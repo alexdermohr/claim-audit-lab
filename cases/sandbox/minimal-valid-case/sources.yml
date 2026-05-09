@@ -1,7 +1,8 @@
 schema_version: "1.0"
 
 sources:
-  - source_id: "s001"
+  - schema_version: "1.0"
+    source_id: "s001"
     label: "Official press release"
     url_or_ref: "https://example.org/press-release"
     source_type: "official_body"

@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/evidence-pack.v1.schema.json",
+  "title": "Evidence Pack v1",
+  "description": "A collection of evidence items bound to claims and sources.",
+  "type": "object",
+  "required": ["schema_version", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "source_ref",
+          "claim_refs",
+          "type",
+          "summary",
+          "verbatim_or_ref",
+          "supports",
+          "contradicts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "pattern": "^e[0-9]{3,}$"
+          },
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_refs": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "document_excerpt",
+              "dataset",
+              "legal_text",
+              "official_statement",
+              "model_output",
+              "secondary_summary",
+              "other"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "verbatim_or_ref": {
+            "type": "string"
+          },
+          "supports": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "contradicts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
