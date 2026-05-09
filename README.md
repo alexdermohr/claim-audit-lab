@@ -46,6 +46,26 @@ Question → Claim Decomposition → Source Map → Evidence Pack
 → Bias Audit → Red-Team Review → Assessment → Lifecycle
 ```
 
+## Current MVP
+
+MVP 0.1-alpha currently validates:
+
+- claim structure (types, required fields, forbidden upgrades)
+- source structure (source_type enum, weight axes, date format)
+- evidence-pack structure (evidence IDs, types, required fields)
+- case-local source/evidence references (no dangling IDs)
+- lifecycle format and status transitions
+- red-team finalization gate
+
+Still not implemented:
+
+- semantic evidence quality scoring
+- source-weight-audit.v1
+- structured assessment.yml
+- bias-audit metrics
+- agent automation
+- external source fetching
+
 ## Quick start
 
 ```bash

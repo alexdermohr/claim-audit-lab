@@ -24,6 +24,15 @@ jobs:
       - name: Validate claims
         run: python scripts/validate_claims.py cases
 
+      - name: Validate sources
+        run: python scripts/validate_sources.py cases
+
+      - name: Validate evidence packs
+        run: python scripts/validate_evidence_pack.py cases
+
+      - name: Validate case references
+        run: python scripts/validate_case_references.py cases
+
       - name: Validate lifecycle
         run: python scripts/validate_lifecycle.py cases
 

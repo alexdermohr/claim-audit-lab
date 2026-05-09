@@ -1,0 +1,14 @@
+schema_version: "1.0"
+
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs:
+      - "c001"
+    type: "official_statement"
+    summary: "The official press release documents the policy announcement with a timestamp of 2026-05-01."
+    verbatim_or_ref: "See cases/sandbox/minimal-valid-case/sources.yml s001 (url_or_ref: https://example.org/press-release)"
+    supports:
+      - "c001"
+    contradicts: []
+    notes: "Minimal sandbox evidence item for validator coverage."
