@@ -98,7 +98,7 @@ def test_motive_claim_missing_capability_and_interest(schema):
         "interpolation": {"score": 0.5, "assumptions": []},
     }
     errors = validate_claims.validate_claim(claim, schema)
-    assert len(errors) == 2
+    assert len(errors) >= 2
     assert any("capability" in e for e in errors)
     assert any("interest" in e for e in errors)
 

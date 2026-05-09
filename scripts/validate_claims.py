@@ -27,7 +27,7 @@ def validate_claim(claim: dict, schema: dict) -> list[str]:
     """Return list of error messages for a single claim dict."""
     errors = []
 
-    # Schema validation (removes enum/type/required checks)
+    # Schema validation (type, enum, required, additionalProperties, etc.)
     validator = jsonschema.Draft7Validator(schema)
     for error in validator.iter_errors(claim):
         errors.append(f"  Schema error at {list(error.absolute_path)}: {error.message}")
