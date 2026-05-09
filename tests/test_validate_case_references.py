@@ -195,8 +195,76 @@ def test_redteam_assessment_ref_missing_file_fails(tmp_path):
     assert any("assessment" in e.lower() for e in errors), errors
 
 
+# --- custom redteam_ref honoured ---
+
+def test_custom_redteam_ref_with_missing_assessment_fails(tmp_path):
+    """lifecycle.redteam_ref points to custom-redteam.yml; its assessment_ref is missing."""
+    write_yaml(tmp_path / "claims.yml", base_claims())
+    write_yaml(tmp_path / "lifecycle.yml", base_lifecycle(redteam_ref="custom-redteam.yml"))
+    write_yaml(tmp_path / "custom-redteam.yml", base_redteam("no/such/assessment.md"))
+    errors = validate_case_references.validate_case(tmp_path)
+    assert any("assessment" in e.lower() for e in errors), errors
+
+
+def test_custom_redteam_ref_ignores_stale_default(tmp_path):
+    """lifecycle.redteam_ref points to custom-redteam.yml with a missing assessment.
+    A stale redteam.yml with a valid assessment also exists.
+    The validator must use custom-redteam.yml and report the missing assessment."""
+    write_yaml(tmp_path / "claims.yml", base_claims())
+    write_yaml(tmp_path / "lifecycle.yml", base_lifecycle(redteam_ref="custom-redteam.yml"))
+    # stale default with a valid assessment file present
+    write_text(tmp_path / "real-assessment.md", "valid assessment")
+    write_yaml(tmp_path / "redteam.yml", base_redteam(str(tmp_path / "real-assessment.md")))
+    # custom file points to a missing assessment
+    write_yaml(tmp_path / "custom-redteam.yml", base_redteam("no/such/assessment.md"))
+    errors = validate_case_references.validate_case(tmp_path)
+    assert any("assessment" in e.lower() for e in errors), (
+        "Validator did not use lifecycle.redteam_ref; it fell back to stale redteam.yml"
+    )
+
+
+# --- malformed YAML produces controlled error, no traceback ---
+
+def test_malformed_claims_yaml_returns_error(tmp_path):
+    (tmp_path / "claims.yml").write_text(": bad: yaml: [\n", encoding="utf-8")
+    errors = validate_case_references.validate_case(tmp_path)
+    assert any("claims.yml" in e and "parse" in e.lower() for e in errors), errors
+
+
+def test_malformed_redteam_yaml_returns_error(tmp_path):
+    write_yaml(tmp_path / "claims.yml", base_claims())
+    write_yaml(tmp_path / "lifecycle.yml", base_lifecycle())
+    (tmp_path / "redteam.yml").write_text(": bad: yaml: [\n", encoding="utf-8")
+    errors = validate_case_references.validate_case(tmp_path)
+    assert any("redteam" in e.lower() and "parse" in e.lower() for e in errors), errors
+
+
+# --- missing source/evidence file produces single clear error, not per-ref noise ---
+
+def test_missing_sources_file_gives_single_error(tmp_path):
+    """When sources.yml is absent but claims reference sources, emit one error, not one per ref."""
+    write_yaml(tmp_path / "claims.yml", base_claims(source_refs=["s001", "s002"]))
+    errors = validate_case_references.validate_case(tmp_path)
+    # Must mention the missing file
+    assert any("sources.yml" in e and "missing" in e for e in errors), errors
+    # Must NOT produce per-ref "not found in sources.yml" noise
+    assert not any("not found in sources.yml" in e for e in errors), (
+        "Got per-ref errors instead of a single missing-file error"
+    )
+
+
+def test_missing_evidence_file_gives_single_error(tmp_path):
+    """When evidence-pack.yml is absent but claims reference evidence, emit one error."""
+    write_yaml(tmp_path / "claims.yml", base_claims(evidence_refs=["e001", "e002"]))
+    errors = validate_case_references.validate_case(tmp_path)
+    assert any("evidence-pack.yml" in e and "missing" in e for e in errors), errors
+    assert not any("not found in evidence-pack.yml" in e for e in errors), (
+        "Got per-ref errors instead of a single missing-file error"
+    )
+
+
 # --- minimal-valid-case integration test ---
 
 def test_minimal_valid_case_passes():
     errors = validate_case_references.validate_case(MINIMAL_CASE)
-    assert errors == [], f"minimal-valid-case has dangling references:\n" + "\n".join(errors)
+    assert errors == [], "minimal-valid-case has dangling references:\n" + "\n".join(errors)
