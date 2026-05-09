@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/source.v1.schema.json",
+  "title": "Source v1",
+  "description": "A source entry with auditable weight axes.",
+  "type": "object",
+  "required": ["schema_version", "source_id", "label", "url_or_ref", "source_type"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^s[0-9]{3,}$"
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "url_or_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "primary_document",
+        "primary_data",
+        "peer_reviewed",
+        "preprint",
+        "official_body",
+        "journalism",
+        "ngo_report",
+        "government_report",
+        "court_document",
+        "leak_or_whistleblower",
+        "secondary_analysis",
+        "other"
+      ]
+    },
+    "publication_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "author_or_org": {
+      "type": "string"
+    },
+    "source_weight": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_proximity": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "method_transparency": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "reproducibility": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "source_cluster_independence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "institutional_interest_risk": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "adversarial_relevance": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "historical_track_record": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "update_latency_risk": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

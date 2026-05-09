@@ -1,0 +1,22 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: ""
+
+status: "draft"
+# draft | assessed | contested | redteam_blocked | final_under_uncertainty | reopened | superseded | archived
+
+created_at: "YYYY-MM-DD"
+last_reviewed_at: "YYYY-MM-DD"
+review_after: "YYYY-MM-DD"
+
+reopen_triggers:
+  - new_primary_source
+  - major_contradiction
+  - source_discredited
+  - legal_update
+  - dataset_revision
+
+history:
+  - date: "YYYY-MM-DD"
+    status: "draft"
+    note: "Case opened."

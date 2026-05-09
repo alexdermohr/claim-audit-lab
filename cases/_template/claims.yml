@@ -1,0 +1,20 @@
+schema_version: "1.0"
+
+claims:
+  - claim_id: "c001"
+    claim_type: "factual_event_claim"
+    statement: ""
+    status: "unresolved"
+    evidence_refs: []
+    source_refs: []
+    requires:
+      - timeline
+    counterclaims: []
+    forbidden_upgrades:
+      - absence_of_evidence_to_falsehood
+    uncertainty:
+      score: 0.0
+      causes: []
+    interpolation:
+      score: 0.0
+      assumptions: []

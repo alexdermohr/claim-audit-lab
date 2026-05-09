@@ -1,0 +1,38 @@
+schema_version: "1.0"
+
+hypotheses:
+  - id: "h1"
+    label: "official_or_public_explanation"
+    description: ""
+    status: "plausible"
+    supporting_evidence: []
+    weaknesses: []
+
+  - id: "h2"
+    label: "incompetence_or_emergence"
+    description: ""
+    status: "plausible"
+    supporting_evidence: []
+    weaknesses: []
+
+  - id: "h3"
+    label: "structural_interest"
+    description: ""
+    status: "plausible"
+    supporting_evidence: []
+    weaknesses: []
+
+  - id: "h4"
+    label: "coordinated_intentionality"
+    description: ""
+    status: "speculative"
+    supporting_evidence: []
+    weaknesses: []
+
+steelmans:
+  - hypothesis_id: "h3"
+    strongest_version: ""
+    best_supporting_evidence: []
+    strongest_objection_to_mainline: ""
+    what_would_change_the_verdict: ""
+    quality_score: 0.0

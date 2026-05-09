@@ -1,0 +1,19 @@
+schema_version: "1.0"
+
+sources:
+  - source_id: "s001"
+    label: ""
+    url_or_ref: ""
+    source_type: "journalism"
+    publication_date: "YYYY-MM-DD"
+    author_or_org: ""
+    source_weight:
+      primary_proximity: 0.0
+      method_transparency: 0.0
+      reproducibility: 0.0
+      source_cluster_independence: 0.0
+      institutional_interest_risk: 0.0
+      adversarial_relevance: 0.0
+      historical_track_record: 0.0
+      update_latency_risk: 0.0
+    notes: ""

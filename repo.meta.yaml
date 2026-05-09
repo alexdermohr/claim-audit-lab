@@ -1,0 +1,46 @@
+name: claim-audit-lab
+version: "0.1.0"
+subtitle: "Evidence-first framework for auditing LLM bias and public-interest claims."
+status: mvp
+phase: 1
+
+principles:
+  - no_oracle_policy
+  - claim_decomposition
+  - source_meta_audit
+  - steelman_obligation
+  - redteam_gate
+  - lifecycle_review
+
+non_goals:
+  - truth_oracle
+  - party_compass_as_truth
+  - official_source_equals_truth
+  - alternative_source_equals_truth
+  - censor_controversial_hypotheses
+  - allow_unverified_speculation_as_fact
+  - automatic_political_recommendation
+  - blackbox_judgement
+
+system_invariants:
+  - "Fact != Causality"
+  - "Causality != Motive"
+  - "Benefit != Causation"
+  - "Source != Proof"
+  - "Majority representation != independent confirmation"
+  - "Refusal != Neutrality"
+  - "Speculation is permitted but must be labelled"
+  - "Contradiction must not be smoothed"
+  - "Every assessment requires a counterhypothesis"
+  - "Every assessment requires a red-team review"
+
+blocking_gates:
+  - no_final_without_redteam
+  - no_causal_without_counterhypothesis
+  - no_motive_without_capability_and_interest
+  - no_source_weight_without_audit
+  - no_strong_claim_from_single_cluster
+  - no_statistics_without_method
+  - no_legal_without_primary
+  - no_contradiction_smoothing
+  - no_hidden_interpolation

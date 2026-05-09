@@ -1,0 +1,20 @@
+schema_version: "1.0"
+claim_id: "c001"
+claim_type: "factual_event_claim"
+statement: "The event occurred on 2025-01-01 in Berlin."
+status: "plausible"
+evidence_refs: ["e001"]
+source_refs: ["s001"]
+requires:
+  - timeline
+counterclaims: []
+forbidden_upgrades:
+  - absence_of_evidence_to_falsehood
+uncertainty:
+  score: 0.3
+  causes:
+    - "Single primary source"
+interpolation:
+  score: 0.1
+  assumptions:
+    - "Date derived from source timestamp"

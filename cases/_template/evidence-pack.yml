@@ -1,0 +1,12 @@
+schema_version: "1.0"
+
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001"]
+    type: "document_excerpt"
+    summary: ""
+    verbatim_or_ref: ""
+    supports: []
+    contradicts: []
+    notes: ""
