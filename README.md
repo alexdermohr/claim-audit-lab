@@ -2,6 +2,8 @@
 
 > Evidence-first framework for auditing LLM bias and public-interest claims.
 
+**Status:** MVP 0.1-alpha
+
 ## What this is
 
 `claim-audit-lab` is not a truth oracle. It is a structured environment for decomposing claims, weighing sources, generating counterhypotheses, and auditing LLM responses for systematic bias.
@@ -14,6 +16,12 @@
 > The repo structures the conditions under which a claim can be truthfully examined.
 
 An LLM may assist with claim extraction, source comparison, hypothesis generation, bias measurement, and contradiction search. It is **not** the truth authority.
+
+## Machine-validated vs human artifacts
+
+- `lifecycle.yml` and `redteam.yml` are machine-validated contracts.
+- `assessment.md` and `redteam.md` are human-readable reports.
+- `assessment.v1.schema.json` is reserved for a future structured `assessment.yml` artifact.
 
 ## System invariants
 

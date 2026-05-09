@@ -7,6 +7,7 @@ import yaml
 
 # Add scripts dir to path
 import sys
+
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "scripts"))
 
 import validate_claims
@@ -17,29 +18,21 @@ SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "claim.v1.schem
 
 @pytest.fixture
 def schema():
-    with open(SCHEMA_PATH) as f:
+    with open(SCHEMA_PATH, encoding="utf-8") as f:
         return json.load(f)
 
 
-def load_fixture(name):
-    with open(FIXTURES_DIR / name) as f:
-        data = yaml.safe_load(f)
-    return data["claims"] if "claims" in data else [data]
-
-
 def test_valid_claim_passes(schema):
-    # Load valid_claim.yml directly (it's a single claim, not wrapped in claims:)
-    with open(FIXTURES_DIR / "valid_claim.yml") as f:
+    with open(FIXTURES_DIR / "valid_claim.yml", encoding="utf-8") as f:
         claim = yaml.safe_load(f)
     errors = validate_claims.validate_claim(claim, schema)
     assert errors == [], f"Expected no errors, got: {errors}"
 
 
 def test_invalid_causal_claim_missing_counterclaims(schema):
-    with open(FIXTURES_DIR / "invalid_claim.yml") as f:
+    with open(FIXTURES_DIR / "invalid_claim.yml", encoding="utf-8") as f:
         claim = yaml.safe_load(f)
     errors = validate_claims.validate_claim(claim, schema)
-    # Should have errors: causal_claim without counterclaims, and strongly_supported without source_refs
     assert len(errors) >= 1
     assert any("causal_claim" in e for e in errors)
 
@@ -63,7 +56,7 @@ def test_causal_claim_with_counterclaims_passes(schema):
     assert errors == [], f"Expected no errors, got: {errors}"
 
 
-def test_causal_claim_with_counterhypotheses_req_passes(schema):
+def test_causal_claim_with_counterhypotheses_only_fails(schema):
     claim = {
         "schema_version": "1.0",
         "claim_id": "c011",
@@ -79,7 +72,7 @@ def test_causal_claim_with_counterhypotheses_req_passes(schema):
         "interpolation": {"score": 0.3, "assumptions": []},
     }
     errors = validate_claims.validate_claim(claim, schema)
-    assert errors == [], f"Expected no errors, got: {errors}"
+    assert any("causal_claim" in e for e in errors)
 
 
 def test_motive_claim_missing_capability_and_interest(schema):
@@ -130,7 +123,7 @@ def test_strongly_supported_without_sources_fails(schema):
         "claim_type": "factual_event_claim",
         "statement": "Event occurred.",
         "status": "strongly_supported",
-        "evidence_refs": [],
+        "evidence_refs": ["e001"],
         "source_refs": [],
         "requires": ["timeline"],
         "counterclaims": [],
@@ -139,5 +132,23 @@ def test_strongly_supported_without_sources_fails(schema):
         "interpolation": {"score": 0.0, "assumptions": []},
     }
     errors = validate_claims.validate_claim(claim, schema)
-    assert len(errors) >= 1
-    assert any("strongly_supported" in e for e in errors)
+    assert any("source_refs" in e for e in errors)
+
+
+def test_established_without_evidence_refs_fails(schema):
+    claim = {
+        "schema_version": "1.0",
+        "claim_id": "c041",
+        "claim_type": "factual_event_claim",
+        "statement": "Event occurred.",
+        "status": "established",
+        "evidence_refs": [],
+        "source_refs": ["s001"],
+        "requires": ["timeline"],
+        "counterclaims": [],
+        "forbidden_upgrades": [],
+        "uncertainty": {"score": 0.0, "causes": []},
+        "interpolation": {"score": 0.0, "assumptions": []},
+    }
+    errors = validate_claims.validate_claim(claim, schema)
+    assert any("evidence_refs" in e for e in errors)

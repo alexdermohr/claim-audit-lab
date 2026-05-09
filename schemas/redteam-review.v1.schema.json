@@ -54,7 +54,7 @@
       "properties": {
         "status": {
           "type": "string",
-          "enum": ["passed", "blocked", "passed_with_notes"]
+          "enum": ["pending", "passed", "blocked", "passed_with_notes"]
         },
         "reason": { "type": "string" }
       }

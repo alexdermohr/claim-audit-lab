@@ -4,7 +4,15 @@
   "title": "Claim v1",
   "description": "A single claim subject to audit.",
   "type": "object",
-  "required": ["schema_version", "claim_id", "claim_type", "statement", "status"],
+  "required": [
+    "schema_version",
+    "claim_id",
+    "claim_type",
+    "statement",
+    "status",
+    "uncertainty",
+    "interpolation"
+  ],
   "additionalProperties": false,
   "properties": {
     "schema_version": {

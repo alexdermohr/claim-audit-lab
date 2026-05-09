@@ -1,0 +1,19 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "cases/_template/assessment.md"
+reviewer: ""
+reviewed_at: "YYYY-MM-DD"
+
+redteam_questions:
+  - "What assumption does this assessment carry unspoken?"
+  - "Which source was weighted too strongly?"
+  - "Which counterhypothesis was reconstructed too weakly?"
+  - "Where does the assessment jump from benefit to motive?"
+  - "Where does source prestige replace methodological scrutiny?"
+  - "Which politically inconvenient interpretation was dismissed too early?"
+
+findings: []
+
+verdict:
+  status: "pending"
+  reason: "Draft case; red-team not yet completed."

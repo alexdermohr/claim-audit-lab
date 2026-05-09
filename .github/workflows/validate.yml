@@ -24,8 +24,8 @@ jobs:
       - name: Validate claims
         run: python scripts/validate_claims.py cases
 
-      - name: Validate assessments
-        run: python scripts/validate_assessment.py cases
+      - name: Validate lifecycle
+        run: python scripts/validate_lifecycle.py cases
 
       - name: Run tests
         run: python -m pytest tests -v

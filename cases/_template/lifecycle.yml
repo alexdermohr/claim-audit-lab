@@ -1,6 +1,6 @@
 schema_version: "1.0"
 assessment_id: "a001"
-case_ref: ""
+case_ref: "cases/_template"
 
 status: "draft"
 # draft | assessed | contested | redteam_blocked | final_under_uncertainty | reopened | superseded | archived
@@ -8,6 +8,8 @@ status: "draft"
 created_at: "YYYY-MM-DD"        # Replace with actual date, e.g. "2026-05-09"
 last_reviewed_at: "YYYY-MM-DD"  # Replace with actual date
 review_after: "YYYY-MM-DD"      # Replace with actual date (typically 3 months out)
+
+redteam_ref: "redteam.yml"
 
 reopen_triggers:
   - new_primary_source

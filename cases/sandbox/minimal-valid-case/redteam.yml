@@ -1,0 +1,11 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "cases/sandbox/minimal-valid-case/assessment.md"
+reviewer: "lab-maintainer"
+reviewed_at: "2026-05-09"
+redteam_questions:
+  - "What assumption does this assessment carry unspoken?"
+findings: []
+verdict:
+  status: "pending"
+  reason: "Draft lifecycle state."
