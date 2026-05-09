@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/lifecycle.v1.schema.json",
+  "title": "Lifecycle v1",
+  "description": "Machine-readable lifecycle state for a case assessment.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "assessment_id",
+    "case_ref",
+    "status",
+    "created_at",
+    "last_reviewed_at",
+    "review_after",
+    "redteam_ref",
+    "reopen_triggers",
+    "history"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "assessment_id": {
+      "type": "string",
+      "pattern": "^a[0-9]{3,}$"
+    },
+    "case_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "assessed",
+        "contested",
+        "redteam_blocked",
+        "final_under_uncertainty",
+        "reopened",
+        "superseded",
+        "archived"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "last_reviewed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "review_after": {
+      "type": "string",
+      "format": "date"
+    },
+    "redteam_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reopen_triggers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "new_primary_source",
+          "major_contradiction",
+          "source_discredited",
+          "legal_update",
+          "dataset_revision"
+        ]
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "status", "note"],
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "assessed",
+              "contested",
+              "redteam_blocked",
+              "final_under_uncertainty",
+              "reopened",
+              "superseded",
+              "archived"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

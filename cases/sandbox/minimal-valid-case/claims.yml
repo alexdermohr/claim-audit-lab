@@ -1,0 +1,24 @@
+schema_version: '1.0'
+claims:
+- claim_id: c001
+  claim_type: factual_event_claim
+  statement: A policy announcement was published on 2026-05-01.
+  status: plausible
+  evidence_refs:
+  - e001
+  source_refs:
+  - s001
+  requires:
+  - timeline
+  counterclaims: []
+  forbidden_upgrades:
+  - absence_of_evidence_to_falsehood
+  uncertainty:
+    score: 0.25
+    causes:
+    - Single-source dependence
+  interpolation:
+    score: 0.1
+    assumptions:
+    - Timestamp interpreted as publication date
+  schema_version: '1.0'

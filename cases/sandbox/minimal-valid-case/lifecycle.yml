@@ -1,0 +1,14 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: "cases/sandbox/minimal-valid-case"
+status: "draft"
+created_at: "2026-05-09"
+last_reviewed_at: "2026-05-09"
+review_after: "2026-08-09"
+redteam_ref: "redteam.yml"
+reopen_triggers:
+  - new_primary_source
+history:
+  - date: "2026-05-09"
+    status: "draft"
+    note: "Case initialized."

@@ -1,0 +1,31 @@
+name: Validate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install jsonschema pyyaml pytest
+
+      - name: Validate claims
+        run: python scripts/validate_claims.py cases
+
+      - name: Validate lifecycle
+        run: python scripts/validate_lifecycle.py cases
+
+      - name: Run tests
+        run: python -m pytest tests -v

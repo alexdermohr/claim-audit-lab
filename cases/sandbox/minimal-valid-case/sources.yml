@@ -1,0 +1,19 @@
+schema_version: "1.0"
+
+sources:
+  - source_id: "s001"
+    label: "Official press release"
+    url_or_ref: "https://example.org/press-release"
+    source_type: "official_body"
+    publication_date: "2026-05-01"
+    author_or_org: "Example Ministry"
+    source_weight:
+      primary_proximity: 0.8
+      method_transparency: 0.7
+      reproducibility: 0.6
+      source_cluster_independence: 0.5
+      institutional_interest_risk: 0.4
+      adversarial_relevance: 0.3
+      historical_track_record: 0.6
+      update_latency_risk: 0.2
+    notes: "Minimal sandbox source for validator coverage"

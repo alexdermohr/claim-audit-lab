@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/claim.v1.schema.json",
+  "title": "Claim v1",
+  "description": "A single claim subject to audit.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "claim_id",
+    "claim_type",
+    "statement",
+    "status",
+    "uncertainty",
+    "interpolation"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^c[0-9]{3,}$"
+    },
+    "claim_type": {
+      "type": "string",
+      "enum": [
+        "factual_event_claim",
+        "statistical_claim",
+        "legal_claim",
+        "causal_claim",
+        "motive_claim",
+        "capability_claim",
+        "beneficiary_claim",
+        "narrative_claim",
+        "suppression_claim",
+        "forecast_claim",
+        "value_claim",
+        "meta_claim"
+      ]
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "established",
+        "strongly_supported",
+        "plausible",
+        "weak",
+        "speculative",
+        "contradicted",
+        "unresolved",
+        "no_verdict_possible"
+      ]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "source_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "requires": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "counterclaims": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "forbidden_upgrades": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "correlation_to_causation",
+          "benefit_to_motive",
+          "source_prestige_to_truth",
+          "suspicion_to_proof",
+          "absence_of_evidence_to_falsehood"
+        ]
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "required": ["score", "causes"],
+      "additionalProperties": false,
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "causes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "interpolation": {
+      "type": "object",
+      "required": ["score", "assumptions"],
+      "additionalProperties": false,
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "assumptions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/redteam-review.v1.schema.json",
+  "title": "Red-Team Review v1",
+  "description": "Adversarial review of a case assessment.",
+  "type": "object",
+  "required": ["schema_version", "review_id", "assessment_ref", "verdict"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "review_id": {
+      "type": "string",
+      "pattern": "^rt[0-9]{3,}$"
+    },
+    "assessment_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewer": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "redteam_questions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "issue"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "issue": { "type": "string", "minLength": 1 },
+          "required_fix": { "type": "string" }
+        }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "passed", "blocked", "passed_with_notes"]
+        },
+        "reason": { "type": "string" }
+      }
+    }
+  }
+}
