@@ -60,7 +60,7 @@ def validate_lifecycle(lifecycle_file: pathlib.Path, schema: dict, redteam_schem
                 with open(redteam_file) as f:
                     redteam_data = yaml.safe_load(f)
                 redteam_verdict = redteam_data.get("verdict", {}).get("status", "")
-                if redteam_verdict != "passed" and redteam_verdict != "passed_with_notes":
+                if redteam_verdict not in ("passed", "passed_with_notes"):
                     errors.append(
                         f"  Assessment status is '{status}' but redteam verdict is '{redteam_verdict}'. "
                         f"Must be 'passed' or 'passed_with_notes'."
