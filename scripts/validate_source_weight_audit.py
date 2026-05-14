@@ -2,6 +2,7 @@
 """Validate source-weight-audit.yml coverage for sources with source_weight."""
 
 import json
+from collections import Counter
 import pathlib
 import sys
 
@@ -40,6 +41,8 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     evidence_path = case_dir / "evidence-pack.yml"
 
     if not sources_path.exists():
+        if audit_path.exists():
+            return ["source-weight-audit.yml exists but sources.yml is missing."]
         return errors
 
     sources_data, err = safe_load_yaml(sources_path)
@@ -78,8 +81,10 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     record_refs = [record.get("source_ref") for record in records if isinstance(record, dict)]
     record_ref_set = set(record_refs)
 
-    duplicate_refs = sorted({ref for ref in record_refs if record_refs.count(ref) > 1})
-    for ref in duplicate_refs:
+    ref_counts = Counter(record_refs)
+    for ref, count in sorted(ref_counts.items()):
+        if count <= 1:
+            continue
         errors.append(f"source-weight-audit.yml has duplicate record for source_ref '{ref}'.")
 
     for source_id in sorted(weighted_source_ids - record_ref_set):
@@ -91,6 +96,12 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     evidence_ids: set[str] = set()
     evidence_source_by_id: dict[str, str] = {}
     evidence_data = None
+
+    if not evidence_path.exists():
+        errors.append(
+            "evidence-pack.yml required because source-weight audits for weighted sources require same-source evidence references."
+        )
+
     if evidence_path.exists():
         evidence_data, err = safe_load_yaml(evidence_path)
         if err:
@@ -118,6 +129,10 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         source_ref = record.get("source_ref", "?")
         record_evidence_refs = record.get("evidence_refs", [])
         has_same_source_evidence = False
+        if source_ref in weighted_source_ids and not record_evidence_refs:
+            errors.append(
+                f"source-weight-audit record '{source_ref}' must reference at least one evidence item."
+            )
         for evidence_ref in record_evidence_refs:
             any_evidence_refs = True
             if evidence_data is not None and evidence_ref not in evidence_ids:
@@ -127,7 +142,7 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             if evidence_source_by_id.get(evidence_ref) == source_ref:
                 has_same_source_evidence = True
 
-        if source_ref in weighted_source_ids and evidence_data is not None and not has_same_source_evidence:
+        if source_ref in weighted_source_ids and evidence_data is not None and record_evidence_refs and not has_same_source_evidence:
             errors.append(
                 f"source-weight-audit record '{source_ref}' must reference at least one evidence item from the same source."
             )
@@ -148,9 +163,11 @@ def main(cases_root: str) -> int:
     root = pathlib.Path(cases_root)
     schema = load_schema()
 
-    candidates = [root] + list(root.rglob("*"))
+    candidate_dirs = {root}
+    for marker_name in ("sources.yml", "source-weight-audit.yml"):
+        candidate_dirs.update(marker.parent for marker in root.rglob(marker_name))
     case_dirs = sorted(
-        d for d in candidates
+        d for d in candidate_dirs
         if d.is_dir() and "_template" not in d.parts and is_case_dir(d)
     )
 

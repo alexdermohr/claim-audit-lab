@@ -106,9 +106,30 @@ def test_missing_weighted_source_record_fails(tmp_path):
 
 def test_audit_unknown_source_ref_fails(tmp_path):
     write_yaml(tmp_path / "sources.yml", base_sources("s001"))
-    write_yaml(tmp_path / "source-weight-audit.yml", base_audit("s999", evidence_refs=[]))
+    write_yaml(tmp_path / "evidence-pack.yml", base_evidence_pack("e001", source_ref="s001"))
+    write_yaml(tmp_path / "source-weight-audit.yml", base_audit("s999", evidence_refs=["e001"]))
     errors = validate_source_weight_audit.validate_case(tmp_path, load_schema())
     assert any("s999" in e and "not found" in e for e in errors), errors
+
+
+def test_audit_file_without_sources_fails(tmp_path):
+    write_yaml(tmp_path / "source-weight-audit.yml", base_audit())
+    errors = validate_source_weight_audit.validate_case(tmp_path, load_schema())
+    assert any("sources.yml is missing" in e for e in errors), errors
+
+
+def test_audit_without_evidence_pack_fails(tmp_path):
+    write_yaml(tmp_path / "sources.yml", base_sources())
+    write_yaml(tmp_path / "source-weight-audit.yml", base_audit(evidence_refs=["e001"]))
+    errors = validate_source_weight_audit.validate_case(tmp_path, load_schema())
+    assert any("evidence-pack.yml required" in e for e in errors), errors
+
+
+def test_audit_with_empty_evidence_refs_fails(tmp_path):
+    write_yaml(tmp_path / "sources.yml", base_sources())
+    write_yaml(tmp_path / "source-weight-audit.yml", base_audit(evidence_refs=[]))
+    errors = validate_source_weight_audit.validate_case(tmp_path, load_schema())
+    assert any("evidence_refs" in e or "at least one evidence item" in e for e in errors), errors
 
 
 def test_audit_unknown_evidence_ref_fails(tmp_path):
@@ -117,7 +138,6 @@ def test_audit_unknown_evidence_ref_fails(tmp_path):
     write_yaml(tmp_path / "source-weight-audit.yml", base_audit(evidence_refs=["e999"]))
     errors = validate_source_weight_audit.validate_case(tmp_path, load_schema())
     assert any("e999" in e and "not found" in e for e in errors), errors
-
 
 
 def test_audit_requires_same_source_evidence_ref(tmp_path):

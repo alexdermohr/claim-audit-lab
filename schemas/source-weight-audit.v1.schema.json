@@ -60,7 +60,9 @@
             "items": {
               "type": "string",
               "pattern": "^e[0-9]{3,}$"
-            }
+            },
+            "minItems": 1,
+            "uniqueItems": true
           },
           "disputed": {
             "type": "boolean"
