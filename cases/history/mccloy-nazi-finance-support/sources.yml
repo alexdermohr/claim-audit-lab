@@ -3,12 +3,12 @@ schema_version: "1.0"
 sources:
   - schema_version: "1.0"
     source_id: "s001"
-    label: "Prior assistant answer in user conversation"
-    url_or_ref: "conversation-local assistant response dated 2026-05-14"
+    label: "Vorherige Assistant-Antwort in der Nutzerkonversation"
+    url_or_ref: "gesprächslokale Assistant-Antwort vom 2026-05-14"
     source_type: "other"
     publication_date: "2026-05-14"
     accessed_at: "2026-05-14"
-    locator: "conversation-local assistant answer immediately preceding this case request"
+    locator: "gesprächslokale Assistant-Antwort unmittelbar vor der Case-Anfrage"
     author_or_org: "OpenAI assistant"
     source_weight:
       primary_proximity: 0.2
@@ -19,16 +19,16 @@ sources:
       adversarial_relevance: 0.7
       historical_track_record: 0.3
       update_latency_risk: 0.2
-    notes: "Audited model output; useful as the object of audit, not as historical proof. Risk-axis scores follow docs/source-weighting.md: higher means higher risk."
+    notes: "Auditierter Model-Output; nützlich als Gegenstand des Audits, nicht als historischer Beleg. Risikoachsen folgen docs/source-weighting.md: höher bedeutet höheres Risiko."
 
   - schema_version: "1.0"
     source_id: "s002"
-    label: "National Archives press release on Nazi War Crimes Disclosure Act documents"
+    label: "National-Archives-Pressehinweis zu Unterlagen nach dem Nazi War Crimes Disclosure Act"
     url_or_ref: "https://www.archives.gov/press/press-releases/2004/nr04-55"
     source_type: "official_body"
     publication_date: "2004-05-13"
     accessed_at: "2026-05-14"
-    locator: "Media Alert date and section 'Chase National Bank, Jewish Accounts, and Nazi Germany', paragraphs on Rueckwanderer Marks and commissions"
+    locator: "Media-Alert-Datum und Abschnitt 'Chase National Bank, Jewish Accounts, and Nazi Germany', Absätze zu Rueckwanderer Marks und Provisionen"
     author_or_org: "U.S. National Archives and Records Administration"
     source_weight:
       primary_proximity: 0.75
@@ -39,7 +39,7 @@ sources:
       adversarial_relevance: 0.85
       historical_track_record: 0.8
       update_latency_risk: 0.2
-    notes: "Official summary of declassified records; reports Chase and other institutions' implication in the Rueckwanderer Mark scheme. Date corrected to the page's displayed Media Alert date."
+    notes: "Offizielle Zusammenfassung deklassifizierter Unterlagen; berichtet Chases und anderer Institutionen Verwicklung in das Rueckwanderer-Mark-System. Datum auf das auf der Seite angezeigte Media-Alert-Datum korrigiert."
 
   - schema_version: "1.0"
     source_id: "s003"
@@ -48,7 +48,7 @@ sources:
     source_type: "secondary_analysis"
     publication_date: "2005-04-04"
     accessed_at: "2026-05-14"
-    locator: "chapter landing page and chapter title"
+    locator: "Kapitel-Landingpage und Kapiteltitel"
     author_or_org: "Richard Breitman, Norman J. W. Goda, Timothy Naftali, and Robert Wolfe / Cambridge University Press"
     source_weight:
       primary_proximity: 0.65
@@ -59,15 +59,15 @@ sources:
       adversarial_relevance: 0.9
       historical_track_record: 0.85
       update_latency_risk: 0.25
-    notes: "Academic secondary source based on U.S. intelligence/Nazi War Crimes Disclosure Act records."
+    notes: "Akademische Sekundärquelle auf Grundlage von U.S.-Intelligence- und Nazi-War-Crimes-Disclosure-Act-Unterlagen."
 
   - schema_version: "1.0"
     source_id: "s004"
-    label: "Biography: John J. McCloy"
+    label: "Biografie: John J. McCloy"
     url_or_ref: "https://www.acgusa.org/about-us/history/biography-john-j-mccloy/"
     source_type: "secondary_analysis"
     accessed_at: "2026-05-14"
-    locator: "biography section describing return from Germany, 1953 Chase chairmanship, and 1955 merger oversight"
+    locator: "Biografieabschnitt zu Rückkehr aus Deutschland, Chase-Vorsitz 1953 und Aufsicht über die Fusion 1955"
     author_or_org: "American Council on Germany"
     source_weight:
       primary_proximity: 0.5
@@ -78,15 +78,15 @@ sources:
       adversarial_relevance: 0.55
       historical_track_record: 0.65
       update_latency_risk: 0.35
-    notes: "Institutionally sympathetic biography; useful for chronology but not sufficient for critical claims."
+    notes: "Institutionell wohlwollende Biografie; für Chronologie nützlich, aber für kritische Claims nicht ausreichend."
 
   - schema_version: "1.0"
     source_id: "s005"
-    label: "John J. McCloy biography"
+    label: "John-J.-McCloy-Biografie"
     url_or_ref: "https://www.britannica.com/biography/John-J-McCloy"
     source_type: "secondary_analysis"
     accessed_at: "2026-05-14"
-    locator: "biographical summary sections on Assistant Secretary of War and Chase Manhattan Bank roles"
+    locator: "biografische Zusammenfassungsabschnitte zu Assistant Secretary of War und Chase-Manhattan-Bank-Rollen"
     author_or_org: "Encyclopaedia Britannica"
     source_weight:
       primary_proximity: 0.45
@@ -97,15 +97,15 @@ sources:
       adversarial_relevance: 0.5
       historical_track_record: 0.75
       update_latency_risk: 0.4
-    notes: "Concise reference source used for chronology and broad summary."
+    notes: "Knappe Referenzquelle für Chronologie und Gesamtzusammenfassung."
 
   - schema_version: "1.0"
     source_id: "s006"
-    label: "National Archives overview of Nuremberg subsequent proceedings and commutations"
+    label: "National-Archives-Überblick zu Nürnberger Nachfolgeprozessen und Strafmilderungen"
     url_or_ref: "https://www.archives.gov/iwg/research-papers/trial-of-war-criminals-before-imt.html"
     source_type: "official_body"
     accessed_at: "2026-05-14"
-    locator: "section describing January 31, 1951 U.S. High Commissioner commutations"
+    locator: "Abschnitt zu Strafmilderungen vom 31. Januar 1951 durch den U.S. High Commissioner"
     author_or_org: "U.S. National Archives and Records Administration"
     source_weight:
       primary_proximity: 0.7
@@ -116,15 +116,15 @@ sources:
       adversarial_relevance: 0.75
       historical_track_record: 0.8
       update_latency_risk: 0.3
-    notes: "Official overview noting January 31, 1951 commutations by the U.S. High Commissioner for Germany."
+    notes: "Offizielle Übersicht, die Strafmilderungen vom 31. Januar 1951 durch den U.S. High Commissioner for Germany erwähnt."
 
   - schema_version: "1.0"
     source_id: "s007"
-    label: "Krupp Historical Exhibition"
+    label: "Historische Krupp-Ausstellung"
     url_or_ref: "https://www.krupp-stiftung.de/en/krupp-historical-exhibition/"
     source_type: "secondary_analysis"
     accessed_at: "2026-05-14"
-    locator: "Alfried Krupp / postwar conviction and pardon exhibit text"
+    locator: "Alfried Krupp / Ausstellungstext zu Nachkriegsverurteilung und Begnadigung"
     author_or_org: "Alfried Krupp von Bohlen und Halbach-Stiftung"
     source_weight:
       primary_proximity: 0.55
@@ -135,7 +135,7 @@ sources:
       adversarial_relevance: 0.8
       historical_track_record: 0.55
       update_latency_risk: 0.35
-    notes: "Institutional Krupp source; its admission that McCloy pardoned Krupp and nullified confiscation is adversarially relevant despite institutional interest."
+    notes: "Institutionelle Krupp-Quelle; ihr Eingeständnis, dass McCloy Krupp begnadigte und die Konfiskation aufhob, ist trotz institutionellen Interesses adversariell relevant."
 
   - schema_version: "1.0"
     source_id: "s008"
@@ -144,7 +144,7 @@ sources:
     source_type: "official_body"
     publication_date: "1957-12-11"
     accessed_at: "2026-05-14"
-    locator: "House of Lords debate 'Disposal Of Krupp's Works', answer describing 1948 sentence and 1951 cancellation"
+    locator: "House-of-Lords-Debatte 'Disposal Of Krupp's Works', Antwort zu Urteil 1948 und Aufhebung 1951"
     author_or_org: "UK Parliament"
     source_weight:
       primary_proximity: 0.75
@@ -155,16 +155,16 @@ sources:
       adversarial_relevance: 0.8
       historical_track_record: 0.8
       update_latency_risk: 0.25
-    notes: "Parliamentary record stating that McCloy cancelled the confiscation order in 1951."
+    notes: "Parlamentsprotokoll, das festhält, dass McCloy die Konfiskationsanordnung 1951 aufhob."
 
   - schema_version: "1.0"
     source_id: "s009"
-    label: "FRUS 1951: McCloy Eighth Quarterly Report on Germany"
+    label: "FRUS 1951: McCloys achter Quartalsbericht zu Deutschland"
     url_or_ref: "https://history.state.gov/historicaldocuments/frus1951v03p2/d6"
     source_type: "primary_document"
     publication_date: "1951-09-30"
     accessed_at: "2026-05-14"
-    locator: "Document 6, opening paragraphs of McCloy's Eighth Quarterly Report covering July 1 to September 30, 1951"
+    locator: "Dokument 6, eröffnende Absätze von McCloys achtem Quartalsbericht für den Zeitraum 1. Juli bis 30. September 1951"
     author_or_org: "U.S. Department of State / U.S. High Commissioner for Germany"
     source_weight:
       primary_proximity: 0.85
@@ -175,4 +175,4 @@ sources:
       adversarial_relevance: 0.65
       historical_track_record: 0.85
       update_latency_risk: 0.2
-    notes: "Primary U.S. policy document reflecting West German integration in a Western defense and political community."
+    notes: "Primäres US-Policy-Dokument, das Westdeutschlands Integration in eine westliche Verteidigungs- und Staatengemeinschaft spiegelt."

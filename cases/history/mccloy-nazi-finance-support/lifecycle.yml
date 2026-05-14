@@ -13,7 +13,7 @@ reopen_triggers:
 history:
   - date: "2026-05-14"
     status: "draft"
-    note: "Case opened to audit a prior assistant response."
+    note: "Case eröffnet, um eine vorherige Assistant-Antwort zu auditieren."
   - date: "2026-05-14"
     status: "provisional_under_uncertainty"
-    note: "Structured source, claim, evidence, and red-team artifacts added."
+    note: "Strukturierte Quellen-, Claim-, Evidence- und Red-Team-Artefakte ergänzt."

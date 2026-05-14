@@ -1,4 +1,4 @@
-# Red-Team Review: John J. McCloy and Anglo-American Support for Nazi Germany
+# Red-Team-Prüfung: John J. McCloy und anglo-amerikanische Unterstützung für NS-Deutschland
 
 **Review ID:** rt001  
 **Assessment ref:** cases/history/mccloy-nazi-finance-support/assessment.md  
@@ -6,22 +6,22 @@
 
 ---
 
-## Adversarial questions
+## Adversarielle Fragen
 
-1. Does the assessment improperly convert institutional Chase conduct into McCloy's personal conduct?
-2. Does the assessment confuse postwar German reintegration with pre-1945 Nazi support?
-3. Does the assessment infer McCloy's motive from who benefited?
-
----
-
-## Findings
-
-- **f001 — medium:** The original German question is semantically broad. The assessment must keep c001, c005, and c006 separate and state timeline boundaries explicitly.
-- **f002 — low:** The source set relies on public summaries rather than exhaustive archival review. New primary sources could reopen the case.
+1. Überträgt das Assessment institutionelles Chase-Handeln unzulässig auf McCloys persönliches Handeln?
+2. Vermischt das Assessment die Nachkriegs-Reintegration Westdeutschlands mit Vorkriegsunterstützung für NS-Deutschland?
+3. Leitet das Assessment McCloys Motiv aus den Begünstigten seiner Entscheidungen ab?
 
 ---
 
-## Verdict
+## Befunde
+
+- **f001 — medium:** Die ursprüngliche deutsche Frage ist semantisch breit. Das Assessment muss c001, c005 und c006 getrennt halten und die Zeitgrenzen ausdrücklich benennen.
+- **f002 — low:** Das Source-Set stützt sich auf öffentliche Zusammenfassungen statt auf eine erschöpfende Archivrecherche. Neue Primärquellen könnten den Case wieder öffnen.
+
+---
+
+## Urteil
 
 **Status:** passed_with_notes  
-**Reason:** Assessment is acceptable if it preserves the distinction between institutional support, personal causality, and postwar rehabilitation.
+**Grund:** Das Assessment ist akzeptabel, wenn es die Unterscheidung zwischen institutioneller Unterstützung, persönlicher Kausalität und Nachkriegs-Rehabilitation bewahrt.

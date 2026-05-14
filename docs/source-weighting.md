@@ -1,51 +1,51 @@
-# Source Weighting Policy
+# Source-Weighting-Policy
 
-## Principle
+## Prinzip
 
-Sources are not labelled "good" or "bad." They are assessed along auditable axes.
+Quellen werden nicht als „gut“ oder „schlecht“ etikettiert. Sie werden entlang auditierbarer Achsen bewertet.
 
-> A source-weight score is itself a claim and must be auditable.
+> Ein `source_weight`-Score ist selbst ein Claim und muss auditierbar sein.
 
-This prevents source weighting from becoming a hidden bias mechanism.
+Dadurch wird verhindert, dass Quellengewichtung zu einem versteckten Bias-Mechanismus wird.
 
-## Weight axes
+## Gewichtungsachsen
 
-| Axis | Meaning |
+| Achse | Bedeutung |
 |---|---|
-| `primary_proximity` | How close is this source to the original event or data? |
-| `method_transparency` | Is the method visible and described? |
-| `reproducibility` | Can the finding be independently checked? |
-| `source_cluster_independence` | Does this source belong to a cluster that shares a common origin? |
-| `institutional_interest_risk` | Does the source institution have a stake in the claim's outcome? |
-| `adversarial_relevance` | Has this source been tested by adversarial scrutiny? |
-| `historical_track_record` | Has this source been reliably accurate in comparable past cases? |
-| `update_latency_risk` | Is this source at risk of being outdated for the current claim? |
+| `primary_proximity` | Wie nah ist diese Quelle am ursprünglichen Ereignis oder an den ursprünglichen Daten? |
+| `method_transparency` | Ist die Methode sichtbar und beschrieben? |
+| `reproducibility` | Kann die Feststellung unabhängig geprüft werden? |
+| `source_cluster_independence` | Gehört diese Quelle zu einem Cluster mit gemeinsamem Ursprung? |
+| `institutional_interest_risk` | Hat die herausgebende Institution ein Interesse am Ausgang des Claims? |
+| `adversarial_relevance` | Wurde diese Quelle durch adversarielle Prüfung belastet? |
+| `historical_track_record` | War diese Quelle in vergleichbaren Fällen historisch zuverlässig? |
+| `update_latency_risk` | Besteht das Risiko, dass diese Quelle für den aktuellen Claim veraltet ist? |
 
 ## Scoring
 
-Each axis is scored 0.0–1.0. Polarity is axis-specific:
+Jede Achse wird von 0.0 bis 1.0 bewertet. Die Polarität ist achsenspezifisch:
 
-- For capability or quality axes (`primary_proximity`, `method_transparency`, `reproducibility`, `source_cluster_independence`, `adversarial_relevance`, `historical_track_record`), higher means stronger support for relying on that source along that dimension.
-- For risk axes (`institutional_interest_risk`, `update_latency_risk`), higher means higher declared risk, not higher credibility. These values must be carried as visible penalties or caveats in any aggregation.
+- Bei Fähigkeits- oder Qualitätsachsen (`primary_proximity`, `method_transparency`, `reproducibility`, `source_cluster_independence`, `adversarial_relevance`, `historical_track_record`) bedeutet höher: stärkere Grundlage, sich entlang dieser Dimension auf die Quelle zu stützen.
+- Bei Risikoachsen (`institutional_interest_risk`, `update_latency_risk`) bedeutet höher: höheres deklariertes Risiko, nicht höhere Glaubwürdigkeit. Diese Werte müssen in jeder Aggregation als sichtbare Abzüge oder Caveats erhalten bleiben.
 
-Scores are not averaged into a single weight without justification. The multi-axis view is preserved to prevent masking weaknesses.
+Scores werden nicht ohne Begründung zu einem Einzelgewicht gemittelt. Die mehrachsige Sicht bleibt erhalten, damit Schwächen nicht verdeckt werden.
 
-## Mandatory audit
+## Pflichtaudit
 
-Every source weight assigned in a case must have an associated `source-weight-audit` record that includes:
+Jede in einem Case vergebene Quellengewichtung muss einen zugehörigen `source-weight-audit`-Record haben, der enthält:
 
-- The questions asked about the source
-- The evidence references used to answer those questions
-- At least one evidence reference from the same source being weighted, to prevent decorative bibliography entries
-- Auditor notes
-- Whether the weight is disputed
+- die Fragen, die an die Quelle gestellt wurden,
+- die Evidence-Referenzen, mit denen diese Fragen beantwortet wurden,
+- mindestens eine Evidence-Referenz aus derselben Quelle, die gewichtet wird, um dekorative Bibliografieeinträge zu verhindern,
+- Auditor-Notizen,
+- ob die Gewichtung bestritten ist.
 
-## Source cluster independence
+## Unabhängigkeit von Quellenclustern
 
-A `strongly_supported` verdict requires independent source clusters — sources that cannot all be traced to a single originating institution, dataset, or informant chain.
+Ein `strongly_supported`-Verdict erfordert unabhängige Quellencluster — Quellen, die nicht alle auf dieselbe Ursprungsinstitution, denselben Datensatz oder dieselbe Informantenkette zurückgeführt werden können.
 
-> No strong claim from a single source cluster.
+> Kein starker Claim aus nur einem Quellencluster.
 
-## Institutional interest risk
+## Institutionelles Interessenrisiko
 
-Institutional interest risk does not disqualify a source. It must be declared and factored into the weight. An interested source that is also primary and method-transparent may outweigh an uninterested source that is secondary and opaque.
+Institutionelles Interessenrisiko disqualifiziert eine Quelle nicht. Es muss deklariert und in der Gewichtung berücksichtigt werden. Eine interessierte Quelle, die zugleich primär und methodentransparent ist, kann schwerer wiegen als eine uninteressierte Quelle, die sekundär und opak ist.

@@ -1,42 +1,42 @@
 # claim-audit-lab
 
-> Evidence-first framework for auditing LLM bias and public-interest claims.
+> Evidenzorientiertes Framework zum Auditieren von LLM-Bias und Gemeinwohl-Claims.
 
 **Status:** MVP 0.1-alpha
 
-## What this is
+## Was dieses Repo ist
 
-`claim-audit-lab` is not a truth oracle. It is a structured environment for decomposing claims, weighing sources, generating counterhypotheses, and auditing LLM responses for systematic bias.
+`claim-audit-lab` ist kein Wahrheitsorakel. Es ist eine strukturierte Umgebung, um Claims zu zerlegen, Quellen zu gewichten, Gegenhypothesen zu erzeugen und LLM-Antworten auf systematische Verzerrungen zu auditieren.
 
-**Etymology:** "Claim" from Latin *clamare* — to call, to assert. "Audit" from Latin *audire* — to hear. A claim-audit is literally: *to hear and examine an assertion*. The repo should not shout. It should listen.
+**Etymologie:** „Claim“ kommt vom lateinischen *clamare* — rufen, behaupten. „Audit“ kommt vom lateinischen *audire* — hören. Ein Claim-Audit bedeutet wörtlich: *eine Behauptung hören und prüfen*. Das Repo soll nicht schreien. Es soll zuhören.
 
-## Core principle
+## Kernprinzip
 
-> The repo does not decide truth.  
-> The repo structures the conditions under which a claim can be truthfully examined.
+> Das Repo entscheidet nicht über Wahrheit.  
+> Das Repo strukturiert die Bedingungen, unter denen ein Claim wahrheitsfähig geprüft werden kann.
 
-An LLM may assist with claim extraction, source comparison, hypothesis generation, bias measurement, and contradiction search. It is **not** the truth authority.
+Ein LLM darf bei Claim-Extraktion, Quellenvergleich, Hypothesengenerierung, Bias-Messung und Widerspruchssuche helfen. Es ist **nicht** die Wahrheitsinstanz.
 
-## Machine-validated vs human artifacts
+## Maschinenvalidierte und menschliche Artefakte
 
-- `lifecycle.yml`, `redteam.yml`, and `source-weight-audit.yml` are machine-validated contracts.
-- `assessment.md` and `redteam.md` are human-readable reports.
-- `assessment.v1.schema.json` is reserved for a future structured `assessment.yml` artifact.
+- `lifecycle.yml`, `redteam.yml` und `source-weight-audit.yml` sind maschinenvalidierte Verträge.
+- `assessment.md` und `redteam.md` sind menschenlesbare Berichte.
+- `assessment.v1.schema.json` ist für ein zukünftiges strukturiertes `assessment.yml`-Artefakt reserviert.
 
-## System invariants
+## Systeminvarianten
 
-1. Fact ≠ Causality.
-2. Causality ≠ Motive.
-3. Benefit ≠ Causation.
-4. Source ≠ Proof.
-5. Majority representation ≠ independent confirmation.
-6. Refusal ≠ Neutrality.
-7. Speculation is permitted but must be labelled.
-8. Contradiction must not be smoothed.
-9. Every assessment requires a counterhypothesis.
-10. Every assessment requires a red-team review.
+1. Fakt ≠ Kausalität.
+2. Kausalität ≠ Motiv.
+3. Nutzen ≠ Verursachung.
+4. Quelle ≠ Beweis.
+5. Mehrheitsdarstellung ≠ unabhängige Bestätigung.
+6. Verweigerung ≠ Neutralität.
+7. Spekulation ist erlaubt, muss aber gekennzeichnet werden.
+8. Widerspruch darf nicht geglättet werden.
+9. Jedes Assessment braucht eine Gegenhypothese.
+10. Jedes Assessment braucht eine Red-Team-Prüfung.
 
-> **No final assessment without adversarial review.**
+> **Kein finales Assessment ohne adversarielle Prüfung.**
 
 ## Pipeline
 
@@ -46,49 +46,49 @@ Question → Claim Decomposition → Source Map → Evidence Pack
 → Bias Audit → Red-Team Review → Assessment → Lifecycle
 ```
 
-## Current MVP
+## Aktueller MVP
 
-MVP 0.1-alpha currently validates:
+MVP 0.1-alpha validiert derzeit:
 
-- claim structure (types, required fields, forbidden upgrades)
-- source structure (source_type enum, weight axes, date format)
-- source-weight audit structure and coverage for sources with `source_weight`
-- evidence-pack structure (evidence IDs, types, required fields)
-- case-local source/evidence references (no dangling IDs)
-- lifecycle format and status transitions
-- red-team finalization gate
+- Claim-Struktur (Typen, Pflichtfelder, verbotene Upgrades)
+- Quellenstruktur (`source_type`-Enum, Gewichtungsachsen, Datumsformat)
+- Quellengewichtungs-Audit-Struktur und Abdeckung für Quellen mit `source_weight`
+- Evidence-Pack-Struktur (Evidence-IDs, Typen, Pflichtfelder)
+- falllokale Quellen-/Evidence-Referenzen (keine hängenden IDs)
+- Lifecycle-Format und Statusübergänge
+- Red-Team-Finalisierungsgate
 
-Still not implemented:
+Noch nicht implementiert:
 
-- semantic evidence quality scoring
-- structured assessment.yml
-- bias-audit metrics
-- agent automation
-- external source fetching
+- semantisches Scoring der Evidenzqualität
+- strukturiertes `assessment.yml`
+- Bias-Audit-Metriken
+- Agentenautomatisierung
+- externes Quellen-Fetching
 
-## Quick start
+## Schnellstart
 
 ```bash
-# Validate all cases
+# Alle Cases validieren
 make validate
 
-# Run tests
+# Tests ausführen
 make test
 ```
 
-## Non-goals
+## Nicht-Ziele
 
-- No truth oracle
-- No party compass as truth substitute
-- No equation of official source with truth
-- No censorship of controversial hypotheses
-- No automatic political recommendation
-- No black-box judgement without auditable artefacts
+- Kein Wahrheitsorakel
+- Kein Parteikompass als Wahrheitsersatz
+- Keine Gleichsetzung offizieller Quellen mit Wahrheit
+- Keine Zensur kontroverser Hypothesen
+- Keine automatische politische Empfehlung
+- Kein Black-Box-Urteil ohne auditierbare Artefakte
 
-## Verdict vocabulary
+## Verdict-Vokabular
 
 `established` · `strongly_supported` · `plausible` · `weak` · `speculative` · `contradicted` · `unresolved` · `no_verdict_possible`
 
 ---
 
-> *This assessment is not a truth certificate. It is an evidence-structured judgment under declared uncertainty.*
+> *Dieses Assessment ist kein Wahrheitszertifikat. Es ist ein evidenzstrukturiertes Urteil unter deklarierter Unsicherheit.*

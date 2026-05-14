@@ -5,9 +5,9 @@ auditor: "lab-maintainer"
 records:
   - source_ref: "s001"
     questions:
-      - "Is this source close to the asserted policy announcement?"
-      - "Is the source's timestamp and institutional origin visible enough for the minimal fixture?"
-      - "Does the source have an institutional interest in the claim outcome?"
+      - "Ist diese Quelle nah an der behaupteten Policy-Ankündigung?"
+      - "Sind Zeitstempel und institutioneller Ursprung der Quelle für das Minimal-Fixture ausreichend sichtbar?"
+      - "Hat die Quelle ein institutionelles Interesse am Ausgang des Claims?"
     evidence_refs: ["e001"]
     disputed: false
-    notes: "Minimal fixture audit record covering the single source_weight block; not intended as a substantive real-world source evaluation."
+    notes: "Minimaler Fixture-Audit-Record für den einzelnen `source_weight`-Block; nicht als substantielle reale Quellenbewertung gedacht."

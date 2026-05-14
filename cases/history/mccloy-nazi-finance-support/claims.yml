@@ -3,146 +3,146 @@ claims:
   - schema_version: "1.0"
     claim_id: "c001"
     claim_type: "causal_claim"
-    statement: "John J. McCloy personally promoted or organized pre-1945 financial and material support for Nazi Germany by Anglo-American financial institutions and industries."
+    statement: "John J. McCloy förderte oder organisierte vor 1945 persönlich finanzielle und materielle Unterstützung für NS-Deutschland durch anglo-amerikanische Finanzinstitutionen und Industrien."
     status: "weak"
     evidence_refs: ["e001", "e002", "e003", "e004"]
     source_refs: ["s001", "s002", "s003", "s004", "s005"]
-    requires: ["direct personal-action evidence", "timeline", "institutional role mapping"]
+    requires: ["direkte Evidenz persönlichen Handelns", "Chronologie", "Zuordnung institutioneller Rollen"]
     counterclaims:
-      - "Evidence establishes Anglo-American institutional dealings with Nazi Germany, but not McCloy's personal promotion of those dealings."
-      - "McCloy's Chase chairmanship began after World War II, weakening claims that he led Chase's 1936-1941 conduct."
+      - "Die Evidenz belegt institutionelle anglo-amerikanische Geschäfte mit NS-Deutschland, aber nicht McCloys persönliche Förderung dieser Geschäfte."
+      - "McCloys Chase-Vorsitz begann nach dem Zweiten Weltkrieg; das schwächt Claims, nach denen er Chase-Verhalten von 1936 bis 1941 leitete."
     forbidden_upgrades: ["correlation_to_causation", "benefit_to_motive", "suspicion_to_proof"]
     uncertainty:
       score: 0.68
       causes:
-        - "Known institutional support does not automatically identify McCloy as promoter."
-        - "Available public summaries do not provide direct documentary evidence of McCloy's pre-1945 operational role in Chase's Nazi-related transactions."
-        - "The phrase 'gefördert' can mean direct promotion, facilitation through networks, or postwar rehabilitation; these must not be conflated."
+        - "Bekannte institutionelle Unterstützung identifiziert McCloy nicht automatisch als Förderer."
+        - "Die verfügbaren öffentlichen Zusammenfassungen liefern keine direkte dokumentarische Evidenz für McCloys operative Vorkriegsrolle bei Nazi-bezogenen Chase-Transaktionen."
+        - "Der Ausdruck 'gefördert' kann direkte Förderung, Netzwerk-Ermöglichung oder Nachkriegsrehabilitation bedeuten; diese Bedeutungen dürfen nicht vermischt werden."
     interpolation:
       score: 0.55
       assumptions:
-        - "Inferring personal promotion from Wall Street proximity would require evidence not present in the audited source set."
-    notes: "This is the main user claim. The current source map supports institutional dealings and postwar rehabilitation more strongly than pre-1945 personal promotion by McCloy."
+        - "Persönliche Förderung aus Wall-Street-Nähe abzuleiten, würde Evidenz verlangen, die im auditierten Source-Set nicht vorliegt."
+    notes: "Dies ist der Hauptclaim der Nutzerfrage. Die aktuelle Quellenkarte stützt institutionelle Geschäfte und Nachkriegsrehabilitation stärker als persönliche Vorkriegsförderung durch McCloy."
 
   - schema_version: "1.0"
     claim_id: "c002"
     claim_type: "factual_event_claim"
-    statement: "Chase National Bank and other U.S. financial institutions were implicated in the Rueckwanderer/Rückwanderer Mark scheme that helped Nazi Germany raise U.S. dollars from 1936 to 1941."
+    statement: "Chase National Bank und andere US-Finanzinstitutionen waren in das Rueckwanderer/Rückwanderer-Mark-System verwickelt, das NS-Deutschland von 1936 bis 1941 half, US-Dollar zu beschaffen."
     status: "established"
     evidence_refs: ["e002", "e009"]
     source_refs: ["s002", "s003"]
-    requires: ["timeline", "source-specific attribution"]
+    requires: ["Chronologie", "quellenspezifische Zuschreibung"]
     counterclaims: []
     forbidden_upgrades: ["source_prestige_to_truth"]
     uncertainty:
       score: 0.15
       causes:
-        - "Details vary between summaries and underlying archival records."
+        - "Details unterscheiden sich zwischen Zusammenfassungen und den zugrunde liegenden Archivunterlagen."
     interpolation:
       score: 0.1
       assumptions:
-        - "The NARA summary and Cambridge chapter are treated as accurately reflecting the declassified record."
-    notes: "This claim is about institutions, not McCloy personally."
+        - "Die NARA-Zusammenfassung und das Cambridge-Kapitel werden als zutreffende Wiedergabe des deklassifizierten Materials behandelt."
+    notes: "Dieser Claim betrifft Institutionen, nicht McCloy persönlich."
 
   - schema_version: "1.0"
     claim_id: "c003"
     claim_type: "factual_event_claim"
-    statement: "McCloy became chairman of Chase National Bank in 1953, after the Nazi regime and World War II had ended."
+    statement: "McCloy wurde 1953 Vorsitzender der Chase National Bank, nachdem das NS-Regime und der Zweite Weltkrieg beendet waren."
     status: "established"
     evidence_refs: ["e003"]
     source_refs: ["s004", "s005"]
-    requires: ["chronology"]
+    requires: ["Chronologie"]
     counterclaims: []
     forbidden_upgrades: ["absence_of_evidence_to_falsehood"]
     uncertainty:
       score: 0.08
       causes:
-        - "Reference-source chronology is consistent but not itself an archival employment file."
+        - "Die Chronologie ist in Referenzquellen konsistent, aber keine archivische Personalakte."
     interpolation:
       score: 0.05
       assumptions:
-        - "Chairmanship date is sufficient to reject claims that he acted as Chase chairman during 1936-1941."
-    notes: "This does not rule out earlier legal or network involvement; it rules out the specific role of Chase chair during the relevant period."
+        - "Das Datum des Vorsitzes reicht aus, um Claims zurückzuweisen, nach denen er 1936–1941 als Chase-Vorsitzender handelte."
+    notes: "Dies schließt frühere anwaltliche oder informelle Netzwerkrollen nicht aus; es schließt die spezifische Rolle als Chase-Vorsitzender im relevanten Zeitraum aus."
 
   - schema_version: "1.0"
     claim_id: "c004"
     claim_type: "factual_event_claim"
-    statement: "During World War II, McCloy served in the U.S. War Department as Assistant Secretary of War rather than as a Nazi-facing finance executive."
+    statement: "Während des Zweiten Weltkriegs diente McCloy im U.S. War Department als Assistant Secretary of War und nicht als auf NS-Deutschland bezogener Finanzmanager."
     status: "strongly_supported"
     evidence_refs: ["e004"]
     source_refs: ["s004", "s005"]
-    requires: ["chronology", "role mapping"]
+    requires: ["Chronologie", "Rollenzuordnung"]
     counterclaims: []
     forbidden_upgrades: ["absence_of_evidence_to_falsehood"]
     uncertainty:
       score: 0.12
       causes:
-        - "The audited source set is biographical and high-level."
+        - "Das auditierte Source-Set ist biografisch und hochaggregiert."
     interpolation:
       score: 0.1
       assumptions:
-        - "Official role does not preclude informal influence, but it constrains the stronger allegation."
-    notes: "Supports the prior answer's caution about the wartime claim."
+        - "Die offizielle Rolle schließt informellen Einfluss nicht aus, begrenzt aber die stärkere Behauptung."
+    notes: "Stützt die Vorsicht der vorherigen Antwort zum Kriegszeit-Claim."
 
   - schema_version: "1.0"
     claim_id: "c005"
     claim_type: "factual_event_claim"
-    statement: "In 1951, as U.S. High Commissioner for Germany, McCloy reduced or commuted numerous war-crimes sentences and pardoned Alfried Krupp while nullifying confiscation of Krupp assets."
+    statement: "1951 reduzierte oder milderte McCloy als U.S. High Commissioner for Germany zahlreiche Kriegsverbrecherstrafen, begnadigte Alfried Krupp und machte die Konfiskation von Krupp-Vermögen rückgängig."
     status: "established"
     evidence_refs: ["e005", "e006", "e010"]
     source_refs: ["s006", "s007", "s008"]
-    requires: ["postwar timeline", "legal disposition records"]
+    requires: ["Nachkriegschronologie", "rechtliche Dispositionsunterlagen"]
     counterclaims: []
     forbidden_upgrades: ["benefit_to_motive", "source_prestige_to_truth"]
     uncertainty:
       score: 0.12
       causes:
-        - "Different sources summarize the clemency and property decisions at different levels of detail."
+        - "Verschiedene Quellen fassen Begnadigungs- und Eigentumsentscheidungen unterschiedlich detailliert zusammen."
     interpolation:
       score: 0.08
       assumptions:
-        - "Pardoning and nullifying confiscation materially benefited Krupp and the Krupp industrial estate."
-    notes: "This is the strongest documented criticism of McCloy in the current audit."
+        - "Begnadigung und Aufhebung der Konfiskation nützten Krupp und dem Krupp-Industrievermögen materiell."
+    notes: "Dies ist die am stärksten dokumentierte Kritik an McCloy im aktuellen Audit."
 
   - schema_version: "1.0"
     claim_id: "c006"
     claim_type: "narrative_claim"
-    statement: "McCloy's postwar policy role supported West Germany's reintegration into the Western political, defense, and economic order, which also facilitated rehabilitation of some industrial elites."
+    statement: "McCloys Nachkriegspolitik unterstützte die Reintegration Westdeutschlands in die westliche politische, verteidigungs- und wirtschaftspolitische Ordnung; dies erleichterte auch die Rehabilitierung einiger Industrieeliten."
     status: "strongly_supported"
     evidence_refs: ["e005", "e006", "e007", "e010"]
     source_refs: ["s006", "s007", "s008", "s009"]
-    requires: ["policy context", "distinction between strategic reintegration and personal motive"]
+    requires: ["politischer Kontext", "Trennung zwischen strategischer Reintegration und persönlichem Motiv"]
     counterclaims:
-      - "Strategic Cold War reintegration is not identical to ideological sympathy for Nazis."
+      - "Strategische Cold-War-Reintegration ist nicht dasselbe wie ideologische Sympathie für Nazis."
     forbidden_upgrades: ["benefit_to_motive", "correlation_to_causation"]
     uncertainty:
       score: 0.24
       causes:
-        - "The breadth of 'industrial elites' exceeds the Krupp-specific evidence unless additional cases are added."
-        - "Policy intent and motive require stronger documentary support than policy outcomes."
+        - "Die Breite von 'Industrieeliten' geht über die Krupp-spezifische Evidenz hinaus, solange keine weiteren Fälle ergänzt werden."
+        - "Politische Absicht und Motiv verlangen stärkere dokumentarische Stützung als politische Folgen."
     interpolation:
       score: 0.3
       assumptions:
-        - "Krupp restitution is treated as an example of broader rehabilitation, not proof of every industrial case."
-    notes: "This is a supported reframing of the original question if 'gefördert' refers to postwar restoration rather than pre-1945 Nazi support."
+        - "Die Krupp-Restitution wird als Beispiel für breitere Rehabilitation behandelt, nicht als Beweis für jeden Industriefall."
+    notes: "Dies ist eine gestützte Umformulierung der ursprünglichen Frage, falls 'gefördert' auf Nachkriegsrestauration statt Vorkriegsunterstützung bezogen wird."
 
   - schema_version: "1.0"
     claim_id: "c007"
     claim_type: "meta_claim"
-    statement: "The prior assistant response was directionally cautious but under-audited: it needed a structured source map, clearer separation of institutional facts from personal causality, and explicit red-team caveats."
+    statement: "Die vorherige Assistant-Antwort war in der Richtung vorsichtig, aber noch unterauditiert: Sie brauchte eine strukturierte Quellenkarte, klarere Trennung institutioneller Fakten von persönlicher Kausalität und explizite Red-Team-Caveats."
     status: "plausible"
     evidence_refs: ["e001", "e008"]
     source_refs: ["s001"]
-    requires: ["model-output audit", "source sufficiency review"]
+    requires: ["Audit von Model-Output", "Prüfung der Quellenhinlänglichkeit"]
     counterclaims:
-      - "The prior response did explicitly distinguish pre-1945 personal promotion from postwar rehabilitation."
+      - "Die vorherige Antwort unterschied bereits ausdrücklich zwischen persönlicher Vorkriegsförderung und Nachkriegsrehabilitation."
     forbidden_upgrades: ["source_prestige_to_truth", "absence_of_evidence_to_falsehood"]
     uncertainty:
       score: 0.32
       causes:
-        - "The audit is based on the visible answer and the limited source set collected during this turn."
+        - "Das Audit basiert auf der sichtbaren Antwort und dem begrenzten Source-Set dieses Turns."
     interpolation:
       score: 0.25
       assumptions:
-        - "A repository case should include evidence artifacts even when a conversational answer already gave a cautious summary."
-    notes: "This claim audits the assistant behavior, not McCloy's historical conduct."
+        - "Ein Repository-Case sollte Evidenzartefakte enthalten, selbst wenn eine Gesprächsantwort bereits vorsichtig zusammenfasst."
+    notes: "Dieser Claim auditiert das Assistant-Verhalten, nicht McCloys historisches Handeln."

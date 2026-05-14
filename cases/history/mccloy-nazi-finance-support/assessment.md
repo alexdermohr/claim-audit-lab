@@ -1,68 +1,68 @@
-# Assessment: John J. McCloy and Anglo-American Support for Nazi Germany
+# Assessment: John J. McCloy und anglo-amerikanische Unterstützung für NS-Deutschland
 
 **Case:** cases/history/mccloy-nazi-finance-support  
 **Status:** provisional_under_uncertainty  
-**Date:** 2026-05-14
+**Datum:** 2026-05-14
 
 ---
 
-> This assessment is not a truth certificate. It is an evidence-structured judgment under declared uncertainty.
+> Dieses Assessment ist kein Wahrheitszertifikat. Es ist ein evidenzstrukturiertes Urteil unter deklarierter Unsicherheit.
 
-## Question
+## Frage
 
 Hat John J. McCloy die finanzielle und materielle Unterstützung der Nazis durch anglo-amerikanische Finanzinstitute und Industrien gefördert?
 
-## Verdict
+## Urteil
 
-**Main verdict:** The strong pre-1945 personal-causality claim is **weak**, not established. The strongest supported version is narrower: McCloy later supported, or at least implemented, postwar West German reintegration and made clemency/property decisions that materially benefited convicted industrial figures such as Alfried Krupp.
+**Haupturteil:** Der starke Claim einer persönlichen Vorkriegskausalität vor 1945 ist **weak**, nicht etabliert. Die am stärksten gestützte Fassung ist enger: McCloy unterstützte bzw. implementierte später die Nachkriegs-Reintegration Westdeutschlands und traf Begnadigungs-/Eigentumsentscheidungen, die verurteilten Industrieakteuren wie Alfried Krupp materiell nützten.
 
-## Claim-level results
+## Claim-Ergebnisse
 
-| Claim | Verdict | Summary |
+| Claim | Urteil | Zusammenfassung |
 |---|---:|---|
-| c001 | weak | Evidence supports Anglo-American institutional dealings with Nazi Germany, but not McCloy's personal promotion of those dealings before 1945. |
-| c002 | established | Chase and other U.S. financial institutions were implicated in the Rueckwanderer Mark scheme, which helped Nazi Germany raise dollars from 1936 to 1941. |
-| c003 | established | McCloy's Chase chairmanship began in 1953, after World War II. |
-| c004 | strongly_supported | During World War II, McCloy served as U.S. Assistant Secretary of War. |
-| c005 | established | McCloy ordered/approved 1951 clemency decisions and the cancellation of Krupp asset confiscation. |
-| c006 | strongly_supported | McCloy's postwar policy role supported West German reintegration into the Western order, with industrial-elite rehabilitation as one documented consequence. |
-| c007 | plausible | The prior assistant answer was cautious but lacked a structured repository audit. |
+| c001 | weak | Die Evidenz stützt institutionelle anglo-amerikanische Geschäfte mit NS-Deutschland, aber nicht McCloys persönliche Förderung dieser Geschäfte vor 1945. |
+| c002 | established | Chase und andere US-Finanzinstitutionen waren in das Rueckwanderer-Mark-System verwickelt, das NS-Deutschland von 1936 bis 1941 half, Dollar zu beschaffen. |
+| c003 | established | McCloys Chase-Vorsitz begann 1953, also nach dem Zweiten Weltkrieg. |
+| c004 | strongly_supported | Während des Zweiten Weltkriegs war McCloy U.S. Assistant Secretary of War. |
+| c005 | established | McCloy ordnete/billigte 1951 Begnadigungs- bzw. Strafmilderungsentscheidungen und die Aufhebung der Krupp-Vermögenskonfiskation. |
+| c006 | strongly_supported | McCloys Nachkriegspolitik unterstützte die Westintegration der Bundesrepublik; die Rehabilitierung einzelner Industrieeliten war eine dokumentierte Folge. |
+| c007 | plausible | Die vorherige Assistant-Antwort war vorsichtig, aber noch nicht als strukturiertes Repo-Audit abgelegt. |
 
-## Evidence map
+## Evidenzkarte
 
-| Evidence | Source | Supports | Contradicts | Relevance |
+| Evidence | Quelle | Stützt | Widerspricht | Relevanz |
 |---|---|---|---|---|
-| e002 | s002 | c002 | — | Establishes institutional U.S. financial implication in Nazi dollar-raising. |
-| e009 | s003 | c002 | — | Provides same-source Cambridge evidence for the Chase/Rückwanderer academic secondary source. |
-| e003 | s004 | c003 | c001 | Chronology weakens any claim that McCloy acted as Chase chairman during 1936-1941. |
-| e004 | s005 | c004 | — | Places McCloy in wartime U.S. government rather than Nazi-facing bank leadership. |
-| e005 | s006 | c005, c006 | — | Establishes postwar commutation context. |
-| e006 | s008 | c005, c006 | — | Confirms Krupp confiscation cancellation by McCloy. |
-| e010 | s007 | c005, c006 | — | Provides same-source Krupp institutional evidence, treated as interested corroboration. |
-| e007 | s009 | c006 | — | Establishes policy context of West German reintegration. |
+| e002 | s002 | c002 | — | Belegt die institutionelle US-Finanzverwicklung in NS-Dollarbeschaffung. |
+| e009 | s003 | c002 | — | Liefert same-source Cambridge-Evidenz für die akademische Sekundärquelle zum Chase/Rückwanderer-Komplex. |
+| e003 | s004 | c003 | c001 | Die Chronologie schwächt jede Version, nach der McCloy 1936–1941 als Chase-Vorsitzender gehandelt habe. |
+| e004 | s005 | c004 | — | Verortet McCloy im Krieg in der US-Regierung, nicht als Nazi-naher Bankmanager. |
+| e005 | s006 | c005, c006 | — | Belegt den Kontext der Nachkriegs-Strafmilderungen. |
+| e006 | s008 | c005, c006 | — | Bestätigt die Aufhebung der Krupp-Konfiskation durch McCloy. |
+| e010 | s007 | c005, c006 | — | Liefert same-source Krupp-Institutionsevidenz, als interessierte Bestätigung behandelt. |
+| e007 | s009 | c006 | — | Belegt den politischen Kontext der Westintegration. |
 
-## Counterhypothesis
+## Gegenhypothese
 
-A stronger alternative to the original broad claim is:
+Eine stärkere Alternative zur ursprünglichen breiten Behauptung lautet:
 
-> McCloy was not shown by this evidence pack to have personally promoted pre-1945 Nazi financing by Anglo-American institutions. Rather, he was a highly connected U.S. establishment lawyer and policymaker whose postwar decisions prioritized Cold War reintegration of West Germany, even when that meant clemency and property restoration for convicted industrial elites.
+> Dieses Evidence-Pack zeigt nicht, dass McCloy persönlich die NS-Finanzierung durch anglo-amerikanische Institutionen vor 1945 gefördert hat. Es zeigt vielmehr einen stark vernetzten US-Establishment-Juristen und Politikakteur, dessen Nachkriegsentscheidungen die Cold-War-Reintegration Westdeutschlands priorisierten — auch wenn dies Begnadigungen und Eigentumsrückgaben für verurteilte Industrieeliten einschloss.
 
-This counterhypothesis better fits the currently audited evidence because it separates:
+Diese Gegenhypothese passt besser zur derzeit auditierten Evidenz, weil sie trennt zwischen:
 
-1. institutional facts about Chase and other U.S. financial institutions;
-2. McCloy's documented chronology and official roles; and
-3. postwar policy choices that materially benefited selected German industrial figures.
+1. institutionellen Fakten zu Chase und anderen US-Finanzinstitutionen,
+2. McCloys dokumentierter Chronologie und offiziellen Rollen,
+3. Nachkriegspolitik, die ausgewählten deutschen Industrieakteuren materiell nützte.
 
-## Uncertainty
+## Unsicherheit
 
-- The audit did not exhaust all archival collections, including McCloy's law-firm records, Chase internal files, or complete State Department and War Department correspondence.
-- The words "gefördert" and "support" are ambiguous. They can mean direct organization, passive facilitation, indirect elite-network enablement, or postwar restoration.
-- A lack of direct evidence in this source set is not proof that no direct evidence exists elsewhere.
+- Das Audit schöpft nicht alle Archivbestände aus, insbesondere nicht McCloys Kanzleiakten, interne Chase-Akten oder vollständige State-/War-Department-Korrespondenz.
+- Die Begriffe „gefördert“ und „support“ sind mehrdeutig. Sie können direkte Organisation, passive Ermöglichung, indirekte Netzwerkförderung oder Nachkriegsrestauration bedeuten.
+- Fehlende direkte Evidenz in diesem Source-Set beweist nicht, dass anderswo keine direkte Evidenz existiert.
 
-## Red-Team Status
+## Red-Team-Status
 
-Passed with notes. The red-team review requires the provisional answer to avoid three upgrades:
+Bestanden mit Hinweisen. Die Red-Team-Prüfung verlangt, dass die vorläufige Antwort drei Upgrades vermeidet:
 
-1. institutional financial support → McCloy's personal causality;
-2. benefit to German industrialists → McCloy's pro-Nazi motive;
-3. postwar reintegration → pre-1945 Nazi-support promotion.
+1. institutionelle Finanzunterstützung → McCloys persönliche Kausalität,
+2. Nutzen für deutsche Industrielle → McCloys pro-nazistisches Motiv,
+3. Nachkriegs-Reintegration → Vorkriegsförderung der Nazis.

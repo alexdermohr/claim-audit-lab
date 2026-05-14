@@ -3,41 +3,41 @@ schema_version: "1.0"
 hypotheses:
   - id: "h1"
     label: "pre_1945_personal_promotion"
-    description: "McCloy personally promoted or organized Anglo-American financial/material support for Nazi Germany before 1945."
+    description: "McCloy förderte oder organisierte vor 1945 persönlich anglo-amerikanische finanzielle/materielle Unterstützung für NS-Deutschland."
     status: "weak"
     supporting_evidence: []
     weaknesses:
-      - "No audited source directly connects McCloy to operational promotion of the Rueckwanderer scheme or comparable pre-1945 material-support channels."
-      - "McCloy's Chase chairmanship began after World War II."
+      - "Keine auditierte Quelle verbindet McCloy direkt mit operativer Förderung des Rueckwanderer-Systems oder vergleichbarer materieller Unterstützungskanäle vor 1945."
+      - "McCloys Chase-Vorsitz begann nach dem Zweiten Weltkrieg."
 
   - id: "h2"
     label: "institutional_support_without_mccloy_personal_causality"
-    description: "Anglo-American institutions, including Chase, aided Nazi Germany financially, but McCloy's personal promotion is not established in the audited source set."
+    description: "Anglo-amerikanische Institutionen, darunter Chase, halfen NS-Deutschland finanziell; McCloys persönliche Förderung ist im auditierten Source-Set aber nicht etabliert."
     status: "strongly_supported"
     supporting_evidence: ["e002", "e003", "e004", "e009"]
     weaknesses:
-      - "Does not exclude undiscovered archival evidence of indirect legal-network facilitation."
+      - "Schließt unentdeckte Archivalien zu indirekter anwaltlicher Netzwerk-Ermöglichung nicht aus."
 
   - id: "h3"
     label: "postwar_reintegration_and_elite_rehabilitation"
-    description: "McCloy's documented postwar role supported West German reintegration and included clemency/property decisions benefiting convicted industrial elites."
+    description: "McCloys dokumentierte Nachkriegsrolle unterstützte die Westintegration und umfasste Begnadigungs-/Eigentumsentscheidungen zugunsten verurteilter Industrieeliten."
     status: "strongly_supported"
     supporting_evidence: ["e005", "e006", "e007", "e010"]
     weaknesses:
-      - "Does not prove pro-Nazi motive and should not be back-projected into pre-1945 conduct."
+      - "Beweist kein pro-nazistisches Motiv und darf nicht in Vorkriegshandeln zurückprojiziert werden."
 
   - id: "h4"
     label: "coordinated_intentionality"
-    description: "McCloy intentionally coordinated a long-running establishment project to protect Nazi-linked finance and industry before and after the war."
+    description: "McCloy koordinierte absichtlich ein langfristiges Establishment-Projekt zum Schutz NS-naher Finanz- und Industrieinteressen vor und nach dem Krieg."
     status: "speculative"
     supporting_evidence: []
     weaknesses:
-      - "Current evidence supports institutional dealings and later reintegration, not a continuous coordinated personal plan."
+      - "Die aktuelle Evidenz stützt institutionelle Geschäfte und spätere Reintegration, nicht aber einen kontinuierlichen koordinierten persönlichen Plan."
 
 steelmans:
   - hypothesis_id: "h3"
-    strongest_version: "McCloy's Cold War policy choices made rehabilitation of selected German industrial elites an acceptable cost of rebuilding West Germany as an anti-communist Western partner."
+    strongest_version: "McCloys Cold-War-Policy machte die Rehabilitierung ausgewählter deutscher Industrieeliten zu einem akzeptierten Preis für den Wiederaufbau Westdeutschlands als antikommunistischen westlichen Partner."
     best_supporting_evidence: ["e005", "e006", "e007", "e010"]
-    strongest_objection_to_mainline: "The main answer may understate how materially consequential the 1951 clemency and Krupp property decisions were."
-    what_would_change_the_verdict: "Archival records showing McCloy directly advising, coordinating, or pressuring financial institutions before 1945 to sustain Nazi Germany would upgrade h1."
+    strongest_objection_to_mainline: "Die Hauptantwort könnte unterschätzen, wie materiell folgenreich die Begnadigungs- und Krupp-Eigentumsentscheidungen von 1951 waren."
+    what_would_change_the_verdict: "Archivalien, die zeigen, dass McCloy vor 1945 Finanzinstitutionen direkt beriet, koordinierte oder unter Druck setzte, NS-Deutschland zu stützen, würden h1 aufwerten."
     quality_score: 0.8

@@ -5,81 +5,81 @@ auditor: "assistant"
 records:
   - source_ref: "s001"
     questions:
-      - "Is the source the object of audit rather than historical proof?"
-      - "Can the source independently confirm McCloy-related historical facts?"
-      - "Should model output receive any source-cluster independence?"
+      - "Ist die Quelle Gegenstand des Audits statt historischer Beleg?"
+      - "Kann die Quelle historische McCloy-Fakten unabhängig bestätigen?"
+      - "Soll Model-Output irgendeine Quellencluster-Unabhängigkeit erhalten?"
     evidence_refs: ["e001", "e008"]
     disputed: false
-    notes: "Weighted low for historical proof and source-cluster independence because it is the audited model output. It remains useful for checking whether the repository case faithfully captures the prior answer."
+    notes: "Niedrig gewichtet für historischen Belegwert und Quellencluster-Unabhängigkeit, weil es sich um den auditierten Model-Output handelt. Nützlich bleibt die Quelle zur Prüfung, ob der Repository-Case die vorherige Antwort korrekt erfasst."
 
   - source_ref: "s002"
     questions:
-      - "How close is the source to the underlying declassified records?"
-      - "Does it identify Chase and other U.S. financial institutions in the Rueckwanderer Mark context?"
-      - "Does it establish McCloy's personal pre-1945 promotion or only institutional implication?"
+      - "Wie nah ist die Quelle an den zugrunde liegenden deklassifizierten Unterlagen?"
+      - "Identifiziert sie Chase und andere US-Finanzinstitutionen im Rueckwanderer-Mark-Kontext?"
+      - "Belegt sie McCloys persönliche Vorkriegsförderung oder nur institutionelle Verwicklung?"
     evidence_refs: ["e002"]
     disputed: false
-    notes: "Official NARA summary of declassified records; strong for institutional implication and dollar-raising context, not sufficient for McCloy personal causality."
+    notes: "Offizielle NARA-Zusammenfassung deklassifizierter Unterlagen; stark für institutionelle Verwicklung und Dollarbeschaffung, nicht hinreichend für McCloys persönliche Kausalität."
 
   - source_ref: "s003"
     questions:
-      - "Is this an academic secondary source tied to the same Nazi War Crimes Disclosure Act record cluster?"
-      - "Does it provide independent analysis of Chase's Rueckwanderer Mark role?"
-      - "Does it identify McCloy as an operational promoter of the scheme?"
+      - "Ist dies eine akademische Sekundärquelle aus demselben Quellencluster des Nazi War Crimes Disclosure Act?"
+      - "Liefert sie unabhängige Analyse zur Rolle von Chase im Rueckwanderer-Mark-System?"
+      - "Identifiziert sie McCloy als operativen Förderer des Systems?"
     evidence_refs: ["e009", "e002"]
     disputed: false
-    notes: "Weighted as a method-transparent academic source for the Chase/Rueckwanderer institutional claim. Its cluster partially overlaps NARA-derived records, so it does not independently establish McCloy's personal causality."
+    notes: "Als methodentransparente akademische Quelle für den institutionellen Chase/Rueckwanderer-Claim gewichtet. Ihr Cluster überschneidet sich teilweise mit NARA-basierten Unterlagen; sie etabliert daher McCloys persönliche Kausalität nicht unabhängig."
 
   - source_ref: "s004"
     questions:
-      - "Is the source useful for McCloy's chronology?"
-      - "Does the institution have a sympathetic interest in McCloy's public legacy?"
-      - "Does the chronology bear on the claim that McCloy led Chase's 1936-1941 conduct?"
+      - "Ist die Quelle für McCloys Chronologie nützlich?"
+      - "Hat die Institution ein wohlwollendes Interesse an McCloys öffentlichem Vermächtnis?"
+      - "Ist die Chronologie relevant für den Claim, McCloy habe Chase-Handeln von 1936 bis 1941 geleitet?"
     evidence_refs: ["e003"]
     disputed: false
-    notes: "Weighted as useful but institutionally interested chronology evidence. The 1953 Chase chairmanship date is relevant against a Chase-chairman version of the allegation."
+    notes: "Als nützliche, aber institutionell interessierte Chronologie-Evidenz gewichtet. Das Datum des Chase-Vorsitzes 1953 ist relevant gegen eine Chase-Vorsitzenden-Version der Behauptung."
 
   - source_ref: "s005"
     questions:
-      - "Is the source a concise independent reference for McCloy's wartime and postwar roles?"
-      - "Does it support role mapping without adding causal speculation?"
-      - "Is it sufficient alone for detailed archival claims?"
+      - "Ist die Quelle eine knappe unabhängige Referenz für McCloys Kriegs- und Nachkriegsrollen?"
+      - "Stützt sie Rollenzuordnung ohne zusätzliche Kausalspekulation?"
+      - "Reicht sie allein für detaillierte Archivclaims?"
     evidence_refs: ["e004"]
     disputed: false
-    notes: "Weighted as a broadly reliable reference source for chronology and role mapping, not as a primary source for contested causality."
+    notes: "Als allgemein zuverlässige Referenzquelle für Chronologie und Rollenzuordnung gewichtet, nicht als Primärquelle für umstrittene Kausalität."
 
   - source_ref: "s006"
     questions:
-      - "Is the source close to official Nuremberg subsequent-proceedings records?"
-      - "Does it support the existence and date of McCloy's commutation decisions?"
-      - "Does it establish motive or only legal-administrative outcomes?"
+      - "Ist die Quelle nah an offiziellen Unterlagen zu den Nürnberger Nachfolgeprozessen?"
+      - "Stützt sie Existenz und Datum von McCloys Strafmilderungsentscheidungen?"
+      - "Belegt sie Motiv oder nur rechtlich-administrative Ergebnisse?"
     evidence_refs: ["e005"]
     disputed: false
-    notes: "Official NARA overview supports the January 31, 1951 commutation context. It supports postwar action, not pro-Nazi motive."
+    notes: "Offizielle NARA-Übersicht stützt den Kontext der Strafmilderungen vom 31. Januar 1951. Sie stützt Nachkriegshandeln, nicht ein pro-nazistisches Motiv."
 
   - source_ref: "s007"
     questions:
-      - "Does the source have an institutional interest in the Krupp legacy?"
-      - "Is the interested admission adversarially relevant when it acknowledges pardon/confiscation facts?"
-      - "Does it need corroboration by less interested records?"
+      - "Hat die Quelle ein institutionelles Interesse am Krupp-Erbe?"
+      - "Ist das interessierte Eingeständnis adversariell relevant, wenn es Begnadigungs-/Konfiskationsfakten anerkennt?"
+      - "Braucht es Bestätigung durch weniger interessierte Quellen?"
     evidence_refs: ["e010", "e006"]
     disputed: false
-    notes: "Weighted with high institutional-interest risk because it is a Krupp institutional source. It is treated as corroborative and adversarially relevant only when paired with Hansard/NARA context."
+    notes: "Mit hohem institutionellen Interessenrisiko gewichtet, weil es sich um eine Krupp-Institutionsquelle handelt. Sie wird nur als bestätigend und adversariell relevant behandelt, wenn sie mit Hansard-/NARA-Kontext kombiniert wird."
 
   - source_ref: "s008"
     questions:
-      - "Is this a formal public parliamentary record?"
-      - "Does it independently confirm the Krupp confiscation cancellation attributed to McCloy?"
-      - "Does it establish motive or only legal/political action?"
+      - "Ist dies ein formaler öffentlicher Parlamentsbericht?"
+      - "Bestätigt er unabhängig die McCloy zugeschriebene Aufhebung der Krupp-Konfiskation?"
+      - "Belegt er ein Motiv oder nur rechtlich-politisches Handeln?"
     evidence_refs: ["e006"]
     disputed: false
-    notes: "Parliamentary record supports the asset-restoration fact and helps corroborate c005/c006. It does not establish pro-Nazi motive."
+    notes: "Parlamentsbericht stützt den Fakt der Vermögensrestitution und hilft c005/c006 zu bestätigen. Er belegt kein pro-nazistisches Motiv."
 
   - source_ref: "s009"
     questions:
-      - "Is the document primary evidence for McCloy's High Commissioner policy framing?"
-      - "Does it support West German reintegration context?"
-      - "Does it support a Nazi-sympathy motive?"
+      - "Ist das Dokument Primärevidenz für McCloys Policy-Framing als High Commissioner?"
+      - "Stützt es den Kontext der Westintegration?"
+      - "Stützt es ein Nazi-Sympathie-Motiv?"
     evidence_refs: ["e007"]
     disputed: false
-    notes: "Primary FRUS/State Department document supports the Westbindung/reintegration frame. Its institutional-interest risk is declared because it is also a U.S. policy self-description."
+    notes: "Primäres FRUS-/State-Department-Dokument stützt den Westbindungs-/Reintegrationsrahmen. Sein institutionelles Interessenrisiko ist deklariert, weil es zugleich eine US-Policy-Selbstbeschreibung ist."

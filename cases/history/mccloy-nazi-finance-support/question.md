@@ -1,36 +1,36 @@
-# Case: John J. McCloy and Anglo-American Support for Nazi Germany
+# Case: John J. McCloy und anglo-amerikanische Unterstützung für NS-Deutschland
 
-## Question
+## Frage
 
 Hat John J. McCloy die finanzielle und materielle Unterstützung der Nazis durch anglo-amerikanische Finanzinstitute und Industrien gefördert?
 
-## Context
+## Kontext
 
-The case audits a prior assistant answer that distinguished between two periods:
+Der Case auditiert eine vorherige Assistant-Antwort, die zwischen zwei Zeiträumen unterschied:
 
-1. pre-1945 Anglo-American financial and industrial dealings with Nazi Germany; and
-2. post-1945 U.S. occupation policy, clemency, industrial restitution, and West German reintegration associated with McCloy.
+1. anglo-amerikanischen Finanz- und Industriegeschäften mit NS-Deutschland vor 1945; und
+2. Nachkriegspolitik der US-Besatzung, Begnadigungen, industrieller Restitution und Westintegration, die mit McCloy verbunden sind.
 
 ## Scope
 
-In scope:
+Im Scope:
 
-- Direct and indirect evidence about McCloy's personal role.
-- Evidence that Anglo-American financial institutions, especially Chase National Bank, aided Nazi Germany financially before U.S. asset-freezing measures.
-- Evidence concerning McCloy's postwar role as U.S. High Commissioner for Germany, including the Landsberg clemency decisions and Krupp property restitution.
-- Audit of whether the prior assistant response upgraded evidence beyond what sources support.
+- Direkte und indirekte Evidenz zu McCloys persönlicher Rolle.
+- Evidenz dafür, dass anglo-amerikanische Finanzinstitutionen, insbesondere Chase National Bank, NS-Deutschland vor der US-Vermögenssperre finanziell halfen.
+- Evidenz zu McCloys Nachkriegsrolle als U.S. High Commissioner for Germany, einschließlich Landsberg-Entscheidungen und Krupp-Vermögensrestitution.
+- Audit, ob die vorherige Assistant-Antwort Evidenz stärker gemacht hat, als die Quellen tragen.
 
-Out of scope:
+Nicht im Scope:
 
-- A comprehensive history of every Anglo-American firm that traded with Nazi Germany.
-- Moral or legal adjudication beyond the cited historical record.
-- Claims about hidden motives unless supported by explicit evidence.
+- Eine vollständige Geschichte aller anglo-amerikanischen Firmen, die mit NS-Deutschland handelten.
+- Moralische oder rechtliche Urteilsfindung über den zitierten historischen Befund hinaus.
+- Claims über verborgene Motive, sofern sie nicht explizit durch Evidenz gestützt sind.
 
-## Opened
+## Eröffnet
 
-Date: 2026-05-14  
-Opened by: assistant
+Datum: 2026-05-14  
+Eröffnet durch: assistant
 
 ## Status
 
-See `lifecycle.yml`
+Siehe `lifecycle.yml`.
