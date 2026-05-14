@@ -3,7 +3,7 @@ schema_version: "1.0"
 evidence:
   - evidence_id: "e001"
     source_ref: "s001"
-    claim_refs: ["c001", "c007"]
+    claim_refs: ["c007"]
     type: "model_output"
     summary: "Die vorherige Antwort sagte, direkte Evidenz für McCloys persönliche Vorkriegsförderung der NS-Unterstützung sei nicht etabliert, während die Nachkriegs-Evidenz zu Begnadigungen und Reintegration stärker sei."
     verbatim_or_ref: "Gesprächslokale Assistant-Antwort vom 2026-05-14."
