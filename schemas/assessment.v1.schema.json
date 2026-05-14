@@ -34,6 +34,7 @@
         "assessed",
         "contested",
         "redteam_blocked",
+        "provisional_under_uncertainty",
         "final_under_uncertainty",
         "reopened",
         "superseded",
@@ -46,11 +47,20 @@
     },
     "redteam_status": {
       "type": "string",
-      "enum": ["passed", "blocked", "passed_with_notes", "pending"]
+      "enum": [
+        "passed",
+        "blocked",
+        "passed_with_notes",
+        "pending"
+      ]
     },
     "lifecycle": {
       "type": "object",
-      "required": ["created_at", "last_reviewed_at", "review_after"],
+      "required": [
+        "created_at",
+        "last_reviewed_at",
+        "review_after"
+      ],
       "additionalProperties": false,
       "properties": {
         "created_at": {
@@ -84,19 +94,61 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "established": { "type": "array", "items": { "type": "string" } },
-        "strongly_supported": { "type": "array", "items": { "type": "string" } },
-        "plausible": { "type": "array", "items": { "type": "string" } },
-        "weak": { "type": "array", "items": { "type": "string" } },
-        "speculative": { "type": "array", "items": { "type": "string" } },
-        "contradicted": { "type": "array", "items": { "type": "string" } },
-        "unresolved": { "type": "array", "items": { "type": "string" } },
-        "no_verdict_possible": { "type": "array", "items": { "type": "string" } }
+        "established": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "strongly_supported": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "plausible": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "weak": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "speculative": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contradicted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unresolved": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "no_verdict_possible": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "claim_refs": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "summary": {
       "type": "string"
@@ -105,16 +157,34 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "causes": { "type": "array", "items": { "type": "string" } }
+        "score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "causes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "interpolation": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "assumptions": { "type": "array", "items": { "type": "string" } }
+        "score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "mandatory_statement": {

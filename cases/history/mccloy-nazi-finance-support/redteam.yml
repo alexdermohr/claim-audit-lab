@@ -1,0 +1,21 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "cases/history/mccloy-nazi-finance-support/assessment.md"
+reviewer: "assistant-redteam"
+reviewed_at: "2026-05-14"
+redteam_questions:
+  - "Überträgt das Assessment institutionelles Chase-Handeln unzulässig auf McCloys persönliches Handeln?"
+  - "Vermischt das Assessment die Nachkriegs-Reintegration Westdeutschlands mit Vorkriegsunterstützung für NS-Deutschland?"
+  - "Leitet das Assessment McCloys Motiv aus den Begünstigten seiner Entscheidungen ab?"
+findings:
+  - id: "f001"
+    severity: "medium"
+    issue: "Die ursprüngliche deutsche Frage ist semantisch breit; ohne Eingrenzung kann Evidenz zur Nachkriegsrehabilitation als Beweis für Vorkriegsunterstützung gelesen werden."
+    required_fix: "c001, c005 und c006 getrennt halten und die Zeitgrenzen explizit benennen."
+  - id: "f002"
+    severity: "low"
+    issue: "Das Quellenset stützt sich auf öffentliche Zusammenfassungen statt auf eine erschöpfende Archivrecherche."
+    required_fix: "Unsicherheitssprache beibehalten und Reopen-Triggers für neue Primärquellen setzen."
+verdict:
+  status: "passed_with_notes"
+  reason: "Das Assessment ist akzeptabel, wenn es die Unterscheidung zwischen institutioneller Unterstützung, persönlicher Kausalität und Nachkriegsrehabilitation bewahrt."

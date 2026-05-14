@@ -56,6 +56,18 @@ def test_valid_evidence_pack_passes(schema):
     assert errors == [], f"Expected no errors, got: {errors}"
 
 
+def test_evidence_audit_locator_fields_pass(schema):
+    item = base_evidence(
+        evidence_excerpt="Short stable excerpt or paraphrase.",
+        locator="section 2, paragraph 4",
+        accessed_at="2026-05-14",
+        archive_url="https://web.archive.org/example",
+        content_hash="sha256:example",
+    )
+    errors = validate_pack(base_pack([item]), schema)
+    assert errors == [], f"Expected no errors, got: {errors}"
+
+
 def test_invalid_evidence_id_fails(schema):
     errors = validate_pack(base_pack([base_evidence(evidence_id="bad")]), schema)
     assert len(errors) >= 1

@@ -1,0 +1,43 @@
+schema_version: "1.0"
+
+hypotheses:
+  - id: "h1"
+    label: "pre_1945_personal_promotion"
+    description: "McCloy förderte oder organisierte vor 1945 persönlich anglo-amerikanische finanzielle/materielle Unterstützung für NS-Deutschland."
+    status: "weak"
+    supporting_evidence: []
+    weaknesses:
+      - "Keine auditierte Quelle verbindet McCloy direkt mit operativer Förderung des Rueckwanderer-Systems oder vergleichbarer materieller Unterstützungskanäle vor 1945."
+      - "McCloys Chase-Vorsitz begann nach dem Zweiten Weltkrieg."
+
+  - id: "h2"
+    label: "institutional_support_without_mccloy_personal_causality"
+    description: "Anglo-amerikanische Institutionen, darunter Chase, halfen NS-Deutschland finanziell; McCloys persönliche Förderung ist im auditierten Quellenset aber nicht etabliert."
+    status: "strongly_supported"
+    supporting_evidence: ["e002", "e003", "e004", "e009"]
+    weaknesses:
+      - "Schließt unentdeckte Archivalien zu indirekter anwaltlicher Netzwerk-Ermöglichung nicht aus."
+
+  - id: "h3"
+    label: "postwar_reintegration_and_elite_rehabilitation"
+    description: "McCloys dokumentierte Nachkriegsrolle unterstützte die Westintegration und umfasste Begnadigungs-/Eigentumsentscheidungen zugunsten verurteilter Industrieeliten."
+    status: "strongly_supported"
+    supporting_evidence: ["e005", "e006", "e007", "e010"]
+    weaknesses:
+      - "Beweist kein pro-nazistisches Motiv und darf nicht in Vorkriegshandeln zurückprojiziert werden."
+
+  - id: "h4"
+    label: "coordinated_intentionality"
+    description: "McCloy koordinierte absichtlich ein langfristiges Establishment-Projekt zum Schutz NS-naher Finanz- und Industrieinteressen vor und nach dem Krieg."
+    status: "speculative"
+    supporting_evidence: []
+    weaknesses:
+      - "Die aktuelle Evidenz stützt institutionelle Geschäfte und spätere Reintegration, nicht aber einen kontinuierlichen koordinierten persönlichen Plan."
+
+steelmans:
+  - hypothesis_id: "h3"
+    strongest_version: "McCloys Cold-War-Policy machte die Rehabilitierung ausgewählter deutscher Industrieeliten zu einem akzeptierten Preis für den Wiederaufbau Westdeutschlands als antikommunistischen westlichen Partner."
+    best_supporting_evidence: ["e005", "e006", "e007", "e010"]
+    strongest_objection_to_mainline: "Die Hauptantwort könnte unterschätzen, wie materiell folgenreich die Begnadigungs- und Krupp-Eigentumsentscheidungen von 1951 waren."
+    what_would_change_the_verdict: "Archivalien, die zeigen, dass McCloy vor 1945 Finanzinstitutionen direkt beriet, koordinierte oder unter Druck setzte, NS-Deutschland zu stützen, würden h1 aufwerten."
+    quality_score: 0.8

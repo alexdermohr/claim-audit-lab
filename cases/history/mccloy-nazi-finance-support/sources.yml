@@ -1,0 +1,178 @@
+schema_version: "1.0"
+
+sources:
+  - schema_version: "1.0"
+    source_id: "s001"
+    label: "Vorherige Assistant-Antwort in der Nutzerkonversation"
+    url_or_ref: "gesprächslokale Assistant-Antwort vom 2026-05-14"
+    source_type: "other"
+    publication_date: "2026-05-14"
+    accessed_at: "2026-05-14"
+    locator: "gesprächslokale Assistant-Antwort unmittelbar vor der Case-Anfrage"
+    author_or_org: "OpenAI assistant"
+    source_weight:
+      primary_proximity: 0.2
+      method_transparency: 0.45
+      reproducibility: 0.35
+      source_cluster_independence: 0.0
+      institutional_interest_risk: 0.4
+      adversarial_relevance: 0.7
+      historical_track_record: 0.3
+      update_latency_risk: 0.2
+    notes: "Auditierte Modellausgabe; nützlich als Gegenstand des Audits, nicht als historischer Beleg. Risikoachsen folgen docs/source-weighting.md: höher bedeutet höheres Risiko."
+
+  - schema_version: "1.0"
+    source_id: "s002"
+    label: "National-Archives-Pressehinweis zu Unterlagen nach dem Nazi War Crimes Disclosure Act"
+    url_or_ref: "https://www.archives.gov/press/press-releases/2004/nr04-55"
+    source_type: "official_body"
+    publication_date: "2004-05-13"
+    accessed_at: "2026-05-14"
+    locator: "Media-Alert-Datum und Abschnitt 'Chase National Bank, Jewish Accounts, and Nazi Germany', Absätze zu Rueckwanderer Marks und Provisionen"
+    author_or_org: "U.S. National Archives and Records Administration"
+    source_weight:
+      primary_proximity: 0.75
+      method_transparency: 0.65
+      reproducibility: 0.65
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.3
+      adversarial_relevance: 0.85
+      historical_track_record: 0.8
+      update_latency_risk: 0.2
+    notes: "Offizielle Zusammenfassung deklassifizierter Unterlagen; berichtet Chases und anderer Institutionen Verwicklung in das Rueckwanderer-Mark-System. Datum auf das auf der Seite angezeigte Media-Alert-Datum korrigiert."
+
+  - schema_version: "1.0"
+    source_id: "s003"
+    label: "Banking on Hitler: Chase National Bank and the Rückwanderer Mark Scheme, 1936–1941"
+    url_or_ref: "https://www.cambridge.org/core/books/us-intelligence-and-the-nazis/banking-on-hitler-chase-national-bank-and-the-ruckwanderer-mark-scheme-19361941/52F76F3AB4FBD92DADE5FBF7784DCF49"
+    source_type: "secondary_analysis"
+    publication_date: "2005-04-04"
+    accessed_at: "2026-05-14"
+    locator: "Kapitel-Landingpage und Kapiteltitel"
+    author_or_org: "Richard Breitman, Norman J. W. Goda, Timothy Naftali, and Robert Wolfe / Cambridge University Press"
+    source_weight:
+      primary_proximity: 0.65
+      method_transparency: 0.75
+      reproducibility: 0.6
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.2
+      adversarial_relevance: 0.9
+      historical_track_record: 0.85
+      update_latency_risk: 0.25
+    notes: "Akademische Sekundärquelle auf Grundlage von U.S.-Intelligence- und Nazi-War-Crimes-Disclosure-Act-Unterlagen."
+
+  - schema_version: "1.0"
+    source_id: "s004"
+    label: "Biografie: John J. McCloy"
+    url_or_ref: "https://www.acgusa.org/about-us/history/biography-john-j-mccloy/"
+    source_type: "secondary_analysis"
+    accessed_at: "2026-05-14"
+    locator: "Biografieabschnitt zu Rückkehr aus Deutschland, Chase-Vorsitz 1953 und Aufsicht über die Fusion 1955"
+    author_or_org: "American Council on Germany"
+    source_weight:
+      primary_proximity: 0.5
+      method_transparency: 0.45
+      reproducibility: 0.55
+      source_cluster_independence: 0.35
+      institutional_interest_risk: 0.55
+      adversarial_relevance: 0.55
+      historical_track_record: 0.65
+      update_latency_risk: 0.35
+    notes: "Institutionell wohlwollende Biografie; für Chronologie nützlich, aber für kritische Claims nicht ausreichend."
+
+  - schema_version: "1.0"
+    source_id: "s005"
+    label: "John-J.-McCloy-Biografie"
+    url_or_ref: "https://www.britannica.com/biography/John-J-McCloy"
+    source_type: "secondary_analysis"
+    accessed_at: "2026-05-14"
+    locator: "biografische Zusammenfassungsabschnitte zu Assistant Secretary of War und Chase-Manhattan-Bank-Rollen"
+    author_or_org: "Encyclopaedia Britannica"
+    source_weight:
+      primary_proximity: 0.45
+      method_transparency: 0.45
+      reproducibility: 0.55
+      source_cluster_independence: 0.65
+      institutional_interest_risk: 0.25
+      adversarial_relevance: 0.5
+      historical_track_record: 0.75
+      update_latency_risk: 0.4
+    notes: "Knappe Referenzquelle für Chronologie und Gesamtzusammenfassung."
+
+  - schema_version: "1.0"
+    source_id: "s006"
+    label: "National-Archives-Überblick zu Nürnberger Nachfolgeprozessen und Strafmilderungen"
+    url_or_ref: "https://www.archives.gov/iwg/research-papers/trial-of-war-criminals-before-imt.html"
+    source_type: "official_body"
+    accessed_at: "2026-05-14"
+    locator: "Abschnitt zu Strafmilderungen vom 31. Januar 1951 durch den U.S. High Commissioner"
+    author_or_org: "U.S. National Archives and Records Administration"
+    source_weight:
+      primary_proximity: 0.7
+      method_transparency: 0.65
+      reproducibility: 0.7
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.3
+      adversarial_relevance: 0.75
+      historical_track_record: 0.8
+      update_latency_risk: 0.3
+    notes: "Offizielle Übersicht, die Strafmilderungen vom 31. Januar 1951 durch den U.S. High Commissioner for Germany erwähnt."
+
+  - schema_version: "1.0"
+    source_id: "s007"
+    label: "Historische Krupp-Ausstellung"
+    url_or_ref: "https://www.krupp-stiftung.de/en/krupp-historical-exhibition/"
+    source_type: "secondary_analysis"
+    accessed_at: "2026-05-14"
+    locator: "Alfried Krupp / Ausstellungstext zu Nachkriegsverurteilung und Begnadigung"
+    author_or_org: "Alfried Krupp von Bohlen und Halbach-Stiftung"
+    source_weight:
+      primary_proximity: 0.55
+      method_transparency: 0.45
+      reproducibility: 0.6
+      source_cluster_independence: 0.35
+      institutional_interest_risk: 0.75
+      adversarial_relevance: 0.8
+      historical_track_record: 0.55
+      update_latency_risk: 0.35
+    notes: "Institutionelle Krupp-Quelle; ihr Eingeständnis, dass McCloy Krupp begnadigte und die Konfiskation aufhob, ist trotz institutionellen Interesses adversariell relevant."
+
+  - schema_version: "1.0"
+    source_id: "s008"
+    label: "UK Parliament Hansard: Disposal of Krupp's Works"
+    url_or_ref: "https://hansard.parliament.uk/Lords/1957-12-11/debates/5c4fa040-e093-4e97-8913-dabc65d12696/DisposalOfKruppSWorks"
+    source_type: "official_body"
+    publication_date: "1957-12-11"
+    accessed_at: "2026-05-14"
+    locator: "House-of-Lords-Debatte 'Disposal Of Krupp's Works', Antwort zu Urteil 1948 und Aufhebung 1951"
+    author_or_org: "UK Parliament"
+    source_weight:
+      primary_proximity: 0.75
+      method_transparency: 0.7
+      reproducibility: 0.75
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.35
+      adversarial_relevance: 0.8
+      historical_track_record: 0.8
+      update_latency_risk: 0.25
+    notes: "Parlamentsprotokoll, das festhält, dass McCloy die Konfiskationsanordnung 1951 aufhob."
+
+  - schema_version: "1.0"
+    source_id: "s009"
+    label: "FRUS 1951: McCloys achter Quartalsbericht zu Deutschland"
+    url_or_ref: "https://history.state.gov/historicaldocuments/frus1951v03p2/d6"
+    source_type: "primary_document"
+    publication_date: "1951-09-30"
+    accessed_at: "2026-05-14"
+    locator: "Dokument 6, eröffnende Absätze von McCloys achtem Quartalsbericht für den Zeitraum 1. Juli bis 30. September 1951"
+    author_or_org: "U.S. Department of State / U.S. High Commissioner for Germany"
+    source_weight:
+      primary_proximity: 0.85
+      method_transparency: 0.8
+      reproducibility: 0.8
+      source_cluster_independence: 0.65
+      institutional_interest_risk: 0.55
+      adversarial_relevance: 0.65
+      historical_track_record: 0.85
+      update_latency_risk: 0.2
+    notes: "Primäres US-Policy-Dokument, das Westdeutschlands Integration in eine westliche Verteidigungs- und Staatengemeinschaft spiegelt."

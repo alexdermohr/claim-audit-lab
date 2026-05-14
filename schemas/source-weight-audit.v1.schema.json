@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/source-weight-audit.v1.schema.json",
+  "title": "Source Weight Audit v1",
+  "description": "Audit records explaining source_weight assignments in a case.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_ref",
+    "audited_at",
+    "auditor",
+    "records"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "case_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "audited_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "auditor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "source_ref",
+          "questions",
+          "evidence_refs",
+          "disputed",
+          "notes"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "pattern": "^s[0-9]{3,}$"
+          },
+          "questions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^e[0-9]{3,}$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "disputed": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

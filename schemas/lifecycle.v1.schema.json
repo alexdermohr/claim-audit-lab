@@ -37,6 +37,7 @@
         "assessed",
         "contested",
         "redteam_blocked",
+        "provisional_under_uncertainty",
         "final_under_uncertainty",
         "reopened",
         "superseded",
@@ -76,7 +77,11 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["date", "status", "note"],
+        "required": [
+          "date",
+          "status",
+          "note"
+        ],
         "additionalProperties": false,
         "properties": {
           "date": {
@@ -90,6 +95,7 @@
               "assessed",
               "contested",
               "redteam_blocked",
+              "provisional_under_uncertainty",
               "final_under_uncertainty",
               "reopened",
               "superseded",

@@ -4,7 +4,10 @@
   "title": "Evidence Pack v1",
   "description": "A collection of evidence items bound to claims and sources.",
   "type": "object",
-  "required": ["schema_version", "evidence"],
+  "required": [
+    "schema_version",
+    "evidence"
+  ],
   "additionalProperties": false,
   "properties": {
     "schema_version": {
@@ -37,7 +40,9 @@
           },
           "claim_refs": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
           "type": {
             "type": "string",
@@ -59,14 +64,38 @@
           },
           "supports": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
           "contradicts": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
           "notes": {
             "type": "string"
+          },
+          "evidence_excerpt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "accessed_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "archive_url": {
+            "type": "string",
+            "minLength": 1
+          },
+          "content_hash": {
+            "type": "string",
+            "minLength": 1
           }
         }
       }

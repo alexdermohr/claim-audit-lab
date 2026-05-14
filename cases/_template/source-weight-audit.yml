@@ -1,0 +1,11 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+audited_at: "YYYY-MM-DD"
+auditor: "[Rolle oder Kennung]"
+records:
+  - source_ref: "s001"
+    questions:
+      - "Welche Annahme zur Quellengewichtung wird auditiert?"
+    evidence_refs: ["e001"]
+    disputed: false
+    notes: "Erklären, warum die `source_weight`-Achsen so vergeben wurden und ob ein Score bestritten ist."

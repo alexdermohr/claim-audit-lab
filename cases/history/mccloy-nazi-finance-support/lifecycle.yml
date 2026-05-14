@@ -1,0 +1,19 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: "cases/history/mccloy-nazi-finance-support"
+status: "provisional_under_uncertainty"
+created_at: "2026-05-14"
+last_reviewed_at: "2026-05-14"
+review_after: "2026-11-14"
+redteam_ref: "redteam.yml"
+reopen_triggers:
+  - new_primary_source
+  - major_contradiction
+  - source_discredited
+history:
+  - date: "2026-05-14"
+    status: "draft"
+    note: "Case eröffnet, um eine vorherige Assistant-Antwort zu auditieren."
+  - date: "2026-05-14"
+    status: "provisional_under_uncertainty"
+    note: "Strukturierte Quellen-, Claim-, Evidence- und Red-Team-Artefakte ergänzt."
