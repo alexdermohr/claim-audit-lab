@@ -1,0 +1,148 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    statement: "John J. McCloy personally promoted or organized pre-1945 financial and material support for Nazi Germany by Anglo-American financial institutions and industries."
+    status: "weak"
+    evidence_refs: ["e001", "e002", "e003", "e004"]
+    source_refs: ["s001", "s002", "s003", "s004", "s005"]
+    requires: ["direct personal-action evidence", "timeline", "institutional role mapping"]
+    counterclaims:
+      - "Evidence establishes Anglo-American institutional dealings with Nazi Germany, but not McCloy's personal promotion of those dealings."
+      - "McCloy's Chase chairmanship began after World War II, weakening claims that he led Chase's 1936-1941 conduct."
+    forbidden_upgrades: ["correlation_to_causation", "benefit_to_motive", "suspicion_to_proof"]
+    uncertainty:
+      score: 0.68
+      causes:
+        - "Known institutional support does not automatically identify McCloy as promoter."
+        - "Available public summaries do not provide direct documentary evidence of McCloy's pre-1945 operational role in Chase's Nazi-related transactions."
+        - "The phrase 'gefördert' can mean direct promotion, facilitation through networks, or postwar rehabilitation; these must not be conflated."
+    interpolation:
+      score: 0.55
+      assumptions:
+        - "Inferring personal promotion from Wall Street proximity would require evidence not present in the audited source set."
+    notes: "This is the main user claim. The current source map supports institutional dealings and postwar rehabilitation more strongly than pre-1945 personal promotion by McCloy."
+
+  - schema_version: "1.0"
+    claim_id: "c002"
+    claim_type: "factual_event_claim"
+    statement: "Chase National Bank and other U.S. financial institutions were implicated in the Rueckwanderer/Rückwanderer Mark scheme that helped Nazi Germany raise U.S. dollars from 1936 to 1941."
+    status: "established"
+    evidence_refs: ["e002", "e009"]
+    source_refs: ["s002", "s003"]
+    requires: ["timeline", "source-specific attribution"]
+    counterclaims: []
+    forbidden_upgrades: ["source_prestige_to_truth"]
+    uncertainty:
+      score: 0.15
+      causes:
+        - "Details vary between summaries and underlying archival records."
+    interpolation:
+      score: 0.1
+      assumptions:
+        - "The NARA summary and Cambridge chapter are treated as accurately reflecting the declassified record."
+    notes: "This claim is about institutions, not McCloy personally."
+
+  - schema_version: "1.0"
+    claim_id: "c003"
+    claim_type: "factual_event_claim"
+    statement: "McCloy became chairman of Chase National Bank in 1953, after the Nazi regime and World War II had ended."
+    status: "established"
+    evidence_refs: ["e003"]
+    source_refs: ["s004", "s005"]
+    requires: ["chronology"]
+    counterclaims: []
+    forbidden_upgrades: ["absence_of_evidence_to_falsehood"]
+    uncertainty:
+      score: 0.08
+      causes:
+        - "Reference-source chronology is consistent but not itself an archival employment file."
+    interpolation:
+      score: 0.05
+      assumptions:
+        - "Chairmanship date is sufficient to reject claims that he acted as Chase chairman during 1936-1941."
+    notes: "This does not rule out earlier legal or network involvement; it rules out the specific role of Chase chair during the relevant period."
+
+  - schema_version: "1.0"
+    claim_id: "c004"
+    claim_type: "factual_event_claim"
+    statement: "During World War II, McCloy served in the U.S. War Department as Assistant Secretary of War rather than as a Nazi-facing finance executive."
+    status: "strongly_supported"
+    evidence_refs: ["e004"]
+    source_refs: ["s004", "s005"]
+    requires: ["chronology", "role mapping"]
+    counterclaims: []
+    forbidden_upgrades: ["absence_of_evidence_to_falsehood"]
+    uncertainty:
+      score: 0.12
+      causes:
+        - "The audited source set is biographical and high-level."
+    interpolation:
+      score: 0.1
+      assumptions:
+        - "Official role does not preclude informal influence, but it constrains the stronger allegation."
+    notes: "Supports the prior answer's caution about the wartime claim."
+
+  - schema_version: "1.0"
+    claim_id: "c005"
+    claim_type: "factual_event_claim"
+    statement: "In 1951, as U.S. High Commissioner for Germany, McCloy reduced or commuted numerous war-crimes sentences and pardoned Alfried Krupp while nullifying confiscation of Krupp assets."
+    status: "established"
+    evidence_refs: ["e005", "e006", "e010"]
+    source_refs: ["s006", "s007", "s008"]
+    requires: ["postwar timeline", "legal disposition records"]
+    counterclaims: []
+    forbidden_upgrades: ["benefit_to_motive", "source_prestige_to_truth"]
+    uncertainty:
+      score: 0.12
+      causes:
+        - "Different sources summarize the clemency and property decisions at different levels of detail."
+    interpolation:
+      score: 0.08
+      assumptions:
+        - "Pardoning and nullifying confiscation materially benefited Krupp and the Krupp industrial estate."
+    notes: "This is the strongest documented criticism of McCloy in the current audit."
+
+  - schema_version: "1.0"
+    claim_id: "c006"
+    claim_type: "narrative_claim"
+    statement: "McCloy's postwar policy role supported West Germany's reintegration into the Western political, defense, and economic order, which also facilitated rehabilitation of some industrial elites."
+    status: "strongly_supported"
+    evidence_refs: ["e005", "e006", "e007", "e010"]
+    source_refs: ["s006", "s007", "s008", "s009"]
+    requires: ["policy context", "distinction between strategic reintegration and personal motive"]
+    counterclaims:
+      - "Strategic Cold War reintegration is not identical to ideological sympathy for Nazis."
+    forbidden_upgrades: ["benefit_to_motive", "correlation_to_causation"]
+    uncertainty:
+      score: 0.24
+      causes:
+        - "The breadth of 'industrial elites' exceeds the Krupp-specific evidence unless additional cases are added."
+        - "Policy intent and motive require stronger documentary support than policy outcomes."
+    interpolation:
+      score: 0.3
+      assumptions:
+        - "Krupp restitution is treated as an example of broader rehabilitation, not proof of every industrial case."
+    notes: "This is a supported reframing of the original question if 'gefördert' refers to postwar restoration rather than pre-1945 Nazi support."
+
+  - schema_version: "1.0"
+    claim_id: "c007"
+    claim_type: "meta_claim"
+    statement: "The prior assistant response was directionally cautious but under-audited: it needed a structured source map, clearer separation of institutional facts from personal causality, and explicit red-team caveats."
+    status: "plausible"
+    evidence_refs: ["e001", "e008"]
+    source_refs: ["s001"]
+    requires: ["model-output audit", "source sufficiency review"]
+    counterclaims:
+      - "The prior response did explicitly distinguish pre-1945 personal promotion from postwar rehabilitation."
+    forbidden_upgrades: ["source_prestige_to_truth", "absence_of_evidence_to_falsehood"]
+    uncertainty:
+      score: 0.32
+      causes:
+        - "The audit is based on the visible answer and the limited source set collected during this turn."
+    interpolation:
+      score: 0.25
+      assumptions:
+        - "A repository case should include evidence artifacts even when a conversational answer already gave a cautious summary."
+    notes: "This claim audits the assistant behavior, not McCloy's historical conduct."

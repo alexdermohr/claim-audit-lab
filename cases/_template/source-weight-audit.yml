@@ -1,0 +1,11 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+audited_at: "YYYY-MM-DD"
+auditor: "[role or identifier]"
+records:
+  - source_ref: "s001"
+    questions:
+      - "What source-weight assumption is being audited?"
+    evidence_refs: []
+    disputed: false
+    notes: "Explain why the source_weight axes were assigned and whether any score is disputed."

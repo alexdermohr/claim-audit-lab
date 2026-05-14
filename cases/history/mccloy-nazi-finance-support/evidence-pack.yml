@@ -1,0 +1,133 @@
+schema_version: "1.0"
+
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001", "c007"]
+    type: "model_output"
+    summary: "The prior answer stated that direct evidence for McCloy personally promoting pre-1945 Nazi support was not established, while post-1945 clemency and reintegration criticism was stronger."
+    verbatim_or_ref: "Conversation-local assistant answer dated 2026-05-14."
+    evidence_excerpt: "Direct evidence for pre-1945 personal promotion was not established; post-1945 clemency and reintegration evidence was stronger."
+    locator: "conversation-local assistant answer"
+    accessed_at: "2026-05-14"
+    supports: ["c007"]
+    contradicts: []
+    notes: "The model output is audited as a claim artifact, not used as independent historical evidence."
+
+  - evidence_id: "e002"
+    source_ref: "s002"
+    claim_refs: ["c001", "c002"]
+    type: "secondary_summary"
+    summary: "NARA reports that the Nazi government built dollar exchange in the United States until the June 14, 1941 asset freeze, and that U.S. financial institutions helped Germans raise more than $20 million between 1936 and 1941, earning more than $1.2 million in commissions."
+    verbatim_or_ref: "See s002: https://www.archives.gov/press/press-releases/2004/nr04-55"
+    evidence_excerpt: "Media Alert date is Thursday, May 13, 2004; NARA states that U.S. financial institutions were clearly implicated, helped Germans raise over $20 million between 1936 and 1941, and earned over $1.2 million in commissions."
+    locator: "s002 lines/section: Media Alert date; 'Chase National Bank, Jewish Accounts, and Nazi Germany'"
+    accessed_at: "2026-05-14"
+    supports: ["c002"]
+    contradicts: []
+    notes: "Supports institutional financial assistance; does not identify McCloy as the promoter."
+
+  - evidence_id: "e003"
+    source_ref: "s004"
+    claim_refs: ["c001", "c003"]
+    type: "secondary_summary"
+    summary: "The American Council on Germany biography places McCloy's Chase chairmanship in 1953 and his oversight of the Chase-Manhattan merger in 1955."
+    verbatim_or_ref: "See s004: https://www.acgusa.org/about-us/history/biography-john-j-mccloy/"
+    evidence_excerpt: "ACG chronology places McCloy's Chase National Bank chairmanship after his return from Germany in 1953, not during the 1936-1941 Rueckwanderer scheme."
+    locator: "s004 biography chronology around 1953 and 1955"
+    accessed_at: "2026-05-14"
+    supports: ["c003"]
+    contradicts: ["c001"]
+    notes: "Contradicts a version of the allegation that depends on McCloy being Chase's chairman during the 1936-1941 Rueckwanderer scheme."
+
+  - evidence_id: "e004"
+    source_ref: "s005"
+    claim_refs: ["c001", "c004"]
+    type: "secondary_summary"
+    summary: "Britannica summarizes McCloy's wartime role as U.S. Assistant Secretary of War and his later postwar role as High Commissioner for Germany."
+    verbatim_or_ref: "See s005: https://www.britannica.com/biography/John-J-McCloy"
+    evidence_excerpt: "Britannica places McCloy in the War Department as Assistant Secretary of War during World War II and later in Germany as High Commissioner."
+    locator: "s005 biography sections on 1941 appointment and postwar Germany role"
+    accessed_at: "2026-05-14"
+    supports: ["c004"]
+    contradicts: []
+    notes: "Constrains but does not exhaustively disprove possible informal prewar legal-network involvement."
+
+  - evidence_id: "e005"
+    source_ref: "s006"
+    claim_refs: ["c005", "c006"]
+    type: "secondary_summary"
+    summary: "NARA states that after January 31, 1951 commutations ordered by the U.S. High Commissioner for Germany, many Nuremberg subsequent-proceeding defendants received reduced outcomes, including releases based on time served."
+    verbatim_or_ref: "See s006: https://www.archives.gov/iwg/research-papers/trial-of-war-criminals-before-imt.html"
+    evidence_excerpt: "NARA records the January 31, 1951 commutations by the U.S. High Commissioner for Germany in the subsequent Nuremberg proceeding context."
+    locator: "s006 section on post-trial sentences and January 31, 1951 commutations"
+    accessed_at: "2026-05-14"
+    supports: ["c005", "c006"]
+    contradicts: []
+    notes: "Official overview of commutations; pairs with Krupp-specific sources for asset-restoration detail."
+
+  - evidence_id: "e006"
+    source_ref: "s008"
+    claim_refs: ["c005", "c006"]
+    type: "official_statement"
+    summary: "A 1957 UK Parliament answer states that Alfried Krupp was sentenced by a U.S. Military Court in 1948 with confiscation of property, and that U.S. High Commissioner McCloy cancelled the confiscation order in 1951."
+    verbatim_or_ref: "See s008: https://hansard.parliament.uk/Lords/1957-12-11/debates/5c4fa040-e093-4e97-8913-dabc65d12696/DisposalOfKruppSWorks"
+    evidence_excerpt: "Hansard states that Krupp was sentenced in 1948 with confiscation of property and that U.S. High Commissioner McCloy cancelled the confiscation order in 1951."
+    locator: "s008 House of Lords debate 'Disposal Of Krupp's Works'"
+    accessed_at: "2026-05-14"
+    supports: ["c005", "c006"]
+    contradicts: []
+    notes: "High adversarial relevance because it independently confirms asset-restoration substance."
+
+  - evidence_id: "e007"
+    source_ref: "s009"
+    claim_refs: ["c006"]
+    type: "document_excerpt"
+    summary: "McCloy's 1951 quarterly report describes the Western powers' intent to transform relations with the Federal Republic from occupation toward defense and free association in a Western community of nations."
+    verbatim_or_ref: "See s009: https://history.state.gov/historicaldocuments/frus1951v03p2/d6"
+    evidence_excerpt: "McCloy's report says the Western powers intended to transform relations with the Federal Republic from occupation to defense and free association in a Western community of nations."
+    locator: "s009 Document 6, opening report paragraphs covering July 1-September 30, 1951"
+    accessed_at: "2026-05-14"
+    supports: ["c006"]
+    contradicts: []
+    notes: "Primary policy-context evidence; it supports reintegration but not a Nazi-sympathy motive."
+
+  - evidence_id: "e008"
+    source_ref: "s001"
+    claim_refs: ["c007"]
+    type: "model_output"
+    summary: "The prior answer relied on several source references in prose but did not preserve a structured evidence pack, source weights, counterclaims, or a red-team review."
+    verbatim_or_ref: "Conversation-local assistant answer dated 2026-05-14."
+    evidence_excerpt: "The prior answer was prose-only and did not create repository-local source weights, claim links, evidence IDs, or a red-team gate."
+    locator: "conversation-local assistant answer"
+    accessed_at: "2026-05-14"
+    supports: ["c007"]
+    contradicts: []
+    notes: "Justifies adding this repository audit case."
+
+  - evidence_id: "e009"
+    source_ref: "s003"
+    claim_refs: ["c002"]
+    type: "secondary_summary"
+    summary: "The Cambridge chapter identifies Chase National Bank and the Rückwanderer Mark scheme as an academic secondary-source treatment of the 1936-1941 institutional finance issue."
+    verbatim_or_ref: "See s003: https://www.cambridge.org/core/books/us-intelligence-and-the-nazis/banking-on-hitler-chase-national-bank-and-the-ruckwanderer-mark-scheme-19361941/52F76F3AB4FBD92DADE5FBF7784DCF49"
+    evidence_excerpt: "The chapter title and metadata identify the subject as Chase National Bank and the Rückwanderer Mark scheme, 1936-1941."
+    locator: "s003 chapter landing page and title"
+    accessed_at: "2026-05-14"
+    supports: ["c002"]
+    contradicts: []
+    notes: "Provides same-source evidence for the Cambridge source weight; it supports the institutional Chase/Rückwanderer context, not McCloy's personal causality."
+
+  - evidence_id: "e010"
+    source_ref: "s007"
+    claim_refs: ["c005", "c006"]
+    type: "secondary_summary"
+    summary: "The Krupp institutional exhibit is used as interested corroboration for the postwar Krupp conviction, pardon, and confiscation-restoration context."
+    verbatim_or_ref: "See s007: https://www.krupp-stiftung.de/en/krupp-historical-exhibition/"
+    evidence_excerpt: "The Krupp institutional source discusses Alfried Krupp's postwar conviction and pardon/confiscation context from an interested institutional perspective."
+    locator: "s007 Alfried Krupp / postwar conviction and pardon exhibit text"
+    accessed_at: "2026-05-14"
+    supports: ["c005", "c006"]
+    contradicts: []
+    notes: "Provides same-source evidence for the Krupp institutional source weight; the source is explicitly treated as interested corroboration rather than independent proof of motive."
+

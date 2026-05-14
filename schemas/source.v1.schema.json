@@ -4,7 +4,13 @@
   "title": "Source v1",
   "description": "A source entry with auditable weight axes.",
   "type": "object",
-  "required": ["schema_version", "source_id", "label", "url_or_ref", "source_type"],
+  "required": [
+    "schema_version",
+    "source_id",
+    "label",
+    "url_or_ref",
+    "source_type"
+  ],
   "additionalProperties": false,
   "properties": {
     "schema_version": {
@@ -51,18 +57,66 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "primary_proximity": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "method_transparency": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "reproducibility": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "source_cluster_independence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "institutional_interest_risk": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "adversarial_relevance": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "historical_track_record": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
-        "update_latency_risk": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+        "primary_proximity": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "method_transparency": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "reproducibility": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "source_cluster_independence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "institutional_interest_risk": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "adversarial_relevance": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "historical_track_record": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "update_latency_risk": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
       }
     },
     "notes": {
       "type": "string"
+    },
+    "accessed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "locator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archive_url": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content_hash": {
+      "type": "string",
+      "minLength": 1
     }
   }
 }

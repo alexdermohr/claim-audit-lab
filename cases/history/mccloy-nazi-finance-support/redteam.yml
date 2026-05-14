@@ -1,0 +1,21 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "cases/history/mccloy-nazi-finance-support/assessment.md"
+reviewer: "assistant-redteam"
+reviewed_at: "2026-05-14"
+redteam_questions:
+  - "Does the assessment improperly convert institutional Chase conduct into McCloy's personal conduct?"
+  - "Does the assessment confuse postwar German reintegration with pre-1945 Nazi support?"
+  - "Does the assessment infer McCloy's motive from who benefited?"
+findings:
+  - id: "f001"
+    severity: "medium"
+    issue: "The original German question is semantically broad; without narrowing, a reader may treat postwar rehabilitation evidence as proof of prewar Nazi support."
+    required_fix: "Keep c001, c005, and c006 separate and state the timeline boundaries explicitly."
+  - id: "f002"
+    severity: "low"
+    issue: "The source set relies on public summaries rather than exhaustive archival review."
+    required_fix: "Retain uncertainty language and set reopen_triggers for new primary sources."
+verdict:
+  status: "passed_with_notes"
+  reason: "Assessment is acceptable if it preserves the distinction between institutional support, personal causality, and postwar rehabilitation."

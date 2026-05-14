@@ -38,6 +38,19 @@ def test_valid_source_passes(schema):
     assert errors == [], f"Expected no errors, got: {errors}"
 
 
+def test_source_audit_locator_fields_pass(schema):
+    errors = validate_sources.validate_source(
+        base_source(
+            accessed_at="2026-05-14",
+            locator="section 2, paragraph 4",
+            archive_url="https://web.archive.org/example",
+            content_hash="sha256:example",
+        ),
+        schema,
+    )
+    assert errors == [], f"Expected no errors, got: {errors}"
+
+
 def test_invalid_source_type_fails(schema):
     errors = validate_sources.validate_source(base_source(source_type="blog_post"), schema)
     assert len(errors) >= 1

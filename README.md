@@ -19,7 +19,7 @@ An LLM may assist with claim extraction, source comparison, hypothesis generatio
 
 ## Machine-validated vs human artifacts
 
-- `lifecycle.yml` and `redteam.yml` are machine-validated contracts.
+- `lifecycle.yml`, `redteam.yml`, and `source-weight-audit.yml` are machine-validated contracts.
 - `assessment.md` and `redteam.md` are human-readable reports.
 - `assessment.v1.schema.json` is reserved for a future structured `assessment.yml` artifact.
 
@@ -52,6 +52,7 @@ MVP 0.1-alpha currently validates:
 
 - claim structure (types, required fields, forbidden upgrades)
 - source structure (source_type enum, weight axes, date format)
+- source-weight audit structure and coverage for sources with `source_weight`
 - evidence-pack structure (evidence IDs, types, required fields)
 - case-local source/evidence references (no dangling IDs)
 - lifecycle format and status transitions
@@ -60,7 +61,6 @@ MVP 0.1-alpha currently validates:
 Still not implemented:
 
 - semantic evidence quality scoring
-- source-weight-audit.v1
 - structured assessment.yml
 - bias-audit metrics
 - agent automation

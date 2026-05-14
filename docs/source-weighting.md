@@ -23,7 +23,10 @@ This prevents source weighting from becoming a hidden bias mechanism.
 
 ## Scoring
 
-Each axis is scored 0.0–1.0. Higher scores indicate stronger quality on that dimension.
+Each axis is scored 0.0–1.0. Polarity is axis-specific:
+
+- For capability or quality axes (`primary_proximity`, `method_transparency`, `reproducibility`, `source_cluster_independence`, `adversarial_relevance`, `historical_track_record`), higher means stronger support for relying on that source along that dimension.
+- For risk axes (`institutional_interest_risk`, `update_latency_risk`), higher means higher declared risk, not higher credibility. These values must be carried as visible penalties or caveats in any aggregation.
 
 Scores are not averaged into a single weight without justification. The multi-axis view is preserved to prevent masking weaknesses.
 
@@ -33,6 +36,7 @@ Every source weight assigned in a case must have an associated `source-weight-au
 
 - The questions asked about the source
 - The evidence references used to answer those questions
+- At least one evidence reference from the same source being weighted, to prevent decorative bibliography entries
 - Auditor notes
 - Whether the weight is disputed
 

@@ -1,0 +1,178 @@
+schema_version: "1.0"
+
+sources:
+  - schema_version: "1.0"
+    source_id: "s001"
+    label: "Prior assistant answer in user conversation"
+    url_or_ref: "conversation-local assistant response dated 2026-05-14"
+    source_type: "other"
+    publication_date: "2026-05-14"
+    accessed_at: "2026-05-14"
+    locator: "conversation-local assistant answer immediately preceding this case request"
+    author_or_org: "OpenAI assistant"
+    source_weight:
+      primary_proximity: 0.2
+      method_transparency: 0.45
+      reproducibility: 0.35
+      source_cluster_independence: 0.0
+      institutional_interest_risk: 0.4
+      adversarial_relevance: 0.7
+      historical_track_record: 0.3
+      update_latency_risk: 0.2
+    notes: "Audited model output; useful as the object of audit, not as historical proof. Risk-axis scores follow docs/source-weighting.md: higher means higher risk."
+
+  - schema_version: "1.0"
+    source_id: "s002"
+    label: "National Archives press release on Nazi War Crimes Disclosure Act documents"
+    url_or_ref: "https://www.archives.gov/press/press-releases/2004/nr04-55"
+    source_type: "official_body"
+    publication_date: "2004-05-13"
+    accessed_at: "2026-05-14"
+    locator: "Media Alert date and section 'Chase National Bank, Jewish Accounts, and Nazi Germany', paragraphs on Rueckwanderer Marks and commissions"
+    author_or_org: "U.S. National Archives and Records Administration"
+    source_weight:
+      primary_proximity: 0.75
+      method_transparency: 0.65
+      reproducibility: 0.65
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.3
+      adversarial_relevance: 0.85
+      historical_track_record: 0.8
+      update_latency_risk: 0.2
+    notes: "Official summary of declassified records; reports Chase and other institutions' implication in the Rueckwanderer Mark scheme. Date corrected to the page's displayed Media Alert date."
+
+  - schema_version: "1.0"
+    source_id: "s003"
+    label: "Banking on Hitler: Chase National Bank and the Rückwanderer Mark Scheme, 1936–1941"
+    url_or_ref: "https://www.cambridge.org/core/books/us-intelligence-and-the-nazis/banking-on-hitler-chase-national-bank-and-the-ruckwanderer-mark-scheme-19361941/52F76F3AB4FBD92DADE5FBF7784DCF49"
+    source_type: "secondary_analysis"
+    publication_date: "2005-04-04"
+    accessed_at: "2026-05-14"
+    locator: "chapter landing page and chapter title"
+    author_or_org: "Richard Breitman, Norman J. W. Goda, Timothy Naftali, and Robert Wolfe / Cambridge University Press"
+    source_weight:
+      primary_proximity: 0.65
+      method_transparency: 0.75
+      reproducibility: 0.6
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.2
+      adversarial_relevance: 0.9
+      historical_track_record: 0.85
+      update_latency_risk: 0.25
+    notes: "Academic secondary source based on U.S. intelligence/Nazi War Crimes Disclosure Act records."
+
+  - schema_version: "1.0"
+    source_id: "s004"
+    label: "Biography: John J. McCloy"
+    url_or_ref: "https://www.acgusa.org/about-us/history/biography-john-j-mccloy/"
+    source_type: "secondary_analysis"
+    accessed_at: "2026-05-14"
+    locator: "biography section describing return from Germany, 1953 Chase chairmanship, and 1955 merger oversight"
+    author_or_org: "American Council on Germany"
+    source_weight:
+      primary_proximity: 0.5
+      method_transparency: 0.45
+      reproducibility: 0.55
+      source_cluster_independence: 0.35
+      institutional_interest_risk: 0.55
+      adversarial_relevance: 0.55
+      historical_track_record: 0.65
+      update_latency_risk: 0.35
+    notes: "Institutionally sympathetic biography; useful for chronology but not sufficient for critical claims."
+
+  - schema_version: "1.0"
+    source_id: "s005"
+    label: "John J. McCloy biography"
+    url_or_ref: "https://www.britannica.com/biography/John-J-McCloy"
+    source_type: "secondary_analysis"
+    accessed_at: "2026-05-14"
+    locator: "biographical summary sections on Assistant Secretary of War and Chase Manhattan Bank roles"
+    author_or_org: "Encyclopaedia Britannica"
+    source_weight:
+      primary_proximity: 0.45
+      method_transparency: 0.45
+      reproducibility: 0.55
+      source_cluster_independence: 0.65
+      institutional_interest_risk: 0.25
+      adversarial_relevance: 0.5
+      historical_track_record: 0.75
+      update_latency_risk: 0.4
+    notes: "Concise reference source used for chronology and broad summary."
+
+  - schema_version: "1.0"
+    source_id: "s006"
+    label: "National Archives overview of Nuremberg subsequent proceedings and commutations"
+    url_or_ref: "https://www.archives.gov/iwg/research-papers/trial-of-war-criminals-before-imt.html"
+    source_type: "official_body"
+    accessed_at: "2026-05-14"
+    locator: "section describing January 31, 1951 U.S. High Commissioner commutations"
+    author_or_org: "U.S. National Archives and Records Administration"
+    source_weight:
+      primary_proximity: 0.7
+      method_transparency: 0.65
+      reproducibility: 0.7
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.3
+      adversarial_relevance: 0.75
+      historical_track_record: 0.8
+      update_latency_risk: 0.3
+    notes: "Official overview noting January 31, 1951 commutations by the U.S. High Commissioner for Germany."
+
+  - schema_version: "1.0"
+    source_id: "s007"
+    label: "Krupp Historical Exhibition"
+    url_or_ref: "https://www.krupp-stiftung.de/en/krupp-historical-exhibition/"
+    source_type: "secondary_analysis"
+    accessed_at: "2026-05-14"
+    locator: "Alfried Krupp / postwar conviction and pardon exhibit text"
+    author_or_org: "Alfried Krupp von Bohlen und Halbach-Stiftung"
+    source_weight:
+      primary_proximity: 0.55
+      method_transparency: 0.45
+      reproducibility: 0.6
+      source_cluster_independence: 0.35
+      institutional_interest_risk: 0.75
+      adversarial_relevance: 0.8
+      historical_track_record: 0.55
+      update_latency_risk: 0.35
+    notes: "Institutional Krupp source; its admission that McCloy pardoned Krupp and nullified confiscation is adversarially relevant despite institutional interest."
+
+  - schema_version: "1.0"
+    source_id: "s008"
+    label: "UK Parliament Hansard: Disposal of Krupp's Works"
+    url_or_ref: "https://hansard.parliament.uk/Lords/1957-12-11/debates/5c4fa040-e093-4e97-8913-dabc65d12696/DisposalOfKruppSWorks"
+    source_type: "official_body"
+    publication_date: "1957-12-11"
+    accessed_at: "2026-05-14"
+    locator: "House of Lords debate 'Disposal Of Krupp's Works', answer describing 1948 sentence and 1951 cancellation"
+    author_or_org: "UK Parliament"
+    source_weight:
+      primary_proximity: 0.75
+      method_transparency: 0.7
+      reproducibility: 0.75
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.35
+      adversarial_relevance: 0.8
+      historical_track_record: 0.8
+      update_latency_risk: 0.25
+    notes: "Parliamentary record stating that McCloy cancelled the confiscation order in 1951."
+
+  - schema_version: "1.0"
+    source_id: "s009"
+    label: "FRUS 1951: McCloy Eighth Quarterly Report on Germany"
+    url_or_ref: "https://history.state.gov/historicaldocuments/frus1951v03p2/d6"
+    source_type: "primary_document"
+    publication_date: "1951-09-30"
+    accessed_at: "2026-05-14"
+    locator: "Document 6, opening paragraphs of McCloy's Eighth Quarterly Report covering July 1 to September 30, 1951"
+    author_or_org: "U.S. Department of State / U.S. High Commissioner for Germany"
+    source_weight:
+      primary_proximity: 0.85
+      method_transparency: 0.8
+      reproducibility: 0.8
+      source_cluster_independence: 0.65
+      institutional_interest_risk: 0.55
+      adversarial_relevance: 0.65
+      historical_track_record: 0.85
+      update_latency_risk: 0.2
+    notes: "Primary U.S. policy document reflecting West German integration in a Western defense and political community."

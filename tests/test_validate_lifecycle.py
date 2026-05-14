@@ -80,6 +80,18 @@ def test_invalid_lifecycle_status_fails(tmp_path):
     assert any("status" in e for e in errors)
 
 
+def test_provisional_under_uncertainty_status_passes(tmp_path):
+    lifecycle = base_lifecycle(
+        status="provisional_under_uncertainty",
+        history=[
+            {"date": "2026-05-09", "status": "draft", "note": "Case opened."},
+            {"date": "2026-05-10", "status": "provisional_under_uncertainty", "note": "Hardened but not final."},
+        ],
+    )
+    errors = run_validate(tmp_path, lifecycle, base_redteam(status="passed_with_notes"))
+    assert errors == []
+
+
 def test_malformed_assessment_id_fails(tmp_path):
     errors = run_validate(tmp_path, base_lifecycle(assessment_id="bad"), base_redteam())
     assert any("assessment_id" in e for e in errors)

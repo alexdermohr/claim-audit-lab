@@ -1,0 +1,85 @@
+schema_version: "1.0"
+case_ref: "cases/history/mccloy-nazi-finance-support"
+audited_at: "2026-05-14"
+auditor: "assistant"
+records:
+  - source_ref: "s001"
+    questions:
+      - "Is the source the object of audit rather than historical proof?"
+      - "Can the source independently confirm McCloy-related historical facts?"
+      - "Should model output receive any source-cluster independence?"
+    evidence_refs: ["e001", "e008"]
+    disputed: false
+    notes: "Weighted low for historical proof and source-cluster independence because it is the audited model output. It remains useful for checking whether the repository case faithfully captures the prior answer."
+
+  - source_ref: "s002"
+    questions:
+      - "How close is the source to the underlying declassified records?"
+      - "Does it identify Chase and other U.S. financial institutions in the Rueckwanderer Mark context?"
+      - "Does it establish McCloy's personal pre-1945 promotion or only institutional implication?"
+    evidence_refs: ["e002"]
+    disputed: false
+    notes: "Official NARA summary of declassified records; strong for institutional implication and dollar-raising context, not sufficient for McCloy personal causality."
+
+  - source_ref: "s003"
+    questions:
+      - "Is this an academic secondary source tied to the same Nazi War Crimes Disclosure Act record cluster?"
+      - "Does it provide independent analysis of Chase's Rueckwanderer Mark role?"
+      - "Does it identify McCloy as an operational promoter of the scheme?"
+    evidence_refs: ["e009", "e002"]
+    disputed: false
+    notes: "Weighted as a method-transparent academic source for the Chase/Rueckwanderer institutional claim. Its cluster partially overlaps NARA-derived records, so it does not independently establish McCloy's personal causality."
+
+  - source_ref: "s004"
+    questions:
+      - "Is the source useful for McCloy's chronology?"
+      - "Does the institution have a sympathetic interest in McCloy's public legacy?"
+      - "Does the chronology bear on the claim that McCloy led Chase's 1936-1941 conduct?"
+    evidence_refs: ["e003"]
+    disputed: false
+    notes: "Weighted as useful but institutionally interested chronology evidence. The 1953 Chase chairmanship date is relevant against a Chase-chairman version of the allegation."
+
+  - source_ref: "s005"
+    questions:
+      - "Is the source a concise independent reference for McCloy's wartime and postwar roles?"
+      - "Does it support role mapping without adding causal speculation?"
+      - "Is it sufficient alone for detailed archival claims?"
+    evidence_refs: ["e004"]
+    disputed: false
+    notes: "Weighted as a broadly reliable reference source for chronology and role mapping, not as a primary source for contested causality."
+
+  - source_ref: "s006"
+    questions:
+      - "Is the source close to official Nuremberg subsequent-proceedings records?"
+      - "Does it support the existence and date of McCloy's commutation decisions?"
+      - "Does it establish motive or only legal-administrative outcomes?"
+    evidence_refs: ["e005"]
+    disputed: false
+    notes: "Official NARA overview supports the January 31, 1951 commutation context. It supports postwar action, not pro-Nazi motive."
+
+  - source_ref: "s007"
+    questions:
+      - "Does the source have an institutional interest in the Krupp legacy?"
+      - "Is the interested admission adversarially relevant when it acknowledges pardon/confiscation facts?"
+      - "Does it need corroboration by less interested records?"
+    evidence_refs: ["e010", "e006"]
+    disputed: false
+    notes: "Weighted with high institutional-interest risk because it is a Krupp institutional source. It is treated as corroborative and adversarially relevant only when paired with Hansard/NARA context."
+
+  - source_ref: "s008"
+    questions:
+      - "Is this a formal public parliamentary record?"
+      - "Does it independently confirm the Krupp confiscation cancellation attributed to McCloy?"
+      - "Does it establish motive or only legal/political action?"
+    evidence_refs: ["e006"]
+    disputed: false
+    notes: "Parliamentary record supports the asset-restoration fact and helps corroborate c005/c006. It does not establish pro-Nazi motive."
+
+  - source_ref: "s009"
+    questions:
+      - "Is the document primary evidence for McCloy's High Commissioner policy framing?"
+      - "Does it support West German reintegration context?"
+      - "Does it support a Nazi-sympathy motive?"
+    evidence_refs: ["e007"]
+    disputed: false
+    notes: "Primary FRUS/State Department document supports the Westbindung/reintegration frame. Its institutional-interest risk is declared because it is also a U.S. policy self-description."

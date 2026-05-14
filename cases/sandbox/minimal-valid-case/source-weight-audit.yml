@@ -1,0 +1,13 @@
+schema_version: "1.0"
+case_ref: "cases/sandbox/minimal-valid-case"
+audited_at: "2026-05-14"
+auditor: "lab-maintainer"
+records:
+  - source_ref: "s001"
+    questions:
+      - "Is this source close to the asserted policy announcement?"
+      - "Is the source's timestamp and institutional origin visible enough for the minimal fixture?"
+      - "Does the source have an institutional interest in the claim outcome?"
+    evidence_refs: ["e001"]
+    disputed: false
+    notes: "Minimal fixture audit record covering the single source_weight block; not intended as a substantive real-world source evaluation."
