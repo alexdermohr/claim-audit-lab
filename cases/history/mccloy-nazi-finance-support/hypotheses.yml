@@ -12,7 +12,7 @@ hypotheses:
 
   - id: "h2"
     label: "institutional_support_without_mccloy_personal_causality"
-    description: "Anglo-amerikanische Institutionen, darunter Chase, halfen NS-Deutschland finanziell; McCloys persönliche Förderung ist im auditierten Source-Set aber nicht etabliert."
+    description: "Anglo-amerikanische Institutionen, darunter Chase, halfen NS-Deutschland finanziell; McCloys persönliche Förderung ist im auditierten Quellenset aber nicht etabliert."
     status: "strongly_supported"
     supporting_evidence: ["e002", "e003", "e004", "e009"]
     weaknesses:

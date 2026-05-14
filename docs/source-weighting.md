@@ -1,4 +1,4 @@
-# Source-Weighting-Policy
+# Quellengewichtungs-Policy
 
 ## Prinzip
 
@@ -21,7 +21,7 @@ Dadurch wird verhindert, dass Quellengewichtung zu einem versteckten Bias-Mechan
 | `historical_track_record` | War diese Quelle in vergleichbaren Fällen historisch zuverlässig? |
 | `update_latency_risk` | Besteht das Risiko, dass diese Quelle für den aktuellen Claim veraltet ist? |
 
-## Scoring
+## Bewertung
 
 Jede Achse wird von 0.0 bis 1.0 bewertet. Die Polarität ist achsenspezifisch:
 

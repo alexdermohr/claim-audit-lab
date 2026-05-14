@@ -10,4 +10,4 @@ records:
       - "Hat die Quelle ein institutionelles Interesse am Ausgang des Claims?"
     evidence_refs: ["e001"]
     disputed: false
-    notes: "Minimaler Fixture-Audit-Record für den einzelnen `source_weight`-Block; nicht als substantielle reale Quellenbewertung gedacht."
+    notes: "Minimaler Fixture-Audit-Eintrag für den einzelnen `source_weight`-Block; nicht als substantielle reale Quellenbewertung gedacht."

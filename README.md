@@ -41,9 +41,9 @@ Ein LLM darf bei Claim-Extraktion, Quellenvergleich, Hypothesengenerierung, Bias
 ## Pipeline
 
 ```
-Question → Claim Decomposition → Source Map → Evidence Pack
-→ Hypothesis Ledger → Counterhypothesis + Steelman
-→ Bias Audit → Red-Team Review → Assessment → Lifecycle
+Frage → Claim-Zerlegung → Quellenkarte → Evidence-Pack
+→ Hypothesenledger → Gegenhypothese + Steelman
+→ Bias-Audit → Red-Team-Prüfung → Assessment → Lifecycle
 ```
 
 ## Aktueller MVP

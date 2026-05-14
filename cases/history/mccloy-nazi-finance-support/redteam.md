@@ -17,7 +17,7 @@
 ## Befunde
 
 - **f001 — medium:** Die ursprüngliche deutsche Frage ist semantisch breit. Das Assessment muss c001, c005 und c006 getrennt halten und die Zeitgrenzen ausdrücklich benennen.
-- **f002 — low:** Das Source-Set stützt sich auf öffentliche Zusammenfassungen statt auf eine erschöpfende Archivrecherche. Neue Primärquellen könnten den Case wieder öffnen.
+- **f002 — low:** Das Quellenset stützt sich auf öffentliche Zusammenfassungen statt auf eine erschöpfende Archivrecherche. Neue Primärquellen könnten den Case wieder öffnen.
 
 ---
 

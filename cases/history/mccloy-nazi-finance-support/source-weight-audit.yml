@@ -7,10 +7,10 @@ records:
     questions:
       - "Ist die Quelle Gegenstand des Audits statt historischer Beleg?"
       - "Kann die Quelle historische McCloy-Fakten unabhängig bestätigen?"
-      - "Soll Model-Output irgendeine Quellencluster-Unabhängigkeit erhalten?"
+      - "Soll Modellausgabe irgendeine Quellencluster-Unabhängigkeit erhalten?"
     evidence_refs: ["e001", "e008"]
     disputed: false
-    notes: "Niedrig gewichtet für historischen Belegwert und Quellencluster-Unabhängigkeit, weil es sich um den auditierten Model-Output handelt. Nützlich bleibt die Quelle zur Prüfung, ob der Repository-Case die vorherige Antwort korrekt erfasst."
+    notes: "Niedrig gewichtet für historischen Belegwert und Quellencluster-Unabhängigkeit, weil es sich um den auditierten Modellausgabe handelt. Nützlich bleibt die Quelle zur Prüfung, ob der Repository-Case die vorherige Antwort korrekt erfasst."
 
   - source_ref: "s002"
     questions:
@@ -77,7 +77,7 @@ records:
 
   - source_ref: "s009"
     questions:
-      - "Ist das Dokument Primärevidenz für McCloys Policy-Framing als High Commissioner?"
+      - "Ist das Dokument Primärevidenz für McCloys politische Rahmung als High Commissioner?"
       - "Stützt es den Kontext der Westintegration?"
       - "Stützt es ein Nazi-Sympathie-Motiv?"
     evidence_refs: ["e007"]

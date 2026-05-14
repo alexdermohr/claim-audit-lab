@@ -12,7 +12,7 @@ evidence:
     accessed_at: "2026-05-14"
     supports: ["c007"]
     contradicts: []
-    notes: "Der Model-Output wird als Claim-Artefakt auditiert, nicht als unabhängige historische Evidenz verwendet."
+    notes: "Der Modellausgabe wird als Claim-Artefakt auditiert, nicht als unabhängige historische Evidenz verwendet."
 
   - evidence_id: "e002"
     source_ref: "s002"
@@ -90,7 +90,7 @@ evidence:
     accessed_at: "2026-05-14"
     supports: ["c006"]
     contradicts: []
-    notes: "Primäre Policy-Kontext-Evidenz; stützt Reintegration, aber kein Nazi-Sympathie-Motiv."
+    notes: "Primäre politischer Kontext-Evidenz; stützt Reintegration, aber kein Nazi-Sympathie-Motiv."
 
   - evidence_id: "e008"
     source_ref: "s001"
@@ -116,7 +116,7 @@ evidence:
     accessed_at: "2026-05-14"
     supports: ["c002"]
     contradicts: []
-    notes: "Liefert same-source Evidenz für das Cambridge-Quellengewicht; stützt den institutionellen Chase/Rückwanderer-Kontext, nicht McCloys persönliche Kausalität."
+    notes: "Liefert quellengleiche Evidenz für das Cambridge-Quellengewicht; stützt den institutionellen Chase/Rückwanderer-Kontext, nicht McCloys persönliche Kausalität."
 
   - evidence_id: "e010"
     source_ref: "s007"
@@ -129,4 +129,4 @@ evidence:
     accessed_at: "2026-05-14"
     supports: ["c005", "c006"]
     contradicts: []
-    notes: "Liefert same-source Evidenz für das Krupp-Institutionsquellengewicht; die Quelle wird ausdrücklich als interessierte Bestätigung und nicht als unabhängiger Motivbeweis behandelt."
+    notes: "Liefert quellengleiche Evidenz für das Krupp-Institutionsquellengewicht; die Quelle wird ausdrücklich als interessierte Bestätigung und nicht als unabhängiger Motivbeweis behandelt."

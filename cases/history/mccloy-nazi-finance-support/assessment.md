@@ -33,12 +33,12 @@ Hat John J. McCloy die finanzielle und materielle Unterstützung der Nazis durch
 | Evidence | Quelle | Stützt | Widerspricht | Relevanz |
 |---|---|---|---|---|
 | e002 | s002 | c002 | — | Belegt die institutionelle US-Finanzverwicklung in NS-Dollarbeschaffung. |
-| e009 | s003 | c002 | — | Liefert same-source Cambridge-Evidenz für die akademische Sekundärquelle zum Chase/Rückwanderer-Komplex. |
+| e009 | s003 | c002 | — | Liefert quellengleiche Cambridge-Evidenz für die akademische Sekundärquelle zum Chase/Rückwanderer-Komplex. |
 | e003 | s004 | c003 | c001 | Die Chronologie schwächt jede Version, nach der McCloy 1936–1941 als Chase-Vorsitzender gehandelt habe. |
 | e004 | s005 | c004 | — | Verortet McCloy im Krieg in der US-Regierung, nicht als Nazi-naher Bankmanager. |
 | e005 | s006 | c005, c006 | — | Belegt den Kontext der Nachkriegs-Strafmilderungen. |
 | e006 | s008 | c005, c006 | — | Bestätigt die Aufhebung der Krupp-Konfiskation durch McCloy. |
-| e010 | s007 | c005, c006 | — | Liefert same-source Krupp-Institutionsevidenz, als interessierte Bestätigung behandelt. |
+| e010 | s007 | c005, c006 | — | Liefert quellengleiche Krupp-Institutionsevidenz, als interessierte Bestätigung behandelt. |
 | e007 | s009 | c006 | — | Belegt den politischen Kontext der Westintegration. |
 
 ## Gegenhypothese
@@ -57,7 +57,7 @@ Diese Gegenhypothese passt besser zur derzeit auditierten Evidenz, weil sie tren
 
 - Das Audit schöpft nicht alle Archivbestände aus, insbesondere nicht McCloys Kanzleiakten, interne Chase-Akten oder vollständige State-/War-Department-Korrespondenz.
 - Die Begriffe „gefördert“ und „support“ sind mehrdeutig. Sie können direkte Organisation, passive Ermöglichung, indirekte Netzwerkförderung oder Nachkriegsrestauration bedeuten.
-- Fehlende direkte Evidenz in diesem Source-Set beweist nicht, dass anderswo keine direkte Evidenz existiert.
+- Fehlende direkte Evidenz in diesem Quellenset beweist nicht, dass anderswo keine direkte Evidenz existiert.
 
 ## Red-Team-Status
 

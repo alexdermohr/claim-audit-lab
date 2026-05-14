@@ -14,7 +14,7 @@ findings:
     required_fix: "c001, c005 und c006 getrennt halten und die Zeitgrenzen explizit benennen."
   - id: "f002"
     severity: "low"
-    issue: "Das Source-Set stützt sich auf öffentliche Zusammenfassungen statt auf eine erschöpfende Archivrecherche."
+    issue: "Das Quellenset stützt sich auf öffentliche Zusammenfassungen statt auf eine erschöpfende Archivrecherche."
     required_fix: "Unsicherheitssprache beibehalten und Reopen-Triggers für neue Primärquellen setzen."
 verdict:
   status: "passed_with_notes"

@@ -21,7 +21,7 @@ claims:
     interpolation:
       score: 0.55
       assumptions:
-        - "Persönliche Förderung aus Wall-Street-Nähe abzuleiten, würde Evidenz verlangen, die im auditierten Source-Set nicht vorliegt."
+        - "Persönliche Förderung aus Wall-Street-Nähe abzuleiten, würde Evidenz verlangen, die im auditierten Quellenset nicht vorliegt."
     notes: "Dies ist der Hauptclaim der Nutzerfrage. Die aktuelle Quellenkarte stützt institutionelle Geschäfte und Nachkriegsrehabilitation stärker als persönliche Vorkriegsförderung durch McCloy."
 
   - schema_version: "1.0"
@@ -77,7 +77,7 @@ claims:
     uncertainty:
       score: 0.12
       causes:
-        - "Das auditierte Source-Set ist biografisch und hochaggregiert."
+        - "Das auditierte Quellenset ist biografisch und hochaggregiert."
     interpolation:
       score: 0.1
       assumptions:
@@ -129,18 +129,18 @@ claims:
   - schema_version: "1.0"
     claim_id: "c007"
     claim_type: "meta_claim"
-    statement: "Die vorherige Assistant-Antwort war in der Richtung vorsichtig, aber noch unterauditiert: Sie brauchte eine strukturierte Quellenkarte, klarere Trennung institutioneller Fakten von persönlicher Kausalität und explizite Red-Team-Caveats."
+    statement: "Die vorherige Assistant-Antwort war in der Richtung vorsichtig, aber noch unterauditiert: Sie brauchte eine strukturierte Quellenkarte, klarere Trennung institutioneller Fakten von persönlicher Kausalität und explizite Red-Team-Vorbehalte."
     status: "plausible"
     evidence_refs: ["e001", "e008"]
     source_refs: ["s001"]
-    requires: ["Audit von Model-Output", "Prüfung der Quellenhinlänglichkeit"]
+    requires: ["Audit von Modellausgabe", "Prüfung der Quellenhinlänglichkeit"]
     counterclaims:
       - "Die vorherige Antwort unterschied bereits ausdrücklich zwischen persönlicher Vorkriegsförderung und Nachkriegsrehabilitation."
     forbidden_upgrades: ["source_prestige_to_truth", "absence_of_evidence_to_falsehood"]
     uncertainty:
       score: 0.32
       causes:
-        - "Das Audit basiert auf der sichtbaren Antwort und dem begrenzten Source-Set dieses Turns."
+        - "Das Audit basiert auf der sichtbaren Antwort und dem begrenzten Quellenset dieses Turns."
     interpolation:
       score: 0.25
       assumptions:

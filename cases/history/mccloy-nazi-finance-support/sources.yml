@@ -19,7 +19,7 @@ sources:
       adversarial_relevance: 0.7
       historical_track_record: 0.3
       update_latency_risk: 0.2
-    notes: "Auditierter Model-Output; nützlich als Gegenstand des Audits, nicht als historischer Beleg. Risikoachsen folgen docs/source-weighting.md: höher bedeutet höheres Risiko."
+    notes: "Auditierter Modellausgabe; nützlich als Gegenstand des Audits, nicht als historischer Beleg. Risikoachsen folgen docs/source-weighting.md: höher bedeutet höheres Risiko."
 
   - schema_version: "1.0"
     source_id: "s002"
