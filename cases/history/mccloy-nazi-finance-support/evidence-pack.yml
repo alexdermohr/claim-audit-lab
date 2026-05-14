@@ -12,7 +12,7 @@ evidence:
     accessed_at: "2026-05-14"
     supports: ["c007"]
     contradicts: []
-    notes: "Der Modellausgabe wird als Claim-Artefakt auditiert, nicht als unabhängige historische Evidenz verwendet."
+    notes: "Die Modellausgabe wird als Claim-Artefakt auditiert, nicht als unabhängige historische Evidenz verwendet."
 
   - evidence_id: "e002"
     source_ref: "s002"
@@ -90,7 +90,7 @@ evidence:
     accessed_at: "2026-05-14"
     supports: ["c006"]
     contradicts: []
-    notes: "Primäre politischer Kontext-Evidenz; stützt Reintegration, aber kein Nazi-Sympathie-Motiv."
+    notes: "Primäre Evidenz zum politischen Kontext; stützt Reintegration, aber kein Nazi-Sympathie-Motiv."
 
   - evidence_id: "e008"
     source_ref: "s001"

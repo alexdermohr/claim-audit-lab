@@ -7,10 +7,10 @@ records:
     questions:
       - "Ist die Quelle Gegenstand des Audits statt historischer Beleg?"
       - "Kann die Quelle historische McCloy-Fakten unabhängig bestätigen?"
-      - "Soll Modellausgabe irgendeine Quellencluster-Unabhängigkeit erhalten?"
+      - "Soll die Modellausgabe irgendeine Quellencluster-Unabhängigkeit erhalten?"
     evidence_refs: ["e001", "e008"]
     disputed: false
-    notes: "Niedrig gewichtet für historischen Belegwert und Quellencluster-Unabhängigkeit, weil es sich um den auditierten Modellausgabe handelt. Nützlich bleibt die Quelle zur Prüfung, ob der Repository-Case die vorherige Antwort korrekt erfasst."
+    notes: "Niedrig gewichtet für historischen Belegwert und Quellencluster-Unabhängigkeit, weil es sich um die auditierte Modellausgabe handelt. Nützlich bleibt die Quelle zur Prüfung, ob der Repository-Case die vorherige Antwort korrekt erfasst."
 
   - source_ref: "s002"
     questions:
