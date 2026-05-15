@@ -230,6 +230,11 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                 for evidence_ref in positive_evidence_refs
                 if evidence_ref in evidence_by_id
             ]
+            for source_ref in positive_source_refs:
+                if isinstance(sources_data, dict) and source_ref and source_ref not in source_types:
+                    errors.append(
+                        f"Positive evidence source_ref '{source_ref}' for claim '{claim_id}' not found in sources.yml."
+                    )
             positive_source_types = [
                 source_types.get(source_ref)
                 for source_ref in positive_source_refs

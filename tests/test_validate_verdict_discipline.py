@@ -276,6 +276,25 @@ def test_official_cluster_uses_positive_evidence_sources_not_claim_metadata(tmp_
     assert any("official/government source cluster" in e for e in errors), errors
 
 
+def test_positive_evidence_unknown_source_ref_fails(tmp_path):
+    claim = base_claim(
+        status="strongly_supported",
+        burden_profile="causal_chain",
+        required_chain=[{"id": "mechanism", "requirement": "Mechanism.", "status": "satisfied"}],
+    )
+    evidence_pack = base_evidence_pack()
+    evidence_pack["evidence"][0]["source_ref"] = "s999"
+    write_case(
+        tmp_path,
+        claim=claim,
+        relations=base_relations("supports_directly"),
+        sources=base_sources("peer_reviewed"),
+    )
+    write_yaml(tmp_path / "evidence-pack.yml", evidence_pack)
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("Positive evidence source_ref 's999'" in e for e in errors), errors
+
+
 def test_relation_processing_continues_after_unrelated_prior_errors(tmp_path):
     write_case(
         tmp_path,
