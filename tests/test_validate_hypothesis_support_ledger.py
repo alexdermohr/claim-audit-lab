@@ -30,11 +30,11 @@ def base_hypotheses(status="plausible") -> dict:
         "hypotheses": [
             {
                 "id": "h1",
-                "label": "test_hypothesis",
-                "description": "A test hypothesis.",
+                "label": "fixture_hypothesis",
+                "description": "Fixture hypothesis.",
                 "status": status,
                 "supporting_evidence": ["e001"],
-                "weaknesses": ["A weakness."],
+                "weaknesses": ["Fixture weakness."],
             }
         ],
     }
@@ -47,7 +47,7 @@ def base_sources(source_id="s001") -> dict:
             {
                 "schema_version": "1.0",
                 "source_id": source_id,
-                "label": "Test source",
+                "label": "Fixture source",
                 "url_or_ref": "https://example.org/source",
                 "source_type": "official_body",
             }
@@ -64,8 +64,8 @@ def base_evidence_pack(evidence_id="e001", source_ref="s001") -> dict:
                 "source_ref": source_ref,
                 "claim_refs": ["c001"],
                 "type": "official_statement",
-                "summary": "Test summary.",
-                "verbatim_or_ref": "See source.",
+                "summary": "Fixture evidence summary.",
+                "verbatim_or_ref": "Fixture source reference.",
                 "supports": ["c001"],
                 "contradicts": [],
             }
@@ -77,14 +77,14 @@ def base_ledger(hypothesis_ref="h1", evidence_refs=None, source_refs=None, **ove
     record = {
         "hypothesis_ref": hypothesis_ref,
         "support_search_status": "completed",
-        "strongest_supporting_argument": "Best available support.",
+        "strongest_supporting_argument": "Fixture support statement.",
         "supporting_evidence_refs": ["e001"] if evidence_refs is None else evidence_refs,
         "best_supporting_source_refs": ["s001"] if source_refs is None else source_refs,
-        "steelman": "Strongest fair version.",
-        "missing_for_upgrade": ["More independent evidence."],
-        "searched_for": ["Supporting evidence."],
+        "steelman": "Fixture steelman.",
+        "missing_for_upgrade": ["Fixture upgrade requirement."],
+        "searched_for": ["Fixture support search."],
         "not_found": [],
-        "notes": "Test notes.",
+        "notes": "Fixture notes.",
         "support_quality_score": 0.5,
     }
     record.update(overrides)
@@ -115,8 +115,8 @@ def test_missing_record_for_hypothesis_fails(tmp_path):
     hypotheses["hypotheses"].append(
         {
             "id": "h2",
-            "label": "second",
-            "description": "Second hypothesis.",
+            "label": "fixture_hypothesis_two",
+            "description": "Fixture hypothesis two.",
             "status": "plausible",
             "supporting_evidence": [],
             "weaknesses": [],

@@ -72,12 +72,12 @@ For co-causation claims, a well-supported primary explanation does not automatic
 
 Causal claims should declare required links when the burden is non-trivial. Depending on the claim, required links may include:
 
-- residue or material signal,
-- chain of custody,
-- sufficient quantity,
-- placement on relevant structural elements,
-- ignition or trigger mechanism,
-- temporal coupling to the event,
-- structural causal effect.
+- observed signal,
+- provenance,
+- scope,
+- applicability,
+- mechanism,
+- timing,
+- effect.
 
 If critical links are missing, the verdict should usually be capped at `weak` or `speculative` unless direct causal evidence is present. Missing links are not the same as direct contradiction.

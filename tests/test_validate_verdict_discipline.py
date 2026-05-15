@@ -30,16 +30,16 @@ def base_claim(status="weak", claim_type="causal_claim", claim_kind="causal_clai
         "claim_id": "c001",
         "claim_type": claim_type,
         "claim_kind": claim_kind,
-        "statement": "A caused B.",
+        "statement": "Synthetic proposition under evaluation.",
         "status": status,
         "evidence_refs": ["e001"],
         "source_refs": ["s001"],
-        "requires": ["mechanism"],
-        "counterclaims": ["Alternative one.", "Alternative two."],
+        "requires": ["required_link"],
+        "counterclaims": ["Counterclaim placeholder one.", "Counterclaim placeholder two."],
         "forbidden_upgrades": ["correlation_to_causation"],
-        "uncertainty": {"score": 0.4, "causes": ["limited evidence"]},
-        "interpolation": {"score": 0.2, "assumptions": ["mechanism assumed"]},
-        "notes": "Test claim.",
+        "uncertainty": {"score": 0.4, "causes": ["fixture uncertainty"]},
+        "interpolation": {"score": 0.2, "assumptions": ["fixture assumption"]},
+        "notes": "Fixture claim.",
     }
     claim.update(overrides)
     return claim
@@ -52,7 +52,7 @@ def base_sources(source_type="official_body"):
             {
                 "schema_version": "1.0",
                 "source_id": "s001",
-                "label": "Source",
+                "label": "Fixture source",
                 "url_or_ref": "https://example.org/source",
                 "source_type": source_type,
             }
@@ -69,8 +69,8 @@ def base_evidence_pack(contradicts=None, supports=None, claim_refs=None):
                 "source_ref": "s001",
                 "claim_refs": ["c001"] if claim_refs is None else claim_refs,
                 "type": "official_statement",
-                "summary": "Evidence summary.",
-                "verbatim_or_ref": "See source.",
+                "summary": "Fixture evidence summary.",
+                "verbatim_or_ref": "Fixture source reference.",
                 "supports": [] if supports is None else supports,
                 "contradicts": [] if contradicts is None else contradicts,
             }
@@ -85,7 +85,7 @@ def base_relations(relation_type="weakens", **overrides):
         "claim_ref": "c001",
         "relation_type": relation_type,
         "strength": 0.7,
-        "explanation": "Typed relation explanation.",
+        "explanation": "Fixture relation explanation.",
     }
     relation.update(overrides)
     return {"schema_version": "1.0", "case_ref": "cases/test", "relations": [relation]}
@@ -177,7 +177,7 @@ def test_legacy_contradicts_with_direct_relation_passes(tmp_path):
         claim=base_claim(status="contradicted"),
         relations=base_relations(
             "contradicts_directly",
-            incompatible_proposition="The direct record is incompatible with the claim.",
+            incompatible_proposition="Fixture incompatible proposition.",
         ),
         evidence_contradicts=["c001"],
     )
@@ -223,7 +223,7 @@ def test_direct_contradiction_allows_contradicted(tmp_path):
         claim=base_claim(status="contradicted"),
         relations=base_relations(
             "contradicts_directly",
-            incompatible_proposition="The dated record makes the claimed date impossible.",
+            incompatible_proposition="Fixture incompatible proposition.",
         ),
     )
     errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
@@ -260,7 +260,7 @@ def test_official_cluster_uses_positive_evidence_sources_not_claim_metadata(tmp_
         {
             "schema_version": "1.0",
             "source_id": "s002",
-            "label": "Non-official background source",
+            "label": "Fixture non-authority source",
             "url_or_ref": "https://example.org/background",
             "source_type": "peer_reviewed",
         }
@@ -268,7 +268,7 @@ def test_official_cluster_uses_positive_evidence_sources_not_claim_metadata(tmp_
     claim = base_claim(
         status="strongly_supported",
         burden_profile="causal_chain",
-        required_chain=[{"id": "mechanism", "requirement": "Mechanism.", "status": "satisfied"}],
+        required_chain=[{"id": "required_link", "requirement": "Required link.", "status": "satisfied"}],
         source_refs=["s001", "s002"],
     )
     write_case(tmp_path, claim=claim, relations=base_relations("supports_directly"), sources=sources)
@@ -280,7 +280,7 @@ def test_positive_evidence_unknown_source_ref_fails(tmp_path):
     claim = base_claim(
         status="strongly_supported",
         burden_profile="causal_chain",
-        required_chain=[{"id": "mechanism", "requirement": "Mechanism.", "status": "satisfied"}],
+        required_chain=[{"id": "required_link", "requirement": "Required link.", "status": "satisfied"}],
     )
     evidence_pack = base_evidence_pack()
     evidence_pack["evidence"][0]["source_ref"] = "s999"
@@ -301,7 +301,7 @@ def test_relation_processing_continues_after_unrelated_prior_errors(tmp_path):
         claim=base_claim(status="contradicted"),
         relations=base_relations(
             "contradicts_directly",
-            incompatible_proposition="The direct record is incompatible with the claim.",
+            incompatible_proposition="Fixture incompatible proposition.",
         ),
         evidence_contradicts=["c001"],
     )
@@ -319,7 +319,7 @@ def test_official_single_cluster_caps_world_causal_claim(tmp_path):
             status="strongly_supported",
             burden_profile="causal_chain",
             required_chain=[
-                {"id": "mechanism", "requirement": "Mechanism.", "status": "satisfied"}
+                {"id": "required_link", "requirement": "Required link.", "status": "satisfied"}
             ],
         ),
         relations=base_relations("supports_directly"),
@@ -347,7 +347,7 @@ def test_missing_chain_caps_strong_causal_claim(tmp_path):
             status="established",
             burden_profile="causal_chain",
             required_chain=[
-                {"id": "placement", "requirement": "Placement.", "status": "missing"}
+                {"id": "required_link", "requirement": "Required link.", "status": "missing"}
             ],
         ),
         relations=base_relations("supports_directly"),
@@ -366,8 +366,8 @@ def test_downgraded_hypothesis_requires_support_ledger(tmp_path):
             "hypotheses": [
                 {
                     "id": "h1",
-                    "label": "weak hypothesis",
-                    "description": "A weak hypothesis.",
+                    "label": "fixture_hypothesis",
+                    "description": "Fixture hypothesis.",
                     "status": "weak",
                     "supporting_evidence": [],
                     "weaknesses": [],
