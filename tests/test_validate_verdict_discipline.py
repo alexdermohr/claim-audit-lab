@@ -254,6 +254,45 @@ def test_strong_claim_without_positive_relation_fails(tmp_path):
     assert any("positive typed evidence relation" in e for e in errors), errors
 
 
+def test_official_cluster_uses_positive_evidence_sources_not_claim_metadata(tmp_path):
+    sources = base_sources("government_report")
+    sources["sources"].append(
+        {
+            "schema_version": "1.0",
+            "source_id": "s002",
+            "label": "Non-official background source",
+            "url_or_ref": "https://example.org/background",
+            "source_type": "peer_reviewed",
+        }
+    )
+    claim = base_claim(
+        status="strongly_supported",
+        burden_profile="causal_chain",
+        required_chain=[{"id": "mechanism", "requirement": "Mechanism.", "status": "satisfied"}],
+        source_refs=["s001", "s002"],
+    )
+    write_case(tmp_path, claim=claim, relations=base_relations("supports_directly"), sources=sources)
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("official/government source cluster" in e for e in errors), errors
+
+
+def test_relation_processing_continues_after_unrelated_prior_errors(tmp_path):
+    write_case(
+        tmp_path,
+        claim=base_claim(status="contradicted"),
+        relations=base_relations(
+            "contradicts_directly",
+            incompatible_proposition="The direct record is incompatible with the claim.",
+        ),
+        evidence_contradicts=["c001"],
+    )
+    write_yaml(tmp_path / "sources.yml", ["not", "an", "object"])
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("sources.yml must contain a YAML object" in e for e in errors), errors
+    assert not any("requires at least one" in e and "contradicts_directly" in e for e in errors), errors
+    assert not any("Legacy evidence-pack contradicts requires" in e for e in errors), errors
+
+
 def test_official_single_cluster_caps_world_causal_claim(tmp_path):
     write_case(
         tmp_path,

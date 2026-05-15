@@ -166,6 +166,14 @@ def test_duplicate_hypothesis_ref_fails(tmp_path):
     assert any("duplicate" in e and "h1" in e for e in errors), errors
 
 
+def test_malformed_evidence_pack_reports_parse_without_ref_cascade(tmp_path):
+    write_valid_support_case(tmp_path)
+    (tmp_path / "evidence-pack.yml").write_text("evidence: [unterminated", encoding="utf-8")
+    errors = validate_hypothesis_support_ledger.validate_case(tmp_path, load_schema())
+    assert any("Could not parse evidence-pack.yml" in e for e in errors), errors
+    assert not any("evidence_ref 'e001' not found" in e for e in errors), errors
+
+
 def test_unknown_evidence_ref_fails(tmp_path):
     write_valid_support_case(tmp_path, ledger=base_ledger(evidence_refs=["e999"]))
     errors = validate_hypothesis_support_ledger.validate_case(tmp_path, load_schema())

@@ -120,8 +120,9 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
         elif not isinstance(relations_data, dict):
             errors.append("evidence-relations.yml must contain a YAML object.")
         else:
-            errors.extend(schema_errors(relations_data, relation_schema))
-            if not errors:
+            relation_errors = schema_errors(relations_data, relation_schema)
+            errors.extend(relation_errors)
+            if not relation_errors:
                 relations = relations_data.get("relations", [])
                 relation_ids = [r.get("relation_id") for r in relations if isinstance(r, dict)]
                 for relation_id, count in sorted(Counter(relation_ids).items()):
@@ -219,13 +220,25 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                     f"Causal claim '{claim_id}' status='{status}' has missing or contested required_chain links."
                 )
 
-            source_refs = claim.get("source_refs") or []
-            if source_refs and source_types:
-                known_types = [source_types.get(ref) for ref in source_refs if ref in source_types]
-                if known_types and all(source_type in OFFICIAL_SOURCE_TYPES for source_type in known_types):
-                    errors.append(
-                        f"World-causal claim '{claim_id}' status='{status}' is supported only by official/government source cluster."
-                    )
+            positive_evidence_refs = [
+                relation.get("evidence_ref")
+                for relation in claim_relations
+                if relation.get("relation_type") in POSITIVE_RELATIONS
+            ]
+            positive_source_refs = [
+                evidence_by_id[evidence_ref].get("source_ref")
+                for evidence_ref in positive_evidence_refs
+                if evidence_ref in evidence_by_id
+            ]
+            positive_source_types = [
+                source_types.get(source_ref)
+                for source_ref in positive_source_refs
+                if source_ref in source_types
+            ]
+            if positive_source_types and all(source_type in OFFICIAL_SOURCE_TYPES for source_type in positive_source_types):
+                errors.append(
+                    f"World-causal claim '{claim_id}' status='{status}' is supported only by official/government source cluster."
+                )
 
             if claim_relations and {r.get("relation_type") for r in claim_relations} <= {"reports"}:
                 errors.append(

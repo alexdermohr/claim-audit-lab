@@ -35,15 +35,20 @@ def schema_errors(payload: dict, schema: dict) -> list[str]:
     ]
 
 
-def _ids_from_file(path: pathlib.Path, top_key: str, id_key: str) -> set[str]:
+def _ids_from_file(path: pathlib.Path, label: str, top_key: str, id_key: str) -> tuple[set[str], list[str]]:
     data, err = safe_load_yaml(path)
-    if err or not isinstance(data, dict):
-        return set()
+    if err:
+        return set(), [f"Could not parse {label}: {err}"]
+    if not isinstance(data, dict):
+        return set(), [f"{label} must contain a YAML object."]
+    items = data.get(top_key, [])
+    if not isinstance(items, list):
+        return set(), [f"{label} '{top_key}' must be an array."]
     return {
         item.get(id_key)
-        for item in data.get(top_key, [])
+        for item in items
         if isinstance(item, dict) and item.get(id_key)
-    }
+    }, []
 
 
 def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
@@ -116,10 +121,16 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
 
     evidence_ids: set[str] = set()
     source_ids: set[str] = set()
+    evidence_lookup_valid = True
+    source_lookup_valid = True
     if evidence_path.exists():
-        evidence_ids = _ids_from_file(evidence_path, "evidence", "evidence_id")
+        evidence_ids, evidence_lookup_errors = _ids_from_file(evidence_path, "evidence-pack.yml", "evidence", "evidence_id")
+        errors.extend(evidence_lookup_errors)
+        evidence_lookup_valid = not evidence_lookup_errors
     if sources_path.exists():
-        source_ids = _ids_from_file(sources_path, "sources", "source_id")
+        source_ids, source_lookup_errors = _ids_from_file(sources_path, "sources.yml", "sources", "source_id")
+        errors.extend(source_lookup_errors)
+        source_lookup_valid = not source_lookup_errors
 
     for record in records:
         if not isinstance(record, dict):
@@ -133,7 +144,7 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                 f"hypothesis-support-ledger record '{hypothesis_ref}' references evidence, but evidence-pack.yml is missing."
             )
         for evidence_ref in support_evidence_refs:
-            if evidence_path.exists() and evidence_ref not in evidence_ids:
+            if evidence_path.exists() and evidence_lookup_valid and evidence_ref not in evidence_ids:
                 errors.append(
                     f"hypothesis-support-ledger record '{hypothesis_ref}' evidence_ref '{evidence_ref}' not found in evidence-pack.yml."
                 )
@@ -143,7 +154,7 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                 f"hypothesis-support-ledger record '{hypothesis_ref}' references sources, but sources.yml is missing."
             )
         for source_ref in support_source_refs:
-            if sources_path.exists() and source_ref not in source_ids:
+            if sources_path.exists() and source_lookup_valid and source_ref not in source_ids:
                 errors.append(
                     f"hypothesis-support-ledger record '{hypothesis_ref}' source_ref '{source_ref}' not found in sources.yml."
                 )
