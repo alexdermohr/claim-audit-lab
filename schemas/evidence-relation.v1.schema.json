@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/evidence-relation.v1.schema.json",
+  "title": "Evidence Relation v1",
+  "description": "Typed relations between evidence and claims used by verdict-discipline validation.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "relations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0" },
+    "case_ref": { "type": "string", "minLength": 1 },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "relation_id",
+          "evidence_ref",
+          "claim_ref",
+          "relation_type",
+          "strength",
+          "explanation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "relation_id": { "type": "string", "pattern": "^r[0-9]{3,}$" },
+          "evidence_ref": { "type": "string", "pattern": "^e[0-9]{3,}$" },
+          "claim_ref": { "type": "string", "pattern": "^c[0-9]{3,}$" },
+          "relation_type": {
+            "type": "string",
+            "enum": [
+              "reports",
+              "supports_directly",
+              "supports_indirectly",
+              "weakens",
+              "undercuts",
+              "contradicts_directly",
+              "contradicts_conditionally",
+              "contextualizes",
+              "alternative_explanation",
+              "missing_link",
+              "method_challenge",
+              "source_interest_warning"
+            ]
+          },
+          "strength": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+          "explanation": { "type": "string", "minLength": 1 },
+          "incompatible_proposition": { "type": "string", "minLength": 1 },
+          "assumptions": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

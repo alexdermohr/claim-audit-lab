@@ -5,7 +5,7 @@ import sys
 import json
 import pathlib
 import yaml
-import jsonschema
+from jsonschema_compat import jsonschema
 
 SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "source.v1.schema.json"
 

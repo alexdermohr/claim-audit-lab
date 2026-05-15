@@ -6,7 +6,7 @@ from collections import Counter
 import pathlib
 import sys
 
-import jsonschema
+from jsonschema_compat import jsonschema
 import yaml
 
 SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "source-weight-audit.v1.schema.json"

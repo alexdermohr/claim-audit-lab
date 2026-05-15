@@ -59,21 +59,29 @@
     },
     "evidence_refs": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "default": []
     },
     "source_refs": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "default": []
     },
     "requires": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "counterclaims": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "default": []
     },
     "forbidden_upgrades": {
@@ -91,7 +99,10 @@
     },
     "uncertainty": {
       "type": "object",
-      "required": ["score", "causes"],
+      "required": [
+        "score",
+        "causes"
+      ],
       "additionalProperties": false,
       "properties": {
         "score": {
@@ -101,13 +112,18 @@
         },
         "causes": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "interpolation": {
       "type": "object",
-      "required": ["score", "assumptions"],
+      "required": [
+        "score",
+        "assumptions"
+      ],
       "additionalProperties": false,
       "properties": {
         "score": {
@@ -117,12 +133,72 @@
         },
         "assumptions": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "notes": {
       "type": "string"
+    },
+    "claim_kind": {
+      "type": "string",
+      "enum": [
+        "reported_claim",
+        "factual_event_claim",
+        "causal_claim",
+        "capability_claim",
+        "absence_claim",
+        "comparative_claim",
+        "motive_claim",
+        "meta_claim"
+      ]
+    },
+    "burden_profile": {
+      "type": "string",
+      "enum": [
+        "none",
+        "causal_chain",
+        "capability_chain",
+        "source_report",
+        "comparative"
+      ]
+    },
+    "required_chain": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "requirement",
+          "status"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requirement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "satisfied",
+              "partially_satisfied",
+              "missing",
+              "contested",
+              "not_applicable"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

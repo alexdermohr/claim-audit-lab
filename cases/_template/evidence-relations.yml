@@ -1,0 +1,9 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "reports"
+    strength: 0.5
+    explanation: "Describe exactly how this evidence relates to this claim without upgrading source content into proof."

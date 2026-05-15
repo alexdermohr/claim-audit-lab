@@ -1,0 +1,19 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+audited_at: "1970-01-01" # replace with real audit date
+auditor: "[role or identifier]"
+records:
+  - hypothesis_ref: "h1"
+    support_search_status: "completed"
+    strongest_supporting_argument: "[Best support found for this hypothesis, even if weak.]"
+    supporting_evidence_refs: []
+    best_supporting_source_refs: []
+    steelman: "[Strongest fair version of the hypothesis.]"
+    missing_for_upgrade:
+      - "[Evidence needed to raise confidence.]"
+    searched_for:
+      - "[What active support search looked for.]"
+    not_found:
+      - "[What was not found, especially if supporting_evidence_refs is empty.]"
+    notes: "Search symmetry, not equal evidential weight."
+    support_quality_score: 0.0
