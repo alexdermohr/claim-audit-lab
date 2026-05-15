@@ -137,7 +137,11 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                     evidence_ref = relation.get("evidence_ref")
                     if claim_ref not in claim_ids:
                         errors.append(f"evidence relation '{rid}' claim_ref '{claim_ref}' not found in claims.yml.")
-                    if evidence_path.exists() and evidence_lookup_valid and evidence_ref not in evidence_ids:
+                    if not evidence_path.exists():
+                        errors.append(
+                            f"evidence relation '{rid}' references evidence_ref '{evidence_ref}', but evidence-pack.yml is missing."
+                        )
+                    elif evidence_lookup_valid and evidence_ref not in evidence_ids:
                         errors.append(f"evidence relation '{rid}' evidence_ref '{evidence_ref}' not found in evidence-pack.yml.")
                     claim = claim_by_id.get(claim_ref)
                     evidence = evidence_by_id.get(evidence_ref)

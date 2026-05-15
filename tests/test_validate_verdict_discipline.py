@@ -157,6 +157,15 @@ def test_relation_must_be_mirrored_by_evidence_claim_refs(tmp_path):
     assert any("Evidence relation must be mirrored" in e for e in errors), errors
 
 
+def test_relation_requires_evidence_pack(tmp_path):
+    claim = base_claim(status="weak")
+    write_yaml(tmp_path / "claims.yml", {"schema_version": "1.0", "claims": [claim]})
+    write_yaml(tmp_path / "sources.yml", base_sources())
+    write_yaml(tmp_path / "evidence-relations.yml", base_relations("supports_indirectly"))
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("evidence-pack.yml is missing" in e for e in errors), errors
+
+
 def test_legacy_contradicts_without_direct_relation_fails(tmp_path):
     claim = base_claim(status="weak")
     write_case(tmp_path, claim=claim, relations=base_relations("weakens"), evidence_contradicts=["c001"])
