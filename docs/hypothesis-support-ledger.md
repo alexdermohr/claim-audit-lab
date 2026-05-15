@@ -17,9 +17,9 @@
 
 The ledger should keep these levels separate:
 
-1. **Source reports X** — established by the source text if accurately captured.
-2. **X is technically or historically true** — requires method review, independent checks, and adversarial comparison.
-3. **X is the best current working hypothesis** — allowed under an evidence pack, but still contingent on missing evidence and uncertainty.
+1. **Source content** — what a source reports, models, measures, or interprets.
+2. **World claim** — whether the reported proposition is independently true under available methods and checks.
+3. **Working hypothesis** — the best current interpretation under the evidence pack, uncertainty, and missing evidence.
 
 ## What the validator enforces
 

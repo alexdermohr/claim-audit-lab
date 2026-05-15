@@ -21,13 +21,13 @@ Verdict discipline prevents the audit pipeline from turning source authority, mi
 
 The audit should keep these layers separate:
 
-| Layer | Question | Example |
-|---|---|---|
-| Source content | What does the source report, model, measure, or interpret? | `NIST reports X.` |
-| Evidence relation | How does evidence bear on a claim? | `e003 weakens c001.` |
-| Hypothesis comparison | Which hypothesis is better supported under this pack? | `c008 is better supported than c001.` |
-| Falsification | Is the claim directly incompatible with evidence? | `A 1953 role date contradicts a 1936 role claim.` |
-| Verdict | What label follows under declared uncertainty? | `weak`, `plausible`, `contradicted` |
+| Layer | Question |
+|---|---|
+| Source content | What does the source report, model, measure, or interpret? |
+| Evidence relation | How does evidence bear on a claim? |
+| Hypothesis comparison | Which hypothesis is better supported under the current evidence pack? |
+| Falsification | Is the claim directly incompatible with evidence? |
+| Verdict | What label follows under declared uncertainty? |
 
 ## Claim-kind precedence
 
@@ -70,7 +70,7 @@ For co-causation claims, a well-supported primary explanation does not automatic
 
 ## Causal-chain burden
 
-Causal claims should declare required links when the burden is non-trivial. A complex co-causation claim, for example, may require:
+Causal claims should declare required links when the burden is non-trivial. Depending on the claim, required links may include:
 
 - residue or material signal,
 - chain of custody,
