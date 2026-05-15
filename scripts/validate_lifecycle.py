@@ -5,7 +5,7 @@ import json
 import pathlib
 import sys
 
-import jsonschema
+from jsonschema_compat import jsonschema
 import yaml
 
 LIFECYCLE_SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "lifecycle.v1.schema.json"

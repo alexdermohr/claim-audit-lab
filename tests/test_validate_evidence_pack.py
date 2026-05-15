@@ -43,7 +43,7 @@ def base_pack(evidence_items=None) -> dict:
 
 
 def validate_pack(pack: dict, schema: dict) -> list[str]:
-    import jsonschema
+    from jsonschema_compat import jsonschema
     validator = jsonschema.Draft7Validator(schema, format_checker=jsonschema.FormatChecker())
     return [
         f"  Schema error at {list(e.absolute_path)}: {e.message}"
