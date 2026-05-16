@@ -95,6 +95,11 @@ def validate_claim(claim: dict, schema: dict) -> list[str]:
             f"  reported_claim '{claim['claim_id']}' must set burden_profile='source_report' so source-content closure is not treated as world-claim closure."
         )
 
+    if burden_profile == "source_report" and claim_kind != "reported_claim":
+        errors.append(
+            f"  Claim '{claim['claim_id']}' uses burden_profile='source_report' but claim_kind is not 'reported_claim'."
+        )
+
     if claim_kind == "absence_claim":
         if not has_absence_scope(claim):
             errors.append(
@@ -112,7 +117,7 @@ def validate_claim(claim: dict, schema: dict) -> list[str]:
                 f"  co-causation claim '{claim['claim_id']}' cannot be status='contradicted' from a stronger alternative explanation alone; set non-empty direct_incompatibility_basis."
             )
 
-    is_source_report_claim = claim_kind == "reported_claim" or burden_profile == "source_report"
+    is_source_report_claim = claim_kind == "reported_claim" and burden_profile == "source_report"
     if (
         claim_type == "causal_claim"
         and not is_source_report_claim

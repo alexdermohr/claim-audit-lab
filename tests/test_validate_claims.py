@@ -369,3 +369,25 @@ def test_world_causal_claim_still_requires_counterclaims(schema):
     }
     errors = validate_claims.validate_claim(claim, schema)
     assert any("requires at least" in e and "counterclaims" in e for e in errors), errors
+
+
+def test_source_report_burden_without_reported_claim_kind_fails(schema):
+    claim = {
+        "schema_version": "1.0",
+        "claim_id": "c060",
+        "claim_type": "causal_claim",
+        "claim_kind": "causal_claim",
+        "burden_profile": "source_report",
+        "statement": "A caused B.",
+        "status": "plausible",
+        "evidence_refs": ["e001"],
+        "source_refs": ["s001"],
+        "requires": ["timeline", "mechanism"],
+        "counterclaims": [],
+        "forbidden_upgrades": ["correlation_to_causation"],
+        "uncertainty": {"score": 0.4, "causes": []},
+        "interpolation": {"score": 0.2, "assumptions": []},
+    }
+    errors = validate_claims.validate_claim(claim, schema)
+    assert any("burden_profile='source_report'" in e and "claim_kind" in e for e in errors), errors
+    assert any("requires at least" in e and "counterclaims" in e for e in errors), errors
