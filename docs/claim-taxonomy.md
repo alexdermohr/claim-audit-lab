@@ -113,3 +113,15 @@ These logical jumps are forbidden in all claim types:
 | Source prestige → truth | "The official body said it, so it is true." |
 | Suspicion → proof | "It looks suspicious, so they did it." |
 | Absence of evidence → falsehood | "We found no proof, so it didn't happen." |
+
+## Claim-kind closure boundaries
+
+### `reported_claim`
+
+`claim_kind: reported_claim` means the auditable proposition is “source X reports Y.” A strong verdict may be appropriate when the source content is clear, but that closes only the report-content question. It must not be treated as a direct verdict on the world claim Y. If Y is assessed as true or false, create a separate world claim and connect it through its own evidence relations.
+
+A `reported_claim` must use `burden_profile: source_report` so validators can distinguish source-content closure from world-claim closure.
+
+### `absence_claim`
+
+`claim_kind: absence_claim` means “no matching evidence was found inside a declared scope,” not “the thing exists nowhere.” The claim must declare that scope, such as the current evidence pack, a named source, or a named dataset, and must guard against `absence_of_evidence_to_falsehood`.

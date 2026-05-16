@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/contradictions.v1.schema.json",
+  "title": "Contradictions v1",
+  "description": "Structured claim-conflict ledger. Contradictions document conflict; they do not change claim verdicts by existence alone.",
+  "type": "object",
+  "required": ["schema_version", "contradictions"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "case_ref": {"type": "string", "minLength": 1},
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "contradiction_id",
+          "claim_a_ref",
+          "claim_b_ref",
+          "description",
+          "resolution_status",
+          "resolution_notes"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "contradiction_id": {"type": "string", "pattern": "^con[0-9]{3,}$"},
+          "claim_a_ref": {"type": "string", "pattern": "^c[0-9]{3,}$"},
+          "claim_b_ref": {"type": "string", "pattern": "^c[0-9]{3,}$"},
+          "description": {"type": "string", "minLength": 1},
+          "resolution_status": {
+            "type": "string",
+            "enum": ["unresolved", "weighted_only", "partially_resolved", "resolved_by_scope", "logically_resolved"]
+          },
+          "resolution_notes": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

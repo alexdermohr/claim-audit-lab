@@ -161,6 +161,19 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                                 "Evidence relation must be mirrored by claim.evidence_refs and evidence.claim_refs "
                                 f"for relation '{rid}'."
                             )
+                    if relation.get("relation_type") == "contradicts_conditionally":
+                        assumptions = relation.get("assumptions")
+                        if not isinstance(assumptions, list) or not any(
+                            isinstance(item, str) and item.strip() for item in assumptions
+                        ):
+                            errors.append(
+                                f"conditional contradiction relation '{rid}' must document assumptions."
+                            )
+                        incompatible = relation.get("incompatible_proposition")
+                        if not isinstance(incompatible, str) or not incompatible.strip():
+                            errors.append(
+                                f"conditional contradiction relation '{rid}' must name incompatible_proposition as a non-empty string."
+                            )
                     relations_by_claim[claim_ref].append(relation)
                     relation_types_by_pair[(evidence_ref, claim_ref)].add(relation.get("relation_type"))
 

@@ -296,7 +296,7 @@ def test_reported_claim_does_not_establish_world_causal_claim(tmp_path):
 
 
 def test_reported_claim_established_allows_reports_relation(tmp_path):
-    claim = base_claim(status="established", claim_type="meta_claim", claim_kind="reported_claim")
+    claim = base_claim(status="established", claim_type="meta_claim", claim_kind="reported_claim", burden_profile="source_report")
     write_case(tmp_path, claim=claim, relations=base_relations("reports"))
     errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
     assert errors == []
@@ -507,3 +507,42 @@ def test_cli_verdict_discipline_still_requires_relations_even_with_legacy_marker
     assert "LEGACY" in captured.out
     assert "verdict discipline still enforced" in captured.out
     assert "evidence-relations.yml required because claims.yml and evidence-pack.yml exist." in captured.out
+
+
+def test_conditional_contradiction_requires_assumptions_and_incompatible_proposition(tmp_path):
+    claim = base_claim(status="weak")
+    write_case(tmp_path, claim=claim, relations=base_relations("contradicts_conditionally"))
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("must document assumptions" in e for e in errors), errors
+    assert any("must name incompatible_proposition" in e for e in errors), errors
+
+
+def test_conditional_contradiction_with_assumptions_passes(tmp_path):
+    claim = base_claim(status="weak")
+    write_case(
+        tmp_path,
+        claim=claim,
+        relations=base_relations(
+            "contradicts_conditionally",
+            assumptions=["If proposition P is required for the claim."],
+            incompatible_proposition="Evidence supports not-P under the stated assumption.",
+        ),
+    )
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert errors == []
+
+
+def test_conditional_contradiction_non_string_incompatible_proposition_fails_without_traceback(tmp_path):
+    claim = base_claim(status="weak")
+    write_case(
+        tmp_path,
+        claim=claim,
+        relations=base_relations(
+            "contradicts_conditionally",
+            assumptions=["If proposition P is required for the claim."],
+            incompatible_proposition=["bad"],
+        ),
+    )
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("incompatible_proposition" in e and "string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)
