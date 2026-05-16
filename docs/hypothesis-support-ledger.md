@@ -42,3 +42,10 @@ The CLI validator scans case roots with `hypotheses.yml`. Direct `validate_case(
 `contradicted` requires direct incompatibility between a claim and evidence. A stronger alternative explanation, missing support, or lack of corroboration should normally produce `weak`, `speculative`, or a future `disfavored_under_current_evidence`, not `contradicted`.
 
 For co-causation claims, a well-supported primary explanation does not automatically falsify every possible additional cause. The ledger should document whether the evidence directly rules out the claim or merely leaves it unsupported relative to a better-supported hypothesis.
+
+## Interaction with anomaly and integrity ledgers
+
+Hypothesis support must remain symmetric under critical inquiry. If a source or investigation strongly supports or closes a hypothesis, the case should also record material non-tests, method gaps, source-cluster dependence, and hypothesis-space gaps in the anomaly or investigation-integrity artifacts.
+
+This does not convert anomalies into counterproof. It records closure limits: which hypotheses were genuinely weakened, which remain unresolved, and which evidentiary paths would be needed to change the support ledger.
+

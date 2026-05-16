@@ -39,6 +39,8 @@
         "official_body",
         "journalism",
         "ngo_report",
+        "advocacy_report",
+        "corporate_report",
         "government_report",
         "court_document",
         "leak_or_whistleblower",

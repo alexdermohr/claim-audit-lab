@@ -10,11 +10,11 @@ sources:
     author_or_org: "Fixture organization"
     source_weight:
       primary_proximity: 0.8
-      method_transparency: 0.7
+      method_transparency: 0.9
       reproducibility: 0.6
       source_cluster_independence: 0.5
-      institutional_interest_risk: 0.4
-      adversarial_relevance: 0.3
+      institutional_interest_risk: 0.7
+      adversarial_relevance: 0.8
       historical_track_record: 0.6
       update_latency_risk: 0.2
     notes: "Minimal sandbox source for validator coverage"

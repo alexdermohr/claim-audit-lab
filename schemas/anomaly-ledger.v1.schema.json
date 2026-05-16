@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/anomaly-ledger.v1.schema.json",
+  "title": "Anomaly Ledger v1",
+  "description": "Case-local material anomalies that may affect claim closure, hypothesis weighting, or source weighting.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "anomalies"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "case_ref": {"type": "string", "minLength": 1},
+    "anomalies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "anomaly_id",
+          "anomaly_type",
+          "statement",
+          "materiality",
+          "anomaly_direction",
+          "status"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "anomaly_id": {"type": "string", "pattern": "^a[0-9]{3,}$"},
+          "anomaly_type": {
+            "type": "string",
+            "enum": [
+              "method_gap",
+              "non_test",
+              "scope_limitation",
+              "chain_of_custody_gap",
+              "raw_data_unavailable",
+              "model_limitation",
+              "interest_conflict",
+              "hypothesis_space_gap",
+              "source_cluster_dependence",
+              "unexplained_exclusion",
+              "contradictory_evidence",
+              "base_rate_anomaly",
+              "overstrong_conclusion"
+            ]
+          },
+          "source_refs": {"type": "array", "items": {"type": "string"}, "default": []},
+          "affected_claims": {"type": "array", "items": {"type": "string"}, "default": []},
+          "affected_hypotheses": {"type": "array", "items": {"type": "string"}, "default": []},
+          "statement": {"type": "string", "minLength": 1},
+          "materiality": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "anomaly_direction": {
+            "type": "string",
+            "enum": [
+              "increases_uncertainty",
+              "decreases_uncertainty",
+              "shifts_weight",
+              "contests_closure",
+              "context_only"
+            ]
+          },
+          "why_it_matters": {"type": "string", "minLength": 1},
+          "possible_benign_explanations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "possible_bias_explanations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "missing_for_resolution": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "status": {
+            "type": "string",
+            "enum": ["unresolved", "partially_resolved", "resolved", "downgraded_as_immaterial"]
+          },
+          "verdict_effect": {
+            "type": "object",
+            "required": ["claim_ref", "effect"],
+            "additionalProperties": false,
+            "properties": {
+              "claim_ref": {"type": "string", "minLength": 1},
+              "effect": {"type": "string", "minLength": 1},
+              "rationale": {"type": "string", "minLength": 1}
+            }
+          },
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

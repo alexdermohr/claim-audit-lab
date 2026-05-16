@@ -34,6 +34,10 @@ A single official source (s001) documents the policy announcement. No contradict
 - Score: 0.1
 - Assumption: Timestamp interpreted as publication date
 
+## Critical Inquiry
+
+- a001 / non-test nt001: The source has high method transparency but also high institutional-interest and adversarial relevance; the documented non-tested path limits closure and keeps c001 at *plausible* rather than strong.
+
 ## Red-Team Status
 
 Pending. Lifecycle status is draft; no finalization gate triggered.

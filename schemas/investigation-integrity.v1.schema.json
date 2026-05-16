@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/investigation-integrity.v1.schema.json",
+  "title": "Investigation Integrity v1",
+  "description": "Case-local audit of source clusters that carry investigative or closure power.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "investigations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "case_ref": {"type": "string", "minLength": 1},
+    "investigations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "investigation_id",
+          "source_cluster_refs",
+          "lead_institution",
+          "report_role",
+          "politically_sensitive",
+          "financially_sensitive",
+          "institutional_interest_risk",
+          "hypothesis_space_declared",
+          "hypothesis_space_gaps",
+          "non_tested_material_paths",
+          "adversarial_review",
+          "integrity_verdict",
+          "downstream_constraints"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "investigation_id": {"type": "string", "pattern": "^inv[0-9]{3,}$"},
+          "source_cluster_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "lead_institution": {"type": "string", "minLength": 1},
+          "report_role": {
+            "type": "string",
+            "enum": [
+              "primary_investigation",
+              "official_summary",
+              "expert_report",
+              "advocacy_report",
+              "corporate_report",
+              "academic_study",
+              "media_investigation",
+              "witness_collection",
+              "secondary_synthesis"
+            ]
+          },
+          "politically_sensitive": {"type": "boolean"},
+          "financially_sensitive": {"type": "boolean"},
+          "institutional_interest_risk": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "hypothesis_space_declared": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "hypothesis_space_gaps": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "non_tested_material_paths": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["path_id", "expected_test", "justification_present", "justification_quality", "materiality"],
+              "additionalProperties": false,
+              "properties": {
+                "path_id": {"type": "string", "minLength": 1},
+                "expected_test": {"type": "string", "minLength": 1},
+                "justification_present": {"type": "string", "enum": ["yes", "partial", "no", "unknown"]},
+                "justification_quality": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                "materiality": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                "notes": {"type": "string"}
+              }
+            }
+          },
+          "adversarial_review": {
+            "type": "object",
+            "required": ["present", "notes"],
+            "additionalProperties": false,
+            "properties": {
+              "present": {"type": "string", "enum": ["yes", "partial", "no", "unknown"]},
+              "notes": {"type": "string", "minLength": 1}
+            }
+          },
+          "integrity_verdict": {
+            "type": "string",
+            "enum": [
+              "high_integrity",
+              "methodologically_strong_but_interest_sensitive",
+              "methodologically_strong_but_incompletely_adversarial",
+              "incomplete_for_closure",
+              "low_integrity_for_closure",
+              "insufficient_information"
+            ]
+          },
+          "downstream_constraints": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

@@ -149,3 +149,31 @@ def test_assessment_with_unallowlisted_legacy_marker_does_not_pass_silently(tmp_
     (case_dir / "assessment.md").write_text("# Assessment\n", encoding="utf-8")
     errors = validate_case_topology.validate_case(case_dir)
     assert any("not allowed" in e for e in errors), errors
+
+def test_anomaly_ledger_without_assessment_fails(tmp_path):
+    case_dir = tmp_path / "cases" / "anomaly_without_assessment"
+    case_dir.mkdir(parents=True)
+    (case_dir / "anomaly-ledger.yml").write_text('schema_version: "1.0"\ncase_ref: "cases/test"\nanomalies: []\n', encoding="utf-8")
+    errors = validate_case_topology.validate_case(case_dir)
+    assert any("assessment.md required because anomaly-ledger.yml exists" in e for e in errors), errors
+
+
+def test_investigation_integrity_without_sources_fails(tmp_path):
+    case_dir = tmp_path / "cases" / "integrity_without_sources"
+    case_dir.mkdir(parents=True)
+    (case_dir / "investigation-integrity.yml").write_text('schema_version: "1.0"\ncase_ref: "cases/test"\ninvestigations: []\n', encoding="utf-8")
+    errors = validate_case_topology.validate_case(case_dir)
+    assert any("sources.yml required because investigation-integrity.yml exists" in e for e in errors), errors
+
+def test_investigation_integrity_without_assessment_fails(tmp_path):
+    case_dir = tmp_path / "cases" / "integrity_without_assessment"
+    case_dir.mkdir(parents=True)
+    (case_dir / "sources.yml").write_text('schema_version: "1.0"\nsources: []\n', encoding="utf-8")
+    (case_dir / "claims.yml").write_text('schema_version: "1.0"\nclaims: []\n', encoding="utf-8")
+    (case_dir / "investigation-integrity.yml").write_text(
+        'schema_version: "1.0"\ncase_ref: "cases/test"\ninvestigations: []\n',
+        encoding="utf-8",
+    )
+    errors = validate_case_topology.validate_case(case_dir)
+    assert any("assessment.md required because investigation-integrity.yml exists" in e for e in errors), errors
+
