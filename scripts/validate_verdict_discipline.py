@@ -231,7 +231,8 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                     f"Claim '{claim_id}' cannot be 'contradicted' when all negative relations are weakens/undercuts/missing_link/alternative_explanation."
                 )
 
-        is_world_causal = claim_kind in WORLD_CAUSAL_KINDS or claim_type in WORLD_CAUSAL_KINDS
+        is_source_report_closure = claim_kind == "reported_claim" and claim.get("burden_profile") == "source_report"
+        is_world_causal = (claim_kind in WORLD_CAUSAL_KINDS or claim_type in WORLD_CAUSAL_KINDS) and not is_source_report_closure
 
         if is_world_causal and status in (STRONG_STATUSES | {"contradicted"}):
             chain = claim.get("required_chain") or []
@@ -279,7 +280,12 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                         f"World-causal claim '{claim_id}' status='{status}' cannot be established only from source-report relations."
                     )
 
-        if claim_kind == "reported_claim" and claim_type == "causal_claim" and status in STRONG_STATUSES:
+        if (
+            claim_kind == "reported_claim"
+            and claim_type == "causal_claim"
+            and claim.get("burden_profile") != "source_report"
+            and status in STRONG_STATUSES
+        ):
             errors.append(
                 f"Claim '{claim_id}' is claim_kind='reported_claim' but claim_type='causal_claim'; split source report from world-causal claim."
             )

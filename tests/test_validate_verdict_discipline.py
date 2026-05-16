@@ -295,6 +295,18 @@ def test_reported_claim_does_not_establish_world_causal_claim(tmp_path):
     assert any("split source report from world-causal claim" in e for e in errors), errors
 
 
+def test_reported_causal_claim_with_source_report_burden_allows_reports_relation(tmp_path):
+    claim = base_claim(
+        status="established",
+        claim_type="causal_claim",
+        claim_kind="reported_claim",
+        burden_profile="source_report",
+    )
+    write_case(tmp_path, claim=claim, relations=base_relations("reports"))
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert errors == []
+
+
 def test_reported_claim_established_allows_reports_relation(tmp_path):
     claim = base_claim(status="established", claim_type="meta_claim", claim_kind="reported_claim", burden_profile="source_report")
     write_case(tmp_path, claim=claim, relations=base_relations("reports"))
