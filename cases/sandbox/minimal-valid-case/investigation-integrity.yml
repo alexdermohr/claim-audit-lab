@@ -1,0 +1,27 @@
+schema_version: "1.0"
+case_ref: "cases/sandbox/minimal-valid-case"
+
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001"]
+    lead_institution: "Fixture organization"
+    report_role: "official_summary"
+    politically_sensitive: true
+    financially_sensitive: false
+    institutional_interest_risk: 0.70
+    hypothesis_space_declared:
+      - "The public statement occurred on the documented date."
+    hypothesis_space_gaps:
+      - "Independent external corroboration of the event timing is not included."
+    non_tested_material_paths:
+      - path_id: "nt001"
+        expected_test: "Check an independent archive, transcript, or external contemporaneous report for the same timing."
+        justification_present: "partial"
+        justification_quality: 0.35
+        materiality: 0.78
+    adversarial_review:
+      present: "partial"
+      notes: "The source is methodically clear but not independently adversarial for this case fixture."
+    integrity_verdict: "methodologically_strong_but_incompletely_adversarial"
+    downstream_constraints:
+      - "Do not use s001 alone to upgrade c001 beyond plausible without corroboration."

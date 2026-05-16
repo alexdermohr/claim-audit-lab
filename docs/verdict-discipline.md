@@ -81,3 +81,17 @@ Causal claims should declare required links when the burden is non-trivial. Depe
 - effect.
 
 If critical links are missing, the verdict should usually be capped at `weak` or `speculative` unless direct causal evidence is present. Missing links are not the same as direct contradiction.
+
+## Critical-inquiry closure discipline
+
+Strong verdicts must not be created by source prestige alone. A claim can be strongly supported only when the evidence relation, source weight, anomaly coverage, and investigation-integrity burden are all consistent with that level of closure.
+
+Important separations:
+
+- A source-content claim (`claim_kind: reported_claim`) says what a source reports; it does not by itself close the corresponding world claim.
+- A material anomaly can prevent overconfidence without proving manipulation.
+- A non-test can limit the closure burden without implying concealment.
+- Official, advocacy, corporate, academic, media, court, and technical sources are all evaluated by the same closure discipline.
+
+High-materiality anomalies that affect a claim must be visible in `assessment.md`, and high-risk/high-adversarial sources used for strong world claims must be covered by `investigation-integrity.yml`. High-materiality non-tested paths from investigation-integrity must also be assessment-visible; a non-test limits closure but does not prove manipulation.
+

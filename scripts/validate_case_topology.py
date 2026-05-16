@@ -18,6 +18,8 @@ CASE_ARTIFACTS = {
     "redteam.yml",
     "redteam.md",
     "contradictions.yml",
+    "anomaly-ledger.yml",
+    "investigation-integrity.yml",
 }
 
 
@@ -53,6 +55,8 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
     has_assessment = (case_dir / "assessment.md").exists()
     has_hypotheses = (case_dir / "hypotheses.yml").exists()
     has_redteam = (case_dir / "redteam.yml").exists() or (case_dir / "redteam.md").exists()
+    has_anomaly_ledger = (case_dir / "anomaly-ledger.yml").exists()
+    has_investigation_integrity = (case_dir / "investigation-integrity.yml").exists()
 
     if has_claims:
         require(errors, case_dir, "evidence-pack.yml", "claims.yml exists")
@@ -75,6 +79,16 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
     if has_redteam:
         require(errors, case_dir, "assessment.md", "redteam.yml or redteam.md exists")
         require(errors, case_dir, "lifecycle.yml", "redteam.yml or redteam.md exists")
+
+    if has_anomaly_ledger:
+        require(errors, case_dir, "claims.yml", "anomaly-ledger.yml exists")
+        require(errors, case_dir, "sources.yml", "anomaly-ledger.yml exists")
+        require(errors, case_dir, "assessment.md", "anomaly-ledger.yml exists")
+
+    if has_investigation_integrity:
+        require(errors, case_dir, "sources.yml", "investigation-integrity.yml exists")
+        require(errors, case_dir, "claims.yml", "investigation-integrity.yml exists")
+        require(errors, case_dir, "assessment.md", "investigation-integrity.yml exists")
 
     return errors
 

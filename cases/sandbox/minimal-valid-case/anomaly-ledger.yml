@@ -1,0 +1,23 @@
+schema_version: "1.0"
+case_ref: "cases/sandbox/minimal-valid-case"
+
+anomalies:
+  - anomaly_id: "a001"
+    anomaly_type: "non_test"
+    source_refs: ["s001"]
+    affected_claims: ["c001"]
+    affected_hypotheses: []
+    statement: "The source documents the announcement but does not include an independent corroboration path for the event timing."
+    materiality: 0.78
+    anomaly_direction: "increases_uncertainty"
+    why_it_matters: "The case depends on a single institutional source for the timing claim, so missing independent corroboration limits closure."
+    possible_benign_explanations:
+      - "The announcement may be routine enough that the source did not include corroborating appendices."
+    possible_bias_explanations:
+      - "The institution could have incentives to present the timing as settled without foregrounding uncertainty."
+    missing_for_resolution:
+      - "Independent archive, transcript, or contemporaneous external report confirming the timing."
+    status: "unresolved"
+    verdict_effect:
+      claim_ref: "c001"
+      effect: "prevents_overconfidence"

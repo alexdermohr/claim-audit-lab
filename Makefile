@@ -9,6 +9,9 @@ PYTHONPATH_ENV = $(if $(PYTHONPATH_PREFIX),PYTHONPATH=$(PYTHONPATH_PREFIX),)
 
 validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_case_topology.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_anomaly_ledger.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_investigation_integrity.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_assessment_anomaly_coverage.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_no_fixture_language.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_mechanical_migration_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_claims.py cases

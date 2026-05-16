@@ -59,6 +59,10 @@ Diese Gegenhypothese passt besser zur derzeit auditierten Evidenz, weil sie tren
 - Die Begriffe „gefördert“ und „support“ sind mehrdeutig. Sie können direkte Organisation, passive Ermöglichung, indirekte Netzwerkförderung oder Nachkriegsrestauration bedeuten.
 - Fehlende direkte Evidenz in diesem Quellenset beweist nicht, dass anderswo keine direkte Evidenz existiert.
 
+## Critical Inquiry
+
+- non-test nt001: Die institutionelle Krupp-Quelle s007 bleibt wegen ihres kuratierten Eigeninteresses closure-limitiert und darf c005/c006 nur zusammen mit unabhängigen Gerichts-, Regierungs- und Parlamentsquellen stützen.
+
 ## Red-Team-Status
 
 Bestanden mit Hinweisen. Die Red-Team-Prüfung verlangt, dass die vorläufige Antwort drei Upgrades vermeidet:
