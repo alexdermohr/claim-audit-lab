@@ -188,3 +188,48 @@ def test_closure_sensitive_source_type_missing_source_weight_fails(tmp_path):
     errors = validate(tmp_path)
 
     assert any("adversarial_relevance is missing" in e for e in errors), errors
+
+
+def test_claim_source_refs_string_fails_without_character_splitting(tmp_path):
+    claims = claim()
+    claims["claims"][0]["source_refs"] = "s001"
+    write_case(tmp_path, claims=claims)
+
+    errors = validate(tmp_path)
+
+    assert any("claim 'c001' source_refs must be an array of strings" in e for e in errors), errors
+    assert not any("source 's'" in e for e in errors), errors
+
+
+def test_claim_source_refs_with_non_string_items_fails_without_traceback(tmp_path):
+    claims = claim()
+    claims["claims"][0]["source_refs"] = ["s001", {"bad": "ref"}, ["s002"]]
+    write_case(tmp_path, claims=claims)
+
+    errors = validate(tmp_path)
+
+    assert any("claim 'c001' source_refs[1] must be a string" in e for e in errors), errors
+    assert any("claim 'c001' source_refs[2] must be a string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)
+
+
+def test_claim_evidence_refs_string_fails(tmp_path):
+    claims = claim()
+    claims["claims"][0]["evidence_refs"] = "e001"
+    write_case(tmp_path, claims=claims)
+
+    errors = validate(tmp_path)
+
+    assert any("claim 'c001' evidence_refs must be an array of strings" in e for e in errors), errors
+
+
+def test_investigation_source_cluster_refs_with_non_string_items_fails(tmp_path):
+    data = integrity()
+    data["investigations"][0]["source_cluster_refs"] = ["s001", {"bad": "ref"}, ["s002"]]
+    write_case(tmp_path, integrity_data=data)
+
+    errors = validate(tmp_path)
+
+    assert any("investigation 'inv001' source_cluster_refs[1] must be a string" in e for e in errors), errors
+    assert any("investigation 'inv001' source_cluster_refs[2] must be a string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)

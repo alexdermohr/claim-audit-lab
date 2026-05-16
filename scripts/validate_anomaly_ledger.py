@@ -49,6 +49,31 @@ def nonempty_list(value) -> bool:
     return isinstance(value, list) and any(str(item).strip() for item in value)
 
 
+def require_list(data: dict, key: str, label: str, errors: list[str]) -> list:
+    if key not in data:
+        return []
+    value = data.get(key)
+    if not isinstance(value, list):
+        errors.append(f"{label} '{key}' must be an array.")
+        return []
+    return value
+
+
+def normalize_string_list(value, context: str) -> tuple[list[str], list[str]]:
+    if value is None:
+        return [], []
+    if not isinstance(value, list):
+        return [], [f"{context} must be an array of strings."]
+    result: list[str] = []
+    errors: list[str] = []
+    for index, item in enumerate(value):
+        if isinstance(item, str):
+            result.append(item)
+        else:
+            errors.append(f"{context}[{index}] must be a string.")
+    return result, errors
+
+
 def collect_ids(case_dir: pathlib.Path) -> tuple[set[str] | None, set[str] | None, set[str] | None, list[str]]:
     errors: list[str] = []
     claims_data, load_errors = load_optional_object(case_dir / "claims.yml", "claims.yml")
@@ -60,26 +85,29 @@ def collect_ids(case_dir: pathlib.Path) -> tuple[set[str] | None, set[str] | Non
 
     claim_ids = None
     if claims_data is not None:
+        claims = require_list(claims_data, "claims", "claims.yml", errors)
         claim_ids = {
             item.get("claim_id")
-            for item in claims_data.get("claims", [])
-            if isinstance(item, dict) and item.get("claim_id")
+            for item in claims
+            if isinstance(item, dict) and isinstance(item.get("claim_id"), str)
         }
 
     source_ids = None
     if sources_data is not None:
+        sources = require_list(sources_data, "sources", "sources.yml", errors)
         source_ids = {
             item.get("source_id")
-            for item in sources_data.get("sources", [])
-            if isinstance(item, dict) and item.get("source_id")
+            for item in sources
+            if isinstance(item, dict) and isinstance(item.get("source_id"), str)
         }
 
     hypothesis_ids = None
     if hypotheses_data is not None:
+        hypotheses = require_list(hypotheses_data, "hypotheses", "hypotheses.yml", errors)
         hypothesis_ids = {
-            item.get("id") or item.get("hypothesis_id")
-            for item in hypotheses_data.get("hypotheses", [])
-            if isinstance(item, dict) and (item.get("id") or item.get("hypothesis_id"))
+            item.get("id") if isinstance(item.get("id"), str) else item.get("hypothesis_id")
+            for item in hypotheses
+            if isinstance(item, dict) and (isinstance(item.get("id"), str) or isinstance(item.get("hypothesis_id"), str))
         }
 
     return claim_ids, source_ids, hypothesis_ids, errors
@@ -98,9 +126,9 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         return ["anomaly-ledger.yml must contain a YAML object."]
 
     errors.extend(schema_errors(data, schema))
-    anomalies = data.get("anomalies", []) if isinstance(data.get("anomalies", []), list) else []
+    anomalies = require_list(data, "anomalies", "anomaly-ledger.yml", errors)
 
-    ids = [item.get("anomaly_id") for item in anomalies if isinstance(item, dict) and item.get("anomaly_id")]
+    ids = [item.get("anomaly_id") for item in anomalies if isinstance(item, dict) and isinstance(item.get("anomaly_id"), str)]
     for anomaly_id, count in Counter(ids).items():
         if count > 1:
             errors.append(f"duplicate anomaly_id '{anomaly_id}'.")
@@ -112,24 +140,38 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         if not isinstance(anomaly, dict):
             continue
         anomaly_id = anomaly.get("anomaly_id", "?")
+        source_refs, ref_errors = normalize_string_list(anomaly.get("source_refs"), f"anomaly '{anomaly_id}' source_refs")
+        errors.extend(ref_errors)
         if source_ids is not None:
-            for source_ref in anomaly.get("source_refs") or []:
+            for source_ref in source_refs:
                 if source_ref not in source_ids:
                     errors.append(f"anomaly '{anomaly_id}' source_ref '{source_ref}' not found in sources.yml.")
+
+        affected_claims, ref_errors = normalize_string_list(anomaly.get("affected_claims"), f"anomaly '{anomaly_id}' affected_claims")
+        errors.extend(ref_errors)
         if claim_ids is not None:
-            for claim_ref in anomaly.get("affected_claims") or []:
+            for claim_ref in affected_claims:
                 if claim_ref not in claim_ids:
                     errors.append(f"anomaly '{anomaly_id}' affected_claim '{claim_ref}' not found in claims.yml.")
+
+        affected_hypotheses, ref_errors = normalize_string_list(
+            anomaly.get("affected_hypotheses"),
+            f"anomaly '{anomaly_id}' affected_hypotheses",
+        )
+        errors.extend(ref_errors)
         if hypothesis_ids is not None:
-            for hypothesis_ref in anomaly.get("affected_hypotheses") or []:
+            for hypothesis_ref in affected_hypotheses:
                 if hypothesis_ref not in hypothesis_ids:
                     errors.append(
                         f"anomaly '{anomaly_id}' affected_hypothesis '{hypothesis_ref}' not found in hypotheses.yml."
                     )
+
         verdict_effect = anomaly.get("verdict_effect")
         if isinstance(verdict_effect, dict) and claim_ids is not None:
             claim_ref = verdict_effect.get("claim_ref")
-            if claim_ref and claim_ref not in claim_ids:
+            if claim_ref is not None and not isinstance(claim_ref, str):
+                errors.append(f"anomaly '{anomaly_id}' verdict_effect.claim_ref must be a string.")
+            elif claim_ref and claim_ref not in claim_ids:
                 errors.append(f"anomaly '{anomaly_id}' verdict_effect claim_ref '{claim_ref}' not found in claims.yml.")
 
         materiality = anomaly.get("materiality")

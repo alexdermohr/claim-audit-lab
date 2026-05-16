@@ -18,6 +18,18 @@ def safe_load_yaml(path: pathlib.Path):
         return None, str(exc)
 
 
+
+
+def require_list(data: dict, key: str, label: str, errors: list[str]) -> list:
+    if key not in data:
+        return []
+    value = data.get(key)
+    if not isinstance(value, list):
+        errors.append(f"{label} '{key}' must be an array.")
+        return []
+    return value
+
+
 def assessment_mentions_anomaly(text: str, anomaly_id: str) -> bool:
     return re.search(rf"(?<![A-Za-z0-9_-])(?:anomaly\s+)?{re.escape(anomaly_id)}(?![A-Za-z0-9_-])", text, re.I) is not None
 
@@ -39,13 +51,15 @@ def validate_anomaly_coverage(case_dir: pathlib.Path, assessment: str) -> list[s
         return ["anomaly-ledger.yml must contain a YAML object."]
 
     errors: list[str] = []
-    anomalies = data.get("anomalies", [])
-    if not isinstance(anomalies, list):
-        return []
-    for anomaly in anomalies:
+    anomalies = require_list(data, "anomalies", "anomaly-ledger.yml", errors)
+    for index, anomaly in enumerate(anomalies):
         if not isinstance(anomaly, dict):
+            errors.append(f"anomaly-ledger.yml anomalies[{index}] must be an object.")
             continue
         anomaly_id = anomaly.get("anomaly_id", "?")
+        if not isinstance(anomaly_id, str):
+            errors.append(f"anomaly-ledger.yml anomalies[{index}].anomaly_id must be a string.")
+            continue
         materiality = anomaly.get("materiality")
         if isinstance(materiality, (int, float)) and materiality >= HIGH_MATERIALITY:
             if not assessment_mentions_anomaly(assessment, anomaly_id):
@@ -67,16 +81,29 @@ def validate_integrity_non_test_coverage(case_dir: pathlib.Path, assessment: str
         return ["investigation-integrity.yml must contain a YAML object."]
 
     errors: list[str] = []
-    investigations = data.get("investigations", [])
-    if not isinstance(investigations, list):
-        return []
-    for investigation in investigations:
+    investigations = require_list(data, "investigations", "investigation-integrity.yml", errors)
+    for investigation_index, investigation in enumerate(investigations):
         if not isinstance(investigation, dict):
+            errors.append(f"investigation-integrity.yml investigations[{investigation_index}] must be an object.")
             continue
-        for path in investigation.get("non_tested_material_paths") or []:
+        paths = require_list(
+            investigation,
+            "non_tested_material_paths",
+            f"investigation-integrity.yml investigations[{investigation_index}]",
+            errors,
+        )
+        for path_index, path in enumerate(paths):
             if not isinstance(path, dict):
+                errors.append(
+                    f"investigation-integrity.yml investigations[{investigation_index}].non_tested_material_paths[{path_index}] must be an object."
+                )
                 continue
             path_id = path.get("path_id", "?")
+            if not isinstance(path_id, str):
+                errors.append(
+                    f"investigation-integrity.yml investigations[{investigation_index}].non_tested_material_paths[{path_index}].path_id must be a string."
+                )
+                continue
             materiality = path.get("materiality")
             if isinstance(materiality, (int, float)) and materiality >= HIGH_MATERIALITY:
                 if not assessment_mentions_non_tested_path(assessment, path_id):

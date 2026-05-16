@@ -112,3 +112,49 @@ def test_anomaly_schema_does_not_require_declaring_manipulation_as_fact(tmp_path
     assert "manipulation" not in item
     write_yaml(tmp_path / "anomaly-ledger.yml", ledger([item]))
     assert validate(tmp_path) == []
+
+
+def test_malformed_claims_top_level_arrays_fail(tmp_path):
+    write_refs(tmp_path)
+    write_yaml(tmp_path / "anomaly-ledger.yml", ledger([anomaly()]))
+    for malformed in (None, "c001", {"claim_id": "c001"}):
+        write_yaml(tmp_path / "claims.yml", {"schema_version": "1.0", "claims": malformed})
+        errors = validate(tmp_path)
+        assert any("claims.yml 'claims' must be an array" in e for e in errors), errors
+
+
+def test_malformed_sources_top_level_arrays_fail(tmp_path):
+    write_refs(tmp_path)
+    write_yaml(tmp_path / "anomaly-ledger.yml", ledger([anomaly()]))
+    for malformed in (None, "s001", {"source_id": "s001"}):
+        write_yaml(tmp_path / "sources.yml", {"schema_version": "1.0", "sources": malformed})
+        errors = validate(tmp_path)
+        assert any("sources.yml 'sources' must be an array" in e for e in errors), errors
+
+
+def test_malformed_hypotheses_top_level_arrays_fail(tmp_path):
+    write_refs(tmp_path)
+    write_yaml(tmp_path / "anomaly-ledger.yml", ledger([anomaly()]))
+    for malformed in (None, "h1", {"id": "h1"}):
+        write_yaml(tmp_path / "hypotheses.yml", {"schema_version": "1.0", "hypotheses": malformed})
+        errors = validate(tmp_path)
+        assert any("hypotheses.yml 'hypotheses' must be an array" in e for e in errors), errors
+
+
+def test_anomaly_reference_lists_with_non_string_items_fail_without_traceback(tmp_path):
+    write_refs(tmp_path)
+    item = anomaly(
+        source_refs=["s001", {"bad": "source"}, ["s002"], 7],
+        affected_claims=["c001", {"bad": "claim"}, ["c002"], 8],
+        affected_hypotheses=["h1", {"bad": "hypothesis"}, ["h2"], 9],
+    )
+    write_yaml(tmp_path / "anomaly-ledger.yml", ledger([item]))
+
+    errors = validate(tmp_path)
+
+    assert any("anomaly 'a001' source_refs[1] must be a string" in e for e in errors), errors
+    assert any("anomaly 'a001' source_refs[2] must be a string" in e for e in errors), errors
+    assert any("anomaly 'a001' source_refs[3] must be a string" in e for e in errors), errors
+    assert any("anomaly 'a001' affected_claims[1] must be a string" in e for e in errors), errors
+    assert any("anomaly 'a001' affected_hypotheses[1] must be a string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)

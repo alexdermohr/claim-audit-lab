@@ -111,3 +111,46 @@ def test_low_materiality_non_tested_path_does_not_require_assessment_reference(t
 def test_missing_assessment_for_non_tested_path_does_not_duplicate_topology_failure(tmp_path):
     write_yaml(tmp_path / "investigation-integrity.yml", integrity(0.8))
     assert validate_assessment_anomaly_coverage.validate_case(tmp_path) == []
+
+
+def test_malformed_anomalies_array_fails(tmp_path):
+    write_yaml(tmp_path / "anomaly-ledger.yml", {"schema_version": "1.0", "case_ref": "cases/test", "anomalies": "a001"})
+    (tmp_path / "assessment.md").write_text("Assessment", encoding="utf-8")
+
+    errors = validate_assessment_anomaly_coverage.validate_case(tmp_path)
+
+    assert any("anomaly-ledger.yml 'anomalies' must be an array" in e for e in errors), errors
+
+
+def test_malformed_investigations_array_fails(tmp_path):
+    write_yaml(
+        tmp_path / "investigation-integrity.yml",
+        {"schema_version": "1.0", "case_ref": "cases/test", "investigations": "inv001"},
+    )
+    (tmp_path / "assessment.md").write_text("Assessment", encoding="utf-8")
+
+    errors = validate_assessment_anomaly_coverage.validate_case(tmp_path)
+
+    assert any("investigation-integrity.yml 'investigations' must be an array" in e for e in errors), errors
+
+
+def test_malformed_non_tested_material_paths_array_fails(tmp_path):
+    data = integrity(0.8)
+    data["investigations"][0]["non_tested_material_paths"] = "nt001"
+    write_yaml(tmp_path / "investigation-integrity.yml", data)
+    (tmp_path / "assessment.md").write_text("Assessment", encoding="utf-8")
+
+    errors = validate_assessment_anomaly_coverage.validate_case(tmp_path)
+
+    assert any("non_tested_material_paths' must be an array" in e for e in errors), errors
+
+
+def test_non_dict_non_tested_material_path_item_fails(tmp_path):
+    data = integrity(0.8)
+    data["investigations"][0]["non_tested_material_paths"] = ["nt001"]
+    write_yaml(tmp_path / "investigation-integrity.yml", data)
+    (tmp_path / "assessment.md").write_text("Assessment", encoding="utf-8")
+
+    errors = validate_assessment_anomaly_coverage.validate_case(tmp_path)
+
+    assert any("non_tested_material_paths[0] must be an object" in e for e in errors), errors

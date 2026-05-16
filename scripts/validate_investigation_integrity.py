@@ -56,6 +56,31 @@ def schema_errors(payload: dict, schema: dict) -> list[str]:
     ]
 
 
+def normalize_string_list(value, context: str) -> tuple[list[str], list[str]]:
+    if value is None:
+        return [], []
+    if not isinstance(value, list):
+        return [], [f"{context} must be an array of strings."]
+    result: list[str] = []
+    errors: list[str] = []
+    for index, item in enumerate(value):
+        if isinstance(item, str):
+            result.append(item)
+        else:
+            errors.append(f"{context}[{index}] must be a string.")
+    return result, errors
+
+
+def require_list(data: dict, key: str, label: str, errors: list[str]) -> list:
+    if key not in data:
+        return []
+    value = data.get(key)
+    if not isinstance(value, list):
+        errors.append(f"{label} '{key}' must be an array.")
+        return []
+    return value
+
+
 def source_weight_value(source: dict, key: str) -> float | None:
     raw = None
     if isinstance(source.get("source_weight"), dict):
@@ -67,32 +92,51 @@ def source_weight_value(source: dict, key: str) -> float | None:
     return None
 
 
-def strong_world_claims_using_sources(claims_data: dict | None, evidence_data: dict | None) -> dict[str, set[str]]:
+def strong_world_claims_using_sources(claims_data: dict | None, evidence_data: dict | None) -> tuple[dict[str, set[str]], list[str]]:
+    errors: list[str] = []
     if not isinstance(claims_data, dict):
-        return {}
+        return {}, errors
 
     evidence_source_by_id = {}
     if isinstance(evidence_data, dict):
-        for evidence in evidence_data.get("evidence", []) or []:
-            if isinstance(evidence, dict) and evidence.get("evidence_id") and evidence.get("source_ref"):
-                evidence_source_by_id[evidence["evidence_id"]] = evidence["source_ref"]
+        evidence_items = evidence_data.get("evidence", [])
+        if isinstance(evidence_items, list):
+            for evidence in evidence_items:
+                if (
+                    isinstance(evidence, dict)
+                    and isinstance(evidence.get("evidence_id"), str)
+                    and isinstance(evidence.get("source_ref"), str)
+                ):
+                    evidence_source_by_id[evidence["evidence_id"]] = evidence["source_ref"]
 
     claims_by_source: dict[str, set[str]] = {}
-    for claim in claims_data.get("claims", []) or []:
+    claims = claims_data.get("claims", [])
+    if not isinstance(claims, list):
+        errors.append("claims.yml 'claims' must be an array.")
+        return claims_by_source, errors
+
+    for claim in claims:
         if not isinstance(claim, dict):
             continue
         claim_id = claim.get("claim_id")
         if not claim_id or claim.get("status") not in STRONG_STATUSES:
             continue
+        if not isinstance(claim_id, str):
+            errors.append("strong claim claim_id must be a string.")
+            continue
         if claim.get("claim_kind") == REPORTED_CLAIM_KIND:
             continue
-        source_refs = set(claim.get("source_refs") or [])
-        for evidence_ref in claim.get("evidence_refs") or []:
+        source_refs, ref_errors = normalize_string_list(claim.get("source_refs"), f"claim '{claim_id}' source_refs")
+        errors.extend(ref_errors)
+        evidence_refs, ref_errors = normalize_string_list(claim.get("evidence_refs"), f"claim '{claim_id}' evidence_refs")
+        errors.extend(ref_errors)
+        source_ref_set = set(source_refs)
+        for evidence_ref in evidence_refs:
             if evidence_ref in evidence_source_by_id:
-                source_refs.add(evidence_source_by_id[evidence_ref])
-        for source_ref in source_refs:
+                source_ref_set.add(evidence_source_by_id[evidence_ref])
+        for source_ref in source_ref_set:
             claims_by_source.setdefault(source_ref, set()).add(claim_id)
-    return claims_by_source
+    return claims_by_source, errors
 
 
 def validate_integrity_file(data: dict, schema: dict, source_ids: set[str] | None) -> tuple[list[str], set[str]]:
@@ -109,7 +153,12 @@ def validate_integrity_file(data: dict, schema: dict, source_ids: set[str] | Non
         if not isinstance(investigation, dict):
             continue
         investigation_id = investigation.get("investigation_id", "?")
-        for source_ref in investigation.get("source_cluster_refs") or []:
+        source_refs, ref_errors = normalize_string_list(
+            investigation.get("source_cluster_refs"),
+            f"investigation '{investigation_id}' source_cluster_refs",
+        )
+        errors.extend(ref_errors)
+        for source_ref in source_refs:
             covered_sources.add(source_ref)
             if source_ids is not None and source_ref not in source_ids:
                 errors.append(
@@ -133,11 +182,17 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     source_ids: set[str] | None = None
     source_by_id: dict[str, dict] = {}
     if isinstance(sources_data, dict):
-        source_by_id = {
-            item.get("source_id"): item
-            for item in sources_data.get("sources", []) or []
-            if isinstance(item, dict) and item.get("source_id")
-        }
+        sources = require_list(sources_data, "sources", "sources.yml", errors)
+        for index, item in enumerate(sources):
+            if not isinstance(item, dict):
+                continue
+            source_id = item.get("source_id")
+            if source_id is None:
+                continue
+            if not isinstance(source_id, str):
+                errors.append(f"sources.yml sources[{index}].source_id must be a string.")
+                continue
+            source_by_id[source_id] = item
         source_ids = set(source_by_id)
 
     integrity_path = case_dir / "investigation-integrity.yml"
@@ -152,7 +207,8 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             file_errors, covered_sources = validate_integrity_file(data, schema, source_ids)
             errors.extend(file_errors)
 
-    claims_by_source = strong_world_claims_using_sources(claims_data, evidence_data)
+    claims_by_source, reference_errors = strong_world_claims_using_sources(claims_data, evidence_data)
+    errors.extend(reference_errors)
     for source_id, source in source_by_id.items():
         if source_id not in claims_by_source:
             continue
