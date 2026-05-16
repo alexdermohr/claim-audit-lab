@@ -164,6 +164,18 @@ def test_legacy_supports_reports_allows_source_report_claim(tmp_path):
     assert errors == []
 
 
+def test_legacy_supports_reports_rejects_source_report_burden_without_reported_kind(tmp_path):
+    claim = base_claim(
+        status="plausible",
+        claim_type="meta_claim",
+        claim_kind="meta_claim",
+        burden_profile="source_report",
+    )
+    write_case(tmp_path, claim=claim, relations=base_relations("reports"), evidence_supports=["c001"])
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("or reports for a reported/source-report claim" in e for e in errors), errors
+
+
 def test_relation_must_be_mirrored_by_claim_evidence_refs(tmp_path):
     claim = base_claim(status="weak", evidence_refs=[])
     write_case(tmp_path, claim=claim, relations=base_relations("weakens"))

@@ -181,7 +181,10 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
         pair_types = relation_types_by_pair.get((evidence_ref, claim_ref), set())
         claim = claim_by_id.get(claim_ref, {})
         claim_kind = claim.get("claim_kind", claim.get("claim_type"))
-        reports_allowed = claim_kind == "reported_claim" or claim.get("burden_profile") == "source_report"
+        reports_allowed = (
+            claim_kind == "reported_claim"
+            and claim.get("burden_profile") == "source_report"
+        )
         positive_pair_types = pair_types & LEGACY_SUPPORT_RELATIONS
         if not positive_pair_types or (positive_pair_types == {"reports"} and not reports_allowed):
             errors.append(
