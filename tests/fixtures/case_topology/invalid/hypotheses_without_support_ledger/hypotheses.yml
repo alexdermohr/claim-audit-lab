@@ -1,0 +1,8 @@
+schema_version: "1.0"
+hypotheses:
+  - id: "h1"
+    label: "synthetic_hypothesis"
+    description: "Synthetic hypothesis."
+    status: "weak"
+    supporting_evidence: []
+    weaknesses: []

@@ -1,0 +1,61 @@
+schema_version: "1.0"
+case_ref: "cases/history/mccloy-nazi-finance-support"
+audited_at: "2026-05-15"
+auditor: "mechanical-migration"
+records:
+  - hypothesis_ref: "h1"
+    support_search_status: "completed"
+    strongest_supporting_argument: "The strongest support for the broad original hypothesis is the indirect association between institutional conduct and later related decisions."
+    supporting_evidence_refs: []
+    best_supporting_source_refs: []
+    steelman: "The hypothesis may be framed as a broad network-continuity claim rather than a narrow direct-action claim."
+    missing_for_upgrade:
+      - "Direct primary evidence tying the actor to the specific earlier institutional conduct."
+    searched_for:
+      - "Direct support in the migrated evidence pack."
+    not_found:
+      - "Direct evidence sufficient to upgrade the broad hypothesis."
+    notes: "Migration ledger entry; preserves search-symmetry gate for a legacy case pending full semantic audit."
+    support_quality_score: 0.2
+  - hypothesis_ref: "h2"
+    support_search_status: "completed"
+    strongest_supporting_argument: "The chronology and role evidence better support a narrower institutional/chronological explanation."
+    supporting_evidence_refs: ["e002", "e003", "e004", "e009"]
+    best_supporting_source_refs: ["s002", "s003", "s004", "s005"]
+    steelman: "A narrower explanation separates institutional conduct, individual chronology, and wartime roles."
+    missing_for_upgrade:
+      - "Further independent primary-source corroboration would strengthen the explanatory account."
+    searched_for:
+      - "Chronology, role, and institutional evidence in the migrated evidence pack."
+    not_found:
+      - "Evidence that collapses the narrower chronology into the broad original hypothesis."
+    notes: "Mechanical migration only; support score is provisional pending full semantic audit."
+    support_quality_score: 0.55
+  - hypothesis_ref: "h3"
+    support_search_status: "completed"
+    strongest_supporting_argument: "Postwar decision evidence supports the narrower postwar-reintegration hypothesis."
+    supporting_evidence_refs: ["e005", "e006", "e007", "e010"]
+    best_supporting_source_refs: ["s006", "s007", "s008", "s009"]
+    steelman: "The strongest version focuses on documented postwar policy decisions rather than earlier direct causation."
+    missing_for_upgrade:
+      - "More complete archival coverage would strengthen the policy-mechanism account."
+    searched_for:
+      - "Postwar decision and policy-context evidence in the migrated evidence pack."
+    not_found:
+      - "Evidence that the postwar hypothesis proves the broader earlier causal hypothesis."
+    notes: "Mechanical migration only; support score is provisional pending full semantic audit."
+    support_quality_score: 0.55
+  - hypothesis_ref: "h4"
+    support_search_status: "completed"
+    strongest_supporting_argument: "The strongest support for residual uncertainty is the acknowledged incompleteness of the public source set."
+    supporting_evidence_refs: []
+    best_supporting_source_refs: []
+    steelman: "A residual unknown hypothesis remains procedurally possible while public evidence remains incomplete."
+    missing_for_upgrade:
+      - "Specific new primary evidence supporting a materially different explanation."
+    searched_for:
+      - "Unresolved support in the migrated evidence pack."
+    not_found:
+      - "Positive evidence sufficient to make the residual hypothesis more than speculative."
+    notes: "Migration ledger entry; records active support search for a speculative hypothesis."
+    support_quality_score: 0.15

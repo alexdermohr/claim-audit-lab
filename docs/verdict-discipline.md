@@ -51,9 +51,9 @@ Typed relations should distinguish direct contradiction from weaker operations:
 
 `alternative_explanation`, `weakens`, `undercuts`, and `missing_link` do not by themselves justify `contradicted`.
 
-## MVP rollout note
+## Discovery rule
 
-During MVP rollout, the CLI validator checks opted-in cases with `evidence-relations.yml`. `validate_case()` remains strict for direct tests and future hardening; a later hardening PR may switch CLI discovery to all cases with `claims.yml`.
+Any case with both `claims.yml` and `evidence-pack.yml` must include `evidence-relations.yml`. Verdict discipline is a required gate for such cases, not an opt-in check.
 
 ## Verdict rules
 

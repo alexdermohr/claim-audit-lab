@@ -3,11 +3,11 @@ schema_version: "1.0"
 sources:
   - schema_version: "1.0"
     source_id: "s001"
-    label: "Official press release"
-    url_or_ref: "https://example.org/press-release"
+    label: "Fixture source"
+    url_or_ref: "https://example.org/fixture-source"
     source_type: "official_body"
     publication_date: "2026-05-01"
-    author_or_org: "Example Ministry"
+    author_or_org: "Fixture organization"
     source_weight:
       primary_proximity: 0.8
       method_transparency: 0.7

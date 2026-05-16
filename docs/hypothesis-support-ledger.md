@@ -35,7 +35,7 @@ It does **not** require every hypothesis to have equally strong evidence.
 
 ## MVP rollout note
 
-During MVP rollout, the CLI validator checks opted-in cases with `hypothesis-support-ledger.yml`. `validate_case()` remains strict for direct tests and future hardening; a later hardening PR may switch CLI discovery to all cases with `hypotheses.yml`.
+The CLI validator scans case roots with `hypotheses.yml`. Direct `validate_case()` checks and CLI checks are strict: when `hypotheses.yml` exists, `hypothesis-support-ledger.yml` is required.
 
 ## Verdict discipline
 

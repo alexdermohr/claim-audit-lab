@@ -1,14 +1,10 @@
 schema_version: "1.0"
-
 evidence:
   - evidence_id: "e001"
     source_ref: "s001"
-    claim_refs:
-      - "c001"
-    type: "official_statement"
+    claim_refs: ["c001"]
+    type: "document_excerpt"
     summary: "Fixture evidence summary."
     verbatim_or_ref: "Fixture source reference."
-    supports:
-      - "c001"
+    supports: []
     contradicts: []
-    notes: "Minimal sandbox evidence item for validator coverage."

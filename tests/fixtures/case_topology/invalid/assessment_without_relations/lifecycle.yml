@@ -1,0 +1,13 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: "tests/fixtures"
+status: "draft"
+created_at: "2026-05-15"
+last_reviewed_at: "2026-05-15"
+review_after: "2026-11-15"
+redteam_ref: "redteam.yml"
+reopen_triggers: ["new_primary_source"]
+history:
+  - date: "2026-05-15"
+    status: "draft"
+    note: "Fixture opened."

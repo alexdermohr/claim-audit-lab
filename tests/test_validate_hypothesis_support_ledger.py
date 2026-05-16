@@ -237,3 +237,61 @@ def test_synthetic_minimal_hypothesis_support_ledger_passes(tmp_path):
     write_valid_support_case(tmp_path)
     errors = validate_hypothesis_support_ledger.validate_case(tmp_path, load_schema())
     assert errors == [], "synthetic minimal case has hypothesis-support ledger errors:\n" + "\n".join(errors)
+
+
+def test_cli_discovers_hypotheses_without_support_ledger(tmp_path, capsys):
+    write_yaml(
+        tmp_path / "hypotheses.yml",
+        {
+            "schema_version": "1.0",
+            "hypotheses": [
+                {
+                    "id": "h1",
+                    "label": "synthetic_hypothesis",
+                    "description": "Synthetic hypothesis.",
+                    "status": "weak",
+                    "supporting_evidence": [],
+                    "weaknesses": [],
+                }
+            ],
+        },
+    )
+    exit_code = validate_hypothesis_support_ledger.main(str(tmp_path))
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "hypothesis-support-ledger.yml required because hypotheses.yml exists" in captured.out
+
+
+def test_cli_hypothesis_support_ledger_still_required_even_with_legacy_marker(tmp_path, capsys):
+    write_yaml(
+        tmp_path / "hypotheses.yml",
+        {
+            "schema_version": "1.0",
+            "hypotheses": [
+                {
+                    "id": "h1",
+                    "label": "synthetic_hypothesis",
+                    "description": "Synthetic hypothesis.",
+                    "status": "weak",
+                    "supporting_evidence": [],
+                    "weaknesses": [],
+                }
+            ],
+        },
+    )
+    write_yaml(
+        tmp_path / "legacy-case.yml",
+        {
+            "legacy_case": True,
+            "created_at": "2026-05-15",
+            "expires_on": "2026-07-14",
+            "migration_target": "Fixture migration target.",
+            "reason": "Fixture legacy reason.",
+        },
+    )
+    exit_code = validate_hypothesis_support_ledger.main(str(tmp_path))
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "LEGACY" in captured.out
+    assert "hypothesis support ledger still enforced" in captured.out
+    assert "hypothesis-support-ledger.yml required because hypotheses.yml exists" in captured.out

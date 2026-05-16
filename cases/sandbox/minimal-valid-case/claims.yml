@@ -2,7 +2,8 @@ schema_version: '1.0'
 claims:
 - claim_id: c001
   claim_type: factual_event_claim
-  statement: A policy announcement was published on 2026-05-01.
+  claim_kind: factual_event_claim
+  statement: Synthetic proposition under evaluation.
   status: plausible
   evidence_refs:
   - e001
@@ -16,9 +17,9 @@ claims:
   uncertainty:
     score: 0.25
     causes:
-    - Single-source dependence
+    - Fixture single-source dependence
   interpolation:
     score: 0.1
     assumptions:
-    - Timestamp interpreted as publication date
+    - Fixture timestamp interpreted as publication date
   schema_version: '1.0'

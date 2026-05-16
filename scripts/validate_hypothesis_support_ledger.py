@@ -8,6 +8,7 @@ import sys
 
 from jsonschema_compat import jsonschema
 import yaml
+from case_compat import is_legacy_case, legacy_case_error, legacy_case_until
 
 SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "hypothesis-support-ledger.v1.schema.json"
 DOWNGRADED_STATUSES = {"weak", "contradicted", "speculative"}
@@ -25,6 +26,8 @@ def safe_load_yaml(path: pathlib.Path):
             return yaml.safe_load(f), None
     except Exception as exc:
         return None, str(exc)
+
+
 
 
 def schema_errors(payload: dict, schema: dict) -> list[str]:
@@ -52,6 +55,9 @@ def _ids_from_file(path: pathlib.Path, label: str, top_key: str, id_key: str) ->
 
 
 def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
+    legacy_error = legacy_case_error(case_dir)
+    if legacy_error:
+        return [legacy_error]
     errors: list[str] = []
     hypotheses_path = case_dir / "hypotheses.yml"
     ledger_path = case_dir / "hypothesis-support-ledger.yml"
@@ -198,19 +204,15 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
 
 
 def is_case_dir(path: pathlib.Path) -> bool:
-    # Transitional rollout: only opted-in cases are scanned by the CLI.
-    # validate_case() remains strict for direct tests and future hardening.
-    return (path / "hypothesis-support-ledger.yml").exists()
+    return (path / "hypotheses.yml").exists()
 
 
 def main(cases_root: str) -> int:
     root = pathlib.Path(cases_root)
     schema = load_schema()
 
-    # Transitional rollout: discover only case directories that opted in with
-    # hypothesis-support-ledger.yml; future hardening may scan hypotheses.yml.
     candidate_dirs = {root}
-    candidate_dirs.update(marker.parent for marker in root.rglob("hypothesis-support-ledger.yml"))
+    candidate_dirs.update(marker.parent for marker in root.rglob("hypotheses.yml"))
     case_dirs = sorted(
         d for d in candidate_dirs
         if d.is_dir() and "_template" not in d.parts and is_case_dir(d)
@@ -222,6 +224,17 @@ def main(cases_root: str) -> int:
 
     total_errors = 0
     for case_dir in case_dirs:
+        legacy_error = legacy_case_error(case_dir)
+        if legacy_error:
+            print(f"FAIL {case_dir}:")
+            print(f"  {legacy_error}")
+            total_errors += 1
+            continue
+        if is_legacy_case(case_dir):
+            print(
+                f"LEGACY {case_dir}: marker valid until {legacy_case_until(case_dir)}; "
+                "hypothesis support ledger still enforced"
+            )
         errors = validate_case(case_dir, schema)
         if errors:
             print(f"FAIL {case_dir}:")
