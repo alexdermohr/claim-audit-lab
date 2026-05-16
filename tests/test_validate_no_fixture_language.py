@@ -39,3 +39,11 @@ def test_cli_returns_nonzero_and_prints_offending_path(tmp_path, capsys):
     assert exit_code == 1
     assert str(path) in captured.out
     assert "synthetic" in captured.out.lower()
+
+
+def test_nested_sandbox_name_in_production_path_fails(tmp_path):
+    path = tmp_path / "cases" / "history" / "sandbox" / "case-a" / "sources.yml"
+    path.parent.mkdir(parents=True)
+    path.write_text('label: "Fixture source"\n', encoding="utf-8")
+    errors = validate_no_fixture_language.validate(tmp_path / "cases")
+    assert any(str(path) in e for e in errors), errors

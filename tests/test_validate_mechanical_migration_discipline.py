@@ -43,3 +43,29 @@ def test_mechanical_migration_indirect_with_conservative_strength_passes(tmp_pat
     path = tmp_path / "cases" / "case-a" / "evidence-relations.yml"
     write_relations(path, relation_type="supports_indirectly", strength=0.5)
     assert validate_mechanical_migration_discipline.validate(tmp_path / "cases") == []
+
+
+def test_mechanical_migration_contradicts_directly_fails(tmp_path):
+    path = tmp_path / "cases" / "case-a" / "evidence-relations.yml"
+    write_relations(path, relation_type="contradicts_directly", strength=0.5)
+    errors = validate_mechanical_migration_discipline.validate(tmp_path / "cases")
+    assert any("contradicts_directly" in e for e in errors), errors
+
+
+def test_mechanical_migration_non_string_explanation_is_ignored(tmp_path):
+    path = tmp_path / "cases" / "case-a" / "evidence-relations.yml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        '''schema_version: "1.0"
+case_ref: "tests/fixtures"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "supports_directly"
+    strength: 0.9
+    explanation: null
+''',
+        encoding="utf-8",
+    )
+    assert validate_mechanical_migration_discipline.validate(tmp_path / "cases") == []

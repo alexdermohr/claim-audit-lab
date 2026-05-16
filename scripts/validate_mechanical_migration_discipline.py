@@ -30,6 +30,8 @@ def validate_file(path: pathlib.Path) -> list[str]:
         if not isinstance(relation, dict):
             continue
         explanation = relation.get("explanation", "")
+        if not isinstance(explanation, str):
+            explanation = ""
         if MECHANICAL_MARKER not in explanation.lower():
             continue
         relation_id = relation.get("relation_id", "?")

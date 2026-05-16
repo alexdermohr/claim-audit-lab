@@ -6,13 +6,19 @@ import re
 import sys
 
 FORBIDDEN_TERMS = ("fixture", "synthetic", "placeholder", "migration-fixture")
-FORBIDDEN_RE = re.compile(r"fixture|synthetic|placeholder|migration-fixture", re.IGNORECASE)
+FORBIDDEN_RE = re.compile("|".join(re.escape(term) for term in FORBIDDEN_TERMS), re.IGNORECASE)
 ALLOWED_PARTS = {"sandbox", "_template"}
 
 
 def is_allowed_case_path(path: pathlib.Path) -> bool:
     parts = path.parts
-    return "cases" in parts and any(part in ALLOWED_PARTS for part in parts)
+    try:
+        cases_index = parts.index("cases")
+    except ValueError:
+        return False
+    if cases_index + 1 >= len(parts):
+        return False
+    return parts[cases_index + 1] in ALLOWED_PARTS
 
 
 def scan_file(path: pathlib.Path) -> list[str]:
