@@ -126,10 +126,16 @@ def strong_world_claims_using_sources(claims_data: dict | None, evidence_data: d
         if not isinstance(claim, dict):
             continue
         claim_id = claim.get("claim_id")
-        if not claim_id or claim.get("status") not in STRONG_STATUSES:
+        status = claim.get("status")
+        if not claim_id:
             continue
         if not isinstance(claim_id, str):
             errors.append("strong claim claim_id must be a string.")
+            continue
+        if not isinstance(status, str):
+            errors.append(f"claim '{claim_id}' status must be a string.")
+            continue
+        if status not in STRONG_STATUSES:
             continue
         if claim.get("claim_kind") == REPORTED_CLAIM_KIND:
             continue
@@ -150,7 +156,17 @@ def validate_integrity_file(data: dict, schema: dict, source_ids: set[str] | Non
     errors = schema_errors(data, schema)
     investigations = data.get("investigations", []) if isinstance(data.get("investigations", []), list) else []
 
-    ids = [item.get("investigation_id") for item in investigations if isinstance(item, dict) and item.get("investigation_id")]
+    ids = []
+    for index, item in enumerate(investigations):
+        if not isinstance(item, dict):
+            continue
+        investigation_id = item.get("investigation_id")
+        if investigation_id is None:
+            continue
+        if not isinstance(investigation_id, str):
+            errors.append(f"investigation-integrity.yml investigations[{index}].investigation_id must be a string.")
+            continue
+        ids.append(investigation_id)
     for investigation_id, count in Counter(ids).items():
         if count > 1:
             errors.append(f"duplicate investigation_id '{investigation_id}'.")
@@ -219,24 +235,28 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     for source_id, source in source_by_id.items():
         if source_id not in claims_by_source:
             continue
+        source_type = source.get("source_type")
+        if source_type is not None and not isinstance(source_type, str):
+            errors.append(f"source '{source_id}' source_type must be a string.")
+            continue
         risk = source_weight_value(source, "institutional_interest_risk")
         adversarial = source_weight_value(source, "adversarial_relevance")
         if adversarial is None:
-            if source.get("source_type") in CLOSURE_SENSITIVE_SOURCE_TYPES:
+            if source_type in CLOSURE_SENSITIVE_SOURCE_TYPES:
                 claim_list = ", ".join(sorted(claims_by_source[source_id]))
                 errors.append(
-                    f"source '{source_id}' is closure-sensitive by source_type='{source.get('source_type')}' "
+                    f"source '{source_id}' is closure-sensitive by source_type='{source_type}' "
                     f"and is used by strong world claim(s) {claim_list}, but source_weight.adversarial_relevance is missing."
                 )
             continue
 
         numeric_trigger = risk is not None and risk >= RISK_THRESHOLD and adversarial >= ADVERSARIAL_THRESHOLD
-        type_trigger = source.get("source_type") in CLOSURE_SENSITIVE_SOURCE_TYPES and adversarial >= ADVERSARIAL_THRESHOLD
+        type_trigger = source_type in CLOSURE_SENSITIVE_SOURCE_TYPES and adversarial >= ADVERSARIAL_THRESHOLD
         if (numeric_trigger or type_trigger) and source_id not in covered_sources:
             claim_list = ", ".join(sorted(claims_by_source[source_id]))
             if type_trigger:
                 errors.append(
-                    f"source '{source_id}' is closure-sensitive by source_type='{source.get('source_type')}' "
+                    f"source '{source_id}' is closure-sensitive by source_type='{source_type}' "
                     f"and adversarial_relevance={adversarial:.2f}; used by strong world claim(s) {claim_list}, "
                     "so investigation-integrity.yml must cover it."
                 )

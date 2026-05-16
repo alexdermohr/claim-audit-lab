@@ -276,3 +276,36 @@ def test_evidence_pack_source_ref_non_string_fails(tmp_path):
     errors = validate(tmp_path)
 
     assert any("evidence-pack.yml evidence[0].source_ref must be a string" in e for e in errors), errors
+
+
+def test_claim_status_list_fails_without_traceback(tmp_path):
+    claims = claim()
+    claims["claims"][0]["status"] = ["strongly_supported"]
+    write_case(tmp_path, claims=claims)
+
+    errors = validate(tmp_path)
+
+    assert any("claim 'c001' status must be a string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)
+
+
+def test_source_type_list_fails_without_traceback(tmp_path):
+    sources = source(risk=0.55, adversarial=0.88, source_type="government_report")
+    sources["sources"][0]["source_type"] = ["government_report"]
+    write_case(tmp_path, sources=sources)
+
+    errors = validate(tmp_path)
+
+    assert any("source 's001' source_type must be a string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)
+
+
+def test_investigation_id_list_fails_without_traceback(tmp_path):
+    data = integrity()
+    data["investigations"][0]["investigation_id"] = ["inv001"]
+    write_case(tmp_path, integrity_data=data)
+
+    errors = validate(tmp_path)
+
+    assert any("investigation-integrity.yml investigations[0].investigation_id must be a string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)
