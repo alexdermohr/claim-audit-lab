@@ -18,8 +18,6 @@ def safe_load_yaml(path: pathlib.Path):
         return None, str(exc)
 
 
-
-
 def require_list(data: dict, key: str, label: str, errors: list[str]) -> list:
     if key not in data:
         return []
