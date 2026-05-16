@@ -161,6 +161,19 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                                 "Evidence relation must be mirrored by claim.evidence_refs and evidence.claim_refs "
                                 f"for relation '{rid}'."
                             )
+                    if relation.get("relation_type") == "contradicts_conditionally":
+                        assumptions = relation.get("assumptions")
+                        if not isinstance(assumptions, list) or not any(
+                            isinstance(item, str) and item.strip() for item in assumptions
+                        ):
+                            errors.append(
+                                f"conditional contradiction relation '{rid}' must document assumptions."
+                            )
+                        incompatible = relation.get("incompatible_proposition")
+                        if not isinstance(incompatible, str) or not incompatible.strip():
+                            errors.append(
+                                f"conditional contradiction relation '{rid}' must name incompatible_proposition as a non-empty string."
+                            )
                     relations_by_claim[claim_ref].append(relation)
                     relation_types_by_pair[(evidence_ref, claim_ref)].add(relation.get("relation_type"))
 
@@ -168,7 +181,10 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
         pair_types = relation_types_by_pair.get((evidence_ref, claim_ref), set())
         claim = claim_by_id.get(claim_ref, {})
         claim_kind = claim.get("claim_kind", claim.get("claim_type"))
-        reports_allowed = claim_kind == "reported_claim" or claim.get("burden_profile") == "source_report"
+        reports_allowed = (
+            claim_kind == "reported_claim"
+            and claim.get("burden_profile") == "source_report"
+        )
         positive_pair_types = pair_types & LEGACY_SUPPORT_RELATIONS
         if not positive_pair_types or (positive_pair_types == {"reports"} and not reports_allowed):
             errors.append(
@@ -209,16 +225,18 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                     f"Claim '{claim_id}' status='contradicted' requires at least one evidence relation with relation_type='contradicts_directly'."
                 )
             for relation in direct_relations:
-                if not relation.get("incompatible_proposition", "").strip():
+                incompatible = relation.get("incompatible_proposition")
+                if not isinstance(incompatible, str) or not incompatible.strip():
                     errors.append(
-                        f"Claim '{claim_id}' direct contradiction relation '{relation.get('relation_id', '?')}' must name incompatible_proposition."
+                        f"Claim '{claim_id}' direct contradiction relation '{relation.get('relation_id', '?')}' must name incompatible_proposition as a non-empty string."
                     )
             if relation_types and relation_types <= WEAK_NEGATIVE_RELATIONS:
                 errors.append(
                     f"Claim '{claim_id}' cannot be 'contradicted' when all negative relations are weakens/undercuts/missing_link/alternative_explanation."
                 )
 
-        is_world_causal = claim_kind in WORLD_CAUSAL_KINDS or claim_type in WORLD_CAUSAL_KINDS
+        is_source_report_closure = claim_kind == "reported_claim" and claim.get("burden_profile") == "source_report"
+        is_world_causal = (claim_kind in WORLD_CAUSAL_KINDS or claim_type in WORLD_CAUSAL_KINDS) and not is_source_report_closure
 
         if is_world_causal and status in (STRONG_STATUSES | {"contradicted"}):
             chain = claim.get("required_chain") or []
@@ -266,7 +284,12 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                         f"World-causal claim '{claim_id}' status='{status}' cannot be established only from source-report relations."
                     )
 
-        if claim_kind == "reported_claim" and claim_type == "causal_claim" and status in STRONG_STATUSES:
+        if (
+            claim_kind == "reported_claim"
+            and claim_type == "causal_claim"
+            and claim.get("burden_profile") != "source_report"
+            and status in STRONG_STATUSES
+        ):
             errors.append(
                 f"Claim '{claim_id}' is claim_kind='reported_claim' but claim_type='causal_claim'; split source report from world-causal claim."
             )

@@ -11,11 +11,62 @@ SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "claim.v1.schem
 
 CAUSAL_CLAIM_MIN_COUNTERCLAIMS = 2
 STRONG_STATUSES = {"established", "strongly_supported"}
+ABSENCE_SCOPE_MARKERS = {
+    "evidence-pack",
+    "evidence pack",
+    "quelle",
+    "source",
+    "dataset",
+    "quellenset",
+    "source set",
+    "auditierte",
+    "audited",
+    "vorliegenden",
+    "vorliegend",
+    "within",
+    "in the reviewed",
+    "im untersuchten",
+    "in untersuchtem",
+}
+CO_CAUSATION_TERMS = (
+    "mitverursachte",
+    "mitverursacht",
+    "contributed",
+    "contributes",
+    "co-cause",
+    "co-causal",
+    "partial cause",
+    "partly caused",
+)
 
 
 def load_schema():
     with open(SCHEMA_PATH, encoding="utf-8") as f:
         return json.load(f)
+
+
+def has_absence_scope(claim: dict) -> bool:
+    """Return whether an absence_claim declares a bounded search scope."""
+    explicit_scope = claim.get("absence_scope") or claim.get("scope")
+    if isinstance(explicit_scope, str) and explicit_scope.strip():
+        return True
+    if isinstance(explicit_scope, list) and any(isinstance(item, str) and item.strip() for item in explicit_scope):
+        return True
+
+    text_parts = [
+        claim.get("statement", ""),
+        claim.get("notes", ""),
+        " ".join(item for item in claim.get("requires", []) if isinstance(item, str)),
+    ]
+    text = " ".join(text_parts).lower()
+    return any(marker in text for marker in ABSENCE_SCOPE_MARKERS)
+
+
+def has_co_causation_language(claim: dict) -> bool:
+    text = " ".join(
+        str(claim.get(key, "")) for key in ("statement", "notes")
+    ).lower()
+    return any(term in text for term in CO_CAUSATION_TERMS)
 
 
 def validate_claim(claim: dict, schema: dict) -> list[str]:
@@ -30,13 +81,48 @@ def validate_claim(claim: dict, schema: dict) -> list[str]:
         return errors
 
     claim_type = claim.get("claim_type", "")
+    claim_kind = claim.get("claim_kind", claim_type)
+    burden_profile = claim.get("burden_profile")
     requires = claim.get("requires", [])
     counterclaims = claim.get("counterclaims", [])
     source_refs = claim.get("source_refs", [])
     evidence_refs = claim.get("evidence_refs", [])
     status = claim.get("status", "")
+    forbidden_upgrades = claim.get("forbidden_upgrades", [])
 
-    if claim_type == "causal_claim" and len(counterclaims) < CAUSAL_CLAIM_MIN_COUNTERCLAIMS:
+    if claim_kind == "reported_claim" and burden_profile != "source_report":
+        errors.append(
+            f"  reported_claim '{claim['claim_id']}' must set burden_profile='source_report' so source-content closure is not treated as world-claim closure."
+        )
+
+    if burden_profile == "source_report" and claim_kind != "reported_claim":
+        errors.append(
+            f"  Claim '{claim['claim_id']}' uses burden_profile='source_report' but claim_kind is not 'reported_claim'."
+        )
+
+    if claim_kind == "absence_claim":
+        if not has_absence_scope(claim):
+            errors.append(
+                f"  absence_claim '{claim['claim_id']}' must declare a bounded scope (for example: within this evidence-pack, in source X, or in dataset Y)."
+            )
+        if "absence_of_evidence_to_falsehood" not in forbidden_upgrades:
+            errors.append(
+                f"  absence_claim '{claim['claim_id']}' must include forbidden_upgrades: absence_of_evidence_to_falsehood."
+            )
+
+    if has_co_causation_language(claim) and status == "contradicted":
+        direct_basis = claim.get("direct_incompatibility_basis")
+        if not isinstance(direct_basis, str) or not direct_basis.strip():
+            errors.append(
+                f"  co-causation claim '{claim['claim_id']}' cannot be status='contradicted' from a stronger alternative explanation alone; set non-empty direct_incompatibility_basis."
+            )
+
+    is_source_report_claim = claim_kind == "reported_claim" and burden_profile == "source_report"
+    if (
+        claim_type == "causal_claim"
+        and not is_source_report_claim
+        and len(counterclaims) < CAUSAL_CLAIM_MIN_COUNTERCLAIMS
+    ):
         errors.append(
             f"  causal_claim '{claim['claim_id']}' requires at least {CAUSAL_CLAIM_MIN_COUNTERCLAIMS} `counterclaims`. "
             f"Found counterclaims={counterclaims}"
@@ -85,9 +171,16 @@ def validate_file(claims_file: pathlib.Path, schema: dict) -> int:
     if not isinstance(data, dict) or "claims" not in data:
         print(f"FAIL {claims_file}: Missing top-level 'claims' key.")
         return 1
+    if not isinstance(data.get("claims"), list):
+        print(f"FAIL {claims_file}: Top-level 'claims' must be an array.")
+        return 1
 
     total_errors = 0
     for claim in data["claims"]:
+        if not isinstance(claim, dict):
+            print(f"FAIL {claims_file} [?]: claim item must be an object.")
+            total_errors += 1
+            continue
         errs = validate_claim(claim, schema)
         if errs:
             print(f"FAIL {claims_file} [{claim.get('claim_id', '?')}]:")

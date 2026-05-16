@@ -199,6 +199,24 @@
           }
         }
       }
+    },
+    "absence_scope": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required bounded search scope for claim_kind=absence_claim, e.g. in this evidence-pack, in source X, or in dataset Y."
+    },
+    "world_claim_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^c[0-9]{3,}$"
+      },
+      "description": "Optional explicit world-claim ids that a reported_claim is being used to motivate; closure still requires separate world-claim evidence relations."
+    },
+    "direct_incompatibility_basis": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Structured basis required when a co-causation claim is marked contradicted; must state the direct incompatibility rather than rely on notes prose."
     }
   }
 }

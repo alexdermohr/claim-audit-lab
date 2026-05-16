@@ -1,0 +1,20 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+anomalies:
+  - anomaly_id: "a001"
+    anomaly_type: "method_gap"
+    source_refs: ["s001"]
+    affected_claims: ["c001"]
+    affected_hypotheses: []
+    statement: "Describe the anomaly without converting suspicion into proof."
+    materiality: 0.0
+    anomaly_direction: "context_only"
+    why_it_matters: "Explain whether the anomaly changes uncertainty, weight, or closure."
+    possible_benign_explanations:
+      - "Benign explanation to test."
+    possible_bias_explanations:
+      - "Bias-risk explanation framed as a hypothesis, not a finding."
+    missing_for_resolution:
+      - "What evidence or method would resolve this anomaly?"
+    status: "unresolved"
+    notes: "Anomaly does not prove manipulation, concealment, or fraud by itself."

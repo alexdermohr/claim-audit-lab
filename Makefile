@@ -18,6 +18,7 @@ validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_sources.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_weight_audit.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_hypothesis_support_ledger.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_contradictions.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_verdict_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_evidence_pack.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_case_references.py cases

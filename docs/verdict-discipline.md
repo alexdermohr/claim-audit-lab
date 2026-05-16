@@ -95,3 +95,9 @@ Important separations:
 
 High-materiality anomalies that affect a claim must be visible in `assessment.md`, and high-risk/high-adversarial sources used for strong world claims must be covered by `investigation-integrity.yml`. High-materiality non-tested paths from investigation-integrity must also be assessment-visible; a non-test limits closure but does not prove manipulation.
 
+
+## Contradiction and co-causation discipline
+
+`contradictions.yml` is the place where unresolved, weighted, scoped, or logically resolved conflicts remain visible. Its existence does not itself change a claim verdict; verdict movement still requires typed evidence relations and a compatible burden profile.
+
+For co-causation language such as “contributed,” “co-cause,” or “mitverursachte,” a stronger alternative explanation is not enough to mark the claim `contradicted`. Direct incompatibility must be documented explicitly with `direct_incompatibility_basis`; prose in `notes` is not sufficient.

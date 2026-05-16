@@ -1,0 +1,27 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001"]
+    lead_institution: "[institution or source cluster]"
+    report_role: "primary_investigation"
+    politically_sensitive: false
+    financially_sensitive: false
+    institutional_interest_risk: 0.0
+    hypothesis_space_declared:
+      - "Primary hypothesis considered by this source cluster."
+    hypothesis_space_gaps:
+      - "Material hypothesis or adversarial path not fully considered."
+    non_tested_material_paths:
+      - path_id: "nt001"
+        expected_test: "What would have been tested for closure?"
+        justification_present: "unknown"
+        justification_quality: 0.0
+        materiality: 0.0
+        notes: "Non-test limits closure; it is not evidence of cover-up by itself."
+    adversarial_review:
+      present: "unknown"
+      notes: "Describe whether adverse experts, affected parties, or independent methods challenged the source cluster."
+    integrity_verdict: "insufficient_information"
+    downstream_constraints:
+      - "Do not convert source prestige into truth."
