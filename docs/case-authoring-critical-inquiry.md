@@ -17,7 +17,7 @@ Use `claim_kind: absence_claim` only with a bounded search scope, for example:
 - in dataset Y;
 - in the audited public record named by the case.
 
-An absence claim must not escalate to “exists nowhere.” It must include `forbidden_upgrades: [absence_of_evidence_to_falsehood]` or an equivalent explicit guard.
+An absence claim must not escalate to “exists nowhere.” It must include `forbidden_upgrades: [absence_of_evidence_to_falsehood]`.
 
 ## `contradictions.yml`
 

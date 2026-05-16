@@ -328,3 +328,44 @@ def test_malformed_claims_yaml_reports_clean_error(tmp_path, capsys):
     assert errors == 1
     assert "Could not parse YAML" in captured.out
     assert "Traceback" not in captured.out
+
+
+def test_reported_causal_claim_with_source_report_burden_skips_world_causal_counterclaim_burden(schema):
+    claim = {
+        "schema_version": "1.0",
+        "claim_id": "c058",
+        "claim_type": "causal_claim",
+        "claim_kind": "reported_claim",
+        "burden_profile": "source_report",
+        "statement": "Source X reports that A caused B.",
+        "status": "established",
+        "evidence_refs": ["e001"],
+        "source_refs": ["s001"],
+        "requires": ["source content"],
+        "counterclaims": [],
+        "forbidden_upgrades": ["source_prestige_to_truth"],
+        "uncertainty": {"score": 0.1, "causes": []},
+        "interpolation": {"score": 0.0, "assumptions": []},
+    }
+    errors = validate_claims.validate_claim(claim, schema)
+    assert errors == []
+
+
+def test_world_causal_claim_still_requires_counterclaims(schema):
+    claim = {
+        "schema_version": "1.0",
+        "claim_id": "c059",
+        "claim_type": "causal_claim",
+        "claim_kind": "causal_claim",
+        "statement": "A caused B.",
+        "status": "plausible",
+        "evidence_refs": ["e001"],
+        "source_refs": ["s001"],
+        "requires": ["timeline", "mechanism"],
+        "counterclaims": ["Only one alternative."],
+        "forbidden_upgrades": ["correlation_to_causation"],
+        "uncertainty": {"score": 0.4, "causes": []},
+        "interpolation": {"score": 0.2, "assumptions": []},
+    }
+    errors = validate_claims.validate_claim(claim, schema)
+    assert any("requires at least" in e and "counterclaims" in e for e in errors), errors

@@ -130,3 +130,19 @@ def test_contradictions_schema_allows_optional_case_ref(tmp_path):
     write_yaml(tmp_path / "contradictions.yml", payload)
     errors = validate_contradictions.validate_case(tmp_path, load_schema())
     assert errors == []
+
+
+def test_counterclaims_in_provisional_case_with_empty_contradictions_fails(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims(counterclaims=["Counterclaim text."]))
+    write_yaml(tmp_path / "lifecycle.yml", lifecycle())
+    write_yaml(tmp_path / "contradictions.yml", {"schema_version": "1.0", "contradictions": []})
+    errors = validate_contradictions.validate_case(tmp_path, load_schema())
+    assert any("must contain at least one contradiction record" in e for e in errors), errors
+
+
+def test_counterclaims_in_provisional_case_with_valid_contradiction_passes(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims(counterclaims=["Counterclaim text."]))
+    write_yaml(tmp_path / "lifecycle.yml", lifecycle())
+    write_yaml(tmp_path / "contradictions.yml", contradictions())
+    errors = validate_contradictions.validate_case(tmp_path, load_schema())
+    assert errors == []

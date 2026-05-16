@@ -112,7 +112,12 @@ def validate_claim(claim: dict, schema: dict) -> list[str]:
                 f"  co-causation claim '{claim['claim_id']}' cannot be status='contradicted' from a stronger alternative explanation alone; set non-empty direct_incompatibility_basis."
             )
 
-    if claim_type == "causal_claim" and len(counterclaims) < CAUSAL_CLAIM_MIN_COUNTERCLAIMS:
+    is_source_report_claim = claim_kind == "reported_claim" or burden_profile == "source_report"
+    if (
+        claim_type == "causal_claim"
+        and not is_source_report_claim
+        and len(counterclaims) < CAUSAL_CLAIM_MIN_COUNTERCLAIMS
+    ):
         errors.append(
             f"  causal_claim '{claim['claim_id']}' requires at least {CAUSAL_CLAIM_MIN_COUNTERCLAIMS} `counterclaims`. "
             f"Found counterclaims={counterclaims}"

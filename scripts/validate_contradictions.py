@@ -120,7 +120,8 @@ def validate_case(case_dir: pathlib.Path, schema: dict | None = None) -> list[st
     status = lifecycle_status(case_dir, errors)
     contradictions_path = case_dir / "contradictions.yml"
 
-    if status in CLOSURE_STATUSES and has_counterclaims and not contradictions_path.exists():
+    requires_conflict_visibility = status in CLOSURE_STATUSES and has_counterclaims
+    if requires_conflict_visibility and not contradictions_path.exists():
         errors.append(
             "contradictions.yml required for assessed/provisional/final cases with counterclaims; conflicts must be artifact-visible, not only assessment prose."
         )
@@ -132,6 +133,11 @@ def validate_case(case_dir: pathlib.Path, schema: dict | None = None) -> list[st
         elif not isinstance(data, dict):
             errors.append("contradictions.yml must contain a YAML object.")
         else:
+            contradictions = data.get("contradictions")
+            if requires_conflict_visibility and (not isinstance(contradictions, list) or not contradictions):
+                errors.append(
+                    "contradictions.yml required for assessed/provisional/final cases with counterclaims must contain at least one contradiction record."
+                )
             errors.extend(validate_contradictions_file(data, schema, claim_ids))
     return errors
 
