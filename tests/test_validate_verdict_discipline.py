@@ -1,5 +1,6 @@
 """Tests for scripts/validate_verdict_discipline.py"""
 
+from datetime import date, timedelta
 import json
 import pathlib
 import sys
@@ -11,6 +12,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "scripts"))
 import validate_verdict_discipline
 
 SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "evidence-relation.v1.schema.json"
+VERDICT_FIXTURE_ROOT = pathlib.Path(__file__).parent / "fixtures" / "verdict_discipline"
 
 
 def load_schema() -> dict:
@@ -110,6 +112,25 @@ def write_case(
         write_yaml(tmp_path / "evidence-relations.yml", relations)
 
 
+def test_claims_and_evidence_pack_require_evidence_relations_file(tmp_path):
+    write_case(tmp_path, relations=None)
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any(
+        "evidence-relations.yml required because claims.yml and evidence-pack.yml exist." in e
+        for e in errors
+    ), errors
+
+
+def test_cli_discovers_claims_and_evidence_pack_case_without_relations(tmp_path, capsys):
+    case_dir = tmp_path / "synthetic-case"
+    write_case(case_dir, relations=None)
+    exit_code = validate_verdict_discipline.main(str(tmp_path))
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "FAIL" in captured.out
+    assert "evidence-relations.yml required because claims.yml and evidence-pack.yml exist." in captured.out
+
+
 def test_legacy_supports_without_positive_relation_fails(tmp_path):
     claim = base_claim(status="weak")
     write_case(tmp_path, claim=claim, relations=base_relations("contextualizes"), evidence_supports=["c001"])
@@ -183,7 +204,11 @@ def test_evidence_pack_weakens_only_must_not_use_contradicts(tmp_path):
 def test_legacy_contradicts_with_direct_relation_passes(tmp_path):
     write_case(
         tmp_path,
-        claim=base_claim(status="contradicted"),
+        claim=base_claim(
+            status="contradicted",
+            burden_profile="causal_chain",
+            required_chain=[{"id": "required_link", "requirement": "Required link.", "status": "satisfied"}],
+        ),
         relations=base_relations(
             "contradicts_directly",
             incompatible_proposition="Fixture incompatible proposition.",
@@ -216,10 +241,27 @@ def test_missing_link_does_not_allow_contradicted(tmp_path):
     assert any("cannot be 'contradicted'" in e for e in errors), errors
 
 
-def test_direct_contradiction_requires_incompatible_proposition(tmp_path):
+def test_contradicted_causal_claim_requires_burden_profile_or_chain(tmp_path):
     write_case(
         tmp_path,
         claim=base_claim(status="contradicted"),
+        relations=base_relations(
+            "contradicts_directly",
+            incompatible_proposition="Fixture incompatible proposition.",
+        ),
+    )
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("requires burden_profile" in e for e in errors), errors
+
+
+def test_direct_contradiction_requires_incompatible_proposition(tmp_path):
+    write_case(
+        tmp_path,
+        claim=base_claim(
+            status="contradicted",
+            burden_profile="causal_chain",
+            required_chain=[{"id": "required_link", "requirement": "Required link.", "status": "satisfied"}],
+        ),
         relations=base_relations("contradicts_directly"),
     )
     errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
@@ -229,7 +271,11 @@ def test_direct_contradiction_requires_incompatible_proposition(tmp_path):
 def test_direct_contradiction_allows_contradicted(tmp_path):
     write_case(
         tmp_path,
-        claim=base_claim(status="contradicted"),
+        claim=base_claim(
+            status="contradicted",
+            burden_profile="causal_chain",
+            required_chain=[{"id": "required_link", "requirement": "Required link.", "status": "satisfied"}],
+        ),
         relations=base_relations(
             "contradicts_directly",
             incompatible_proposition="Fixture incompatible proposition.",
@@ -307,7 +353,11 @@ def test_positive_evidence_unknown_source_ref_fails(tmp_path):
 def test_relation_processing_continues_after_unrelated_prior_errors(tmp_path):
     write_case(
         tmp_path,
-        claim=base_claim(status="contradicted"),
+        claim=base_claim(
+            status="contradicted",
+            burden_profile="causal_chain",
+            required_chain=[{"id": "required_link", "requirement": "Required link.", "status": "satisfied"}],
+        ),
         relations=base_relations(
             "contradicts_directly",
             incompatible_proposition="Fixture incompatible proposition.",
@@ -393,3 +443,67 @@ def test_synthetic_minimal_verdict_discipline_case_passes(tmp_path):
     write_case(tmp_path, claim=base_claim(status="weak"), relations=base_relations("supports_indirectly"))
     errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
     assert errors == [], "synthetic minimal verdict case has errors:\n" + "\n".join(errors)
+
+
+def test_fixture_contradicted_without_direct_relation_fails():
+    errors = validate_verdict_discipline.validate_case(
+        VERDICT_FIXTURE_ROOT / "invalid" / "contradicted_without_direct_relation",
+        load_schema(),
+    )
+    assert any("requires at least one" in e and "contradicts_directly" in e for e in errors), errors
+
+
+def test_fixture_claims_with_missing_relations_file_fails():
+    errors = validate_verdict_discipline.validate_case(
+        VERDICT_FIXTURE_ROOT / "invalid" / "claims_with_missing_relations_file",
+        load_schema(),
+    )
+    assert any("evidence-relations.yml required" in e for e in errors), errors
+
+
+def test_fixture_reports_used_as_world_causal_proof_fails():
+    errors = validate_verdict_discipline.validate_case(
+        VERDICT_FIXTURE_ROOT / "invalid" / "reports_used_as_world_causal_proof",
+        load_schema(),
+    )
+    assert any("requires a positive typed evidence relation" in e for e in errors), errors
+    assert any("cannot be established only from source-report relations" in e for e in errors), errors
+
+
+def test_verdict_discipline_still_requires_relations_for_claims_and_evidence_even_with_legacy_marker(tmp_path):
+    today = date.today()
+    write_case(tmp_path, relations=None)
+    write_yaml(
+        tmp_path / "legacy-case.yml",
+        {
+            "legacy_case": True,
+            "created_at": today.isoformat(),
+            "expires_on": (today + timedelta(days=60)).isoformat(),
+            "migration_target": "Fixture migration target.",
+            "reason": "Fixture legacy reason.",
+        },
+    )
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("evidence-relations.yml required" in e for e in errors), errors
+
+
+def test_cli_verdict_discipline_still_requires_relations_even_with_legacy_marker(tmp_path, capsys):
+    today = date.today()
+    case_dir = tmp_path / "legacy-case"
+    write_case(case_dir, relations=None)
+    write_yaml(
+        case_dir / "legacy-case.yml",
+        {
+            "legacy_case": True,
+            "created_at": today.isoformat(),
+            "expires_on": (today + timedelta(days=60)).isoformat(),
+            "migration_target": "Fixture migration target.",
+            "reason": "Fixture legacy reason.",
+        },
+    )
+    exit_code = validate_verdict_discipline.main(str(tmp_path))
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "LEGACY" in captured.out
+    assert "verdict discipline still enforced" in captured.out
+    assert "evidence-relations.yml required because claims.yml and evidence-pack.yml exist." in captured.out

@@ -8,6 +8,7 @@ import sys
 
 from jsonschema_compat import jsonschema
 import yaml
+from case_compat import is_legacy_case, legacy_case_error, legacy_case_until
 
 RELATION_SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "evidence-relation.v1.schema.json"
 DIRECT_CONTRADICTION = "contradicts_directly"
@@ -34,6 +35,8 @@ def safe_load_yaml(path: pathlib.Path):
         return None, str(exc)
 
 
+
+
 def schema_errors(payload: dict, schema: dict) -> list[str]:
     validator = jsonschema.Draft7Validator(schema, format_checker=jsonschema.FormatChecker())
     return [
@@ -55,6 +58,9 @@ def load_optional_object(path: pathlib.Path, label: str) -> tuple[dict | None, l
 
 def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
     errors: list[str] = []
+    legacy_error = legacy_case_error(case_dir)
+    if legacy_error:
+        return [legacy_error]
     claims_path = case_dir / "claims.yml"
     relations_path = case_dir / "evidence-relations.yml"
     evidence_path = case_dir / "evidence-pack.yml"
@@ -82,6 +88,8 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
     legacy_supports: list[tuple[str, str]] = []
     evidence_data, load_errors = load_optional_object(evidence_path, "evidence-pack.yml")
     errors.extend(load_errors)
+    if claims_path.exists() and evidence_path.exists() and not relations_path.exists():
+        errors.append("evidence-relations.yml required because claims.yml and evidence-pack.yml exist.")
     evidence_lookup_valid = isinstance(evidence_data, dict)
     if isinstance(evidence_data, dict):
         evidence_by_id = {
@@ -210,11 +218,13 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                     f"Claim '{claim_id}' cannot be 'contradicted' when all negative relations are weakens/undercuts/missing_link/alternative_explanation."
                 )
 
-        if claim_kind in WORLD_CAUSAL_KINDS and status in STRONG_STATUSES:
+        is_world_causal = claim_kind in WORLD_CAUSAL_KINDS or claim_type in WORLD_CAUSAL_KINDS
+
+        if is_world_causal and status in (STRONG_STATUSES | {"contradicted"}):
             chain = claim.get("required_chain") or []
             if not claim.get("burden_profile") and not chain:
                 errors.append(
-                    f"Causal claim '{claim_id}' status='{status}' requires burden_profile or required_chain before strong verdict."
+                    f"Causal claim '{claim_id}' status='{status}' requires burden_profile or required_chain before strong or negative verdict."
                 )
             missing_chain = [
                 link for link in chain
@@ -225,35 +235,36 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                     f"Causal claim '{claim_id}' status='{status}' has missing or contested required_chain links."
                 )
 
-            positive_evidence_refs = [
-                relation.get("evidence_ref")
-                for relation in claim_relations
-                if relation.get("relation_type") in POSITIVE_RELATIONS
-            ]
-            positive_source_refs = [
-                evidence_by_id[evidence_ref].get("source_ref")
-                for evidence_ref in positive_evidence_refs
-                if evidence_ref in evidence_by_id
-            ]
-            for source_ref in positive_source_refs:
-                if isinstance(sources_data, dict) and source_ref and source_ref not in source_types:
+            if status in STRONG_STATUSES:
+                positive_evidence_refs = [
+                    relation.get("evidence_ref")
+                    for relation in claim_relations
+                    if relation.get("relation_type") in POSITIVE_RELATIONS
+                ]
+                positive_source_refs = [
+                    evidence_by_id[evidence_ref].get("source_ref")
+                    for evidence_ref in positive_evidence_refs
+                    if evidence_ref in evidence_by_id
+                ]
+                for source_ref in positive_source_refs:
+                    if isinstance(sources_data, dict) and source_ref and source_ref not in source_types:
+                        errors.append(
+                            f"Positive evidence source_ref '{source_ref}' for claim '{claim_id}' not found in sources.yml."
+                        )
+                positive_source_types = [
+                    source_types.get(source_ref)
+                    for source_ref in positive_source_refs
+                    if source_ref in source_types
+                ]
+                if positive_source_types and all(source_type in OFFICIAL_SOURCE_TYPES for source_type in positive_source_types):
                     errors.append(
-                        f"Positive evidence source_ref '{source_ref}' for claim '{claim_id}' not found in sources.yml."
+                        f"World-causal claim '{claim_id}' status='{status}' is supported only by official/government source cluster."
                     )
-            positive_source_types = [
-                source_types.get(source_ref)
-                for source_ref in positive_source_refs
-                if source_ref in source_types
-            ]
-            if positive_source_types and all(source_type in OFFICIAL_SOURCE_TYPES for source_type in positive_source_types):
-                errors.append(
-                    f"World-causal claim '{claim_id}' status='{status}' is supported only by official/government source cluster."
-                )
 
-            if claim_relations and {r.get("relation_type") for r in claim_relations} <= {"reports"}:
-                errors.append(
-                    f"World-causal claim '{claim_id}' status='{status}' cannot be established only from source-report relations."
-                )
+                if claim_relations and {r.get("relation_type") for r in claim_relations} <= {"reports"}:
+                    errors.append(
+                        f"World-causal claim '{claim_id}' status='{status}' cannot be established only from source-report relations."
+                    )
 
         if claim_kind == "reported_claim" and claim_type == "causal_claim" and status in STRONG_STATUSES:
             errors.append(
@@ -282,18 +293,15 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
 
 
 def is_case_dir(path: pathlib.Path) -> bool:
-    # Transitional rollout: only opted-in cases are scanned by the CLI.
-    # validate_case() remains strict for direct tests and future hardening.
-    return (path / "evidence-relations.yml").exists()
+    return any((path / name).exists() for name in ("claims.yml", "evidence-pack.yml", "assessment.md"))
 
 
 def main(cases_root: str) -> int:
     root = pathlib.Path(cases_root)
     relation_schema = load_schema()
-    # Transitional rollout: discover only case directories that opted in with
-    # evidence-relations.yml; future hardening may scan claims.yml.
     candidate_dirs = {root}
-    candidate_dirs.update(marker.parent for marker in root.rglob("evidence-relations.yml"))
+    for marker_name in ("claims.yml", "evidence-pack.yml", "assessment.md"):
+        candidate_dirs.update(marker.parent for marker in root.rglob(marker_name))
     case_dirs = sorted(
         d for d in candidate_dirs
         if d.is_dir() and "_template" not in d.parts and is_case_dir(d)
@@ -305,6 +313,17 @@ def main(cases_root: str) -> int:
 
     total_errors = 0
     for case_dir in case_dirs:
+        legacy_error = legacy_case_error(case_dir)
+        if legacy_error:
+            print(f"FAIL {case_dir}:")
+            print(f"  {legacy_error}")
+            total_errors += 1
+            continue
+        if is_legacy_case(case_dir):
+            print(
+                f"LEGACY {case_dir}: marker valid until {legacy_case_until(case_dir)}; "
+                "verdict discipline still enforced"
+            )
         errors = validate_case(case_dir, relation_schema)
         if errors:
             print(f"FAIL {case_dir}:")

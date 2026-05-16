@@ -37,7 +37,7 @@ evidence:
     locator: "s004 biografische Chronologie um 1953 und 1955"
     accessed_at: "2026-05-14"
     supports: ["c003"]
-    contradicts: ["c001"]
+    contradicts: []
     notes: "Widerspricht einer Version der Behauptung, die davon abhängt, dass McCloy während des Rueckwanderer-Systems 1936–1941 Chase-Vorsitzender gewesen sei."
 
   - evidence_id: "e004"

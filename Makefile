@@ -8,6 +8,9 @@ PYTHONPATH_ENV = $(if $(PYTHONPATH_PREFIX),PYTHONPATH=$(PYTHONPATH_PREFIX),)
 .PHONY: validate test report
 
 validate:
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_case_topology.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_no_fixture_language.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_mechanical_migration_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_claims.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_sources.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_weight_audit.py cases

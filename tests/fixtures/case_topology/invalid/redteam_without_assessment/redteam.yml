@@ -1,0 +1,10 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "assessment.md"
+reviewer: "fixture"
+reviewed_at: "2026-05-15"
+redteam_questions: ["Fixture question?"]
+findings: []
+verdict:
+  status: "pending"
+  reason: "Fixture pending."
