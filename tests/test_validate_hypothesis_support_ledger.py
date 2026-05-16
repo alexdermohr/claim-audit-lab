@@ -264,6 +264,7 @@ def test_cli_discovers_hypotheses_without_support_ledger(tmp_path, capsys):
 
 
 def test_cli_hypothesis_support_ledger_still_required_even_with_legacy_marker(tmp_path, capsys):
+    today = date.today()
     write_yaml(
         tmp_path / "hypotheses.yml",
         {
@@ -284,8 +285,8 @@ def test_cli_hypothesis_support_ledger_still_required_even_with_legacy_marker(tm
         tmp_path / "legacy-case.yml",
         {
             "legacy_case": True,
-            "created_at": date.today().isoformat(),
-            "expires_on": (date.today() + timedelta(days=60)).isoformat(),
+            "created_at": today.isoformat(),
+            "expires_on": (today + timedelta(days=60)).isoformat(),
             "migration_target": "Fixture migration target.",
             "reason": "Fixture legacy reason.",
         },

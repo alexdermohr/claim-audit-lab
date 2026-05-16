@@ -471,13 +471,14 @@ def test_fixture_reports_used_as_world_causal_proof_fails():
 
 
 def test_verdict_discipline_still_requires_relations_for_claims_and_evidence_even_with_legacy_marker(tmp_path):
+    today = date.today()
     write_case(tmp_path, relations=None)
     write_yaml(
         tmp_path / "legacy-case.yml",
         {
             "legacy_case": True,
-            "created_at": date.today().isoformat(),
-            "expires_on": (date.today() + timedelta(days=60)).isoformat(),
+            "created_at": today.isoformat(),
+            "expires_on": (today + timedelta(days=60)).isoformat(),
             "migration_target": "Fixture migration target.",
             "reason": "Fixture legacy reason.",
         },
@@ -487,14 +488,15 @@ def test_verdict_discipline_still_requires_relations_for_claims_and_evidence_eve
 
 
 def test_cli_verdict_discipline_still_requires_relations_even_with_legacy_marker(tmp_path, capsys):
+    today = date.today()
     case_dir = tmp_path / "legacy-case"
     write_case(case_dir, relations=None)
     write_yaml(
         case_dir / "legacy-case.yml",
         {
             "legacy_case": True,
-            "created_at": date.today().isoformat(),
-            "expires_on": (date.today() + timedelta(days=60)).isoformat(),
+            "created_at": today.isoformat(),
+            "expires_on": (today + timedelta(days=60)).isoformat(),
             "migration_target": "Fixture migration target.",
             "reason": "Fixture legacy reason.",
         },

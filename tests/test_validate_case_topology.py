@@ -111,15 +111,16 @@ def test_legacy_case_rejects_expired_marker(tmp_path):
 
 
 def test_legacy_case_is_visible_in_cli_output(tmp_path, capsys):
+    today = date.today()
     case_dir = tmp_path / "cases" / "allowed-case"
     case_dir.mkdir(parents=True)
-    write_legacy_marker(case_dir)
+    write_legacy_marker(case_dir, today=today)
     (case_dir / "claims.yml").write_text("schema_version: '1.0'\nclaims: []\n", encoding="utf-8")
     exit_code = validate_case_topology.main(str(tmp_path / "cases"))
     captured = capsys.readouterr()
     assert exit_code == 0
     assert "LEGACY" in captured.out
-    assert f"temporarily exempt until {(date.today() + timedelta(days=60)).isoformat()}" in captured.out
+    assert f"temporarily exempt until {(today + timedelta(days=60)).isoformat()}" in captured.out
 
 
 def test_unknown_case_with_legacy_marker_fails(tmp_path):
