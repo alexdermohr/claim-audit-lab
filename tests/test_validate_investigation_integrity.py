@@ -233,3 +233,46 @@ def test_investigation_source_cluster_refs_with_non_string_items_fails(tmp_path)
     assert any("investigation 'inv001' source_cluster_refs[1] must be a string" in e for e in errors), errors
     assert any("investigation 'inv001' source_cluster_refs[2] must be a string" in e for e in errors), errors
     assert not any("Traceback" in e for e in errors)
+
+
+def test_evidence_pack_evidence_scalar_fails(tmp_path):
+    write_case(tmp_path)
+    write_yaml(tmp_path / "evidence-pack.yml", {"schema_version": "1.0", "evidence": "not-an-array"})
+
+    errors = validate(tmp_path)
+
+    assert any("evidence-pack.yml 'evidence' must be an array" in e for e in errors), errors
+
+
+def test_evidence_pack_evidence_non_object_item_fails_without_traceback(tmp_path):
+    write_case(tmp_path)
+    write_yaml(tmp_path / "evidence-pack.yml", {"schema_version": "1.0", "evidence": ["e001"]})
+
+    errors = validate(tmp_path)
+
+    assert any("evidence-pack.yml evidence[0] must be an object" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)
+
+
+def test_evidence_pack_evidence_id_non_string_fails(tmp_path):
+    write_case(tmp_path)
+    write_yaml(
+        tmp_path / "evidence-pack.yml",
+        {"schema_version": "1.0", "evidence": [{"evidence_id": 123, "source_ref": "s001", "claim_refs": ["c001"]}]},
+    )
+
+    errors = validate(tmp_path)
+
+    assert any("evidence-pack.yml evidence[0].evidence_id must be a string" in e for e in errors), errors
+
+
+def test_evidence_pack_source_ref_non_string_fails(tmp_path):
+    write_case(tmp_path)
+    write_yaml(
+        tmp_path / "evidence-pack.yml",
+        {"schema_version": "1.0", "evidence": [{"evidence_id": "e001", "source_ref": {"bad": "ref"}, "claim_refs": ["c001"]}]},
+    )
+
+    errors = validate(tmp_path)
+
+    assert any("evidence-pack.yml evidence[0].source_ref must be a string" in e for e in errors), errors

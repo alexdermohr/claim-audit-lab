@@ -100,14 +100,21 @@ def strong_world_claims_using_sources(claims_data: dict | None, evidence_data: d
     evidence_source_by_id = {}
     if isinstance(evidence_data, dict):
         evidence_items = evidence_data.get("evidence", [])
-        if isinstance(evidence_items, list):
-            for evidence in evidence_items:
-                if (
-                    isinstance(evidence, dict)
-                    and isinstance(evidence.get("evidence_id"), str)
-                    and isinstance(evidence.get("source_ref"), str)
-                ):
-                    evidence_source_by_id[evidence["evidence_id"]] = evidence["source_ref"]
+        if not isinstance(evidence_items, list):
+            errors.append("evidence-pack.yml 'evidence' must be an array.")
+        else:
+            for index, evidence in enumerate(evidence_items):
+                if not isinstance(evidence, dict):
+                    errors.append(f"evidence-pack.yml evidence[{index}] must be an object.")
+                    continue
+                evidence_id = evidence.get("evidence_id")
+                source_ref = evidence.get("source_ref")
+                if evidence_id is not None and not isinstance(evidence_id, str):
+                    errors.append(f"evidence-pack.yml evidence[{index}].evidence_id must be a string.")
+                if source_ref is not None and not isinstance(source_ref, str):
+                    errors.append(f"evidence-pack.yml evidence[{index}].source_ref must be a string.")
+                if isinstance(evidence_id, str) and isinstance(source_ref, str):
+                    evidence_source_by_id[evidence_id] = source_ref
 
     claims_by_source: dict[str, set[str]] = {}
     claims = claims_data.get("claims", [])
