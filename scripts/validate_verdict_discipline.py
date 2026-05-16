@@ -222,9 +222,10 @@ def validate_case(case_dir: pathlib.Path, relation_schema: dict) -> list[str]:
                     f"Claim '{claim_id}' status='contradicted' requires at least one evidence relation with relation_type='contradicts_directly'."
                 )
             for relation in direct_relations:
-                if not relation.get("incompatible_proposition", "").strip():
+                incompatible = relation.get("incompatible_proposition")
+                if not isinstance(incompatible, str) or not incompatible.strip():
                     errors.append(
-                        f"Claim '{claim_id}' direct contradiction relation '{relation.get('relation_id', '?')}' must name incompatible_proposition."
+                        f"Claim '{claim_id}' direct contradiction relation '{relation.get('relation_id', '?')}' must name incompatible_proposition as a non-empty string."
                     )
             if relation_types and relation_types <= WEAK_NEGATIVE_RELATIONS:
                 errors.append(

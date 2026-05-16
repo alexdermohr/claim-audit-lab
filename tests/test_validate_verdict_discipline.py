@@ -285,6 +285,25 @@ def test_direct_contradiction_allows_contradicted(tmp_path):
     assert errors == []
 
 
+def test_direct_contradiction_non_string_incompatible_proposition_fails_without_traceback(tmp_path):
+    claim = base_claim(
+        status="contradicted",
+        burden_profile="causal_chain",
+        required_chain=[{"id": "required_link", "requirement": "Required link.", "status": "satisfied"}],
+    )
+    write_case(
+        tmp_path,
+        claim=claim,
+        relations=base_relations(
+            "contradicts_directly",
+            incompatible_proposition=["bad"],
+        ),
+    )
+    errors = validate_verdict_discipline.validate_case(tmp_path, load_schema())
+    assert any("incompatible_proposition" in e and "string" in e for e in errors), errors
+    assert not any("Traceback" in e for e in errors)
+
+
 def test_reported_claim_does_not_establish_world_causal_claim(tmp_path):
     write_case(
         tmp_path,
