@@ -16,6 +16,8 @@ import sys
 from jsonschema_compat import jsonschema
 import yaml
 
+from case_compat import legacy_case_error
+
 SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "source-cluster-robustness.v1.schema.json"
 
 ROBUSTNESS_FILENAME = "source-cluster-robustness.yml"
@@ -36,6 +38,19 @@ ASSESSMENT_FRAGILITY_TERMS = (
     "fragility",
     "fragile",
     "knockout",
+    # German equivalents (Fix 2)
+    "fragilität",
+    "fragil",
+    "quellencluster",
+    "quellen-cluster",
+    "quellencluster-abhängigkeit",
+    "cluster-abhängigkeit",
+    "clusterabhängigkeit",
+    "abhängigkeit vom cluster",
+    "abhängigkeit vom quellencluster",
+    "knockout-test",
+    "stresstest",
+    "stress-test",
 )
 # Conservative overreach phrases: compromise scenario must not be used as positive proof.
 OVERREACH_PROOF_TERMS = (
@@ -186,8 +201,51 @@ def _overreach_in_text(text: str) -> bool:
     return False
 
 
+def _load_evidence_pack(case_dir: pathlib.Path) -> dict[str, str]:
+    """Return mapping evidence_id -> source_ref from evidence-pack.yml, or empty dict."""
+    path = case_dir / "evidence-pack.yml"
+    if not path.exists():
+        return {}
+    data, err = safe_load_yaml(path)
+    if err or not isinstance(data, dict):
+        return {}
+    evidence = data.get("evidence", [])
+    if not isinstance(evidence, list):
+        return {}
+    result: dict[str, str] = {}
+    for item in evidence:
+        if isinstance(item, dict):
+            eid = item.get("evidence_id")
+            sref = item.get("source_ref")
+            if isinstance(eid, str) and isinstance(sref, str):
+                result[eid] = sref
+    return result
+
+
+def _load_evidence_relations(case_dir: pathlib.Path) -> list[dict]:
+    """Return list of evidence-relation dicts from evidence-relations.yml, or empty list."""
+    path = case_dir / "evidence-relations.yml"
+    if not path.exists():
+        return []
+    data, err = safe_load_yaml(path)
+    if err or not isinstance(data, dict):
+        return []
+    relations = data.get("relations", [])
+    if not isinstance(relations, list):
+        return []
+    return [r for r in relations if isinstance(r, dict)]
+
+
+SUPPORTING_RELATION_TYPES = {"supports_directly", "supports_indirectly"}
+
+
 def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     errors: list[str] = []
+
+    # Fix 1: Legacy compatibility — skip new errors for legacy-marked cases.
+    legacy_error = legacy_case_error(case_dir)
+    if legacy_error:
+        return [legacy_error]
 
     sources_data, load_errors = load_optional_object(case_dir / "sources.yml", "sources.yml")
     errors.extend(load_errors)
@@ -246,6 +304,28 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     if not isinstance(knockout_tests, list):
         knockout_tests = []
 
+    # Fix 4: Duplicate cluster_id detection.
+    seen_cluster_ids: list[str] = []
+    for cluster in clusters:
+        if isinstance(cluster, dict):
+            cid = cluster.get("cluster_id")
+            if isinstance(cid, str):
+                if cid in seen_cluster_ids:
+                    errors.append(f"Duplicate cluster_id '{cid}' in clusters.")
+                else:
+                    seen_cluster_ids.append(cid)
+
+    # Fix 4: Duplicate test_id detection.
+    seen_test_ids: list[str] = []
+    for test in knockout_tests:
+        if isinstance(test, dict):
+            tid = test.get("test_id")
+            if isinstance(tid, str):
+                if tid in seen_test_ids:
+                    errors.append(f"Duplicate test_id '{tid}' in knockout_tests.")
+                else:
+                    seen_test_ids.append(tid)
+
     cluster_by_id: dict[str, dict] = {}
     cluster_source_refs: dict[str, set[str]] = {}
     for cluster in clusters:
@@ -257,6 +337,16 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         cluster_by_id[cluster_id] = cluster
         refs = cluster.get("source_refs", [])
         if isinstance(refs, list):
+            # Fix 4: Duplicate source_refs within a cluster.
+            seen_refs: list[str] = []
+            for r in refs:
+                if isinstance(r, str):
+                    if r in seen_refs:
+                        errors.append(
+                            f"cluster '{cluster_id}' has duplicate source_ref '{r}'."
+                        )
+                    else:
+                        seen_refs.append(r)
             cluster_source_refs[cluster_id] = {r for r in refs if isinstance(r, str)}
         else:
             cluster_source_refs[cluster_id] = set()
@@ -304,18 +394,38 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         test_id = test.get("test_id", "?")
         removed = test.get("removed_cluster_refs", []) or []
         if isinstance(removed, list):
+            # Fix 4: Duplicate removed_cluster_refs within a knockout test.
+            seen_removed: list[str] = []
             for ref in removed:
-                if isinstance(ref, str) and ref not in cluster_by_id:
-                    errors.append(
-                        f"knockout_test '{test_id}' removed_cluster_ref '{ref}' is not a declared cluster."
-                    )
+                if isinstance(ref, str):
+                    if ref in seen_removed:
+                        errors.append(
+                            f"knockout_test '{test_id}' has duplicate removed_cluster_ref '{ref}'."
+                        )
+                    else:
+                        seen_removed.append(ref)
+                    if ref not in cluster_by_id:
+                        errors.append(
+                            f"knockout_test '{test_id}' removed_cluster_ref '{ref}' is not a declared cluster."
+                        )
         affected = test.get("affected_claims", []) or []
-        if isinstance(affected, list) and claim_ids:
+        if isinstance(affected, list):
+            # Fix 4: Duplicate affected_claims within a knockout test.
+            seen_affected: list[str] = []
             for cref in affected:
-                if isinstance(cref, str) and cref not in claim_ids:
-                    errors.append(
-                        f"knockout_test '{test_id}' affected_claim '{cref}' not found in claims.yml."
-                    )
+                if isinstance(cref, str):
+                    if cref in seen_affected:
+                        errors.append(
+                            f"knockout_test '{test_id}' has duplicate affected_claim '{cref}'."
+                        )
+                    else:
+                        seen_affected.append(cref)
+            if claim_ids:
+                for cref in affected:
+                    if isinstance(cref, str) and cref not in claim_ids:
+                        errors.append(
+                            f"knockout_test '{test_id}' affected_claim '{cref}' not found in claims.yml."
+                        )
         for field in ("notes", "rationale"):
             text = test.get(field, "")
             if isinstance(text, str) and _overreach_in_text(text):
@@ -326,7 +436,14 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
 
     # Rule 3: strong-verdict fragility — for each strong causal claim, ensure a knockout test
     # exists that removes a cluster whose sources intersect investigation-integrity flagged sources.
+    # Also: ALL flagged sources for a claim must be fully covered by declared clusters (partial
+    # coverage is not enough).
     if causal_strong_claims and integrity_cluster_sources:
+        # Build a reverse map: which sources are covered by at least one declared cluster?
+        all_clustered_sources: set[str] = set()
+        for refs in cluster_source_refs.values():
+            all_clustered_sources.update(refs)
+
         for claim in causal_strong_claims:
             claim_id = claim.get("claim_id")
             if not isinstance(claim_id, str):
@@ -336,6 +453,24 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             srcs = claim.get("source_refs", [])
             if isinstance(srcs, list):
                 claim_source_refs.update(s for s in srcs if isinstance(s, str))
+
+            # Flagged sources: intersection of claim's source_refs with investigation cluster sources.
+            # If claim has no source_refs field, fall back to all investigation cluster sources.
+            if claim_source_refs:
+                flagged_sources = claim_source_refs & integrity_cluster_sources
+            else:
+                flagged_sources = integrity_cluster_sources
+
+            # Fix 3: ALL flagged sources must be fully covered by declared clusters.
+            if flagged_sources:
+                uncovered = flagged_sources - all_clustered_sources
+                if uncovered:
+                    errors.append(
+                        f"causal_claim '{claim_id}' has status='{claim.get('status')}': "
+                        f"flagged source(s) {sorted(uncovered)} are not covered by any declared cluster "
+                        "in source-cluster-robustness.yml; partial coverage is not enough."
+                    )
+
             # Dominant clusters for this claim: clusters whose sources overlap both
             # the investigation-flagged sources AND the claim's sources (if known).
             dominant_clusters: set[str] = set()
@@ -395,6 +530,58 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                 "assessment.md must surface cluster dependency / fragility when a knockout_test "
                 f"reports fragility_score>={HIGH_FRAGILITY_THRESHOLD}."
             )
+
+    # Fix 5: Minimal relational knockout check.
+    # Only run when both evidence-pack.yml and evidence-relations.yml are present.
+    evidence_map = _load_evidence_pack(case_dir)
+    relations = _load_evidence_relations(case_dir)
+    if evidence_map and relations:
+        for test in knockout_tests:
+            if not isinstance(test, dict):
+                continue
+            test_id = test.get("test_id", "?")
+            verdict_without = test.get("verdict_without_cluster")
+            if not isinstance(verdict_without, str):
+                continue
+            # Only check when verdict_without_cluster signals surviving strength.
+            if verdict_without not in {"established", "strongly_supported", "plausible"}:
+                continue
+
+            removed_cluster_ref_list = test.get("removed_cluster_refs", []) or []
+            if not isinstance(removed_cluster_ref_list, list):
+                continue
+
+            # Determine removed sources: all source_refs in removed clusters.
+            removed_sources: set[str] = set()
+            for cref in removed_cluster_ref_list:
+                if isinstance(cref, str):
+                    removed_sources.update(cluster_source_refs.get(cref, set()))
+
+            # Determine removed evidences: all evidence_ids whose source_ref is in removed_sources.
+            removed_evidences: set[str] = {
+                eid for eid, sref in evidence_map.items() if sref in removed_sources
+            }
+
+            affected = test.get("affected_claims", []) or []
+            if not isinstance(affected, list):
+                continue
+
+            for claim_id in affected:
+                if not isinstance(claim_id, str):
+                    continue
+                # Find remaining supporting relations for this claim.
+                remaining_support = [
+                    r for r in relations
+                    if r.get("claim_ref") == claim_id
+                    and r.get("relation_type") in SUPPORTING_RELATION_TYPES
+                    and r.get("evidence_ref") not in removed_evidences
+                ]
+                if not remaining_support:
+                    errors.append(
+                        f"verdict_without_cluster '{verdict_without}' not supported by remaining "
+                        f"evidence relations for claim '{claim_id}' after removing cluster(s) "
+                        f"{sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
+                    )
 
     return errors
 

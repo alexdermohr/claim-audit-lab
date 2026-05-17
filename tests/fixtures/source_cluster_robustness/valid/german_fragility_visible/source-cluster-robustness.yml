@@ -1,0 +1,16 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/german_fragility_visible"
+clusters:
+  - cluster_id: "offizieller_cluster"
+    source_refs: ["s001", "s002"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.65
+    notes: "Beide Quellen gehören zum offiziellen Untersuchungscluster."
+knockout_tests:
+  - test_id: "offiziellen_cluster_entfernen"
+    removed_cluster_refs: ["offizieller_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "weak"
+    verdict_delta: "strongly_supported_to_weak"
+    fragility_score: 0.75
+    notes: "Die Quellencluster-Abhängigkeit ist hoch. Das Urteil ist fragil."

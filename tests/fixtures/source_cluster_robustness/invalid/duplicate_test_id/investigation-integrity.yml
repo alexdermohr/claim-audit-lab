@@ -1,0 +1,18 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/duplicate_test_id"
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001", "s002"]
+    lead_institution: "Fixture commission"
+    report_role: "official_summary"
+    politically_sensitive: false
+    financially_sensitive: false
+    institutional_interest_risk: 0.5
+    hypothesis_space_declared:
+      - "Mechanism X caused outcome Y."
+    hypothesis_space_gaps:
+      - "No independent replication."
+    adversarial_review:
+      present: "partial"
+      notes: "Limited adversarial scope."
+    integrity_verdict: "methodologically_strong_but_incompletely_adversarial"

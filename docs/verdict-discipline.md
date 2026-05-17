@@ -107,16 +107,16 @@ For co-causation language such as “contributed,” “co-cause,” or “mitve
 
 Source weight is not source immunity. A verdict that is strong on paper can still be fragile: if removing one dominant source cluster collapses the verdict, the verdict depends on that cluster, not on independent evidence.
 
-The optional `source-cluster-robustness.yml` artifact lets a case state this dependency openly. Its purpose is to separate four ideas the audit must not blur:
+The `source-cluster-robustness.yml` artifact is **optional for low-stakes or draft cases** but **mandatory when `investigation-integrity.yml` declares `source_cluster_refs` and at least one `causal_claim` carries a `strongly_supported`, `established`, or `contradicted` status**. Its purpose is to separate four ideas the audit must not blur:
 
 - **interest risk**: a source has structural reasons to lean one way (already modeled via `source_weight` / `investigation-integrity.yml`);
 - **cluster dependency**: a verdict relies on a small set of related sources;
 - **compromise scenario**: a *stress assumption* that the cluster is institutionally entangled, applied as a what-if, not a finding;
 - **verdict fragility**: how much the verdict moves when the dominant cluster is removed in a knockout test.
 
-When a `causal_claim` reaches `strongly_supported`, `established`, or `contradicted` and `investigation-integrity.yml` flags one or more source clusters, the case must declare the dominant cluster(s) and at least one knockout test for them in `source-cluster-robustness.yml`. If any knockout test reports `fragility_score >= 0.7`, `assessment.md` must surface the cluster dependency / fragility in plain text.
+When a `causal_claim` reaches `strongly_supported`, `established`, or `contradicted` and `investigation-integrity.yml` flags one or more source clusters, the case must declare the dominant cluster(s) and at least one knockout test for them in `source-cluster-robustness.yml`. All sources flagged by `investigation-integrity.yml` for a strong causal claim must be fully covered by declared clusters; partial coverage is not enough. If any knockout test reports `fragility_score >= 0.7`, `assessment.md` must surface the cluster dependency / fragility in plain text.
 
-Compromise scenarios are stress hypotheses, not proofs. A compromise scenario may never be used as positive evidence for a counter-hypothesis. An official cluster does not automatically win because it is official; an anti-official cluster does not automatically win because it is adversarial. The validator does not decide which source is true; it enforces that strong verdicts make their cluster dependence visible.
+**A knockout test is a fragility measurement, not a proof of the counter-hypothesis.** It answers: "how much does the verdict depend on this cluster?" — not "is the cluster wrong?" or "is the alternative true?" Compromise scenarios are stress hypotheses, not proofs. A compromise scenario may never be used as positive evidence for a counter-hypothesis. An official cluster does not automatically win because it is official; an anti-official cluster does not automatically win because it is adversarial. The validator does not decide which source is true; it enforces that strong verdicts make their cluster dependence visible.
 
 ## Overclosure guard
 

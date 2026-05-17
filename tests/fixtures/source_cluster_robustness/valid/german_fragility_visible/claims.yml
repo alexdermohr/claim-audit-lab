@@ -1,0 +1,14 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    statement: "Mechanismus X verursachte Ergebnis Y."
+    status: "strongly_supported"
+    source_refs: ["s001", "s002"]
+    uncertainty:
+      score: 0.25
+      causes: ["Quellencluster-Abhängigkeit ist hoch"]
+    interpolation:
+      score: 0.1
+      assumptions: ["Quellen beschreiben dasselbe Ereignis"]

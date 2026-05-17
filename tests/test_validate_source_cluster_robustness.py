@@ -51,3 +51,36 @@ def test_invalid_compromise_upgraded_to_proof_fails():
 def test_main_accepts_valid_fixture_path(tmp_path, monkeypatch):
     target = FIXTURE_ROOT / "valid" / "source_cluster_robustness_declared"
     assert validate_source_cluster_robustness.main(str(target)) == 0
+
+
+# Fix 7 / Fix 8: New fixtures
+
+
+def test_invalid_partial_cluster_coverage_not_enough_fails():
+    """Fix 3: partial cluster coverage must be rejected; all flagged sources must be covered."""
+    errors = fixture_errors("invalid", "partial_cluster_coverage_not_enough")
+    assert any("partial coverage is not enough" in e for e in errors), errors
+
+
+def test_invalid_high_verdict_without_remaining_support_fails():
+    """Fix 5: if no supporting relation remains after knockout, a plausible/higher verdict is rejected."""
+    errors = fixture_errors("invalid", "high_verdict_without_remaining_support")
+    assert any("not supported by remaining evidence relations" in e for e in errors), errors
+
+
+def test_valid_german_fragility_visible_passes():
+    """Fix 2: German fragility terms (Quellencluster-Abhängigkeit etc.) satisfy assessment visibility."""
+    errors = fixture_errors("valid", "german_fragility_visible")
+    assert errors == [], errors
+
+
+def test_invalid_duplicate_cluster_id_fails():
+    """Fix 4: duplicate cluster_id must produce an error."""
+    errors = fixture_errors("invalid", "duplicate_cluster_id")
+    assert any("Duplicate cluster_id" in e for e in errors), errors
+
+
+def test_invalid_duplicate_test_id_fails():
+    """Fix 4: duplicate test_id must produce an error."""
+    errors = fixture_errors("invalid", "duplicate_test_id")
+    assert any("Duplicate test_id" in e for e in errors), errors

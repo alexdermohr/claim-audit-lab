@@ -1,0 +1,16 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/partial_cluster_coverage_not_enough"
+clusters:
+  - cluster_id: "partial_cluster"
+    source_refs: ["s001"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.55
+    notes: "Only s001 declared — s002 and s003 are missing from cluster coverage."
+knockout_tests:
+  - test_id: "remove_partial_cluster"
+    removed_cluster_refs: ["partial_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "weak"
+    verdict_delta: "strongly_supported_to_weak"
+    fragility_score: 0.6
+    notes: "Only partial coverage declared; s002 and s003 are not in any cluster."

@@ -1,0 +1,14 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    statement: "Mechanism X caused outcome Y via sources s001, s002, s003."
+    status: "strongly_supported"
+    source_refs: ["s001", "s002", "s003"]
+    uncertainty:
+      score: 0.2
+      causes: ["All three sources support the claim"]
+    interpolation:
+      score: 0.1
+      assumptions: ["Sources are independent"]
