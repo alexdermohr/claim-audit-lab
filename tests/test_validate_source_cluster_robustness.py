@@ -120,3 +120,18 @@ def test_invalid_unknown_evidence_ref_not_counted_as_remaining_support_fails():
     """Fix 4: relations referencing an evidence_ref not in evidence-pack.yml must not count as support."""
     errors = fixture_errors("invalid", "unknown_evidence_ref_not_counted_as_remaining_support")
     assert any("not supported by remaining evidence relations" in e for e in errors), errors
+
+
+def test_invalid_strong_knockout_verdict_missing_evidence_relations_fails():
+    errors = fixture_errors("invalid", "strong_knockout_verdict_missing_evidence_relations")
+    assert any("evidence-relations.yml is missing or empty" in e for e in errors), errors
+
+
+def test_invalid_strong_knockout_verdict_missing_evidence_pack_fails():
+    errors = fixture_errors("invalid", "strong_knockout_verdict_missing_evidence_pack")
+    assert any("evidence-pack.yml is missing or empty" in e for e in errors), errors
+
+
+def test_valid_weak_knockout_verdict_without_relations_passes():
+    errors = fixture_errors("valid", "weak_knockout_verdict_without_relations")
+    assert errors == [], errors
