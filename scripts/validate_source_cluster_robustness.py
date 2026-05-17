@@ -302,6 +302,8 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         for claim in claims_data.get("claims", []) or []:
             if isinstance(claim, dict):
                 cid = claim.get("claim_id")
+                # claim_kind is preferred; fall back to claim_type for schema variants
+                # that only declare claim_type (both fields are valid per schema history).
                 kind = claim.get("claim_kind", claim.get("claim_type"))
                 if isinstance(cid, str) and isinstance(kind, str):
                     claim_kind_by_id[cid] = kind
