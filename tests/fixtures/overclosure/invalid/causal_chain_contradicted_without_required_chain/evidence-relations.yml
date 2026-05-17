@@ -1,0 +1,11 @@
+schema_version: '1.0'
+case_ref: tests/fixtures/overclosure/invalid/causal_chain_contradicted_without_required_chain
+relations:
+- relation_id: r001
+  evidence_ref: e001
+  claim_ref: c001
+  relation_type: contradicts_directly
+  strength: 0.8
+  explanation: Evidence directly rules out timeline.
+  incompatible_proposition: 'Required chain link timeline is temporally impossible:
+    A occurred after B.'

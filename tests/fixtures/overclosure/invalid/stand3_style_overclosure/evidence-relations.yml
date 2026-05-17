@@ -1,0 +1,14 @@
+schema_version: '1.0'
+case_ref: tests/fixtures/overclosure/invalid/stand3_style_overclosure
+relations:
+- relation_id: r001
+  evidence_ref: e001
+  claim_ref: c001
+  relation_type: contradicts_directly
+  strength: 0.8
+  explanation: >
+    The collapse initiation is better explained by impact/fire; no collected evidence supports blast/explosion indicators,
+    and the thermitic-material item lacks bridge to operational charges.
+  incompatible_proposition: >
+    Controlled demolition is treated as incompatible because the expected indicators are alternatively accounted for,
+    no collected blast/explosion evidence is present, and the asserted material lacks a bridge to installed operational charges.

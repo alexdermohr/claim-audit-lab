@@ -1,0 +1,21 @@
+schema_version: '1.0'
+case_ref: tests/fixtures/overclosure/invalid/contradicted_with_unresolved_high_materiality_anomaly
+anomalies:
+- anomaly_id: a001
+  anomaly_type: method_gap
+  affected_claims:
+  - c001
+  affected_hypotheses: []
+  source_refs:
+  - s001
+  statement: High materiality method gap remains unresolved.
+  materiality: 0.9
+  anomaly_direction: contests_closure
+  why_it_matters: It leaves a residual path open.
+  possible_benign_explanations:
+  - Benign fixture.
+  possible_bias_explanations:
+  - Bias fixture.
+  missing_for_resolution:
+  - Residual path closure.
+  status: unresolved

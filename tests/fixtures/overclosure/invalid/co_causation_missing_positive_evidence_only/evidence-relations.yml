@@ -1,0 +1,10 @@
+schema_version: '1.0'
+case_ref: tests/fixtures/overclosure/invalid/co_causation_missing_positive_evidence_only
+relations:
+- relation_id: r001
+  evidence_ref: e001
+  claim_ref: c001
+  relation_type: contradicts_directly
+  strength: 0.8
+  explanation: No evidence found for A as a contributor.
+  incompatible_proposition: No evidence found in the evidence pack for A.

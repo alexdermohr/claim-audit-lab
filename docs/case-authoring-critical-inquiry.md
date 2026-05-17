@@ -23,7 +23,7 @@ An absence claim must not escalate to “exists nowhere.” It must include `for
 
 Use `contradictions.yml` when claims, counterclaims, or evidence create a visible conflict. A contradiction ledger is not a verdict engine: the conflict is documented, referenced, and given a `resolution_status`, but the claim verdict still depends on typed evidence relations and the stated burden.
 
-Strong alternative explanations are not direct falsifications. For co-causation claims, do not mark a claim `contradicted` merely because a better-supported primary cause exists; use `direct_incompatibility_basis` if direct falsification is intended.
+Strong alternative explanations are not direct falsifications. For co-causation claims, do not mark a claim `contradicted` merely because a better-supported primary cause exists; use `direct_incompatibility_basis` if direct falsification is intended, and tie that basis to the required causal-chain link that is directly ruled out. Direct contradiction requires direct incompatibility. A stronger alternative explanation, missing link, non-test, source-report non-corroboration, or bounded absence claim may weaken or cap confidence, but must not by itself produce `contradicted` for a co-causation/world-causal claim.
 
 ## `anomaly-ledger.yml`
 
@@ -49,3 +49,10 @@ High method depth and high interest risk can both be true. Do not convert source
 - **Suspicion to proof:** anomalies, interests, and gaps can create hypotheses or lower confidence; they do not prove manipulation without additional evidence.
 - **Source prestige to truth:** official, corporate, academic, NGO, and advocacy sources all need method and independence checks when they carry closure power.
 - **Non-test to cover-up:** a material untested path limits closure and must be visible, but it does not prove concealment by itself.
+
+
+## Overclosure authoring checklist
+
+Before assigning `status: contradicted` to a world-causal or co-causation claim, check that the case is not merely saying one of these weaker things: a better explanation exists, no positive evidence was found, an official source did not corroborate the claim, a causal bridge is missing, or a method/non-test gap remains. Those operations should normally cap or downgrade confidence rather than close the claim negatively.
+
+For `burden_profile: causal_chain`, keep `required_chain` populated whenever the claim uses a strong or negative verdict. If unresolved high-materiality anomalies or source-overlapping non-tested paths still affect the claim, leave the claim below negative closure unless the residual path has been explicitly closed; first-class `affected_claims` and residual-closure fields for non-tested paths are future schema extensions.

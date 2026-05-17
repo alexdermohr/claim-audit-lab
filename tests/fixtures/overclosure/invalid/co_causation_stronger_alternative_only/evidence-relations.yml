@@ -1,0 +1,10 @@
+schema_version: '1.0'
+case_ref: tests/fixtures/overclosure/invalid/co_causation_stronger_alternative_only
+relations:
+- relation_id: r001
+  evidence_ref: e001
+  claim_ref: c001
+  relation_type: contradicts_directly
+  strength: 0.8
+  explanation: The evidence gives a stronger alternative explanation only.
+  incompatible_proposition: A is not necessary because fire is a better explanation.

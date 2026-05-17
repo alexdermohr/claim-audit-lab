@@ -1,0 +1,41 @@
+schema_version: '1.0'
+claims:
+- schema_version: '1.0'
+  claim_id: c001
+  claim_type: causal_claim
+  claim_kind: causal_claim
+  statement: A contributed to B alongside other causes.
+  status: contradicted
+  evidence_refs:
+  - e001
+  source_refs:
+  - s001
+  requires:
+  - mechanism
+  - causal_bridge
+  counterclaims:
+  - A stronger alternative explanation accounts for B.
+  - The current evidence pack does not provide positive proof of A.
+  forbidden_upgrades:
+  - correlation_to_causation
+  uncertainty:
+    score: 0.4
+    causes:
+    - fixture uncertainty
+  interpolation:
+    score: 0.2
+    assumptions:
+    - fixture assumption
+  burden_profile: causal_chain
+  required_chain:
+  - id: mechanism
+    requirement: A mechanism connects A to B.
+    status: satisfied
+  - id: causal_bridge
+    requirement: A causal bridge connects A to B.
+    status: satisfied
+  direct_incompatibility_basis: >
+    The evidence does not rule out A, but no corroborating evidence was found and the causal bridge is missing.
+    Die Evidenz schließt A nicht aus, aber es gibt keine korroborierenden Belege und die Kausalbrücke fehlt.
+    Die Evidenz schliesst A nicht aus, aber es gibt keine korroborierenden Belege und die Kausalbruecke fehlt.
+    Die Quellen koennen A nicht ausschliessen, aber es gibt keine gesammelte Evidenz fuer die Kausalbruecke.

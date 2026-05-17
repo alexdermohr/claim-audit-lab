@@ -1,0 +1,19 @@
+schema_version: '1.0'
+claims:
+- schema_version: '1.0'
+  claim_id: c001
+  claim_type: meta_claim
+  claim_kind: reported_claim
+  statement: Source S reported proposition P.
+  status: established
+  evidence_refs:
+  - e001
+  source_refs:
+  - s001
+  uncertainty:
+    score: 0.1
+    causes: []
+  interpolation:
+    score: 0.0
+    assumptions: []
+  burden_profile: source_report

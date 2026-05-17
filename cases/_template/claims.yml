@@ -2,8 +2,10 @@ schema_version: '1.0'
 claims:
 - claim_id: c001
   claim_type: factual_event_claim
+  claim_kind: factual_event_claim
   statement: ''
   status: unresolved
+  # For co-causation/world-causal status=contradicted only: add direct_incompatibility_basis and tie it to a required_chain link that is directly ruled out.
   evidence_refs: []
   source_refs: []
   requires:
