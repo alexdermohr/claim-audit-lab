@@ -84,3 +84,39 @@ def test_invalid_duplicate_test_id_fails():
     """Fix 4: duplicate test_id must produce an error."""
     errors = fixture_errors("invalid", "duplicate_test_id")
     assert any("Duplicate test_id" in e for e in errors), errors
+
+
+# Fixes for PR review: relational knockout hardening
+
+
+def test_invalid_negative_verdict_without_remaining_contradiction_fails():
+    """Fix 1: contradicted verdict_without_cluster must be backed by remaining contradicts_directly relations."""
+    errors = fixture_errors("invalid", "negative_verdict_without_remaining_contradiction")
+    assert any(
+        "verdict_without_cluster 'contradicted'" in e and "direct contradiction relations" in e
+        for e in errors
+    ), errors
+
+
+def test_valid_negative_verdict_with_remaining_direct_contradiction_passes():
+    """Fix 1: contradicted verdict_without_cluster passes when a contradicts_directly relation survives."""
+    errors = fixture_errors("valid", "negative_verdict_with_remaining_direct_contradiction")
+    assert errors == [], errors
+
+
+def test_invalid_multiple_dominant_clusters_only_one_tested_fails():
+    """Fix 2: all dominant clusters must be individually tested, not just one of several."""
+    errors = fixture_errors("invalid", "multiple_dominant_clusters_only_one_tested")
+    assert any("dominant cluster" in e and "not covered" in e for e in errors), errors
+
+
+def test_valid_reported_claim_reports_survive_knockout_passes():
+    """Fix 3: reports relation type counts as remaining support for reported_claim."""
+    errors = fixture_errors("valid", "reported_claim_reports_survive_knockout")
+    assert errors == [], errors
+
+
+def test_invalid_unknown_evidence_ref_not_counted_as_remaining_support_fails():
+    """Fix 4: relations referencing an evidence_ref not in evidence-pack.yml must not count as support."""
+    errors = fixture_errors("invalid", "unknown_evidence_ref_not_counted_as_remaining_support")
+    assert any("not supported by remaining evidence relations" in e for e in errors), errors

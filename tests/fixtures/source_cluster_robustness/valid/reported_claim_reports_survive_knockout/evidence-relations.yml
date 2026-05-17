@@ -1,0 +1,12 @@
+schema_version: "1.0"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "supports_directly"
+    notes: "Official source directly supports the reported claim."
+  - relation_id: "r002"
+    evidence_ref: "e002"
+    claim_ref: "c001"
+    relation_type: "reports"
+    notes: "Independent source reports the same claim attribution."

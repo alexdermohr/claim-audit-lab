@@ -237,6 +237,7 @@ def _load_evidence_relations(case_dir: pathlib.Path) -> list[dict]:
 
 
 SUPPORTING_RELATION_TYPES = {"supports_directly", "supports_indirectly"}
+NEGATIVE_RELATION_TYPES = {"contradicts_directly"}
 
 
 def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
@@ -294,8 +295,16 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     if isinstance(sources_data, dict):
         source_ids = _collect_ids(sources_data.get("sources"), "source_id")
     claim_ids: set[str] = set()
+    # Fix 3: Build claim kind map to distinguish reported_claim from causal_claim.
+    claim_kind_by_id: dict[str, str] = {}
     if isinstance(claims_data, dict):
         claim_ids = _collect_ids(claims_data.get("claims"), "claim_id")
+        for claim in claims_data.get("claims", []) or []:
+            if isinstance(claim, dict):
+                cid = claim.get("claim_id")
+                kind = claim.get("claim_kind", claim.get("claim_type"))
+                if isinstance(cid, str) and isinstance(kind, str):
+                    claim_kind_by_id[cid] = kind
 
     clusters = robustness_data.get("clusters", [])
     if not isinstance(clusters, list):
@@ -500,6 +509,28 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                     f"causal_claim '{claim_id}' has status='{claim.get('status')}' but no knockout_test "
                     f"removes a dominant cluster ({', '.join(sorted(dominant_clusters))}) affecting it."
                 )
+            else:
+                # Fix 2: All dominant clusters must be covered — either all removed together in one test,
+                # or each dominant cluster is removed in at least one test that affects this claim.
+                fully_covered_at_once = any(
+                    dominant_clusters <= set(t.get("removed_cluster_refs", []) or [])
+                    for t in covering_tests
+                    if isinstance(t, dict)
+                )
+                if not fully_covered_at_once:
+                    tested_dominant: set[str] = set()
+                    for t in covering_tests:
+                        if isinstance(t, dict):
+                            removed_set = set(t.get("removed_cluster_refs", []) or [])
+                            tested_dominant.update(removed_set & dominant_clusters)
+                    uncovered_dominant = dominant_clusters - tested_dominant
+                    if uncovered_dominant:
+                        errors.append(
+                            f"causal_claim '{claim_id}' has status='{claim.get('status')}': "
+                            f"dominant cluster(s) {sorted(uncovered_dominant)} are not covered by any "
+                            "knockout_test affecting this claim; all dominant clusters must be individually "
+                            "tested or all tested together in one knockout."
+                        )
 
     # Rule 4: high fragility visibility.
     high_fragility_present = False
@@ -543,9 +574,6 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             verdict_without = test.get("verdict_without_cluster")
             if not isinstance(verdict_without, str):
                 continue
-            # Only check when verdict_without_cluster signals surviving strength.
-            if verdict_without not in {"established", "strongly_supported", "plausible"}:
-                continue
 
             removed_cluster_ref_list = test.get("removed_cluster_refs", []) or []
             if not isinstance(removed_cluster_ref_list, list):
@@ -569,11 +597,43 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             for claim_id in affected:
                 if not isinstance(claim_id, str):
                     continue
+
+                # Fix 1: Check negative verdict_without_cluster requires remaining contradicts_directly.
+                if verdict_without == "contradicted":
+                    remaining_contradiction = [
+                        r for r in relations
+                        if r.get("claim_ref") == claim_id
+                        and r.get("relation_type") in NEGATIVE_RELATION_TYPES
+                        # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml
+                        and r.get("evidence_ref") in evidence_map
+                        and r.get("evidence_ref") not in removed_evidences
+                    ]
+                    if not remaining_contradiction:
+                        errors.append(
+                            f"verdict_without_cluster 'contradicted' not supported by remaining "
+                            f"direct contradiction relations for claim '{claim_id}' after removing "
+                            f"cluster(s) {sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
+                        )
+                    continue
+
+                # Only check surviving positive verdicts.
+                if verdict_without not in {"established", "strongly_supported", "plausible"}:
+                    continue
+
+                # Fix 3: For reported_claim, `reports` relation type also counts as remaining support.
+                claim_kind = claim_kind_by_id.get(claim_id)
+                if claim_kind == "reported_claim":
+                    effective_support_types = SUPPORTING_RELATION_TYPES | {"reports"}
+                else:
+                    effective_support_types = SUPPORTING_RELATION_TYPES
+
                 # Find remaining supporting relations for this claim.
+                # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml.
                 remaining_support = [
                     r for r in relations
                     if r.get("claim_ref") == claim_id
-                    and r.get("relation_type") in SUPPORTING_RELATION_TYPES
+                    and r.get("relation_type") in effective_support_types
+                    and r.get("evidence_ref") in evidence_map
                     and r.get("evidence_ref") not in removed_evidences
                 ]
                 if not remaining_support:
