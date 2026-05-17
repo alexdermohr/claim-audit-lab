@@ -103,6 +103,21 @@ High-materiality anomalies that affect a claim must be visible in `assessment.md
 For co-causation language such as “contributed,” “co-cause,” or “mitverursachte,” a stronger alternative explanation is not enough to mark the claim `contradicted`. Direct incompatibility must be documented explicitly with `direct_incompatibility_basis`; prose in `notes` is not sufficient.
 
 
+## Source-cluster robustness
+
+Source weight is not source immunity. A verdict that is strong on paper can still be fragile: if removing one dominant source cluster collapses the verdict, the verdict depends on that cluster, not on independent evidence.
+
+The optional `source-cluster-robustness.yml` artifact lets a case state this dependency openly. Its purpose is to separate four ideas the audit must not blur:
+
+- **interest risk**: a source has structural reasons to lean one way (already modeled via `source_weight` / `investigation-integrity.yml`);
+- **cluster dependency**: a verdict relies on a small set of related sources;
+- **compromise scenario**: a *stress assumption* that the cluster is institutionally entangled, applied as a what-if, not a finding;
+- **verdict fragility**: how much the verdict moves when the dominant cluster is removed in a knockout test.
+
+When a `causal_claim` reaches `strongly_supported`, `established`, or `contradicted` and `investigation-integrity.yml` flags one or more source clusters, the case must declare the dominant cluster(s) and at least one knockout test for them in `source-cluster-robustness.yml`. If any knockout test reports `fragility_score >= 0.7`, `assessment.md` must surface the cluster dependency / fragility in plain text.
+
+Compromise scenarios are stress hypotheses, not proofs. A compromise scenario may never be used as positive evidence for a counter-hypothesis. An official cluster does not automatically win because it is official; an anti-official cluster does not automatically win because it is adversarial. The validator does not decide which source is true; it enforces that strong verdicts make their cluster dependence visible.
+
 ## Overclosure guard
 
 The overclosure validator blocks direct-negative verdicts that are really weaker operations under another label. `contradicts_directly` must not be used when the explanation or `incompatible_proposition` only says that a stronger alternative explanation exists, positive evidence was not found, a causal bridge is missing, an official source did not corroborate the proposition, or a method/non-test gap remains.
