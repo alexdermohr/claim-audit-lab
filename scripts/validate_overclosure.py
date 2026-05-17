@@ -364,7 +364,7 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
 
         if not contains_sufficient_direct_exclusion(claim_only_basis_text) and not contains_sufficient_direct_exclusion(direct_relation_basis_text):
             errors.append(
-                f"world-causal claim '{claim_id}' status='contradicted' requires a non-negated direct exclusion in direct_incompatibility_basis or a contradicts_directly relation."
+                f"world-causal claim '{claim_id}' status='contradicted' requires a non-negated direct exclusion in direct_incompatibility_basis or in a contradicts_directly relation basis."
             )
 
         if has_co_causation_language(claim) and not has_chain_link_exclusion(claim, direct_relations):
@@ -385,7 +385,12 @@ def claim_overlaps_investigation(claim: dict, investigation: dict, evidence_by_i
         return True
     for evidence_ref in claim.get("evidence_refs") or []:
         evidence = evidence_by_id.get(evidence_ref)
-        if isinstance(evidence, dict) and evidence.get("source_ref") in cluster_refs:
+        if not isinstance(evidence, dict):
+            continue
+        if evidence.get("source_ref") in cluster_refs:
+            return True
+        evidence_source_refs = {ref for ref in evidence.get("source_refs") or [] if isinstance(ref, str)}
+        if evidence_source_refs & cluster_refs:
             return True
     return False
 
