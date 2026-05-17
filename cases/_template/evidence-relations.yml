@@ -6,4 +6,4 @@ relations:
     claim_ref: "c001"
     relation_type: "reports"
     strength: 0.5
-    explanation: "Describe exactly how this evidence relates to this claim without upgrading source content into proof."
+    explanation: "Describe exactly how this evidence relates to this claim without upgrading source content into proof. Use contradicts_directly only for direct incompatibility, not stronger alternatives, missing links, non-tests, or non-corroboration."

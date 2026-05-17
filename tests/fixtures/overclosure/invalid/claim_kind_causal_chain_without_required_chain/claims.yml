@@ -1,0 +1,28 @@
+schema_version: '1.0'
+claims:
+- schema_version: '1.0'
+  claim_id: c001
+  claim_type: meta_claim
+  claim_kind: causal_claim
+  statement: A causal mechanism claim framed under a non-causal claim_type.
+  status: strongly_supported
+  evidence_refs:
+  - e001
+  source_refs:
+  - s001
+  requires:
+  - mechanism
+  counterclaims:
+  - Alternative one.
+  - Alternative two.
+  forbidden_upgrades:
+  - correlation_to_causation
+  uncertainty:
+    score: 0.2
+    causes:
+    - fixture uncertainty
+  interpolation:
+    score: 0.1
+    assumptions:
+    - fixture assumption
+  burden_profile: causal_chain

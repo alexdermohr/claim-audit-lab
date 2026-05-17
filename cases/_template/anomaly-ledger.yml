@@ -17,4 +17,4 @@ anomalies:
     missing_for_resolution:
       - "What evidence or method would resolve this anomaly?"
     status: "unresolved"
-    notes: "Anomaly does not prove manipulation, concealment, or fraud by itself."
+    notes: "Anomaly does not prove manipulation, concealment, or fraud by itself. High-materiality unresolved anomalies affecting a contradicted world-causal claim require explicit residual-path closure before negative closure."
