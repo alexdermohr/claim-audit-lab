@@ -1,0 +1,16 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/strong_knockout_verdict_missing_evidence_pack"
+clusters:
+  - cluster_id: "official_cluster"
+    source_refs: ["s001", "s002"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.75
+    notes: "Both s001 and s002 are part of the same official investigation cluster."
+knockout_tests:
+  - test_id: "remove_official_cluster"
+    removed_cluster_refs: ["official_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "plausible"
+    verdict_delta: "strongly_supported_to_plausible"
+    fragility_score: 0.8
+    notes: "cluster dependency is high, verdict is fragile if official cluster removed"

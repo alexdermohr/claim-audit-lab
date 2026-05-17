@@ -1,0 +1,12 @@
+schema_version: "1.0"
+sources:
+  - schema_version: "1.0"
+    source_id: "s001"
+    label: "Official investigative report"
+    url_or_ref: "https://example.org/report1"
+    source_type: "official_body"
+  - schema_version: "1.0"
+    source_id: "s002"
+    label: "Secondary analysis"
+    url_or_ref: "https://example.org/report2"
+    source_type: "secondary_analysis"

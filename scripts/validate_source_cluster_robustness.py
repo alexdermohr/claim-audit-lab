@@ -238,6 +238,12 @@ def _load_evidence_relations(case_dir: pathlib.Path) -> list[dict]:
 
 SUPPORTING_RELATION_TYPES = {"supports_directly", "supports_indirectly"}
 NEGATIVE_RELATION_TYPES = {"contradicts_directly"}
+STRONG_KNOCKOUT_REST_VERDICTS = {
+    "established",
+    "strongly_supported",
+    "plausible",
+    "contradicted",
+}
 
 
 def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
@@ -565,85 +571,99 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             )
 
     # Fix 5: Minimal relational knockout check.
-    # Only run when both evidence-pack.yml and evidence-relations.yml are present.
     evidence_map = _load_evidence_pack(case_dir)
     relations = _load_evidence_relations(case_dir)
-    if evidence_map and relations:
-        for test in knockout_tests:
-            if not isinstance(test, dict):
+    for test in knockout_tests:
+        if not isinstance(test, dict):
+            continue
+        test_id = test.get("test_id", "?")
+        verdict_without = test.get("verdict_without_cluster")
+        if not isinstance(verdict_without, str):
+            continue
+
+        requires_relational_check = verdict_without in STRONG_KNOCKOUT_REST_VERDICTS
+        if requires_relational_check and not evidence_map:
+            errors.append(
+                f"knockout_test '{test_id}' sets verdict_without_cluster '{verdict_without}' "
+                "but evidence-pack.yml is missing or empty; cannot validate remaining evidence "
+                "after cluster knockout."
+            )
+        if requires_relational_check and not relations:
+            errors.append(
+                f"knockout_test '{test_id}' sets verdict_without_cluster '{verdict_without}' "
+                "but evidence-relations.yml is missing or empty; cannot validate remaining evidence "
+                "after cluster knockout."
+            )
+        if requires_relational_check and (not evidence_map or not relations):
+            continue
+
+        removed_cluster_ref_list = test.get("removed_cluster_refs", []) or []
+        if not isinstance(removed_cluster_ref_list, list):
+            continue
+
+        # Determine removed sources: all source_refs in removed clusters.
+        removed_sources: set[str] = set()
+        for cref in removed_cluster_ref_list:
+            if isinstance(cref, str):
+                removed_sources.update(cluster_source_refs.get(cref, set()))
+
+        # Determine removed evidences: all evidence_ids whose source_ref is in removed_sources.
+        removed_evidences: set[str] = {
+            eid for eid, sref in evidence_map.items() if sref in removed_sources
+        }
+
+        affected = test.get("affected_claims", []) or []
+        if not isinstance(affected, list):
+            continue
+
+        for claim_id in affected:
+            if not isinstance(claim_id, str):
                 continue
-            test_id = test.get("test_id", "?")
-            verdict_without = test.get("verdict_without_cluster")
-            if not isinstance(verdict_without, str):
-                continue
 
-            removed_cluster_ref_list = test.get("removed_cluster_refs", []) or []
-            if not isinstance(removed_cluster_ref_list, list):
-                continue
-
-            # Determine removed sources: all source_refs in removed clusters.
-            removed_sources: set[str] = set()
-            for cref in removed_cluster_ref_list:
-                if isinstance(cref, str):
-                    removed_sources.update(cluster_source_refs.get(cref, set()))
-
-            # Determine removed evidences: all evidence_ids whose source_ref is in removed_sources.
-            removed_evidences: set[str] = {
-                eid for eid, sref in evidence_map.items() if sref in removed_sources
-            }
-
-            affected = test.get("affected_claims", []) or []
-            if not isinstance(affected, list):
-                continue
-
-            for claim_id in affected:
-                if not isinstance(claim_id, str):
-                    continue
-
-                # Fix 1: Check negative verdict_without_cluster requires remaining contradicts_directly.
-                if verdict_without == "contradicted":
-                    remaining_contradiction = [
-                        r for r in relations
-                        if r.get("claim_ref") == claim_id
-                        and r.get("relation_type") in NEGATIVE_RELATION_TYPES
-                        # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml
-                        and r.get("evidence_ref") in evidence_map
-                        and r.get("evidence_ref") not in removed_evidences
-                    ]
-                    if not remaining_contradiction:
-                        errors.append(
-                            f"verdict_without_cluster 'contradicted' not supported by remaining "
-                            f"direct contradiction relations for claim '{claim_id}' after removing "
-                            f"cluster(s) {sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
-                        )
-                    continue
-
-                # Only check surviving positive verdicts.
-                if verdict_without not in {"established", "strongly_supported", "plausible"}:
-                    continue
-
-                # Fix 3: For reported_claim, `reports` relation type also counts as remaining support.
-                claim_kind = claim_kind_by_id.get(claim_id)
-                if claim_kind == "reported_claim":
-                    effective_support_types = SUPPORTING_RELATION_TYPES | {"reports"}
-                else:
-                    effective_support_types = SUPPORTING_RELATION_TYPES
-
-                # Find remaining supporting relations for this claim.
-                # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml.
-                remaining_support = [
+            # Fix 1: Check negative verdict_without_cluster requires remaining contradicts_directly.
+            if verdict_without == "contradicted":
+                remaining_contradiction = [
                     r for r in relations
                     if r.get("claim_ref") == claim_id
-                    and r.get("relation_type") in effective_support_types
+                    and r.get("relation_type") in NEGATIVE_RELATION_TYPES
+                    # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml
                     and r.get("evidence_ref") in evidence_map
                     and r.get("evidence_ref") not in removed_evidences
                 ]
-                if not remaining_support:
+                if not remaining_contradiction:
                     errors.append(
-                        f"verdict_without_cluster '{verdict_without}' not supported by remaining "
-                        f"evidence relations for claim '{claim_id}' after removing cluster(s) "
-                        f"{sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
+                        f"verdict_without_cluster 'contradicted' not supported by remaining "
+                        f"direct contradiction relations for claim '{claim_id}' after removing "
+                        f"cluster(s) {sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
                     )
+                continue
+
+            # Only check surviving positive verdicts.
+            if verdict_without not in {"established", "strongly_supported", "plausible"}:
+                continue
+
+            # Fix 3: For reported_claim, `reports` relation type also counts as remaining support.
+            claim_kind = claim_kind_by_id.get(claim_id)
+            if claim_kind == "reported_claim":
+                effective_support_types = SUPPORTING_RELATION_TYPES | {"reports"}
+            else:
+                effective_support_types = SUPPORTING_RELATION_TYPES
+
+            # Find remaining supporting relations for this claim.
+            # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml.
+            remaining_support = [
+                r for r in relations
+                if r.get("claim_ref") == claim_id
+                and r.get("relation_type") in effective_support_types
+                and r.get("evidence_ref") in evidence_map
+                and r.get("evidence_ref") not in removed_evidences
+            ]
+            if not remaining_support:
+                errors.append(
+                    f"verdict_without_cluster '{verdict_without}' not supported by remaining "
+                    f"evidence relations for claim '{claim_id}' after removing cluster(s) "
+                    f"{sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
+                )
 
     return errors
 

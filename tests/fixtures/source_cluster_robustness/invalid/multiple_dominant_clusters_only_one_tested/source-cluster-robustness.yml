@@ -7,7 +7,7 @@ clusters:
     independence_risk: 0.6
   - cluster_id: "cluster_b"
     source_refs: ["s003", "s004"]
-    cluster_role: "corroborating_cluster"
+    cluster_role: "official_summary"
     independence_risk: 0.5
 knockout_tests:
   - test_id: "remove_cluster_a_only"
