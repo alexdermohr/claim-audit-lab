@@ -1,0 +1,14 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    statement: "Mechanism X caused outcome Y (backed only by independent source)."
+    status: "strongly_supported"
+    source_refs: ["s001"]
+    uncertainty:
+      score: 0.3
+      causes: ["Single independent source"]
+    interpolation:
+      score: 0.1
+      assumptions: ["s001 is independent of the flagged cluster"]

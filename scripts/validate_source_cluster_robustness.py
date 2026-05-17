@@ -16,7 +16,7 @@ import sys
 from jsonschema_compat import jsonschema
 import yaml
 
-from case_compat import legacy_case_error
+from case_compat import is_legacy_case, legacy_case_error
 
 SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "source-cluster-robustness.v1.schema.json"
 
@@ -179,61 +179,101 @@ def _text_has_term(text: str, terms) -> bool:
     return any(term.lower() in lower for term in terms)
 
 
+def _term_pattern(term: str) -> str:
+    """Return a regex pattern that matches term as a whole word or phrase (not as a substring)."""
+    escaped = re.escape(term)
+    if " " in term:
+        # Multi-word phrase: anchor at non-word-character boundaries on both sides.
+        return r"(?<!\w)" + escaped + r"(?!\w)"
+    return r"\b" + escaped + r"\b"
+
+
 def _overreach_in_text(text: str) -> bool:
     """Return True if a compromise term and a proof term co-occur within a short
-    window in the same text. Conservative: only flags when both appear nearby."""
+    window in the same text. Conservative: only flags when both appear nearby.
+    Uses word/phrase boundary matching to avoid false positives on substrings
+    (e.g., 'improves' will not match 'proves', 'uncompromised' will not match 'compromised')."""
     if not text:
         return False
     lower = text.lower()
+    # Build compiled patterns for all compromise and proof terms.
+    compiled_compromise = [
+        re.compile(_term_pattern(t), re.IGNORECASE | re.UNICODE)
+        for t in OVERREACH_COMPROMISE_TERMS
+    ]
+    compiled_proof = [
+        re.compile(_term_pattern(t), re.IGNORECASE | re.UNICODE)
+        for t in OVERREACH_PROOF_TERMS
+    ]
     # Find every compromise term occurrence and check a +/- 120 char window for a proof term.
-    for c_term in OVERREACH_COMPROMISE_TERMS:
-        start = 0
-        while True:
-            idx = lower.find(c_term, start)
-            if idx < 0:
-                break
+    for c_pat in compiled_compromise:
+        for m in c_pat.finditer(lower):
+            idx = m.start()
             window_start = max(0, idx - 120)
-            window_end = min(len(lower), idx + len(c_term) + 120)
+            window_end = min(len(lower), idx + len(m.group()) + 120)
             window = lower[window_start:window_end]
-            if any(p in window for p in OVERREACH_PROOF_TERMS):
+            if any(p_pat.search(window) for p_pat in compiled_proof):
                 return True
-            start = idx + len(c_term)
     return False
 
 
-def _load_evidence_pack(case_dir: pathlib.Path) -> dict[str, str]:
-    """Return mapping evidence_id -> source_ref from evidence-pack.yml, or empty dict."""
+def _load_evidence_pack(
+    case_dir: pathlib.Path,
+) -> tuple[dict[str, str], dict[str, set[str]], list[str]]:
+    """Return (evidence_id_to_source_ref, claim_id_to_evidence_source_refs, errors).
+
+    evidence_id_to_source_ref maps each evidence_id to its source_ref.
+    claim_id_to_evidence_source_refs maps each claim_id to the set of source_refs
+    backing it via evidence items whose claim_refs include that claim.
+    Parse and type errors are returned in the errors list.
+    """
     path = case_dir / "evidence-pack.yml"
     if not path.exists():
-        return {}
+        return {}, {}, []
     data, err = safe_load_yaml(path)
-    if err or not isinstance(data, dict):
-        return {}
+    if err:
+        return {}, {}, [f"Could not parse evidence-pack.yml: {err}"]
+    if not isinstance(data, dict):
+        return {}, {}, ["evidence-pack.yml must contain a YAML object."]
     evidence = data.get("evidence", [])
     if not isinstance(evidence, list):
-        return {}
-    result: dict[str, str] = {}
+        return {}, {}, []
+    evidence_id_to_source_ref: dict[str, str] = {}
+    claim_id_to_evidence_source_refs: dict[str, set[str]] = {}
     for item in evidence:
-        if isinstance(item, dict):
-            eid = item.get("evidence_id")
-            sref = item.get("source_ref")
-            if isinstance(eid, str) and isinstance(sref, str):
-                result[eid] = sref
-    return result
+        if not isinstance(item, dict):
+            continue
+        eid = item.get("evidence_id")
+        sref = item.get("source_ref")
+        if not (isinstance(eid, str) and isinstance(sref, str)):
+            continue
+        evidence_id_to_source_ref[eid] = sref
+        claim_refs = item.get("claim_refs", [])
+        if isinstance(claim_refs, list):
+            for cref in claim_refs:
+                if isinstance(cref, str):
+                    claim_id_to_evidence_source_refs.setdefault(cref, set()).add(sref)
+    return evidence_id_to_source_ref, claim_id_to_evidence_source_refs, []
 
 
-def _load_evidence_relations(case_dir: pathlib.Path) -> list[dict]:
-    """Return list of evidence-relation dicts from evidence-relations.yml, or empty list."""
+def _load_evidence_relations(case_dir: pathlib.Path) -> tuple[list[dict], list[str]]:
+    """Return (relations, errors) from evidence-relations.yml.
+
+    Parse and type errors are returned in the errors list.
+    Returns an empty list and no errors when the file is absent.
+    """
     path = case_dir / "evidence-relations.yml"
     if not path.exists():
-        return []
+        return [], []
     data, err = safe_load_yaml(path)
-    if err or not isinstance(data, dict):
-        return []
+    if err:
+        return [], [f"Could not parse evidence-relations.yml: {err}"]
+    if not isinstance(data, dict):
+        return [], ["evidence-relations.yml must contain a YAML object."]
     relations = data.get("relations", [])
     if not isinstance(relations, list):
-        return []
-    return [r for r in relations if isinstance(r, dict)]
+        return [], []
+    return [r for r in relations if isinstance(r, dict)], []
 
 
 SUPPORTING_RELATION_TYPES = {"supports_directly", "supports_indirectly"}
@@ -246,13 +286,47 @@ STRONG_KNOCKOUT_REST_VERDICTS = {
 }
 
 
+def _resolve_claim_source_refs(
+    claim: dict,
+    evidence_id_to_source_ref: dict[str, str],
+    claim_id_to_evidence_source_refs: dict[str, set[str]],
+) -> set[str]:
+    """Return the full set of source_refs attributable to a claim.
+
+    Combines:
+    1. Explicit claim.source_refs.
+    2. claim.evidence_refs resolved through evidence_id_to_source_ref.
+    3. Reverse lookup: all source_refs from evidence-pack items whose claim_refs include this claim.
+    Unknown evidence_refs are silently ignored (not counted as coverage).
+    """
+    claim_id = claim.get("claim_id", "")
+    result: set[str] = set()
+    # 1. Explicit source_refs.
+    srcs = claim.get("source_refs", [])
+    if isinstance(srcs, list):
+        result.update(s for s in srcs if isinstance(s, str))
+    # 2. claim.evidence_refs resolved via evidence_id_to_source_ref.
+    eids = claim.get("evidence_refs", [])
+    if isinstance(eids, list):
+        for eid in eids:
+            if isinstance(eid, str) and eid in evidence_id_to_source_ref:
+                result.add(evidence_id_to_source_ref[eid])
+    # 3. Reverse lookup: evidence-pack items whose claim_refs include this claim.
+    if isinstance(claim_id, str):
+        result.update(claim_id_to_evidence_source_refs.get(claim_id, set()))
+    return result
+
+
 def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     errors: list[str] = []
 
-    # Fix 1: Legacy compatibility — skip new errors for legacy-marked cases.
+    # Legacy compatibility — malformed legacy case returns its error;
+    # a valid legacy case is fully exempted from this validator's enforcement.
     legacy_error = legacy_case_error(case_dir)
     if legacy_error:
         return [legacy_error]
+    if is_legacy_case(case_dir):
+        return []
 
     sources_data, load_errors = load_optional_object(case_dir / "sources.yml", "sources.yml")
     errors.extend(load_errors)
@@ -278,20 +352,35 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     causal_strong_claims = _causal_strong_claims(claims_data)
     integrity_cluster_sources = _investigation_cluster_sources(integrity_data)
 
-    # Rule 2: Required artifact when integrity flags clusters AND strong/negative causal verdict exists.
+    # Load evidence pack early; needed for claim-source derivation in Rule 2 and Rule 3.
+    evidence_id_to_source_ref, claim_id_to_evidence_source_refs, evidence_pack_errors = (
+        _load_evidence_pack(case_dir)
+    )
+    errors.extend(evidence_pack_errors)
+
+    # Rule 2: Required artifact when integrity flags clusters AND strong/negative causal verdict
+    # exists for claims whose resolved sources overlap the investigation-flagged cluster sources.
+    # "Resolved sources" = explicit claim.source_refs ∪ claim.evidence_refs resolved via
+    # evidence-pack ∪ evidence-pack claim_refs reversed to source_refs.
+    # Conservative fallback: if a claim has no resolvable sources, it is treated as potentially
+    # depending on flagged cluster sources.
     integrity_path = case_dir / "investigation-integrity.yml"
-    if (
-        causal_strong_claims
-        and integrity_path.exists()
-        and integrity_cluster_sources
-        and not robustness_path.exists()
-    ):
-        claim_list = ", ".join(sorted(claim.get("claim_id", "?") for claim in causal_strong_claims))
-        errors.append(
-            f"{ROBUSTNESS_FILENAME} required: causal_claim(s) {claim_list} carry a "
-            "strongly_supported/established/contradicted status while investigation-integrity.yml "
-            "declares source_cluster_refs; declare cluster dependency and knockout tests."
-        )
+    if causal_strong_claims and integrity_path.exists() and integrity_cluster_sources:
+        claims_requiring_robustness = []
+        for claim in causal_strong_claims:
+            cid = claim.get("claim_id", "?")
+            resolved = _resolve_claim_source_refs(
+                claim, evidence_id_to_source_ref, claim_id_to_evidence_source_refs
+            )
+            if not resolved or resolved & integrity_cluster_sources:
+                claims_requiring_robustness.append(cid)
+        if claims_requiring_robustness and not robustness_path.exists():
+            claim_list = ", ".join(sorted(claims_requiring_robustness))
+            errors.append(
+                f"{ROBUSTNESS_FILENAME} required: causal_claim(s) {claim_list} carry a "
+                "strongly_supported/established/contradicted status while investigation-integrity.yml "
+                "declares source_cluster_refs; declare cluster dependency and knockout tests."
+            )
 
     if robustness_data is None:
         return errors
@@ -465,36 +554,38 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             claim_id = claim.get("claim_id")
             if not isinstance(claim_id, str):
                 continue
-            # Sources backing this claim
-            claim_source_refs: set[str] = set()
-            srcs = claim.get("source_refs", [])
-            if isinstance(srcs, list):
-                claim_source_refs.update(s for s in srcs if isinstance(s, str))
+            # Resolved sources for this claim: explicit source_refs ∪ evidence_refs ∪ reverse
+            # evidence-pack claim_refs. Unknown evidence_refs are silently excluded.
+            claim_resolved_sources = _resolve_claim_source_refs(
+                claim, evidence_id_to_source_ref, claim_id_to_evidence_source_refs
+            )
 
-            # Flagged sources: intersection of claim's source_refs with investigation cluster sources.
-            # If claim has no source_refs field, fall back to all investigation cluster sources.
-            if claim_source_refs:
-                flagged_sources = claim_source_refs & integrity_cluster_sources
+            # Flagged sources: intersection of claim's resolved sources with investigation cluster sources.
+            # Mixed-case fix: if resolved sources are known but none overlap the flagged cluster
+            # sources, this claim does not depend on the flagged clusters — skip Rule 3 for it.
+            # Conservative fallback: if no sources can be resolved at all, apply Rule 3 to all
+            # integrity_cluster_sources to avoid silently missing real cluster dependencies.
+            if claim_resolved_sources:
+                flagged_sources = claim_resolved_sources & integrity_cluster_sources
+                if not flagged_sources:
+                    continue  # This claim has no overlap with investigation-flagged cluster sources.
             else:
                 flagged_sources = integrity_cluster_sources
 
-            # Fix 3: ALL flagged sources must be fully covered by declared clusters.
-            if flagged_sources:
-                uncovered = flagged_sources - all_clustered_sources
-                if uncovered:
-                    errors.append(
-                        f"causal_claim '{claim_id}' has status='{claim.get('status')}': "
-                        f"flagged source(s) {sorted(uncovered)} are not covered by any declared cluster "
-                        "in source-cluster-robustness.yml; partial coverage is not enough."
-                    )
+            # ALL flagged sources must be fully covered by declared clusters.
+            uncovered = flagged_sources - all_clustered_sources
+            if uncovered:
+                errors.append(
+                    f"causal_claim '{claim_id}' has status='{claim.get('status')}': "
+                    f"flagged source(s) {sorted(uncovered)} are not covered by any declared cluster "
+                    "in source-cluster-robustness.yml; partial coverage is not enough."
+                )
 
-            # Dominant clusters for this claim: clusters whose sources overlap both
-            # the investigation-flagged sources AND the claim's sources (if known).
+            # Dominant clusters for this claim: clusters whose sources overlap the flagged sources
+            # (i.e., the intersection of the claim's resolved sources with integrity_cluster_sources).
             dominant_clusters: set[str] = set()
             for cluster_id, refs in cluster_source_refs.items():
-                if not (refs & integrity_cluster_sources):
-                    continue
-                if claim_source_refs and not (refs & claim_source_refs):
+                if not (refs & flagged_sources):
                     continue
                 dominant_clusters.add(cluster_id)
             if not dominant_clusters:
@@ -518,7 +609,7 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                     f"removes a dominant cluster ({', '.join(sorted(dominant_clusters))}) affecting it."
                 )
             else:
-                # Fix 2: All dominant clusters must be covered — either all removed together in one test,
+                # All dominant clusters must be covered — either all removed together in one test,
                 # or each dominant cluster is removed in at least one test that affects this claim.
                 fully_covered_at_once = any(
                     dominant_clusters <= set(t.get("removed_cluster_refs", []) or [])
@@ -542,7 +633,6 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
 
     # Rule 4: high fragility visibility.
     high_fragility_present = False
-    high_fragility_missing_text = False
     for test in knockout_tests:
         if not isinstance(test, dict):
             continue
@@ -560,7 +650,6 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                 f"knockout_test '{test.get('test_id', '?')}' has fragility_score>={HIGH_FRAGILITY_THRESHOLD} "
                 "but no notes or rationale; high fragility must be explained."
             )
-            high_fragility_missing_text = True
 
     if high_fragility_present:
         assessment_text = _read_text(case_dir / "assessment.md")
@@ -570,9 +659,11 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                 f"reports fragility_score>={HIGH_FRAGILITY_THRESHOLD}."
             )
 
-    # Fix 5: Minimal relational knockout check.
-    evidence_map = _load_evidence_pack(case_dir)
-    relations = _load_evidence_relations(case_dir)
+    # Relational knockout check: use the already-loaded evidence_id_to_source_ref, and load
+    # evidence-relations.yml (errors propagated into main errors list).
+    evidence_map = evidence_id_to_source_ref  # alias for clarity in the relational section
+    relations, relations_errors = _load_evidence_relations(case_dir)
+    errors.extend(relations_errors)
     for test in knockout_tests:
         if not isinstance(test, dict):
             continue

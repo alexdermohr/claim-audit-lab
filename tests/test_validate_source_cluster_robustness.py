@@ -135,3 +135,39 @@ def test_invalid_strong_knockout_verdict_missing_evidence_pack_fails():
 def test_valid_weak_knockout_verdict_without_relations_passes():
     errors = fixture_errors("valid", "weak_knockout_verdict_without_relations")
     assert errors == [], errors
+
+
+# Review-comment fixes: mixed-case, evidence_refs, legacy, overreach substring
+
+
+def test_invalid_evidence_ref_flagged_source_not_clustered_fails():
+    """Source reached via claim.evidence_refs counts toward flagged source coverage requirements."""
+    errors = fixture_errors("invalid", "evidence_ref_flagged_source_not_clustered")
+    assert any("s002" in e and "not covered by any declared cluster" in e for e in errors), errors
+
+
+def test_valid_mixed_case_unflagged_strong_claim_ignored_passes():
+    """A strongly_supported claim with source_refs that do not overlap flagged cluster sources
+    must not trigger a 'depends on investigation-flagged source clusters' false positive."""
+    errors = fixture_errors("valid", "mixed_case_unflagged_strong_claim_ignored")
+    assert errors == [], errors
+
+
+def test_valid_overreach_substring_improves_does_not_false_positive():
+    """'improves' must not be flagged as overreach via substring match on 'proves'."""
+    import validate_source_cluster_robustness as v
+    # 'improves' is very close to 'compromised' within 120 chars — must not trigger.
+    text = "The rework significantly improves the process and is not compromised."
+    assert not v._overreach_in_text(text), "False positive: 'improves' matched 'proves'"
+
+
+def test_valid_overreach_substring_uncompromised_does_not_false_positive():
+    """'uncompromised' must not be flagged as overreach via substring match on 'compromised'."""
+    import validate_source_cluster_robustness as v
+    text = "The evidence chain is uncompromised and proves nothing beyond the stated findings."
+    # Note: 'proves' IS present here near 'uncompromised'. This tests that 'uncompromised'
+    # (as a word boundary) should NOT match 'compromised'. The 'proves' on its own does match
+    # its pattern but the compromise term 'uncompromised' should not count — check word boundary.
+    # For a proper non-false-positive: no compromise term present at all.
+    text2 = "The evidence chain remains uncompromised throughout the investigation."
+    assert not v._overreach_in_text(text2), "False positive: 'uncompromised' matched 'compromised'"

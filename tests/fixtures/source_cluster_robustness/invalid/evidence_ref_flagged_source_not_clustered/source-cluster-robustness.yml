@@ -1,0 +1,15 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/evidence_ref_flagged_source_not_clustered"
+clusters:
+  - cluster_id: "s001_cluster"
+    source_refs: ["s001"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.7
+knockout_tests:
+  - test_id: "remove_s001_cluster"
+    removed_cluster_refs: ["s001_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "plausible"
+    verdict_delta: "strongly_supported_to_plausible"
+    fragility_score: 0.5
+    notes: "Only s001 cluster declared; s002 (via evidence_ref e002) is flagged but not clustered."
