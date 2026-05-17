@@ -339,11 +339,10 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
             relation_text = text_from(
                 relation.get("explanation", ""),
                 relation.get("incompatible_proposition", ""),
-                relation.get("direct_incompatibility_basis", ""),
             )
             if overclosure_without_direct_exclusion(relation_text):
                 errors.append(
-                    f"relation '{relation.get('relation_id', '?')}' uses contradicts_directly for claim '{claim_id}' but its basis is only missing-link/alternative/non-test/absence language."
+                    f"relation '{relation.get('relation_id', '?')}' uses contradicts_directly for claim '{claim_id}' but its basis is only stronger-alternative, missing-link, non-test, non-corroboration, method-gap, or absence language."
                 )
 
         if status != "contradicted" or not is_world_causal(claim):

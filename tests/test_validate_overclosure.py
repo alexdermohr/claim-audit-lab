@@ -1,9 +1,6 @@
 """Tests for scripts/validate_overclosure.py."""
 
 import pathlib
-import sys
-
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "scripts"))
 
 import validate_overclosure
 
@@ -22,7 +19,7 @@ def test_invalid_co_causation_stronger_alternative_only_fails():
 
 def test_invalid_co_causation_missing_positive_evidence_only_fails():
     errors = fixture_errors("invalid", "co_causation_missing_positive_evidence_only")
-    assert any("missing-link/alternative/non-test/absence" in error for error in errors), errors
+    assert any("stronger-alternative, missing-link, non-test, non-corroboration, method-gap, or absence" in error for error in errors), errors
 
 
 def test_invalid_co_causation_official_non_corroboration_only_fails():
