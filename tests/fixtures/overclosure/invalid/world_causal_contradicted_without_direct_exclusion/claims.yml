@@ -1,0 +1,37 @@
+schema_version: '1.0'
+claims:
+- schema_version: '1.0'
+  claim_id: c001
+  claim_type: causal_claim
+  claim_kind: causal_claim
+  statement: A caused B.
+  status: contradicted
+  evidence_refs:
+  - e001
+  source_refs:
+  - s001
+  requires:
+  - timeline
+  - mechanism
+  counterclaims:
+  - Alternative one.
+  - Alternative two.
+  forbidden_upgrades:
+  - correlation_to_causation
+  uncertainty:
+    score: 0.4
+    causes:
+    - fixture uncertainty
+  interpolation:
+    score: 0.2
+    assumptions:
+    - fixture assumption
+  burden_profile: causal_chain
+  required_chain:
+  - id: timeline
+    requirement: Timeline connects A to B.
+    status: satisfied
+  - id: mechanism
+    requirement: Mechanism connects A to B.
+    status: satisfied
+  notes: Current evidence lowers confidence but does not directly exclude the claim.

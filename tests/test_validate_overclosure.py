@@ -46,6 +46,16 @@ def test_invalid_causal_chain_contradicted_without_required_chain_fails():
     assert any("requires non-empty required_chain" in error for error in errors), errors
 
 
+def test_invalid_claim_kind_causal_chain_without_required_chain_fails():
+    errors = fixture_errors("invalid", "claim_kind_causal_chain_without_required_chain")
+    assert any("requires non-empty required_chain" in error for error in errors), errors
+
+
+def test_invalid_world_causal_contradicted_without_direct_exclusion_fails():
+    errors = fixture_errors("invalid", "world_causal_contradicted_without_direct_exclusion")
+    assert any("requires a non-negated direct exclusion" in error for error in errors), errors
+
+
 def test_invalid_direct_contradiction_no_evidence_found_fails():
     errors = fixture_errors("invalid", "direct_contradiction_no_evidence_found")
     assert any("contradicts_directly" in error and "absence" in error for error in errors), errors

@@ -107,14 +107,14 @@ SUFFICIENT_DIRECT_EXCLUSION_PATTERNS = (
 )
 
 NEGATED_DIRECT_EXCLUSION_PATTERNS = (
-    r"does\s+not\s+rule\s+out",
-    r"do\s+not\s+rule\s+out",
-    r"did\s+not\s+rule\s+out",
+    r"does\s+not\s+(?:.*\s+)?rule\s+out",
+    r"do\s+not\s+(?:.*\s+)?rule\s+out",
+    r"did\s+not\s+(?:.*\s+)?rule\s+out",
     r"not\s+rule\s+out",
     r"not\s+ruled\s+out",
-    r"does\s+not\s+exclude",
-    r"do\s+not\s+exclude",
-    r"did\s+not\s+exclude",
+    r"does\s+not\s+(?:.*\s+)?exclude",
+    r"do\s+not\s+(?:.*\s+)?exclude",
+    r"did\s+not\s+(?:.*\s+)?exclude",
     r"not\s+excluded",
     r"not\s+impossible",
     r"not\s+physically\s+impossible",
@@ -122,8 +122,8 @@ NEGATED_DIRECT_EXCLUSION_PATTERNS = (
     r"not\s+mutually\s+exclusive",
     r"cannot\s+exclude",
     r"could\s+not\s+exclude",
-    r"does\s+not\s+preclude",
-    r"do\s+not\s+preclude",
+    r"does\s+not\s+(?:.*\s+)?preclude",
+    r"do\s+not\s+(?:.*\s+)?preclude",
     r"not\s+precluded",
     r"schlie(?:ß|ss|s)t\s+nicht\s+aus",
     r"schlie(?:ß|ss|s)t\s+.*\s+nicht\s+aus",
@@ -328,7 +328,7 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
             if relation.get("relation_type") == DIRECT_CONTRADICTION
         ]
 
-        if claim.get("claim_type") == "causal_claim" and claim.get("burden_profile") == "causal_chain" and status in STRONG_OR_NEGATIVE_STATUSES:
+        if is_world_causal(claim) and claim.get("burden_profile") == "causal_chain" and status in STRONG_OR_NEGATIVE_STATUSES:
             chain = claim.get("required_chain")
             if not isinstance(chain, list) or not chain:
                 errors.append(
@@ -348,15 +348,23 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
         if status != "contradicted" or not is_world_causal(claim):
             continue
 
-        claim_basis_text = text_from(
+        claim_only_basis_text = text_from(
             claim.get("direct_incompatibility_basis", ""),
             claim.get("notes", ""),
+        )
+        direct_relation_basis_text = text_from(
             *(relation.get("explanation", "") for relation in direct_relations),
             *(relation.get("incompatible_proposition", "") for relation in direct_relations),
         )
+        claim_basis_text = text_from(claim_only_basis_text, direct_relation_basis_text)
         if overclosure_without_direct_exclusion(claim_basis_text):
             errors.append(
                 f"world-causal claim '{claim_id}' cannot be status='contradicted' when the direct-incompatibility basis is only a stronger alternative, missing link, non-test, non-corroboration, method gap, or absence operation."
+            )
+
+        if not contains_sufficient_direct_exclusion(claim_only_basis_text) and not contains_sufficient_direct_exclusion(direct_relation_basis_text):
+            errors.append(
+                f"world-causal claim '{claim_id}' status='contradicted' requires a non-negated direct exclusion in direct_incompatibility_basis or a contradicts_directly relation."
             )
 
         if has_co_causation_language(claim) and not has_chain_link_exclusion(claim, direct_relations):
