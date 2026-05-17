@@ -180,7 +180,9 @@ def _text_has_term(text: str, terms) -> bool:
 
 
 def _term_pattern(term: str) -> str:
-    """Return a regex pattern that matches term as a whole word or phrase (not as a substring)."""
+    """Return a regex pattern that matches term as a whole word or phrase (not as a substring).
+    For single words, uses \b word boundaries. For phrases, ensures no word characters
+    immediately before or after the phrase to avoid partial substring matches."""
     escaped = re.escape(term)
     if " " in term:
         # Multi-word phrase: anchor at non-word-character boundaries on both sides.
@@ -297,7 +299,7 @@ def _resolve_claim_source_refs(
     1. Explicit claim.source_refs.
     2. claim.evidence_refs resolved through evidence_id_to_source_ref.
     3. Reverse lookup: all source_refs from evidence-pack items whose claim_refs include this claim.
-    Unknown evidence_refs are silently ignored (not counted as coverage).
+    evidence_refs not found in evidence-pack.yml are silently ignored (not counted as coverage).
     """
     claim_id = claim.get("claim_id", "")
     result: set[str] = set()

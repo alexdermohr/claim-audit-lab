@@ -156,7 +156,6 @@ def test_valid_mixed_case_unflagged_strong_claim_ignored_passes():
 def test_valid_overreach_substring_improves_does_not_false_positive():
     """'improves' must not be flagged as overreach via substring match on 'proves'."""
     import validate_source_cluster_robustness as v
-    # 'improves' is very close to 'compromised' within 120 chars — must not trigger.
     text = "The rework significantly improves the process and is not compromised."
     assert not v._overreach_in_text(text), "False positive: 'improves' matched 'proves'"
 
@@ -164,10 +163,13 @@ def test_valid_overreach_substring_improves_does_not_false_positive():
 def test_valid_overreach_substring_uncompromised_does_not_false_positive():
     """'uncompromised' must not be flagged as overreach via substring match on 'compromised'."""
     import validate_source_cluster_robustness as v
-    text = "The evidence chain is uncompromised and proves nothing beyond the stated findings."
-    # Note: 'proves' IS present here near 'uncompromised'. This tests that 'uncompromised'
-    # (as a word boundary) should NOT match 'compromised'. The 'proves' on its own does match
-    # its pattern but the compromise term 'uncompromised' should not count — check word boundary.
-    # For a proper non-false-positive: no compromise term present at all.
+    # text2 contains 'uncompromised' but no real compromise or proof term.
     text2 = "The evidence chain remains uncompromised throughout the investigation."
     assert not v._overreach_in_text(text2), "False positive: 'uncompromised' matched 'compromised'"
+
+
+def test_overreach_genuine_co_occurrence_is_detected():
+    """A genuine co-occurrence of 'compromised' and 'proves' within 120 chars is flagged."""
+    import validate_source_cluster_robustness as v
+    text = "The source is compromised, which proves that the official account is false."
+    assert v._overreach_in_text(text), "Should flag genuine compromise+proof co-occurrence"
