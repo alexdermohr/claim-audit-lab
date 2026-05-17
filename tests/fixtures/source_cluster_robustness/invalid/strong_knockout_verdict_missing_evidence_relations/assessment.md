@@ -5,5 +5,5 @@ The cluster dependency is high: both s001 and s002 are part of the official inve
 After removing the official cluster, no independent supporting evidence remains, yet
 verdict_without_cluster is set to "plausible" rather than "weak" or "very_weak".
 
-This fixture tests that strong knockout rest verdicts are rejected when
+This fixture tests that strong post-knockout verdicts are rejected when
 evidence-relations.yml is missing.

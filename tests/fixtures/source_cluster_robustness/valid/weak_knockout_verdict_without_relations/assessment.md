@@ -4,5 +4,5 @@ Verdict for c001 is strongly_supported, but this case has a cluster dependency p
 The cluster dependency is high: both s001 and s002 are part of the official investigation cluster.
 After removing the official cluster, this fixture sets verdict_without_cluster to "unresolved".
 
-This fixture confirms that weak knockout rest verdicts can remain valid even when
+This fixture confirms that weak post-knockout verdicts can remain valid even when
 evidence-relations.yml is absent.
