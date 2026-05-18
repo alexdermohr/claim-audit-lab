@@ -82,3 +82,63 @@ def test_established_verdict_is_capped(tmp_path):
     write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
     errors = validate_verdict_caps.validate_case(tmp_path)
     assert any("is capped" in e for e in errors), errors
+
+
+# --- contradicted caps ---
+
+def test_contradicted_verdict_with_unresolved_high_defeater_is_capped(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("contradicted"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
+    errors = validate_verdict_caps.validate_case(tmp_path)
+    assert any("is capped" in e and "contradicted" in e for e in errors), errors
+
+
+def test_contradicted_with_rebuttal_passes(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("contradicted"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc(rebuttal_refs=["e001"]))
+    assert validate_verdict_caps.validate_case(tmp_path) == []
+
+
+def test_contradicted_with_low_materiality_defeater_passes(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("contradicted"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc(materiality=0.4))
+    assert validate_verdict_caps.validate_case(tmp_path) == []
+
+
+# --- source_report exemption ---
+
+def source_report_claims_doc(status):
+    return {
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "factual_event_claim",
+            "claim_kind": "reported_claim",
+            "burden_profile": "source_report",
+            "statement": "Source X reports that event Y occurred.",
+            "status": status,
+            "uncertainty": {"score": 0.1, "causes": []},
+            "interpolation": {"score": 0.0, "assumptions": []},
+        }],
+    }
+
+
+def test_source_report_established_is_exempt_from_cap(tmp_path):
+    write_yaml(tmp_path / "claims.yml", source_report_claims_doc("established"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
+    assert validate_verdict_caps.validate_case(tmp_path) == []
+
+
+def test_source_report_strongly_supported_is_exempt_from_cap(tmp_path):
+    write_yaml(tmp_path / "claims.yml", source_report_claims_doc("strongly_supported"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
+    assert validate_verdict_caps.validate_case(tmp_path) == []
+
+
+def test_source_report_contradicted_is_not_exempt(tmp_path):
+    # Negative closure is not exempt even for source_report claims.
+    write_yaml(tmp_path / "claims.yml", source_report_claims_doc("contradicted"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
+    errors = validate_verdict_caps.validate_case(tmp_path)
+    assert any("is capped" in e for e in errors), errors

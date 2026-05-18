@@ -80,6 +80,47 @@ def collect_refs(case_dir: pathlib.Path) -> tuple[set[str] | None, set[str] | No
     return claim_ids, evidence_ids, errors
 
 
+# Statuses that indicate a layer is not yet positively established.
+_OPEN_LAYER_STATUSES = {"unresolved", "partially_resolved", "contested"}
+# Claim statuses that represent strong negative closure.
+_NEGATIVE_CLOSURE_STATUSES = {"weak", "contradicted"}
+# The layers whose openness protects the physical-mechanism thesis from knockout.
+_MECHANISTIC_LAYERS = {"physical_mechanism", "structural_effect", "observational_fit"}
+
+
+def _validate_anti_knockout(entry: dict, claim_by_id: dict[str, dict], errors: list[str]) -> None:
+    """Emit an error when missing operational_placement alone would explain a negative verdict."""
+    claim_ref = entry.get("claim_ref")
+    if not isinstance(claim_ref, str) or not claim_ref:
+        return
+    claim = claim_by_id.get(claim_ref)
+    if claim is None:
+        return
+    status = claim.get("status")
+    if status not in _NEGATIVE_CLOSURE_STATUSES:
+        return
+
+    layers = entry.get("layers")
+    if not isinstance(layers, dict):
+        return
+
+    op_layer = layers.get("operational_placement")
+    if not isinstance(op_layer, dict) or op_layer.get("status") != "missing":
+        return
+
+    # Check if any mechanistic layer remains open (contested or unresolved).
+    open_mechanistic = [
+        name for name in _MECHANISTIC_LAYERS
+        if isinstance(layers.get(name), dict) and layers[name].get("status") in _OPEN_LAYER_STATUSES
+    ]
+    if open_mechanistic:
+        errors.append(
+            f"claim '{claim_ref}' status='{status}' may not be driven by operational_placement: missing alone "
+            f"while {open_mechanistic} remain open; anti-knockout rule requires independent justification "
+            f"for the negative verdict or resolution of the contested mechanistic layers."
+        )
+
+
 def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     path = case_dir / "burden-layers.yml"
     if not path.exists():
@@ -102,6 +143,14 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
 
     claim_ids, evidence_ids, load_errors = collect_refs(case_dir)
     errors.extend(load_errors)
+
+    # Build a claim lookup for anti-knockout checks (needs claim status).
+    claims_data, _ = load_optional_object(case_dir / "claims.yml", "claims.yml")
+    claim_by_id: dict[str, dict] = {}
+    if isinstance(claims_data, dict):
+        for claim in claims_data.get("claims") or []:
+            if isinstance(claim, dict) and isinstance(claim.get("claim_id"), str):
+                claim_by_id[claim["claim_id"]] = claim
 
     for entry in entries:
         if not isinstance(entry, dict):
@@ -129,6 +178,8 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                     errors.append(
                         f"burden-layers '{claim_ref}' layer '{layer_name}' evidence_ref '{ref}' not found in evidence-pack.yml."
                     )
+
+        _validate_anti_knockout(entry, claim_by_id, errors)
 
     return errors
 

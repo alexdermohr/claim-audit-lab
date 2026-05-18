@@ -99,3 +99,103 @@ def test_duplicate_claim_ref_fails(tmp_path):
     )
     errors = validate(tmp_path)
     assert any("duplicate burden-layer claim_ref 'c001'" in e for e in errors), errors
+
+
+# --- anti-knockout rule ---
+
+def write_claim_with_status(case_dir, status):
+    case_dir.mkdir(parents=True, exist_ok=True)
+    (case_dir / "claims.yml").write_text(
+        __import__("yaml").safe_dump({
+            "schema_version": "1.0",
+            "claims": [{
+                "schema_version": "1.0",
+                "claim_id": "c001",
+                "claim_type": "causal_claim",
+                "statement": "Mechanism A caused outcome B.",
+                "status": status,
+                "uncertainty": {"score": 0.5, "causes": []},
+                "interpolation": {"score": 0.0, "assumptions": []},
+            }],
+        }),
+        encoding="utf-8",
+    )
+    (case_dir / "evidence-pack.yml").write_text(
+        __import__("yaml").safe_dump({"schema_version": "1.0", "evidence": []}),
+        encoding="utf-8",
+    )
+
+
+def anti_knockout_layers(physical_status="contested", op_status="missing"):
+    return {
+        "physical_mechanism": {"status": physical_status},
+        "operational_placement": {"status": op_status},
+    }
+
+
+def test_anti_knockout_contradicted_with_open_mechanism_fails(tmp_path):
+    write_claim_with_status(tmp_path, "contradicted")
+    write_yaml(
+        tmp_path / "burden-layers.yml",
+        doc([{"claim_ref": "c001", "layers": anti_knockout_layers()}]),
+    )
+    errors = validate(tmp_path)
+    assert any("anti-knockout" in e for e in errors), errors
+
+
+def test_anti_knockout_weak_with_open_mechanism_fails(tmp_path):
+    write_claim_with_status(tmp_path, "weak")
+    write_yaml(
+        tmp_path / "burden-layers.yml",
+        doc([{"claim_ref": "c001", "layers": anti_knockout_layers()}]),
+    )
+    errors = validate(tmp_path)
+    assert any("anti-knockout" in e for e in errors), errors
+
+
+def test_anti_knockout_contradicted_with_resolved_mechanism_passes(tmp_path):
+    write_claim_with_status(tmp_path, "contradicted")
+    write_yaml(
+        tmp_path / "burden-layers.yml",
+        doc([{"claim_ref": "c001", "layers": anti_knockout_layers(physical_status="resolved")}]),
+    )
+    errors = validate(tmp_path)
+    assert not any("anti-knockout" in e for e in errors), errors
+
+
+def test_anti_knockout_plausible_verdict_passes(tmp_path):
+    write_claim_with_status(tmp_path, "plausible")
+    write_yaml(
+        tmp_path / "burden-layers.yml",
+        doc([{"claim_ref": "c001", "layers": anti_knockout_layers()}]),
+    )
+    assert validate(tmp_path) == []
+
+
+def test_anti_knockout_operational_placement_not_missing_passes(tmp_path):
+    write_claim_with_status(tmp_path, "contradicted")
+    write_yaml(
+        tmp_path / "burden-layers.yml",
+        doc([{
+            "claim_ref": "c001",
+            "layers": {"physical_mechanism": {"status": "contested"}, "operational_placement": {"status": "resolved"}},
+        }]),
+    )
+    errors = validate(tmp_path)
+    assert not any("anti-knockout" in e for e in errors), errors
+
+
+def test_anti_knockout_structural_effect_unresolved_also_triggers(tmp_path):
+    write_claim_with_status(tmp_path, "weak")
+    write_yaml(
+        tmp_path / "burden-layers.yml",
+        doc([{
+            "claim_ref": "c001",
+            "layers": {
+                "structural_effect": {"status": "unresolved"},
+                "operational_placement": {"status": "missing"},
+            },
+        }]),
+    )
+    errors = validate(tmp_path)
+    assert any("anti-knockout" in e for e in errors), errors
