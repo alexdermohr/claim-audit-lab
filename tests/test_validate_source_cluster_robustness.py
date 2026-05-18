@@ -189,11 +189,17 @@ def test_invalid_strongly_supported_without_direct_remaining_support_fails():
 
 
 def test_invalid_established_with_only_one_remaining_evidence_ref_fails():
-    """established requires at least two remaining support relations across two evidence_refs."""
+    """established fails when two relations survive but both point to the same evidence_ref.
+
+    The fixture leaves r002 (supports_directly) and r003 (supports_indirectly) after
+    knockout, both referencing e002. len(remaining_support)==2 and direct_supports>=1
+    both pass; only len(unique_evidence_refs)==1 triggers the floor. This isolates the
+    evidence-ref diversity condition from the relation-count condition.
+    """
     errors = fixture_errors("invalid", "established_with_only_one_remaining_evidence_ref")
     assert any(
         "verdict_without_cluster 'established'" in e
-        and "at least two remaining support relations" in e
+        and "at least two evidence_refs" in e
         for e in errors
     ), errors
 

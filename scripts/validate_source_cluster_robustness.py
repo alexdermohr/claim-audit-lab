@@ -309,7 +309,7 @@ def _remaining_support_floor_errors(
     already excluded by callers before invoking this helper.
     """
     errors: list[str] = []
-    removed_sorted = sorted(removed_cluster_ref_list)
+    removed_sorted = sorted(str(ref) for ref in removed_cluster_ref_list)
 
     if verdict_without == "contradicted":
         if not remaining_contradiction:

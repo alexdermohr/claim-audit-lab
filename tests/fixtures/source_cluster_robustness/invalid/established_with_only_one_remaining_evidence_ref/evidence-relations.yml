@@ -10,3 +10,8 @@ relations:
     claim_ref: "c001"
     relation_type: "supports_directly"
     notes: "Independent source directly supports the claim."
+  - relation_id: "r003"
+    evidence_ref: "e002"
+    claim_ref: "c001"
+    relation_type: "supports_indirectly"
+    notes: "Second relation pointing to the same evidence_ref; must not count as a second evidence_ref for established."
