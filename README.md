@@ -63,8 +63,20 @@ Noch nicht implementiert:
 - semantisches Scoring der Evidenzqualität
 - strukturiertes `assessment.yml`
 - Bias-Audit-Metriken
-- Agentenautomatisierung
-- externes Quellen-Fetching
+- vollständige repo-interne Agenten-Orchestrierung
+- eingebautes externes Quellen-Fetching im Repository-Code
+
+Externe Recherche kann weiterhin durch eine Agent-Runtime erfolgen, wenn Web- oder Research-Tools verfügbar sind; sie ist in diesem MVP nicht als Repository-Code implementiert.
+
+## Agentennutzung
+
+Agenten dürfen dieses Repository nicht als geschlossenes Faktenlexikon behandeln. Für Weltfragen und Claim-Prüfungen sollen sie zuerst allgemeines Wissen und verfügbare Internet-/Web-Recherche nutzen und anschließend die Audit-Methodik dieses Repositories anwenden. Repository-Suche ist ergänzend, außer der Nutzer stellt ausdrücklich eine Repo-Navigationsfrage.
+
+Wenn kein lokaler Case existiert, lautet die korrekte Schlussfolgerung nur: Es gibt keine repo-lokale Case-Evidenz. Das ist kein Tatsachenurteil über die Welt.
+
+Siehe:
+- AGENTS.md
+- docs/agent-usage.md
 
 ## Schnellstart
 
