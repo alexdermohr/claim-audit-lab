@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/model-audit.v1.schema.json",
+  "title": "Model Audit v1",
+  "description": "Case-local audit of explanatory models attached to claims/hypotheses, with structured score components.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "models"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "case_ref": {"type": "string", "minLength": 1},
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["model_id", "claim_ref", "hypothesis_ref"],
+        "additionalProperties": false,
+        "properties": {
+          "model_id": {"type": "string", "pattern": "^m[0-9]{3,}$"},
+          "claim_ref": {"type": "string", "minLength": 1},
+          "hypothesis_ref": {"type": "string", "minLength": 1},
+          "model_summary": {"type": "string"},
+          "central_chain_steps": {"type": "array", "items": {"type": "string"}, "default": []},
+          "assumptions_public": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "sensitivity_analysis": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "independent_reproducibility": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "observed_feature_fit": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "adversarial_response_quality": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "unresolved_defeater_refs": {"type": "array", "items": {"type": "string"}, "default": []},
+          "model_confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

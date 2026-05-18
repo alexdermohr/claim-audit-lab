@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/model-defeaters.v1.schema.json",
+  "title": "Model Defeaters v1",
+  "description": "Case-local structured challenges (defeaters) targeting specific claims, hypotheses, or required_chain steps.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "defeaters"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "case_ref": {"type": "string", "minLength": 1},
+    "defeaters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "defeater_id",
+          "defeater_type",
+          "statement",
+          "materiality",
+          "status"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "defeater_id": {"type": "string", "pattern": "^d[0-9]{3,}$"},
+          "target_claim_ref": {"type": "string"},
+          "target_hypothesis_ref": {"type": "string"},
+          "target_chain_step": {"type": "string"},
+          "defeater_type": {
+            "type": "string",
+            "enum": [
+              "model_incompatibility",
+              "missing_assumption_disclosure",
+              "missing_sensitivity_analysis",
+              "missing_independent_reproduction",
+              "ignored_rival_model",
+              "central_data_gap",
+              "observation_mismatch",
+              "scope_overreach",
+              "actor_attribution_gap",
+              "operational_placement_gap"
+            ]
+          },
+          "source_refs": {"type": "array", "items": {"type": "string"}, "default": []},
+          "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []},
+          "statement": {"type": "string", "minLength": 1},
+          "materiality": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "status": {
+            "type": "string",
+            "enum": [
+              "unresolved",
+              "partially_resolved",
+              "resolved",
+              "out_of_scope"
+            ]
+          },
+          "rebuttal_evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []},
+          "verdict_effect": {
+            "type": "object",
+            "required": ["effect"],
+            "additionalProperties": false,
+            "properties": {
+              "effect": {
+                "type": "string",
+                "enum": [
+                  "prevents_strong_closure",
+                  "downgrades_confidence",
+                  "context_only"
+                ]
+              },
+              "rationale": {"type": "string"}
+            }
+          },
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

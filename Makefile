@@ -19,6 +19,10 @@ validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_weight_audit.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_hypothesis_support_ledger.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_contradictions.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_model_defeaters.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_burden_layers.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_model_audit.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_verdict_caps.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_verdict_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_overclosure.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_evidence_pack.py cases

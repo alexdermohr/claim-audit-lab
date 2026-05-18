@@ -1,0 +1,26 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+claims:
+  - claim_ref: "c001"
+    burden_profile: "causal_chain"
+    layers:
+      physical_mechanism:
+        status: "unresolved"
+        evidence_refs: []
+        notes: ""
+      structural_effect:
+        status: "unresolved"
+        evidence_refs: []
+        notes: ""
+      observational_fit:
+        status: "unresolved"
+        evidence_refs: []
+        notes: ""
+      operational_placement:
+        status: "missing"
+        evidence_refs: []
+        notes: ""
+      actor_attribution:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: ""

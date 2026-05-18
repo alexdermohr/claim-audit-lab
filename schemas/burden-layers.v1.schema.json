@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/burden-layers.v1.schema.json",
+  "title": "Burden Layers v1",
+  "description": "Case-local separation of distinct burden layers (physical mechanism, structural effect, observational fit, operational placement, actor attribution, source report, comparative probability) for a claim.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "claims"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "case_ref": {"type": "string", "minLength": 1},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_ref", "layers"],
+        "additionalProperties": false,
+        "properties": {
+          "claim_ref": {"type": "string", "minLength": 1},
+          "burden_profile": {
+            "type": "string",
+            "enum": ["none", "causal_chain", "capability_chain", "source_report", "comparative"]
+          },
+          "layers": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "physical_mechanism": {"type": "object", "required": ["status"], "additionalProperties": false, "properties": {"status": {"type": "string", "enum": ["unresolved", "partially_resolved", "resolved", "missing", "contested", "satisfied", "out_of_scope"]}, "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []}, "notes": {"type": "string"}}},
+              "structural_effect": {"type": "object", "required": ["status"], "additionalProperties": false, "properties": {"status": {"type": "string", "enum": ["unresolved", "partially_resolved", "resolved", "missing", "contested", "satisfied", "out_of_scope"]}, "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []}, "notes": {"type": "string"}}},
+              "observational_fit": {"type": "object", "required": ["status"], "additionalProperties": false, "properties": {"status": {"type": "string", "enum": ["unresolved", "partially_resolved", "resolved", "missing", "contested", "satisfied", "out_of_scope"]}, "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []}, "notes": {"type": "string"}}},
+              "operational_placement": {"type": "object", "required": ["status"], "additionalProperties": false, "properties": {"status": {"type": "string", "enum": ["unresolved", "partially_resolved", "resolved", "missing", "contested", "satisfied", "out_of_scope"]}, "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []}, "notes": {"type": "string"}}},
+              "actor_attribution": {"type": "object", "required": ["status"], "additionalProperties": false, "properties": {"status": {"type": "string", "enum": ["unresolved", "partially_resolved", "resolved", "missing", "contested", "satisfied", "out_of_scope"]}, "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []}, "notes": {"type": "string"}}},
+              "source_report": {"type": "object", "required": ["status"], "additionalProperties": false, "properties": {"status": {"type": "string", "enum": ["unresolved", "partially_resolved", "resolved", "missing", "contested", "satisfied", "out_of_scope"]}, "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []}, "notes": {"type": "string"}}},
+              "comparative_probability": {"type": "object", "required": ["status"], "additionalProperties": false, "properties": {"status": {"type": "string", "enum": ["unresolved", "partially_resolved", "resolved", "missing", "contested", "satisfied", "out_of_scope"]}, "evidence_refs": {"type": "array", "items": {"type": "string"}, "default": []}, "notes": {"type": "string"}}}
+            }
+          },
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}
