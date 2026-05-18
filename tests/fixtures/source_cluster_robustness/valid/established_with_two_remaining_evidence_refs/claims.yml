@@ -1,0 +1,14 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    statement: "Mechanism X caused outcome Y."
+    status: "established"
+    source_refs: ["s001", "s002", "s003"]
+    uncertainty:
+      score: 0.1
+      causes: ["Cluster plus two independent corroborating sources"]
+    interpolation:
+      score: 0.05
+      assumptions: ["Sources are independent"]

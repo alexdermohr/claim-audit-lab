@@ -173,3 +173,69 @@ def test_overreach_genuine_co_occurrence_is_detected():
     import validate_source_cluster_robustness as v
     text = "The source is compromised, which proves that the official account is false."
     assert v._overreach_in_text(text), "Should flag genuine compromise+proof co-occurrence"
+
+
+# Strength floors for post-knockout verdict_without_cluster on causal_claim.
+
+
+def test_invalid_strongly_supported_without_direct_remaining_support_fails():
+    """strongly_supported requires at least one remaining supports_directly relation."""
+    errors = fixture_errors("invalid", "strongly_supported_without_direct_remaining_support")
+    assert any(
+        "verdict_without_cluster 'strongly_supported'" in e
+        and "remaining supports_directly relation" in e
+        for e in errors
+    ), errors
+
+
+def test_invalid_established_with_only_one_remaining_evidence_ref_fails():
+    """established fails when two relations survive but both point to the same evidence_ref.
+
+    The fixture leaves r002 (supports_directly) and r003 (supports_indirectly) after
+    knockout, both referencing e002. len(remaining_support)==2 and direct_supports>=1
+    both pass; only len(unique_evidence_refs)==1 triggers the floor. This isolates the
+    evidence-ref diversity condition from the relation-count condition.
+    """
+    errors = fixture_errors("invalid", "established_with_only_one_remaining_evidence_ref")
+    assert any(
+        "verdict_without_cluster 'established'" in e
+        and "at least two evidence_refs" in e
+        for e in errors
+    ), errors
+
+
+def test_invalid_established_without_direct_remaining_support_fails():
+    """established requires at least one supports_directly among the remaining support relations."""
+    errors = fixture_errors("invalid", "established_without_direct_remaining_support")
+    assert any(
+        "verdict_without_cluster 'established'" in e
+        and "supports_directly relation" in e
+        for e in errors
+    ), errors
+
+
+def test_valid_strongly_supported_with_direct_remaining_support_passes():
+    """strongly_supported passes when an independent supports_directly relation survives."""
+    errors = fixture_errors("valid", "strongly_supported_with_direct_remaining_support")
+    assert errors == [], errors
+
+
+def test_valid_established_with_two_remaining_evidence_refs_passes():
+    """established passes when two distinct evidence_refs back the remaining support, including one direct."""
+    errors = fixture_errors("valid", "established_with_two_remaining_evidence_refs")
+    assert errors == [], errors
+
+
+def test_valid_plausible_with_indirect_remaining_support_passes():
+    """plausible passes when at least one remaining supporting relation (indirect is enough) survives."""
+    errors = fixture_errors("valid", "plausible_with_indirect_remaining_support")
+    assert errors == [], errors
+
+
+def test_valid_non_causal_established_with_indirect_remaining_support_passes():
+    """Non-causal claim kinds (factual_event_claim etc.) keep legacy support semantics:
+    an indirect remaining support relation is enough for an 'established'
+    verdict_without_cluster. The strict positive floors only apply to world-causal kinds.
+    """
+    errors = fixture_errors("valid", "non_causal_established_with_indirect_remaining_support")
+    assert errors == [], errors
