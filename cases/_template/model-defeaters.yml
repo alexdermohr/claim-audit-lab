@@ -1,0 +1,17 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+defeaters:
+  - defeater_id: "d001"
+    target_claim_ref: "c001"
+    target_hypothesis_ref: "h1"
+    defeater_type: "model_incompatibility"
+    source_refs: []
+    evidence_refs: []
+    statement: ""
+    materiality: 0.0
+    status: "unresolved"
+    rebuttal_evidence_refs: []
+    verdict_effect:
+      effect: "prevents_strong_closure"
+      rationale: ""
+    notes: ""

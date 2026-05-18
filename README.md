@@ -97,6 +97,31 @@ make test
 - Keine automatische politische Empfehlung
 - Kein Black-Box-Urteil ohne auditierbare Artefakte
 
+## Model Defeater und Burden-Layer
+
+Eine vollständige Erzählung ist nicht automatisch eine starke Erzählung.
+
+- **Model Defeater** sind strukturierte Herausforderungen gegen einen
+  konkreten Claim, ein Modell, eine Hypothese oder einen Schritt der
+  `required_chain`. Ein ungeklärter, hoch-materialer Defeater verhindert
+  starke Closure, ohne das Rivalmodell zu beweisen.
+- **Burden-Layer** trennen `physical_mechanism`, `structural_effect`,
+  `observational_fit`, `operational_placement`, `actor_attribution`,
+  `source_report` und `comparative_probability`. Fehlende Operations-
+  oder Akteursevidenz darf einen technisch/mechanischen Claim nicht
+  automatisch knockout-downgraden, solange die Mechanik materiell
+  umstritten bleibt.
+
+Repository-Cases dürfen formal vollständige Kausalketten nicht mit
+starker Evidenz gleichsetzen. Verdict-Caps werden über
+`scripts/validate_verdict_caps.py` mechanisch geprüft.
+
+Siehe:
+
+- `docs/model-defeater-policy.md`
+- `docs/burden-layer-policy.md`
+- `docs/comparative-causation-policy.md`
+
 ## Verdict-Vokabular
 
 `established` · `strongly_supported` · `plausible` · `weak` · `speculative` · `contradicted` · `unresolved` · `no_verdict_possible`
