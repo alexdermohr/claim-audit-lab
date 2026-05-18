@@ -239,7 +239,7 @@ def _load_evidence_pack(
         return {}, {}, ["evidence-pack.yml must contain a YAML object."]
     evidence = data.get("evidence", [])
     if not isinstance(evidence, list):
-        return {}, {}, []
+        return {}, {}, ["evidence-pack.yml 'evidence' must be a list."]
     evidence_id_to_source_ref: dict[str, str] = {}
     claim_id_to_evidence_source_refs: dict[str, set[str]] = {}
     for item in evidence:
@@ -274,7 +274,7 @@ def _load_evidence_relations(case_dir: pathlib.Path) -> tuple[list[dict], list[s
         return [], ["evidence-relations.yml must contain a YAML object."]
     relations = data.get("relations", [])
     if not isinstance(relations, list):
-        return [], []
+        return [], ["evidence-relations.yml 'relations' must be a list."]
     return [r for r in relations if isinstance(r, dict)], []
 
 

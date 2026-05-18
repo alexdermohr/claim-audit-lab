@@ -53,7 +53,7 @@ High method depth and high interest risk can both be true. Do not convert source
 
 ## `source-cluster-robustness.yml`
 
-Use `source-cluster-robustness.yml` to declare cluster dependence and run knockout/stress tests for strong or negative world-causal verdicts. It is required when `investigation-integrity.yml` flags one or more source clusters and a `causal_claim` reaches `strongly_supported`, `established`, or `contradicted`.
+Use `source-cluster-robustness.yml` to declare cluster dependence and run knockout/stress tests for strong or negative world-causal verdicts. It is required when `investigation-integrity.yml` flags one or more source clusters **and** at least one `causal_claim` with `strongly_supported`, `established`, or `contradicted` status has a resolved source set that overlaps the flagged sources. "Resolved sources" means explicit `source_refs` on the claim, any `evidence_refs` entries on the claim resolved to their `source_ref` via `evidence-pack.yml`, and `evidence-pack.yml` items whose `claim_refs` include the claim. A strong causal claim with no resolvable sources is treated conservatively and also triggers the requirement.
 
 Author each artifact with these separations in mind:
 
