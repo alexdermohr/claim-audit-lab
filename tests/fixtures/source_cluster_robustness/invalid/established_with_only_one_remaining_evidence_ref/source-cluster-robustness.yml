@@ -1,0 +1,15 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/established_with_only_one_remaining_evidence_ref"
+clusters:
+  - cluster_id: "official_cluster"
+    source_refs: ["s001"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.6
+knockout_tests:
+  - test_id: "remove_official_cluster"
+    removed_cluster_refs: ["official_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "established"
+    verdict_delta: "established_overclaimed_with_only_one_remaining_evidence_ref"
+    fragility_score: 0.4
+    notes: "Only one support relation survives the knockout, but the test still asserts established."

@@ -1,0 +1,15 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/strongly_supported_with_direct_remaining_support"
+clusters:
+  - cluster_id: "official_cluster"
+    source_refs: ["s001"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.5
+knockout_tests:
+  - test_id: "remove_official_cluster"
+    removed_cluster_refs: ["official_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "strongly_supported"
+    verdict_delta: "strongly_supported_sustained_via_independent_direct_support"
+    fragility_score: 0.3
+    notes: "After cluster removal, an independent supports_directly relation remains for c001."

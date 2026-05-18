@@ -280,12 +280,99 @@ def _load_evidence_relations(case_dir: pathlib.Path) -> tuple[list[dict], list[s
 
 SUPPORTING_RELATION_TYPES = {"supports_directly", "supports_indirectly"}
 NEGATIVE_RELATION_TYPES = {"contradicts_directly"}
+POSITIVE_KNOCKOUT_REST_VERDICTS = {"plausible", "strongly_supported", "established"}
 STRONG_KNOCKOUT_REST_VERDICTS = {
     "established",
     "strongly_supported",
     "plausible",
     "contradicted",
 }
+
+
+def _remaining_support_floor_errors(
+    *,
+    verdict_without: str,
+    claim_id: str,
+    claim_kind: str | None,
+    remaining_support: list[dict],
+    remaining_contradiction: list[dict],
+    removed_cluster_ref_list: list,
+    test_id: str,
+) -> list[str]:
+    """Return strength-floor violations for a post-knockout verdict on a single claim.
+
+    For causal_claim, enforce minimal remaining-relation structure for plausible /
+    strongly_supported / established / contradicted verdict_without_cluster. For
+    reported_claim, keep the legacy "at least one remaining support" check so that
+    `reports` continues to count as remaining support without forcing world-causal
+    direct-support semantics. Unknown evidence_refs and removed evidence_refs are
+    already excluded by callers before invoking this helper.
+    """
+    errors: list[str] = []
+    removed_sorted = sorted(removed_cluster_ref_list)
+
+    if verdict_without == "contradicted":
+        if not remaining_contradiction:
+            errors.append(
+                f"verdict_without_cluster 'contradicted' not supported by remaining "
+                f"direct contradiction relations for claim '{claim_id}' after removing "
+                f"cluster(s) {removed_sorted} in knockout_test '{test_id}'."
+            )
+        return errors
+
+    if verdict_without not in POSITIVE_KNOCKOUT_REST_VERDICTS:
+        return errors
+
+    if not remaining_support:
+        errors.append(
+            f"verdict_without_cluster '{verdict_without}' not supported by remaining "
+            f"evidence relations for claim '{claim_id}' after removing cluster(s) "
+            f"{removed_sorted} in knockout_test '{test_id}'."
+        )
+        return errors
+
+    # reported_claim keeps the legacy "at least one remaining support" semantics;
+    # `reports` already counts via the caller's effective_support_types.
+    if claim_kind == "reported_claim":
+        return errors
+
+    direct_supports = [
+        r for r in remaining_support if r.get("relation_type") == "supports_directly"
+    ]
+
+    if verdict_without == "plausible":
+        # The "no remaining support" case is already handled above.
+        return errors
+
+    if verdict_without == "strongly_supported":
+        if not direct_supports:
+            errors.append(
+                f"verdict_without_cluster 'strongly_supported' requires at least one "
+                f"remaining supports_directly relation for claim '{claim_id}' after "
+                f"removing cluster(s) {removed_sorted} in knockout_test '{test_id}'."
+            )
+        return errors
+
+    if verdict_without == "established":
+        unique_evidence_refs = {
+            r.get("evidence_ref")
+            for r in remaining_support
+            if isinstance(r.get("evidence_ref"), str)
+        }
+        if (
+            len(remaining_support) < 2
+            or not direct_supports
+            or len(unique_evidence_refs) < 2
+        ):
+            errors.append(
+                f"verdict_without_cluster 'established' requires at least two remaining "
+                f"support relations from at least two evidence_refs, including one "
+                f"supports_directly relation, for claim '{claim_id}' after removing "
+                f"cluster(s) {removed_sorted} in knockout_test '{test_id}'."
+            )
+        return errors
+
+    return errors
 
 
 def _resolve_claim_source_refs(
@@ -713,37 +800,16 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             if not isinstance(claim_id, str):
                 continue
 
-            # Fix 1: Check negative verdict_without_cluster requires remaining contradicts_directly.
-            if verdict_without == "contradicted":
-                remaining_contradiction = [
-                    r for r in relations
-                    if r.get("claim_ref") == claim_id
-                    and r.get("relation_type") in NEGATIVE_RELATION_TYPES
-                    # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml
-                    and r.get("evidence_ref") in evidence_map
-                    and r.get("evidence_ref") not in removed_evidences
-                ]
-                if not remaining_contradiction:
-                    errors.append(
-                        f"verdict_without_cluster 'contradicted' not supported by remaining "
-                        f"direct contradiction relations for claim '{claim_id}' after removing "
-                        f"cluster(s) {sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
-                    )
-                continue
-
-            # Only check surviving positive verdicts.
-            if verdict_without not in {"established", "strongly_supported", "plausible"}:
-                continue
-
-            # Fix 3: For reported_claim, `reports` relation type also counts as remaining support.
             claim_kind = claim_kind_by_id.get(claim_id)
+            # reported_claim: `reports` counts as remaining support. World-causal
+            # causal_claim verdicts do not get this allowance.
             if claim_kind == "reported_claim":
                 effective_support_types = SUPPORTING_RELATION_TYPES | {"reports"}
             else:
                 effective_support_types = SUPPORTING_RELATION_TYPES
 
-            # Find remaining supporting relations for this claim.
-            # Fix 4: only count relations whose evidence_ref is known in evidence-pack.yml.
+            # Only count relations whose evidence_ref is known in evidence-pack.yml
+            # and was not removed by the cluster knockout.
             remaining_support = [
                 r for r in relations
                 if r.get("claim_ref") == claim_id
@@ -751,12 +817,25 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                 and r.get("evidence_ref") in evidence_map
                 and r.get("evidence_ref") not in removed_evidences
             ]
-            if not remaining_support:
-                errors.append(
-                    f"verdict_without_cluster '{verdict_without}' not supported by remaining "
-                    f"evidence relations for claim '{claim_id}' after removing cluster(s) "
-                    f"{sorted(removed_cluster_ref_list)} in knockout_test '{test_id}'."
+            remaining_contradiction = [
+                r for r in relations
+                if r.get("claim_ref") == claim_id
+                and r.get("relation_type") in NEGATIVE_RELATION_TYPES
+                and r.get("evidence_ref") in evidence_map
+                and r.get("evidence_ref") not in removed_evidences
+            ]
+
+            errors.extend(
+                _remaining_support_floor_errors(
+                    verdict_without=verdict_without,
+                    claim_id=claim_id,
+                    claim_kind=claim_kind,
+                    remaining_support=remaining_support,
+                    remaining_contradiction=remaining_contradiction,
+                    removed_cluster_ref_list=removed_cluster_ref_list,
+                    test_id=test_id,
                 )
+            )
 
     return errors
 

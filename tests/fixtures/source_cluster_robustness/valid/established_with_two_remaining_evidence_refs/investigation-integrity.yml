@@ -1,0 +1,18 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/established_with_two_remaining_evidence_refs"
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001"]
+    lead_institution: "Fixture commission"
+    report_role: "official_summary"
+    politically_sensitive: true
+    financially_sensitive: false
+    institutional_interest_risk: 0.5
+    hypothesis_space_declared:
+      - "Mechanism X caused outcome Y."
+    hypothesis_space_gaps:
+      - "Two independent sources corroborate outside the cluster."
+    adversarial_review:
+      present: "partial"
+      notes: "Limited adversarial scope."
+    integrity_verdict: "methodologically_strong_but_incompletely_adversarial"
