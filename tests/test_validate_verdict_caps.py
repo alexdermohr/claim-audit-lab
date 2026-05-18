@@ -152,3 +152,99 @@ def test_source_report_exemption_works_without_claim_kind(tmp_path):
     write_yaml(tmp_path / "claims.yml", doc)
     write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
     assert validate_verdict_caps.validate_case(tmp_path) == []
+
+
+# --- verdict_effect.effect modes ---
+
+def defeaters_with_effect(effect):
+    return {
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "defeaters": [{
+            "defeater_id": "d001",
+            "target_claim_ref": "c001",
+            "defeater_type": "model_incompatibility",
+            "statement": "Central step challenged.",
+            "materiality": 0.9,
+            "status": "unresolved",
+            "rebuttal_evidence_refs": [],
+            "verdict_effect": {"effect": effect},
+        }],
+    }
+
+
+def defeaters_without_verdict_effect():
+    return {
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "defeaters": [{
+            "defeater_id": "d001",
+            "target_claim_ref": "c001",
+            "defeater_type": "model_incompatibility",
+            "statement": "Central step challenged.",
+            "materiality": 0.9,
+            "status": "unresolved",
+            "rebuttal_evidence_refs": [],
+        }],
+    }
+
+
+def test_missing_verdict_effect_defaults_to_prevents_strong_closure(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("strongly_supported"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_without_verdict_effect())
+    errors = validate_verdict_caps.validate_case(tmp_path)
+    assert any("is capped" in e for e in errors), errors
+
+
+def test_prevents_strong_closure_caps_strongly_supported(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("strongly_supported"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("prevents_strong_closure"))
+    errors = validate_verdict_caps.validate_case(tmp_path)
+    assert any("is capped" in e for e in errors), errors
+
+
+def test_prevents_strong_closure_caps_contradicted(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("contradicted"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("prevents_strong_closure"))
+    errors = validate_verdict_caps.validate_case(tmp_path)
+    assert any("is capped" in e for e in errors), errors
+
+
+def test_prevents_strong_positive_closure_caps_strongly_supported(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("strongly_supported"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("prevents_strong_positive_closure"))
+    errors = validate_verdict_caps.validate_case(tmp_path)
+    assert any("is capped" in e for e in errors), errors
+
+
+def test_prevents_strong_positive_closure_does_not_cap_contradicted(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("contradicted"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("prevents_strong_positive_closure"))
+    assert validate_verdict_caps.validate_case(tmp_path) == []
+
+
+def test_prevents_strong_negative_closure_caps_contradicted(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("contradicted"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("prevents_strong_negative_closure"))
+    errors = validate_verdict_caps.validate_case(tmp_path)
+    assert any("is capped" in e for e in errors), errors
+
+
+def test_prevents_strong_negative_closure_does_not_cap_strongly_supported(tmp_path):
+    write_yaml(tmp_path / "claims.yml", claims_doc("strongly_supported"))
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("prevents_strong_negative_closure"))
+    assert validate_verdict_caps.validate_case(tmp_path) == []
+
+
+def test_downgrades_confidence_does_not_cap(tmp_path):
+    for status in ("strongly_supported", "established", "contradicted"):
+        write_yaml(tmp_path / "claims.yml", claims_doc(status))
+        write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("downgrades_confidence"))
+        assert validate_verdict_caps.validate_case(tmp_path) == [], status
+
+
+def test_context_only_does_not_cap(tmp_path):
+    for status in ("strongly_supported", "established", "contradicted"):
+        write_yaml(tmp_path / "claims.yml", claims_doc(status))
+        write_yaml(tmp_path / "model-defeaters.yml", defeaters_with_effect("context_only"))
+        assert validate_verdict_caps.validate_case(tmp_path) == [], status

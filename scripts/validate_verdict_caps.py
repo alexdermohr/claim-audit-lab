@@ -1,18 +1,29 @@
 #!/usr/bin/env python3
-"""Verdict caps: unresolved high-materiality defeaters block both strong positive and strong negative closure."""
+"""Verdict caps: unresolved high-materiality defeaters block both strong positive and strong negative closure.
+
+The scope of each cap is determined by defeater.verdict_effect.effect:
+  prevents_strong_closure          → caps established, strongly_supported, contradicted
+  prevents_strong_positive_closure → caps established, strongly_supported only
+  prevents_strong_negative_closure → caps contradicted only
+  downgrades_confidence            → no hard cap (lowers confidence, not a blocker)
+  context_only                     → no cap
+  missing verdict_effect or effect → defaults conservatively to prevents_strong_closure
+"""
 
 import pathlib
 import sys
 
 import yaml
 
-# Capped in all cases (positive and negative strong closure).
-CAPPED_STATUSES = {"established", "strongly_supported", "contradicted"}
-# source_report claims assert only that a source reported something, so positive
-# strong closure is not inflated by a physical-mechanism defeater.  Negative
-# closure (contradicted) is still capped because over-contradicting a
-# source-report claim is equally asymmetric.
-SOURCE_REPORT_EXEMPT_STATUSES = {"established", "strongly_supported"}
+POSITIVE_STRONG = {"established", "strongly_supported"}
+NEGATIVE_STRONG = {"contradicted"}
+ALL_STRONG = POSITIVE_STRONG | NEGATIVE_STRONG
+
+# source_report claims assert only that a source reported something; a defeater
+# against the physical mechanism does not invalidate that fact.  Positive strong
+# closure is exempt; negative closure (contradicted) is still capped.
+SOURCE_REPORT_EXEMPT_STATUSES = POSITIVE_STRONG
+
 UNRESOLVED_DEFEATER_STATUSES = {"unresolved", "partially_resolved"}
 HIGH_MATERIALITY = 0.75
 
@@ -37,10 +48,20 @@ def load_optional_object(path: pathlib.Path, label: str) -> tuple[dict | None, l
 
 
 def is_source_report_claim(claim: dict) -> bool:
-    # burden_profile is the schema-stable signal for a source-report claim.
-    # Requiring claim_kind as well would silently skip the exemption for valid
-    # claims that omit the optional claim_kind field.
+    # burden_profile is the schema-stable signal; claim_kind is optional.
     return claim.get("burden_profile") == "source_report"
+
+
+def capped_statuses_for_effect(effect: str) -> set[str]:
+    """Return the set of claim statuses that this defeater effect caps."""
+    if effect in ("context_only", "downgrades_confidence"):
+        return set()
+    if effect == "prevents_strong_positive_closure":
+        return POSITIVE_STRONG
+    if effect == "prevents_strong_negative_closure":
+        return NEGATIVE_STRONG
+    # prevents_strong_closure and any unknown/missing value → conservative default.
+    return ALL_STRONG
 
 
 def validate_case(case_dir: pathlib.Path) -> list[str]:
@@ -85,15 +106,19 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
         if claim is None:
             continue
         status = claim.get("status")
-        if status not in CAPPED_STATUSES:
+
+        effect = (defeater.get("verdict_effect") or {}).get("effect", "prevents_strong_closure")
+        capped = capped_statuses_for_effect(effect)
+        if status not in capped:
             continue
-        # source_report claims may keep positive strong closure: a defeater against
-        # the physical mechanism does not invalidate the claim that a source reported it.
+        # source_report claims retain positive strong closure; the defeater
+        # targets the physical mechanism, not the act of reporting.
         if status in SOURCE_REPORT_EXEMPT_STATUSES and is_source_report_claim(claim):
             continue
         errors.append(
             f"claim '{target_claim}' status='{status}' is capped by unresolved high-materiality defeater "
-            f"'{defeater.get('defeater_id', '?')}' (materiality={materiality}) without rebuttal_evidence_refs."
+            f"'{defeater.get('defeater_id', '?')}' (materiality={materiality}, effect='{effect}') "
+            f"without rebuttal_evidence_refs."
         )
     return errors
 
