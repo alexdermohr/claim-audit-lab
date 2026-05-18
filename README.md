@@ -66,15 +66,15 @@ Noch nicht implementiert:
 - vollständige repo-interne Agenten-Orchestrierung
 - eingebautes externes Quellen-Fetching im Repository-Code
 
-External research may still be performed by an agent runtime when web or research tools are available; it is not implemented as repository code in this MVP.
+Externe Recherche kann weiterhin durch eine Agent-Runtime erfolgen, wenn Web- oder Research-Tools verfügbar sind; sie ist in diesem MVP nicht als Repository-Code implementiert.
 
-## Agent usage
+## Agentennutzung
 
-Agents should not treat this repository as a closed factual knowledge base. For world questions and claim verification, agents should first use general knowledge and available internet/web research, then apply this repository's audit method. Repository search is supplementary unless the user asks a repository-navigation question.
+Agenten dürfen dieses Repository nicht als geschlossenes Faktenlexikon behandeln. Für Weltfragen und Claim-Prüfungen sollen sie zuerst allgemeines Wissen und verfügbare Internet-/Web-Recherche nutzen und anschließend die Audit-Methodik dieses Repositories anwenden. Repository-Suche ist ergänzend, außer der Nutzer stellt ausdrücklich eine Repo-Navigationsfrage.
 
-If no local case exists, the correct conclusion is only: no repo-local case evidence exists. It is not a factual verdict about the world.
+Wenn kein lokaler Case existiert, lautet die korrekte Schlussfolgerung nur: Es gibt keine repo-lokale Case-Evidenz. Das ist kein Tatsachenurteil über die Welt.
 
-See:
+Siehe:
 - AGENTS.md
 - docs/agent-usage.md
 

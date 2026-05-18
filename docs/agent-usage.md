@@ -9,6 +9,7 @@ Agents should use:
 - repository schemas and validators for artifact correctness.
 
 ## Task modes
+
 | User task | First action | Repo role |
 |---|---|---|
 | Normal factual question | Answer using knowledge + web if available | Method only |
