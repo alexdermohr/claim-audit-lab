@@ -143,14 +143,16 @@ def test_anti_knockout_contradicted_with_open_mechanism_fails(tmp_path):
     assert any("anti-knockout" in e for e in errors), errors
 
 
-def test_anti_knockout_weak_with_open_mechanism_fails(tmp_path):
+def test_anti_knockout_weak_with_open_mechanism_passes(tmp_path):
+    # `weak` is a legitimate cautious low-confidence verdict; the anti-knockout
+    # guard intentionally targets only `contradicted` (overclosure into negation).
     write_claim_with_status(tmp_path, "weak")
     write_yaml(
         tmp_path / "burden-layers.yml",
         doc([{"claim_ref": "c001", "layers": anti_knockout_layers()}]),
     )
     errors = validate(tmp_path)
-    assert any("anti-knockout" in e for e in errors), errors
+    assert not any("anti-knockout" in e for e in errors), errors
 
 
 def test_anti_knockout_contradicted_with_resolved_mechanism_passes(tmp_path):
@@ -186,13 +188,29 @@ def test_anti_knockout_operational_placement_not_missing_passes(tmp_path):
 
 
 def test_anti_knockout_structural_effect_unresolved_also_triggers(tmp_path):
-    write_claim_with_status(tmp_path, "weak")
+    write_claim_with_status(tmp_path, "contradicted")
     write_yaml(
         tmp_path / "burden-layers.yml",
         doc([{
             "claim_ref": "c001",
             "layers": {
                 "structural_effect": {"status": "unresolved"},
+                "operational_placement": {"status": "missing"},
+            },
+        }]),
+    )
+    errors = validate(tmp_path)
+    assert any("anti-knockout" in e for e in errors), errors
+
+
+def test_anti_knockout_observational_fit_unresolved_also_triggers(tmp_path):
+    write_claim_with_status(tmp_path, "contradicted")
+    write_yaml(
+        tmp_path / "burden-layers.yml",
+        doc([{
+            "claim_ref": "c001",
+            "layers": {
+                "observational_fit": {"status": "contested"},
                 "operational_placement": {"status": "missing"},
             },
         }]),

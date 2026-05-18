@@ -39,7 +39,21 @@ Ein Defeater zielt **immer** auf ein konkretes Ziel:
 ## Wirkung auf Verdicts
 
 Ein offener, hoch-materialer Defeater **verhindert starke Closure**, auch
-wenn ansonsten eine vollständige narrative Kette vorliegt.
+wenn ansonsten eine vollständige narrative Kette vorliegt. „Starke
+Closure" umfasst dabei **beide Richtungen**:
+
+- starke positive Closure (`established`, `strongly_supported`),
+- starke negative Closure (`contradicted`).
+
+Das `verdict_effect.effect`-Feld unterscheidet:
+
+- `prevents_strong_closure` — blockiert beide Richtungen (Standardwert).
+- `prevents_strong_positive_closure` — blockiert nur Hochstufung.
+- `prevents_strong_negative_closure` — blockiert nur Überwiderlegung.
+- `downgrades_confidence` — senkt Konfidenz, ohne ein konkretes Verdict
+  zu blocken.
+- `context_only` — dokumentiert eine Spannung ohne unmittelbare
+  Verdict-Wirkung.
 
 **Kernregel:**
 

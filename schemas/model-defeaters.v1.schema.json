@@ -64,6 +64,8 @@
                 "type": "string",
                 "enum": [
                   "prevents_strong_closure",
+                  "prevents_strong_positive_closure",
+                  "prevents_strong_negative_closure",
                   "downgrades_confidence",
                   "context_only"
                 ]

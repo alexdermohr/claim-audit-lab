@@ -124,3 +124,19 @@ def test_resolved_high_materiality_with_rebuttal_passes(tmp_path):
         doc([defeater(status="resolved", materiality=0.9, rebuttal_evidence_refs=["e001"])]),
     )
     assert validate(tmp_path) == []
+
+
+def test_directional_verdict_effects_pass(tmp_path):
+    write_refs(tmp_path)
+    for effect in ("prevents_strong_positive_closure", "prevents_strong_negative_closure"):
+        item = defeater(verdict_effect={"effect": effect, "rationale": ""})
+        write_yaml(tmp_path / "model-defeaters.yml", doc([item]))
+        assert validate(tmp_path) == [], effect
+
+
+def test_unknown_verdict_effect_fails(tmp_path):
+    write_refs(tmp_path)
+    item = defeater(verdict_effect={"effect": "bogus_effect"})
+    write_yaml(tmp_path / "model-defeaters.yml", doc([item]))
+    errors = validate(tmp_path)
+    assert any("Schema error" in e for e in errors), errors

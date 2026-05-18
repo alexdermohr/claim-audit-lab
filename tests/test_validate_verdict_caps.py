@@ -142,3 +142,13 @@ def test_source_report_contradicted_is_not_exempt(tmp_path):
     write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
     errors = validate_verdict_caps.validate_case(tmp_path)
     assert any("is capped" in e for e in errors), errors
+
+
+def test_source_report_exemption_works_without_claim_kind(tmp_path):
+    # claim_kind is optional in the schema; burden_profile alone must be
+    # sufficient to identify a source_report claim and apply the exemption.
+    doc = source_report_claims_doc("established")
+    doc["claims"][0].pop("claim_kind")
+    write_yaml(tmp_path / "claims.yml", doc)
+    write_yaml(tmp_path / "model-defeaters.yml", defeaters_doc())
+    assert validate_verdict_caps.validate_case(tmp_path) == []

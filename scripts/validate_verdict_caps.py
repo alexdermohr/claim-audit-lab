@@ -37,7 +37,10 @@ def load_optional_object(path: pathlib.Path, label: str) -> tuple[dict | None, l
 
 
 def is_source_report_claim(claim: dict) -> bool:
-    return claim.get("claim_kind") == "reported_claim" and claim.get("burden_profile") == "source_report"
+    # burden_profile is the schema-stable signal for a source-report claim.
+    # Requiring claim_kind as well would silently skip the exemption for valid
+    # claims that omit the optional claim_kind field.
+    return claim.get("burden_profile") == "source_report"
 
 
 def validate_case(case_dir: pathlib.Path) -> list[str]:

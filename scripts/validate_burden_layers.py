@@ -83,7 +83,10 @@ def collect_refs(case_dir: pathlib.Path) -> tuple[set[str] | None, set[str] | No
 # Statuses that indicate a layer is not yet positively established.
 _OPEN_LAYER_STATUSES = {"unresolved", "partially_resolved", "contested"}
 # Claim statuses that represent strong negative closure.
-_NEGATIVE_CLOSURE_STATUSES = {"weak", "contradicted"}
+# `weak` is intentionally excluded: a cautious low-confidence verdict can be a
+# legitimate result even while mechanistic layers remain open.  Only
+# `contradicted` (overclosure into negation) is gated by this rule.
+_NEGATIVE_CLOSURE_STATUSES = {"contradicted"}
 # The layers whose openness protects the physical-mechanism thesis from knockout.
 _MECHANISTIC_LAYERS = {"physical_mechanism", "structural_effect", "observational_fit"}
 
