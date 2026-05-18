@@ -1,0 +1,15 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    statement: "Mechanism X caused outcome Y."
+    status: "strongly_supported"
+    source_refs: ["s001"]
+    evidence_refs: ["e002"]
+    uncertainty:
+      score: 0.2
+      causes: ["Claim backed by s001 explicitly and s002 via evidence_ref e002"]
+    interpolation:
+      score: 0.1
+      assumptions: ["e002 from s002 is the primary evidence"]

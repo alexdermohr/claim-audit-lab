@@ -1,0 +1,14 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    statement: "Mechanism X caused outcome Y."
+    status: "contradicted"
+    source_refs: ["s001", "s002", "s003"]
+    uncertainty:
+      score: 0.2
+      causes: ["Multiple independent contradicting sources"]
+    interpolation:
+      score: 0.1
+      assumptions: ["s003 is independent of the official cluster"]

@@ -1,0 +1,19 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/duplicate_cluster_id"
+clusters:
+  - cluster_id: "official_cluster"
+    source_refs: ["s001"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.5
+  - cluster_id: "official_cluster"
+    source_refs: ["s002"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.5
+    notes: "Duplicate cluster_id — this should be rejected."
+knockout_tests:
+  - test_id: "remove_official_cluster"
+    removed_cluster_refs: ["official_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "weak"
+    fragility_score: 0.5
+    notes: "Knockout test for duplicate cluster fixture."

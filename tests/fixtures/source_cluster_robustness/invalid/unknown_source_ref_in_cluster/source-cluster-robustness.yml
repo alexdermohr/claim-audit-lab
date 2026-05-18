@@ -1,0 +1,21 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/source_cluster_robustness_declared"
+clusters:
+  - cluster_id: "official_cluster"
+    source_refs: ["s001", "s002", "s999"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.55
+    compromise_scenarios:
+      - scenario_id: "official_cluster_stress"
+        premise: "Assume the cluster is institutionally entangled with the subject."
+        treatment: "downgrade_to_reported_claim_only"
+        affected_claims: ["c001"]
+        notes: "Stress hypothesis only; not asserted as fact."
+knockout_tests:
+  - test_id: "remove_official_cluster"
+    removed_cluster_refs: ["official_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "weak"
+    verdict_delta: "strongly_supported_to_weak"
+    fragility_score: 0.78
+    notes: "Strong verdict depends heavily on the official cluster."

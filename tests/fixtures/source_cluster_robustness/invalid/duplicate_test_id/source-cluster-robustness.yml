@@ -1,0 +1,20 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/duplicate_test_id"
+clusters:
+  - cluster_id: "official_cluster"
+    source_refs: ["s001", "s002"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.5
+knockout_tests:
+  - test_id: "remove_official_cluster"
+    removed_cluster_refs: ["official_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "weak"
+    fragility_score: 0.5
+    notes: "First test with this ID."
+  - test_id: "remove_official_cluster"
+    removed_cluster_refs: ["official_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "speculative"
+    fragility_score: 0.6
+    notes: "Duplicate test_id — this should be rejected."

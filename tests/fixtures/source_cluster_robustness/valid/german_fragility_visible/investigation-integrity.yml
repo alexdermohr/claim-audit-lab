@@ -1,0 +1,18 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/german_fragility_visible"
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001", "s002"]
+    lead_institution: "Fixture-Kommission"
+    report_role: "official_summary"
+    politically_sensitive: true
+    financially_sensitive: false
+    institutional_interest_risk: 0.7
+    hypothesis_space_declared:
+      - "Mechanismus X verursachte Ergebnis Y."
+    hypothesis_space_gaps:
+      - "Unabhängige Replikation fehlt."
+    adversarial_review:
+      present: "partial"
+      notes: "Begrenzter adversarieller Umfang."
+    integrity_verdict: "methodologically_strong_but_incompletely_adversarial"

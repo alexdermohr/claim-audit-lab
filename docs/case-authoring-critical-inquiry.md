@@ -51,6 +51,19 @@ High method depth and high interest risk can both be true. Do not convert source
 - **Non-test to cover-up:** a material untested path limits closure and must be visible, but it does not prove concealment by itself.
 
 
+## `source-cluster-robustness.yml`
+
+Use `source-cluster-robustness.yml` to declare cluster dependence and run knockout/stress tests for strong or negative world-causal verdicts. It is required when `investigation-integrity.yml` flags one or more source clusters **and** at least one `causal_claim` with `strongly_supported`, `established`, or `contradicted` status has a resolved source set that overlaps the flagged sources. "Resolved sources" means explicit `source_refs` on the claim, any `evidence_refs` entries on the claim resolved to their `source_ref` via `evidence-pack.yml`, and `evidence-pack.yml` items whose `claim_refs` include the claim. A strong causal claim with no resolvable sources is treated conservatively and also triggers the requirement.
+
+Author each artifact with these separations in mind:
+
+- A **cluster** groups related sources that may not be epistemically independent. Declare its role (`primary_investigation`, `official_summary`, `advocacy_report`, `anti_official_cluster`, ...). An anti-official cluster is held to the same standard as an official one.
+- A **compromise scenario** is a stress hypothesis with a declared `treatment` (`downgrade_to_reported_claim_only`, `remove_from_world_claim_support`, `require_independent_replication`, `cap_negative_closure`). It does not assert the cluster is actually compromised.
+- A **knockout test** removes one or more clusters and records the verdict that would remain, optionally with a `fragility_score`. A strong verdict can simultaneously be fragile; this is the place where that is recorded honestly.
+- When `fragility_score >= 0.7`, `assessment.md` must surface the cluster dependency or fragility in plain text.
+
+A compromise scenario must never be used as positive proof for a counter-hypothesis. Validators flag prose that pairs cluster-compromise language with proof language (for example, *proves*, *beweist*, *therefore true*, *deshalb wahr*) in `notes`, `rationale`, or `premise`.
+
 ## Overclosure authoring checklist
 
 Before assigning `status: contradicted` to a world-causal or co-causation claim, check that the case is not merely saying one of these weaker things: a better explanation exists, no positive evidence was found, an official source did not corroborate the claim, a causal bridge is missing, or a method/non-test gap remains. Those operations should normally cap or downgrade confidence rather than close the claim negatively.

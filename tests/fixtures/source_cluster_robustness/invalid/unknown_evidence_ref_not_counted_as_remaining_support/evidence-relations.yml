@@ -1,0 +1,12 @@
+schema_version: "1.0"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "supports_directly"
+    notes: "Direct support from official source."
+  - relation_id: "r002"
+    evidence_ref: "e999"
+    claim_ref: "c001"
+    relation_type: "supports_directly"
+    notes: "This relation references e999 which does not exist in evidence-pack.yml."
