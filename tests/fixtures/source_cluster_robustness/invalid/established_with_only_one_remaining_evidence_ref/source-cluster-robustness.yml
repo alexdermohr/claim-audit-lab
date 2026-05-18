@@ -12,4 +12,4 @@ knockout_tests:
     verdict_without_cluster: "established"
     verdict_delta: "established_overclaimed_with_only_one_remaining_evidence_ref"
     fragility_score: 0.4
-    notes: "Only one support relation survives the knockout, but the test still asserts established."
+    notes: "Two support relations survive the knockout, but both point to the same evidence_ref; the test still asserts established."

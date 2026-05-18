@@ -230,3 +230,12 @@ def test_valid_plausible_with_indirect_remaining_support_passes():
     """plausible passes when at least one remaining supporting relation (indirect is enough) survives."""
     errors = fixture_errors("valid", "plausible_with_indirect_remaining_support")
     assert errors == [], errors
+
+
+def test_valid_non_causal_established_with_indirect_remaining_support_passes():
+    """Non-causal claim kinds (factual_event_claim etc.) keep legacy support semantics:
+    an indirect remaining support relation is enough for an 'established'
+    verdict_without_cluster. The strict positive floors only apply to world-causal kinds.
+    """
+    errors = fixture_errors("valid", "non_causal_established_with_indirect_remaining_support")
+    assert errors == [], errors

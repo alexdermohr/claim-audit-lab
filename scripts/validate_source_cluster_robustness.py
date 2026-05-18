@@ -301,12 +301,19 @@ def _remaining_support_floor_errors(
 ) -> list[str]:
     """Return strength-floor violations for a post-knockout verdict on a single claim.
 
-    For causal_claim, enforce minimal remaining-relation structure for plausible /
-    strongly_supported / established / contradicted verdict_without_cluster. For
-    reported_claim, keep the legacy "at least one remaining support" check so that
-    `reports` continues to count as remaining support without forcing world-causal
-    direct-support semantics. Unknown evidence_refs and removed evidence_refs are
-    already excluded by callers before invoking this helper.
+    Scope discipline:
+    - verdict_without_cluster == 'contradicted' always requires at least one remaining
+      contradicts_directly relation, regardless of claim_kind. Support relations do not
+      carry a contradiction verdict.
+    - For positive verdicts (plausible / strongly_supported / established), every claim
+      kind must have at least one remaining supporting relation (the legacy check).
+      reported_claim may include 'reports' via the caller's effective_support_types.
+    - The stricter positive direct-support / evidence-diversity floors only apply to
+      world-causal claim kinds (WORLD_CAUSAL_TYPES). Other claim kinds — reported_claim,
+      factual_event_claim, legal_claim, meta_claim, etc. — keep the legacy semantics.
+
+    Unknown evidence_refs and removed evidence_refs are already excluded by callers
+    before invoking this helper.
     """
     errors: list[str] = []
     removed_sorted = sorted(str(ref) for ref in removed_cluster_ref_list)
@@ -331,9 +338,11 @@ def _remaining_support_floor_errors(
         )
         return errors
 
-    # reported_claim keeps the legacy "at least one remaining support" semantics;
-    # `reports` already counts via the caller's effective_support_types.
-    if claim_kind == "reported_claim":
+    # Only world-causal claim kinds use the stricter positive direct-support and
+    # evidence-diversity floors. All other claim kinds keep the legacy "at least
+    # one remaining support relation" semantics; reported_claim may include
+    # 'reports' via the caller's effective_support_types.
+    if claim_kind not in WORLD_CAUSAL_TYPES:
         return errors
 
     direct_supports = [

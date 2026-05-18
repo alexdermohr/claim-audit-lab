@@ -1,0 +1,18 @@
+schema_version: "1.0"
+case_ref: "cases/fixture/non_causal_established_with_indirect_remaining_support"
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001"]
+    lead_institution: "Fixture commission"
+    report_role: "official_summary"
+    politically_sensitive: false
+    financially_sensitive: false
+    institutional_interest_risk: 0.4
+    hypothesis_space_declared:
+      - "Event E occurred on date D."
+    hypothesis_space_gaps:
+      - "Only indirect independent corroboration outside the cluster."
+    adversarial_review:
+      present: "partial"
+      notes: "Limited adversarial scope."
+    integrity_verdict: "methodologically_strong_but_incompletely_adversarial"
