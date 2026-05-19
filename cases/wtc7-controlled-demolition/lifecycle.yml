@@ -1,0 +1,20 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: "cases/wtc7-controlled-demolition"
+
+status: "draft"
+
+created_at: "2026-05-18"
+last_reviewed_at: "2026-05-18"
+review_after: "2026-08-18"
+
+redteam_ref: "redteam.yml"
+
+reopen_triggers:
+  - new_primary_source
+  - major_contradiction
+
+history:
+  - date: "2026-05-18"
+    status: "draft"
+    note: "Case opened."

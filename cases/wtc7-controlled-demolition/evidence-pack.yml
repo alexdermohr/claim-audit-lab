@@ -1,0 +1,22 @@
+schema_version: "1.0"
+
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001", "c002", "c003"]
+    type: "official_statement"
+    summary: "NIST kommt zu dem Schluss, dass Brände und nicht Sprengstoffe den Einsturz verursachten."
+    verbatim_or_ref: "https://www.nist.gov/pba/questions-and-answers-about-nist-wtc-7-investigation"
+    supports: ["c002"]
+    contradicts: ["c001", "c003"]
+    notes: "NIST-Untersuchung von WTC 7"
+
+  - evidence_id: "e002"
+    source_ref: "s002"
+    claim_refs: ["c001"]
+    type: "secondary_summary"
+    summary: "AE911Truth argumentiert, dass die physikalischen Merkmale des Einsturzes auf eine kontrollierte Sprengung hindeuten."
+    verbatim_or_ref: "https://www.ae911truth.org/"
+    supports: ["c001"]
+    contradicts: []
+    notes: "Keine operationale Evidenz enthalten."

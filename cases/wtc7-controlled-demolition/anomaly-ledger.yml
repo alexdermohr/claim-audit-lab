@@ -1,0 +1,23 @@
+schema_version: "1.0"
+case_ref: "cases/wtc7-controlled-demolition"
+
+anomalies:
+  - anomaly_id: "a001"
+    anomaly_type: "contradictory_evidence"
+    source_refs: ["s001", "s002"]
+    affected_claims: ["c001"]
+    affected_hypotheses: []
+    statement: "Freier Fall von WTC 7 für ca. 2.25 Sekunden."
+    materiality: 0.8
+    anomaly_direction: "contests_closure"
+    why_it_matters: "Ein reiner Strukturversagen-Einsturz durch Feuer müsste normalerweise mehr Widerstand zeigen; der freie Fall ist das Hauptargument der Sprengungsthese."
+    possible_benign_explanations:
+      - "Simultanes Versagen der Stützstruktur im Inneren bevor die Außenhülle nachgibt."
+    possible_bias_explanations:
+      - "Wurde im offiziellen Modell nachträglich eingefügt/akzeptiert, ohne die Sprengungsthese neu zu testen."
+    missing_for_resolution:
+      - "Physische Beweise für Sprengstoffe oder detailliertere Innenstrukturdaten."
+    status: "partially_resolved"
+    verdict_effect:
+      claim_ref: "c001"
+      effect: "prevents_overconfidence"

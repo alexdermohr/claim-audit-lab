@@ -1,0 +1,95 @@
+schema_version: '1.0'
+claims:
+- claim_id: c001
+  claim_type: causal_claim
+  claim_kind: comparative_claim
+  burden_profile: comparative
+  statement: "Die Wahrscheinlichkeit, dass WTC 7 durch eine kontrollierte Sprengung statt durch den Brand eingestürzt ist, ist hoch."
+  status: weak
+  evidence_refs:
+  - e001
+  - e002
+  source_refs:
+  - s001
+  - s002
+  requires:
+  - timeline
+  - mechanism
+  - at least two counterhypotheses
+  counterclaims: ["c002", "c003"]
+  forbidden_upgrades:
+  - correlation_to_causation
+  - absence_of_evidence_to_falsehood
+  uncertainty:
+    score: 0.1
+    causes:
+    - Fehlen von positiver operationaler Evidenz für die Sprengungsthese
+  interpolation:
+    score: 0.1
+    assumptions:
+    - Das NIST-Modell schließt die Notwendigkeit von Sprengstoffen für den Einsturz aus.
+  required_chain:
+  - id: r001
+    requirement: operational_placement_evidence
+    status: missing
+  world_claim_refs: []
+  schema_version: '1.0'
+
+- claim_id: c002
+  claim_type: causal_claim
+  claim_kind: comparative_claim
+  burden_profile: comparative
+  statement: "WTC 7 stürzte hauptsächlich aufgrund von durch Trümmer ausgelösten Bränden ein."
+  status: plausible
+  evidence_refs:
+  - e001
+  source_refs:
+  - s001
+  requires:
+  - timeline
+  - mechanism
+  - at least two counterhypotheses
+  counterclaims: ["c001", "c003"]
+  forbidden_upgrades:
+  - correlation_to_causation
+  - absence_of_evidence_to_falsehood
+  uncertainty:
+    score: 0.1
+    causes:
+    - NIST suchte nicht nach Sprengstoffrückständen
+  interpolation:
+    score: 0.1
+    assumptions:
+    - Computermodelle entsprechen exakt der Realität
+  world_claim_refs: []
+  schema_version: '1.0'
+
+- claim_id: c003
+  claim_type: causal_claim
+  claim_kind: comparative_claim
+  burden_profile: comparative
+  statement: "WTC 7 stürzte durch unvorhersehbare strukturelle Mängel ein, die unabhängig von den Bränden und den Anschlägen waren."
+  status: contradicted
+  direct_incompatibility_basis: "ruled out by NIST report because building was structurally sound prior to fire."
+  evidence_refs:
+  - e001
+  source_refs:
+  - s001
+  requires:
+  - timeline
+  - mechanism
+  - at least two counterhypotheses
+  counterclaims: ["c001", "c002"]
+  forbidden_upgrades:
+  - correlation_to_causation
+  - absence_of_evidence_to_falsehood
+  uncertainty:
+    score: 0.1
+    causes:
+    - Keine Evidenz für diese These
+  interpolation:
+    score: 0.1
+    assumptions:
+    - "Keine validen Annahmen"
+  world_claim_refs: []
+  schema_version: '1.0'

@@ -1,0 +1,32 @@
+schema_version: "1.0"
+case_ref: "cases/wtc7-controlled-demolition"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "contradicts_directly"
+    strength: 0.9
+    incompatible_proposition: "The building collapsed primarily due to fire without explosives."
+    explanation: "Offizielle Untersuchung schließt Sprengstoff aus."
+
+  - relation_id: "r002"
+    evidence_ref: "e002"
+    claim_ref: "c001"
+    relation_type: "supports_indirectly"
+    strength: 0.3
+    explanation: "Stützt die Hypothese durch alternative physikalische Interpretationen, hat aber Lücken in der operationalen Beweiskette."
+
+  - relation_id: "r003"
+    evidence_ref: "e001"
+    claim_ref: "c002"
+    relation_type: "supports_directly"
+    strength: 0.8
+    explanation: "NIST Report liefert direkte Erklärungen und Beweise für feuerausgelösten Einsturz."
+
+  - relation_id: "r004"
+    evidence_ref: "e001"
+    claim_ref: "c003"
+    relation_type: "contradicts_directly"
+    strength: 0.9
+    incompatible_proposition: "Der Einsturz ist ruled out als strukturelle Schwäche."
+    explanation: "Unvorhersehbare Mängel ohne Brand ruled out by evidence."

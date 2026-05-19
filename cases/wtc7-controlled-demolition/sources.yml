@@ -1,0 +1,38 @@
+schema_version: "1.0"
+
+sources:
+  - schema_version: "1.0"
+    source_id: "s001"
+    label: "NIST NCSTAR 1A"
+    url_or_ref: "https://www.nist.gov/pba/questions-and-answers-about-nist-wtc-7-investigation"
+    source_type: "official_body"
+    publication_date: "2008-11-20"
+    author_or_org: "National Institute of Standards and Technology (NIST)"
+    source_weight:
+      primary_proximity: 0.9
+      method_transparency: 0.8
+      reproducibility: 0.5
+      source_cluster_independence: 0.8
+      institutional_interest_risk: 0.7
+      adversarial_relevance: 0.1
+      historical_track_record: 0.9
+      update_latency_risk: 0.1
+    notes: "Offizieller Bericht über den Einsturz von WTC 7"
+
+  - schema_version: "1.0"
+    source_id: "s002"
+    label: "Architects & Engineers for 9/11 Truth"
+    url_or_ref: "https://www.ae911truth.org/"
+    source_type: "advocacy_report"
+    publication_date: "2006-01-01"
+    author_or_org: "AE911Truth"
+    source_weight:
+      primary_proximity: 0.4
+      method_transparency: 0.6
+      reproducibility: 0.3
+      source_cluster_independence: 0.9
+      institutional_interest_risk: 0.8
+      adversarial_relevance: 0.9
+      historical_track_record: 0.4
+      update_latency_risk: 0.5
+    notes: "Alternative Untersuchung und Interessenvertretung für die Sprengungsthese"

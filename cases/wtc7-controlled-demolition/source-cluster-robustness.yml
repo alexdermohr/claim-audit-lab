@@ -1,0 +1,16 @@
+schema_version: "1.0"
+case_ref: "cases/wtc7-controlled-demolition"
+
+clusters:
+  - cluster_id: "cl001"
+    cluster_role: "primary_investigation"
+    source_refs: ["s001"]
+    notes: "Official government investigation and its associated models."
+
+knockout_tests:
+  - test_id: "kt001"
+    affected_claims: ["c003"]
+    removed_cluster_refs: ["cl001"]
+    fragility_score: 0.9
+    verdict_without_cluster: "unresolved"
+    notes: "Entfernt man den NIST-Bericht (cl001) als Quelle, fällt der primäre Nachweis für den feuerausgelösten Einsturz und gegen strukturunabhängige Mängel weitgehend weg, was den Status von c003 auf unresolved setzen würde."

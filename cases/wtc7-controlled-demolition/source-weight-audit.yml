@@ -1,0 +1,19 @@
+schema_version: "1.0"
+case_ref: "cases/wtc7-controlled-demolition"
+audited_at: "2026-05-18"
+auditor: "jules"
+records:
+  - source_ref: "s001"
+    questions:
+      - "Ist diese Quelle methodisch transparent?"
+      - "Wie stark ist das institutionelle Interesse?"
+    evidence_refs: ["e001"]
+    disputed: true
+    notes: "Offizieller Bericht der stark von alternativen Narrativen kritisiert wird."
+  - source_ref: "s002"
+    questions:
+      - "Ist diese Quelle unabhängig?"
+      - "Gibt es primäre Daten oder nur Sekundäranalyse?"
+    evidence_refs: ["e002"]
+    disputed: false
+    notes: "Interessenverband ohne primären Zugriff auf Beweise."

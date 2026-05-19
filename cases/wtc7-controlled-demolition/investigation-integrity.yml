@@ -1,0 +1,27 @@
+schema_version: "1.0"
+case_ref: "cases/wtc7-controlled-demolition"
+
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001"]
+    lead_institution: "NIST"
+    report_role: "official_summary"
+    politically_sensitive: true
+    financially_sensitive: true
+    institutional_interest_risk: 0.70
+    hypothesis_space_declared:
+      - "The building collapsed primarily due to fire without explosives."
+    hypothesis_space_gaps:
+      - "Physical search for explosive residue."
+    non_tested_material_paths:
+      - path_id: "nt001"
+        expected_test: "Exhaustive forensic search for all possible explosive residues."
+        justification_present: "yes"
+        justification_quality: 0.8
+        materiality: 0.8
+    adversarial_review:
+      present: "partial"
+      notes: "Extensive peer review but heavily criticized by alternative groups."
+    integrity_verdict: "methodologically_strong_but_incompletely_adversarial"
+    downstream_constraints:
+      - "NIST report is the strongest technical model but its missing explosive residue test is a known non-test."
