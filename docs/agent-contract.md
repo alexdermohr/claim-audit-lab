@@ -140,6 +140,13 @@ verdict.
 8.3 The agent's prose, when discussing a claim, uses the register allowed by
 `docs/status-prose-consistency.md` for that claim's `status`.
 
+8.4 Strong or contentious verdicts require an explicit, auditable inference
+chain. When a claim reaches `established`, `strongly_supported`, or
+`contradicted`, or uses `burden_profile: causal_chain` / `comparative` at
+any resolved status, the agent must supply a corresponding entry in
+`inference-ledger.yml` as defined in `docs/inference-ledger.md`. Strong
+closure without an inference-ledger entry is a validator failure.
+
 ## Article 9: Red-team status
 
 9.1 The agent does not present a `final` assessment of a case unless the
