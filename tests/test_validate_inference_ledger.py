@@ -125,7 +125,11 @@ def test_valid_high_materiality_defeater_treated(tmp_path):
             }],
         },
     )
-    s = step(operation="defeater_response", produces="Addressed: data gap does not invalidate existing corroboration.")
+    s = step(
+        operation="defeater_response",
+        produces="Addressed: data gap does not invalidate existing corroboration.",
+        addresses_defeater_refs=["d001"],
+    )
     write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
     assert validate(tmp_path) == []
 
@@ -174,25 +178,26 @@ def test_invalid_causal_chain_plausible_without_ledger(tmp_path):
     assert any("requires an inference-ledger entry" in e and "c001" in e for e in errors), errors
 
 
+def _defeater_doc(defeater_id="d001", materiality=0.8, status="unresolved"):
+    return {
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "defeaters": [{
+            "defeater_id": defeater_id,
+            "target_claim_ref": "c001",
+            "defeater_type": "central_data_gap",
+            "statement": "Key data is missing.",
+            "materiality": materiality,
+            "status": status,
+            "rebuttal_evidence_refs": [],
+            "verdict_effect": {"effect": "prevents_strong_closure", "rationale": ""},
+        }],
+    }
+
+
 def test_invalid_unresolved_high_materiality_defeater_without_step(tmp_path):
     write_base(tmp_path, [claim(status="strongly_supported")])
-    write_yaml(
-        tmp_path / "model-defeaters.yml",
-        {
-            "schema_version": "1.0",
-            "case_ref": "cases/test",
-            "defeaters": [{
-                "defeater_id": "d001",
-                "target_claim_ref": "c001",
-                "defeater_type": "central_data_gap",
-                "statement": "Key data is missing.",
-                "materiality": 0.8,
-                "status": "unresolved",
-                "rebuttal_evidence_refs": [],
-                "verdict_effect": {"effect": "prevents_strong_closure", "rationale": ""},
-            }],
-        },
-    )
+    write_yaml(tmp_path / "model-defeaters.yml", _defeater_doc())
     # Inference exists but only has corroboration — no defeater_response or uncertainty_preservation
     write_yaml(tmp_path / "inference-ledger.yml", ledger([inference()]))
     errors = validate(tmp_path)
@@ -200,3 +205,90 @@ def test_invalid_unresolved_high_materiality_defeater_without_step(tmp_path):
         "defeater_response" in e and "uncertainty_preservation" in e and "d001" in e
         for e in errors
     ), errors
+
+
+# --- additional hardening tests ---
+
+def test_invalid_step_with_no_premise_refs(tmp_path):
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    s = step(premise_evidence_refs=[], premise_claim_refs=[])
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    errors = validate(tmp_path)
+    assert any("must cite at least one premise_evidence_ref or premise_claim_ref" in e for e in errors), errors
+
+
+def test_invalid_uncertainty_preservation_with_no_premise_refs(tmp_path):
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    s = step(
+        operation="uncertainty_preservation",
+        produces="Open quantification gap preserved.",
+        uncertainty_effect="preserves",
+        premise_evidence_refs=[],
+        premise_claim_refs=[],
+    )
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    errors = validate(tmp_path)
+    assert any("must cite at least one premise_evidence_ref or premise_claim_ref" in e for e in errors), errors
+
+
+def test_invalid_defeater_not_satisfied_by_generic_defeater_response(tmp_path):
+    """defeater_response without addresses_defeater_refs does not cover the specific defeater."""
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    write_yaml(tmp_path / "model-defeaters.yml", _defeater_doc())
+    s = step(operation="defeater_response", produces="Generic response with no defeater ref.")
+    # No addresses_defeater_refs → does not satisfy d001
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    errors = validate(tmp_path)
+    assert any("d001" in e and "addresses_defeater_refs" in e for e in errors), errors
+
+
+def test_invalid_defeater_not_satisfied_by_wrong_addresses_ref(tmp_path):
+    """addresses_defeater_refs: [d999] does not satisfy d001, and d999 is unknown."""
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    write_yaml(tmp_path / "model-defeaters.yml", _defeater_doc())
+    s = step(
+        operation="defeater_response",
+        produces="Response aimed at the wrong defeater.",
+        addresses_defeater_refs=["d999"],
+    )
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    errors = validate(tmp_path)
+    # d999 is unknown
+    assert any("addresses_defeater_ref 'd999' not found in model-defeaters.yml" in e for e in errors), errors
+    # d001 is still uncovered
+    assert any("d001" in e and "addresses_defeater_refs" in e for e in errors), errors
+
+
+def test_invalid_unknown_addresses_defeater_ref(tmp_path):
+    """addresses_defeater_refs referencing a non-existent defeater_id fails."""
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    write_yaml(tmp_path / "model-defeaters.yml", _defeater_doc())
+    s = step(addresses_defeater_refs=["d999"])
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    errors = validate(tmp_path)
+    assert any("addresses_defeater_ref 'd999' not found in model-defeaters.yml" in e for e in errors), errors
+
+
+def test_valid_defeater_response_with_specific_ref(tmp_path):
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    write_yaml(tmp_path / "model-defeaters.yml", _defeater_doc())
+    s = step(
+        operation="defeater_response",
+        produces="Addressed d001: available evidence triangulates despite the data gap.",
+        addresses_defeater_refs=["d001"],
+    )
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    assert validate(tmp_path) == []
+
+
+def test_valid_uncertainty_preservation_with_premise_and_specific_ref(tmp_path):
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    write_yaml(tmp_path / "model-defeaters.yml", _defeater_doc())
+    s = step(
+        operation="uncertainty_preservation",
+        produces="d001 data gap cannot be closed; uncertainty preserved rather than hidden.",
+        uncertainty_effect="preserves",
+        addresses_defeater_refs=["d001"],
+    )
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    assert validate(tmp_path) == []

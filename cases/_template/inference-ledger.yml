@@ -25,8 +25,13 @@ inferences:
         #   defeater_response        → step addresses a specific defeater
         #   uncertainty_preservation → step documents irreducible uncertainty rather than resolving it
         operation: "corroboration"
-        produces: ""
+        produces: "Describe in one sentence what this step concludes from the premises above."
         uncertainty_effect: "lowers"
         forbidden_upgrade_checked:
           - "source_prestige_to_truth"
+        # addresses_defeater_refs: required when operation is defeater_response or
+        # uncertainty_preservation and a high-materiality defeater must be covered.
+        # Example:
+        #   addresses_defeater_refs:
+        #     - "d001"
         notes: ""

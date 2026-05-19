@@ -129,8 +129,13 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
     defeaters_data, load_errors = load_optional_object(case_dir / "model-defeaters.yml", "model-defeaters.yml")
     errors.extend(load_errors)
     defeaters = []
+    defeater_ids: set[str] | None = None
     if defeaters_data is not None:
         defeaters = require_list(defeaters_data, "defeaters", "model-defeaters.yml", errors)
+        defeater_ids = {
+            d.get("defeater_id") for d in defeaters
+            if isinstance(d, dict) and isinstance(d.get("defeater_id"), str)
+        }
 
     ledger_path = case_dir / "inference-ledger.yml"
     if not ledger_path.exists():
@@ -209,6 +214,31 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                             f"not found in claims.yml."
                         )
 
+            # every step must ground itself in at least one concrete premise
+            has_evidence_premise = any(
+                isinstance(r, str) and r.strip()
+                for r in (step.get("premise_evidence_refs") or [])
+            )
+            has_claim_premise = any(
+                isinstance(r, str) and r.strip()
+                for r in (step.get("premise_claim_refs") or [])
+            )
+            if not has_evidence_premise and not has_claim_premise:
+                errors.append(
+                    f"inference '{inf_id}' step '{step_id}' must cite at least one "
+                    f"premise_evidence_ref or premise_claim_ref."
+                )
+
+            # validate addresses_defeater_refs against known defeater_ids
+            addr_refs = step.get("addresses_defeater_refs") or []
+            if isinstance(addr_refs, list) and defeater_ids is not None:
+                for ref in addr_refs:
+                    if isinstance(ref, str) and ref not in defeater_ids:
+                        errors.append(
+                            f"inference '{inf_id}' step '{step_id}' addresses_defeater_ref '{ref}' "
+                            f"not found in model-defeaters.yml."
+                        )
+
             # comparison steps must declare rival_weakness_to_own_proof as checked
             if step.get("operation") == "comparison":
                 forbidden = step.get("forbidden_upgrade_checked") or []
@@ -262,6 +292,8 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         defeater_id = defeater.get("defeater_id", "?")
         covered = any(
             step.get("operation") in ("defeater_response", "uncertainty_preservation")
+            and isinstance(step.get("addresses_defeater_refs"), list)
+            and defeater_id in step["addresses_defeater_refs"]
             for inf in inferences
             if isinstance(inf, dict) and inf.get("claim_ref") == target_ref
             for step in (inf.get("inference_steps") or [])
@@ -271,7 +303,7 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             errors.append(
                 f"claim '{target_ref}' has unresolved high-materiality defeater '{defeater_id}' "
                 f"(materiality={materiality}) but no inference step with 'defeater_response' or "
-                f"'uncertainty_preservation' found."
+                f"'uncertainty_preservation' and addresses_defeater_refs containing '{defeater_id}' found."
             )
 
     return errors

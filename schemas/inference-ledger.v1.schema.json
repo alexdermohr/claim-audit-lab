@@ -104,6 +104,11 @@
             ]
           }
         },
+        "addresses_defeater_refs": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "defeater_ids from model-defeaters.yml that this step explicitly addresses; required when operation is defeater_response or uncertainty_preservation and a matching high-materiality defeater exists."
+        },
         "notes": {
           "type": "string"
         }
