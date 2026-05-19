@@ -35,19 +35,20 @@ bleibt unter den verfügbaren Quellen underdetermined.
 
 **Engere Aussage (c004):** Cluster-Effekte trugen substantiell zur
 Konvergenz dismissiver Bewertungen in den dokumentierten
-hochrezipierten Kanälen bei. Diese engere Aussage ist stark gestützt.
+hochrezipierten Kanälen bei. Diese engere Aussage bleibt bei
+unverified Quellenlage nur **schwach** gestützt.
 
 ## Claim-Ergebnisse
 
 | Claim | Urteil | Zusammenfassung |
 |---|---:|---|
-| c001 | established | Autoren der Lancet-Korrespondenz hatten zum Publikationszeitpunkt Förder- und Autorenverflechtungen mit Forschung am WIV, dokumentiert durch das Lancet-Addendum vom Juni 2021. |
-| c002 | strongly_supported | Pre-Publication-Kommunikation der Proximal-Origin-Autoren mit NIH-Leitung zeigte intern eine Unsicherheit, die in der publizierten Fassung rahmungsmäßig reduziert war. |
-| c003 | strongly_supported | Beispielartikel in hochrezipierten Outlets wendeten Kategorie-B-Dismissal-Sprache an, gestützt auf Quellenprestige (Verweis auf s001/s002) statt auf unabhängige Burden-Layer-Tests. |
-| c004 | strongly_supported | Cluster-Effekte trugen substantiell zur Konvergenz dismissiver Bewertungen in den dokumentierten hochrezipierten Kanälen bei. |
+| c001 | plausible | Autoren der Lancet-Korrespondenz hatten zum Publikationszeitpunkt Förder- und Autorenverflechtungen mit Forschung am WIV, dokumentiert durch das Lancet-Addendum vom Juni 2021. |
+| c002 | plausible | Pre-Publication-Kommunikation der Proximal-Origin-Autoren mit NIH-Leitung zeigte intern eine Unsicherheit, die in der publizierten Fassung rahmungsmäßig reduziert war. |
+| c003 | weak | Beispielartikel in hochrezipierten Outlets wendeten Kategorie-B-Dismissal-Sprache an, gestützt auf Quellenprestige (Verweis auf s001/s002) statt auf unabhängige Burden-Layer-Tests. |
+| c004 | weak | Cluster-Effekte trugen substantiell zur Konvergenz dismissiver Bewertungen in den dokumentierten hochrezipierten Kanälen bei. |
 | c005 | weak | Die Pauschalbehauptung, die Mainstream-Bewertung sei unabhängig von Cluster-Effekten gewesen, ist underdetermined. |
 | c006 | established | Die Case auditiert die Diskursunabhängigkeit, nicht die Ursprungsfrage; das ist case-konstitutiv. |
-| c007 | established | Unabhängige Stimmen (Baker, Wade) publizierten innerhalb des Auditzeitraums außerhalb der dokumentierten Cluster. |
+| c007 | plausible | Unabhängige Stimmen (Baker, Wade) publizierten innerhalb des Auditzeitraums außerhalb der dokumentierten Cluster. |
 
 ## Evidenzkarte
 
@@ -127,21 +128,21 @@ nicht von einer einzelnen Quellengruppe abhängig.
 
 ## Was die Case sagt
 
-- c001 (established): Die Lancet-Korrespondenz-Unterzeichner hatten zum
+- c001 (plausible): Die Lancet-Korrespondenz-Unterzeichner hatten zum
   Publikationszeitpunkt nicht-offengelegte Förderverflechtungen.
-- c002 (strongly_supported): Pre-Publication-Kommunikation der
+- c002 (plausible): Pre-Publication-Kommunikation der
   Proximal-Origin-Autoren zeigt interne Unsicherheit, die in der
   publizierten Fassung rahmungsmäßig reduziert war.
-- c003 (strongly_supported): Mainstream-Outlets wendeten Kategorie-B-
+- c003 (weak): Mainstream-Outlets wendeten Kategorie-B-
   Dismissal-Labels mit Stützung auf Quellenprestige an, nicht auf
   unabhängige Burden-Layer-Tests.
-- c004 (strongly_supported): Cluster-Effekte trugen substantiell zur
+- c004 (weak): Cluster-Effekte trugen substantiell zur
   Konvergenz dismissiver Bewertungen in den hochrezipierten Kanälen bei.
 - c005 (weak): Die Pauschalbehauptung "Mainstream-Bewertung war
   unabhängig von Cluster-Effekten" ist underdetermined; die engere
   Aussage (c004) ist stärker gestützt.
 - c006 (established): Diese Case bewertet die Ursprungsfrage nicht.
-- c007 (established): Unabhängige Stimmen waren im Auditzeitraum verfügbar.
+- c007 (plausible): Unabhängige Stimmen waren im Auditzeitraum verfügbar.
 
 ## Unsicherheit
 
@@ -163,7 +164,7 @@ nicht von einer einzelnen Quellengruppe abhängig.
 vollständigen Pre-Publication-Korrespondenz der Proximal-Origin-Autoren und
 die vollständige Offenlegung der Förder-/institutionellen Verflechtungen
 zum Publikationszeitpunkt wären die Tests, die fehlen. Ihre Abwesenheit
-beschränkt die Closure auf c004 (strongly_supported, nicht established)
+beschränkt die Closure auf c004 (weak, nicht strongly_supported)
 und hält c005 bei weak. Die Adde s004 und die Releases s003/s006 sind
 partielle nachträgliche Substitute, aber sie kommen mit Selektions- und
 Interest-Constraints.

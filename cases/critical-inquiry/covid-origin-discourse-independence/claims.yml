@@ -4,7 +4,7 @@ claims:
     claim_id: "c001"
     claim_type: "factual_event_claim"
     statement: "Die Autoren des Lancet-Korrespondenzbriefs vom 19. Februar 2020 (Calisher, Daszak et al.) hatten zum Zeitpunkt der Publikation dokumentierte institutionelle und Förder-Verflechtungen mit Forschung am Wuhan Institute of Virology."
-    status: "established"
+    status: "plausible"
     evidence_refs: ["e001", "e006"]
     source_refs: ["s001", "s004"]
     requires: ["dokumentierte Förderbeziehungen", "Autorenliste", "Chronologie"]
@@ -24,7 +24,7 @@ claims:
     claim_id: "c002"
     claim_type: "factual_event_claim"
     statement: "Zwischen den Autoren des Proximal-Origin-Manuskripts (Andersen et al., Nature Medicine, März 2020) und leitenden NIH-Vertretern (Fauci, Collins) gab es vor der Publikation Kommunikation, in der die Autoren intern Unsicherheit zu einem natürlichen Ursprung äußerten, die in der publizierten Fassung nicht in derselben Form sichtbar war."
-    status: "strongly_supported"
+    status: "plausible"
     evidence_refs: ["e002", "e003", "e007"]
     source_refs: ["s002", "s003", "s006"]
     requires: ["Primärdokumente der Kommunikation", "Vergleich mit publizierter Fassung", "Chronologie"]
@@ -46,7 +46,7 @@ claims:
     claim_id: "c003"
     claim_type: "narrative_claim"
     statement: "Zwischen Februar 2020 und Mai 2021 verwendeten zahlreiche Beiträge in hochrezipierten Mainstream-Outlets die Sprache von Kategorie B (Dismissal: 'conspiracy theory', 'debunked', 'fringe') gegen Lab-Origin-Hypothesen, ohne dabei einen Test, eine Methodenkritik oder eine direkte Exklusion auf Burden-Layer-Niveau zu zitieren."
-    status: "strongly_supported"
+    status: "weak"
     evidence_refs: ["e004", "e007"]
     source_refs: ["s005", "s006"]
     requires: ["Beispielartikel", "Vergleich von Label-Anwendung und Burden-Layer-Begründung"]
@@ -68,7 +68,7 @@ claims:
     claim_id: "c004"
     claim_type: "causal_claim"
     statement: "Die Konvergenz dismissiver Bewertungen der Lab-Origin-Hypothese in den dokumentierten hochrezipierten Kanälen (Lancet-Korrespondenz, Proximal-Origin-Paper, große Mainstream-Outlets) zwischen Februar 2020 und Mai 2021 wurde substantiell durch Quellencluster-Effekte (überlappende Förder-, Autoren- und institutionelle Bezüge) mitgetragen."
-    status: "strongly_supported"
+    status: "weak"
     evidence_refs: ["e001", "e002", "e003", "e006", "e007"]
     source_refs: ["s001", "s002", "s003", "s004", "s006"]
     burden_profile: "causal_chain"
@@ -132,7 +132,7 @@ claims:
     claim_id: "c006"
     claim_type: "meta_claim"
     statement: "Diese Case auditiert die Unabhängigkeit der Diskursbewertung, nicht die zugrunde liegende Frage nach dem Ursprung von SARS-CoV-2; die Burden-Layer (physical_mechanism, observational_fit, operational_placement) für die Ursprungsfrage werden in dieser Case nicht aufgebaut."
-    status: "established"
+    status: "plausible"
     evidence_refs: ["e008"]
     source_refs: ["s008"]
     requires: ["explizite Scope-Erklärung in question.md"]

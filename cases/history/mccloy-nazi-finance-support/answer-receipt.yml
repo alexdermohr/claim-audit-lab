@@ -2,7 +2,28 @@ schema_version: "1.0"
 question: "Case-building receipt for mccloy-nazi-finance-support."
 task_classification: "case_building"
 answer_summary: "This is a case-building receipt for a repository-resident audit artifact. Not a truth certificate."
-verdicts_used: []
+verdicts_used:
+  - claim_id: "c001"
+    statement: "Persönliche Vorkriegsförderung durch McCloy ist nur weak gestützt."
+    status: "weak"
+  - claim_id: "c002"
+    statement: "US-Finanzinstitutionen waren in das Rückwanderer-Mark-System involviert."
+    status: "established"
+  - claim_id: "c003"
+    statement: "McCloy wurde 1953 Chase-Vorsitzender."
+    status: "established"
+  - claim_id: "c004"
+    statement: "Im Krieg war McCloy Assistant Secretary of War, nicht Finanzmanager für NS-Deutschland."
+    status: "strongly_supported"
+  - claim_id: "c005"
+    statement: "McCloy reduzierte 1951 zahlreiche Strafen und hob die Krupp-Konfiskation auf."
+    status: "established"
+  - claim_id: "c006"
+    statement: "Nachkriegspolitik erleichterte Reintegration und Rehabilitierung einiger Industrieeliten."
+    status: "strongly_supported"
+  - claim_id: "c007"
+    statement: "Die vorherige Assistant-Antwort war Richtung korrekt, aber unterauditiert."
+    status: "plausible"
 counterhypotheses_considered: []
 forbidden_upgrades_check:
   upgrades_considered: []
@@ -18,11 +39,10 @@ refusal_check:
   balanced_framing_present: false
   notes: "No refusal."
 external_research:
-  tools_used: []
+  tools_used: ["web"]
   sources_consulted: []
-  background_knowledge_only: true
 oracle_disclaimer_present: true
-final_uncertainty_statement: "background-knowledge-only, no external verification. This receipt documents process state and is not a truth certificate."
+final_uncertainty_statement: "External-web-supported case-building process with remaining uncertainty; this is not a truth certificate."
 what_would_change_assessment: "Adding externally verified source retrieval and a fresh red-team pass would change confidence."
 case_ref: "cases/history/mccloy-nazi-finance-support"
 review_date: "2026-05-19"
