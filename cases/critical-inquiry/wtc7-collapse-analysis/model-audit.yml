@@ -1,0 +1,40 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+models:
+  - model_id: "m001"
+    claim_ref: "c005"
+    hypothesis_ref: "h1"
+    model_summary: "NIST-Finite-Element-Modell: Brandausdehnung erzeugt thermische Expansion von Bodenträgern; Auflager von Pfeiler 79 wird lateral verschoben; Pfeiler 79 verliert Unterstützung und versagt; progressiver Gesamteinsturz folgt."
+    central_chain_steps:
+      - "Brandausdehnung auf Etagen 7-9 und 12 über 7+ Stunden"
+      - "Thermische Expansion von Bodenträgern durch Pfeiler-79-Anschluss"
+      - "Laterale Verschiebung des Pfeiler-79-Auflagers"
+      - "Globales Versagen von Pfeiler 79 (Knicken)"
+      - "Progressiver Einsturz der Stützkette östlich von Pfeiler 79"
+      - "Globaler Gesamteinsturz"
+    assumptions_public: 0.55
+    sensitivity_analysis: 0.40
+    independent_reproducibility: 0.35
+    observed_feature_fit: 0.70
+    adversarial_response_quality: 0.40
+    unresolved_defeater_refs: ["d001"]
+    model_confidence: 0.50
+    notes: "Modell erklärt Osteinsturz (Ostpenthouse zuerst) und Freifall-Periode. Modell-Eingaben teilweise nicht veröffentlicht. UAF-Studie bestreitet Reproduzierbarkeit des Kernschritts. Modell-Confidence 0.50 reflektiert 'plausibel aber nicht unabhängig verifiziert'."
+
+  - model_id: "m002"
+    claim_ref: "c001"
+    hypothesis_ref: "h2"
+    model_summary: "CD-Hypothese: Vorab platzierte Sprengladungen (möglicherweise Thermit/Thermit-basierte Materialien) wurden zum Einsturzzeitpunkt ausgelöst und erzeugten simultaneLles Versagen aller Stützkonstruktionen."
+    central_chain_steps:
+      - "Heimliche Installation von Sprengladungen an strukturellen Stützpunkten"
+      - "Simultane oder sequentiell koordinierte Detonation"
+      - "Gleichzeitiges Versagen aller Stützstrukturen"
+      - "Symmetrischer Gesamteinsturz mit freier Fallbeschleunigung"
+    assumptions_public: 0.20
+    sensitivity_analysis: 0.10
+    independent_reproducibility: 0.10
+    observed_feature_fit: 0.35
+    adversarial_response_quality: 0.20
+    unresolved_defeater_refs: ["d002", "d003", "d004"]
+    model_confidence: 0.15
+    notes: "Kein vollständiges mechanistisches Modell vorhanden; H2 ist als Rahmenthese formuliert, nicht als ausgearbeitetes Ingenieursmodell. Observed_feature_fit 0.35: Freifall-Periode kann durch H2 erklärt werden, aber auch durch H1. Symmetrie-Argument ist durch Osteinsturz des Ostpenthouse partiell konterkariert. Drei unaufgelöste Defeater."

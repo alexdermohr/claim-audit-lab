@@ -1,0 +1,262 @@
+schema_version: "1.0"
+
+sources:
+  - schema_version: "1.0"
+    source_id: "s001"
+    label: "NIST NCSTAR 1A: Final Report on the Collapse of World Trade Center Building 7 (2008)"
+    url_or_ref: "https://www.nist.gov/publications/final-report-collapse-world-trade-center-building-7"
+    source_type: "government_report"
+    publication_date: "2008-11-20"
+    accessed_at: "2026-05-19"
+    locator: "NIST NCSTAR 1A, November 2008"
+    author_or_org: "National Institute of Standards and Technology (NIST)"
+    source_weight:
+      primary_proximity: 0.95
+      method_transparency: 0.6
+      reproducibility: 0.5
+      source_cluster_independence: 0.4
+      institutional_interest_risk: 0.65
+      adversarial_relevance: 0.9
+      historical_track_record: 0.7
+      update_latency_risk: 0.2
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Primäres Regierungsgutachten. NIST ist Bundesbehörde; Modell-Input-Daten wurden nicht vollständig veröffentlicht; externe Peer-Review nach Journalstandard fehlt."
+    notes: "UNVERIFIED_REFERENCE (draft): Hauptquelle für die H1-Hypothese (feuerinduzierter progressiver Kollaps). Identifiziert Pfeiler 79 als Auslöser. Institutionelles Interesse: US-Regierungsbehörde. Die Nichtveröffentlichung von Eingabedaten ist ein dokumentierter Methodenmangel."
+
+  - schema_version: "1.0"
+    source_id: "s002"
+    label: "FEMA World Trade Center Building Performance Study, Chapter 5: WTC 7 (2002)"
+    url_or_ref: "https://www.fema.gov/media-library/assets/documents/3544"
+    source_type: "government_report"
+    publication_date: "2002-05-01"
+    accessed_at: "2026-05-19"
+    locator: "FEMA 403, Chapter 5, May 2002"
+    author_or_org: "Federal Emergency Management Agency (FEMA) / ASCE"
+    source_weight:
+      primary_proximity: 0.85
+      method_transparency: 0.55
+      reproducibility: 0.45
+      source_cluster_independence: 0.4
+      institutional_interest_risk: 0.6
+      adversarial_relevance: 0.8
+      historical_track_record: 0.65
+      update_latency_risk: 0.3
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Frühe Untersuchung. Stellte fest, dass das 'best hypothesis' Feuer-Szenario 'a low probability scenario' sei — eine Formulierung, die von CD-Proponenten zitiert wird."
+    notes: "UNVERIFIED_REFERENCE (draft): Vorläufiger Bericht, der die fehlende Datenlage früh dokumentiert. Die FEMA-Formulierung 'low probability' für das Feuer-Szenario ist ein adversariell relevantes Zitat, das in der späteren NIST-Analyse revidiert wurde."
+
+  - schema_version: "1.0"
+    source_id: "s003"
+    label: "University of Alaska Fairbanks (UAF) Hulsey Study: 'A Structural Reevaluation of the Collapse of World Trade Center 7' (2020)"
+    url_or_ref: "https://www.uaf.edu/wtc7/"
+    source_type: "preprint"
+    publication_date: "2020-03-25"
+    accessed_at: "2026-05-19"
+    locator: "UAF Final Report, March 2020"
+    author_or_org: "J. Leroy Hulsey, University of Alaska Fairbanks"
+    source_weight:
+      primary_proximity: 0.8
+      method_transparency: 0.65
+      reproducibility: 0.55
+      source_cluster_independence: 0.6
+      institutional_interest_risk: 0.5
+      adversarial_relevance: 0.85
+      historical_track_record: 0.5
+      update_latency_risk: 0.25
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Studie wurde von AE911Truth-Förderern finanziert; methodische Kritik von anderen Strukturingenieuren. Die Studie fand, dass das NIST-Kollapsinitierungsmodell nicht reproduzierbar sei, schloss aber nicht auf kontrollierte Sprengung."
+    notes: "UNVERIFIED_REFERENCE (draft): Wichtigste unabhängige akademische Kritik des NIST-Modells. Methodenkritisch: Finanzierung durch AE911Truth, kein Peer-Review in Standard-Ingenieurjournalen. Schluss: NIST-Mechanismus nicht reproduzierbar — keine Aussage über CD."
+
+  - schema_version: "1.0"
+    source_id: "s004"
+    label: "AE911Truth: 'Architects and Engineers for 9/11 Truth' petition and technical documentation"
+    url_or_ref: "https://www.ae911truth.org/"
+    source_type: "advocacy_report"
+    publication_date: "2006-02-01"
+    accessed_at: "2026-05-19"
+    locator: "AE911Truth petition and technical reports, ongoing"
+    author_or_org: "Architects and Engineers for 9/11 Truth (advocacy organization)"
+    source_weight:
+      primary_proximity: 0.5
+      method_transparency: 0.4
+      reproducibility: 0.3
+      source_cluster_independence: 0.3
+      institutional_interest_risk: 0.75
+      adversarial_relevance: 0.7
+      historical_track_record: 0.4
+      update_latency_risk: 0.5
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Advocacy-Organisation mit explizitem Ziel der CD-Hypothesen-Förderung. Zählt Petitionsunterzeichner. Nicht alle Unterzeichner sind Strukturingenieure mit WTC-Expertise."
+    notes: "UNVERIFIED_REFERENCE (draft): Advocacy-Quelle; hoher Interessenkonflikt. Die Petition belegt, dass eine Minderheit von Ingenieuren und Architekten die CD-Hypothese vertritt — dies ist ein Diskursbefund, kein Evidenzbefund für CD."
+
+  - schema_version: "1.0"
+    source_id: "s005"
+    label: "Video and seismic records of WTC 7 collapse, including NIST-analyzed footage and independent analyses (various)"
+    url_or_ref: "https://www.nist.gov/el/materials-and-structural-systems-division-73100/nist-wtc-7-investigation (video analysis section)"
+    source_type: "primary_document"
+    publication_date: "2008-11-20"
+    accessed_at: "2026-05-19"
+    locator: "NIST NCSTAR 1A, video analysis; seismic records from LDEO"
+    author_or_org: "NIST (video); Lamont-Doherty Earth Observatory (seismic)"
+    source_weight:
+      primary_proximity: 0.95
+      method_transparency: 0.75
+      reproducibility: 0.8
+      source_cluster_independence: 0.7
+      institutional_interest_risk: 0.3
+      adversarial_relevance: 0.9
+      historical_track_record: 0.8
+      update_latency_risk: 0.1
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Physikalische Primärevidenz. Video ist direkte Beobachtung. Seismische Aufzeichnungen sind unabhängige Instrumente. Die Interpretation der Messdaten (Freifall-Dauer) ist konsentiert; die Kausalinterpretation ist strittig."
+    notes: "UNVERIFIED_REFERENCE (draft): Direkteste physikalische Evidenz. Freifall-Acceleration-Periode (~2.25 Sekunden) ist von NIST selbst anerkannt. Keine seismischen Explosionssignaturen verzeichnet, die mit bekannten Sprengungen vergleichbar wären."
+
+  - schema_version: "1.0"
+    source_id: "s006"
+    label: "NIST NCSTAR 1-9: Structural Fire Response and Probable Collapse Sequence of World Trade Center Building 7 (2008)"
+    url_or_ref: "https://www.nist.gov/publications/structural-fire-response-and-probable-collapse-sequence-world-trade-center-building-7"
+    source_type: "government_report"
+    publication_date: "2008-11-20"
+    accessed_at: "2026-05-19"
+    locator: "NIST NCSTAR 1-9, November 2008"
+    author_or_org: "National Institute of Standards and Technology (NIST)"
+    source_weight:
+      primary_proximity: 0.95
+      method_transparency: 0.55
+      reproducibility: 0.45
+      source_cluster_independence: 0.4
+      institutional_interest_risk: 0.65
+      adversarial_relevance: 0.9
+      historical_track_record: 0.7
+      update_latency_risk: 0.2
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Technischer Detailbericht zur NIST-Untersuchung. Enthält das Computermodell des Kollapsinitierungsmechanismus."
+    notes: "UNVERIFIED_REFERENCE (draft): Detailband der NIST-Untersuchung. Die Modelleingaben wurden zunächst nicht vollständig offengelegt. Modell-Reproduzierbarkeit ist ein offener Punkt."
+
+  - schema_version: "1.0"
+    source_id: "s007"
+    label: "Peer-reviewed structural engineering assessments of WTC 7 collapse — e.g., Quintiere, di Marzo, Bauer (2002); Wierzbicki, Teng (2003); Gilsanz et al. (AISC) (2010)"
+    url_or_ref: "Various peer-reviewed journals and AISC publications"
+    source_type: "peer_reviewed"
+    publication_date: "2010-01-01"
+    accessed_at: "2026-05-19"
+    locator: "Multiple journals; AISC Engineering Journal 2010; Journal of Engineering Mechanics"
+    author_or_org: "Multiple structural engineers; American Institute of Steel Construction"
+    source_weight:
+      primary_proximity: 0.8
+      method_transparency: 0.75
+      reproducibility: 0.7
+      source_cluster_independence: 0.65
+      institutional_interest_risk: 0.35
+      adversarial_relevance: 0.8
+      historical_track_record: 0.75
+      update_latency_risk: 0.3
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Peer-reviewed Ingenieursliteratur. Mehrheitlich akzeptieren diese Autoren Brandkollaps als plausiblen Mechanismus, weisen aber auf strukturelle Besonderheiten von WTC 7 hin."
+    notes: "UNVERIFIED_REFERENCE (draft): Wichtigste unabhängige akademische Stützung der H1-Hypothese. Methodisch stärker als Regierungsberichte durch externe Peer-Review. Begrenzte Granularität für WTC-7-spezifische Modellierung."
+
+  - schema_version: "1.0"
+    source_id: "s008"
+    label: "Thermite/explosive residue studies: NIST search findings; Jones et al. 'Active Thermitic Material' (Open Chemical Physics Journal, 2009)"
+    url_or_ref: "NIST NCSTAR 1A (explosive residue section); Jones et al. 2009 Open Chemical Physics Journal"
+    source_type: "peer_reviewed"
+    publication_date: "2009-04-03"
+    accessed_at: "2026-05-19"
+    locator: "NIST NCSTAR 1A pp. 47-48; Jones et al. Open Chem Phys J 2009"
+    author_or_org: "NIST (search); Steven E. Jones et al. (residue claim)"
+    source_weight:
+      primary_proximity: 0.7
+      method_transparency: 0.5
+      reproducibility: 0.35
+      source_cluster_independence: 0.4
+      institutional_interest_risk: 0.7
+      adversarial_relevance: 0.85
+      historical_track_record: 0.45
+      update_latency_risk: 0.4
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): NIST fand keine Sprengstoffe. Jones et al. behaupteten Thermit-Rückstände in Staubproben; das Journal wurde kritisiert; Methodik wurde von anderen Chemikern bestritten. Keine unabhängige Replikation."
+    notes: "UNVERIFIED_REFERENCE (draft): Zentraler Streitpunkt für physikalische Sprengstoffevidenz. NIST-Negativbefund versus Jones-et-al.-Positivbehauptung. Jones-Studie wurde in einem nicht-Standard-Journal publiziert; Replikation fehlt."
+
+  - schema_version: "1.0"
+    source_id: "s009"
+    label: "BBC and CNN pre-collapse reporting, September 11, 2001 (archive footage)"
+    url_or_ref: "https://www.youtube.com/watch?v=c0RoRcMxJwc (BBC archival); CNN archive"
+    source_type: "journalism"
+    publication_date: "2001-09-11"
+    accessed_at: "2026-05-19"
+    locator: "BBC broadcast archive; CNN broadcast archive, September 11, 2001"
+    author_or_org: "BBC News; CNN"
+    source_weight:
+      primary_proximity: 0.9
+      method_transparency: 0.3
+      reproducibility: 0.8
+      source_cluster_independence: 0.75
+      institutional_interest_risk: 0.25
+      adversarial_relevance: 0.6
+      historical_track_record: 0.6
+      update_latency_risk: 0.1
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "UNVERIFIED_REFERENCE (draft): Medienbericht, der vor dem Einsturz über WTC 7 als kollabiert berichtete. Plausible Erklärung: Verwirrung und vorläufige Meldungen in chaotischer Situation. Für CD-Proponenten: Vorwissen-Argument."
+    notes: "UNVERIFIED_REFERENCE (draft): Frühberichterstattung über WTC 7 vor Einsturz. Erklärbarer Irrtum unter Nachrichtenchaos ist die einfachste Erklärung. Die Frühberichte stützen keinen CD-Mechanismus direkt."
+
+  - schema_version: "1.0"
+    source_id: "s010"
+    label: "Diese Case-Definition: question.md Scope-Erklärung"
+    url_or_ref: "cases/critical-inquiry/wtc7-collapse-analysis/question.md"
+    source_type: "other"
+    publication_date: "2026-05-19"
+    accessed_at: "2026-05-19"
+    locator: "question.md, Abschnitt Scope"
+    author_or_org: "claim-audit-lab case definition"
+    source_weight:
+      primary_proximity: 1.0
+      method_transparency: 0.85
+      reproducibility: 1.0
+      source_cluster_independence: 0.5
+      institutional_interest_risk: 0.4
+      adversarial_relevance: 0.3
+      historical_track_record: 0.5
+      update_latency_risk: 0.1
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; case-local meta source."
+    notes: "UNVERIFIED_REFERENCE (draft): Selbstreferenz für die meta_claim c008. Case-konstitutiv."

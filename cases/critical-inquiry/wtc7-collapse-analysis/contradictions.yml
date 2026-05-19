@@ -1,0 +1,30 @@
+schema_version: "1.0"
+
+contradictions:
+  - contradiction_id: "con001"
+    claim_a_ref: "c005"
+    claim_b_ref: "c004"
+    description: "c005 (NIST-H1-Modell ist plausibel) und c004 (NIST-Modell hat methodische Schwaechen) stehen in Spannung: c004 begrenzt das Vertrauen in c005 ohne es direkt auszuschliessen."
+    resolution_status: "unresolved"
+    resolution_notes: "Beide Claims koennen gleichzeitig wahr sein: H1 ist der plausibelste verfuegbare Mechanismus, und die NIST-Untersuchung hat methodische Schwaechen, die vollstaendige Closure verhindern. Die Spannung rechtfertigt 'plausible' statt 'strongly_supported' fuer c005."
+
+  - contradiction_id: "con002"
+    claim_a_ref: "c002"
+    claim_b_ref: "c003"
+    description: "c002 (Freifall-Periode ist beobachtet und bestaetigt) und c003 (Freifall-Periode ist CD-Beweis, status: speculative) sind nicht widerspruchlich in ihren Fakten, aber die kausale Interpretation in c003 ist nicht durch c002 gestutzt. c003 erfordert einen Ausschluss der NIST-Alternativerklarung, der nicht vorliegt."
+    resolution_status: "unresolved"
+    resolution_notes: "c002 bleibt 'plausible' als Faktenclaim. c003 bleibt 'speculative', weil der Kausalschluss ungestuetzt ist. Kein direkter Widerspruch, aber c003 ueberdehnt c002."
+
+  - contradiction_id: "con003"
+    claim_a_ref: "c006"
+    claim_b_ref: "c001"
+    description: "c006 (Keine physikalische CD-Evidenz nachgewiesen) schwaecht c001 (P(CD) > P(Brand) ist hoch) erheblich. Wenn c006 plausibel ist, ist der positive Mechanismusbeitrag fuer c001 nicht geliefert."
+    resolution_status: "unresolved"
+    resolution_notes: "c006 falsifiziert c001 nicht direkt (Abwesenheitsclaim ist scope-begrenzt), aber er verhindert, dass c001 den 'physikalischer Mechanismusnachweis fuer CD' Burden-Layer befriedigt. Spannung bleibt."
+
+  - contradiction_id: "con004"
+    claim_a_ref: "c005"
+    claim_b_ref: "c001"
+    description: "c005 (H1 ist physikalisch plausibel) und c001 (P(CD) > P(Brand)) sind komparativ unvereinbar, wenn c001 behauptet, CD sei wahrscheinlicher als Brand. Eine plausible H1 und eine ungestuetzte H2 erzeugen die umgekehrte komparative Wahrscheinlichkeit."
+    resolution_status: "unresolved"
+    resolution_notes: "Sofern H2 keinen positiven Mechanismusnachweis liefert und H1 plausibel bleibt, ist die komparative Wahrscheinlichkeitsbehauptung c001 nicht gestutzt. Das ist das Kernurteil dieser Case."

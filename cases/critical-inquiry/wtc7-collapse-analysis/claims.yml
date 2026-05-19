@@ -1,0 +1,255 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    claim_kind: "comparative_claim"
+    statement: "Die Wahrscheinlichkeit, dass WTC 7 durch eine kontrollierte Sprengung statt durch den Brand eingestürzt ist, ist hoch (Hauptbehauptung: P(CD) > P(Brandkollaps))."
+    status: "weak"
+    burden_profile: "comparative"
+    evidence_refs: ["e001", "e002", "e003", "e004", "e005", "e006", "e007", "e008", "e009"]
+    source_refs: ["s001", "s002", "s003", "s004", "s005", "s007", "s008"]
+    requires:
+      - "positiver physikalischer Mechanismusnachweis fuer kontrollierte Sprengung"
+      - "Rueckseitige Ausschlussargumente gegen H1 (Brandkollaps)"
+      - "komparative Wahrscheinlichkeitsbewertung beider Hypothesen unter gleicher Beweislast"
+    counterclaims:
+      - "Das NIST-Modell liefert einen vollstaendigen physikalischen Mechanismus fuer Brandkollaps ohne CD-Annahme."
+      - "Es gibt keine physikalischen Beweise (Sprengstoffreste, Explosionsschall, Vorbereitungsmarkierungen) fuer CD."
+      - "Kontrollierte Sprengungen erfordern monatelange Vorbereitung; das Gebaeude war bis kurz vor dem Kollaps in Betrieb."
+    forbidden_upgrades:
+      - "suspicion_to_proof"
+      - "absence_of_evidence_to_falsehood"
+      - "source_prestige_to_truth"
+    uncertainty:
+      score: 0.65
+      causes:
+        - "Das NIST-Modell wurde nicht vollstaendig unabhaengig repliziert."
+        - "Die Hulsey-UAF-Studie bestreitet den NIST-Mechanismus, ohne CD direkt zu beweisen."
+        - "Physikalische Sprengstoffevidenz fehlt in unabhaengig verifizierten Quellen."
+        - "Die komparative Wahrscheinlichkeitsaussage ist ohne quantifiziertes Bayessches Modell unvollstaendig."
+    interpolation:
+      score: 0.55
+      assumptions:
+        - "Die vorliegende Quellenlage erlaubt keine numerische Wahrscheinlichkeitszuweisung."
+        - "Die Bewertung stuetzt sich auf strukturierte Abwaegung der Beweislasten, nicht auf statistische Frequenzen."
+    notes: "Hauptclaim des Audits. Verdict 'weak' bedeutet: Die Behauptung P(CD) > P(Brand) ist unzureichend gestuetzt. H1 (Brand) hat einen dokumentierten mechanistischen Erklarungsversuch; H2 (CD) hat keinen positiven Mechanismusnachweis. Die komparative Wahrscheinlichkeitsaussage ist spekulativ in Richtung CD."
+
+  - schema_version: "1.0"
+    claim_id: "c002"
+    claim_type: "factual_event_claim"
+    claim_kind: "factual_event_claim"
+    statement: "WTC 7 erlebte waehrend des Kollapses eine Phase nahezu freier Fallbeschleunigung von ca. 2.25 Sekunden, die NIST selbst bestaetigte."
+    status: "plausible"
+    evidence_refs: ["e005"]
+    source_refs: ["s001", "s005"]
+    requires:
+      - "Videoanalyse der Kollapsdauer"
+      - "NIST-Bestaetigung"
+    counterclaims:
+      - "NIST erklaert die Freifall-Periode dadurch, dass die Aussenfassade fiel, nachdem die innere Struktur bereits versagt hatte — kein Beweis fuer Sprengung."
+    forbidden_upgrades:
+      - "suspicion_to_proof"
+    uncertainty:
+      score: 0.15
+      causes:
+        - "Die genaue Messung haengt von der Referenzpunkt-Auswahl im Video ab."
+    interpolation:
+      score: 0.1
+      assumptions:
+        - "NIST-Videoanalyse wird als korrekte Messung der beobachtbaren Fallgeschwindigkeit angenommen."
+    notes: "Faktenclaim: Die Freifall-Periode ist physikalisch dokumentiert und von NIST bestaetigt. Die kausale Interpretation (Beweis fuer CD) ist nicht durch den Faktenclaim gestutzt."
+
+  - schema_version: "1.0"
+    claim_id: "c003"
+    claim_type: "causal_claim"
+    claim_kind: "causal_claim"
+    statement: "Die Freifall-Beschleunigungsperiode von WTC 7 ist ein Beweis (oder starkes Indiz) fuer kontrollierte Sprengung."
+    status: "speculative"
+    burden_profile: "causal_chain"
+    required_chain:
+      - id: "rc1"
+        requirement: "Nachweis, dass Freifall-Beschleunigung nur durch simultane Unterstuetzungsentfernung (CD) erklaerbar ist."
+        status: "missing"
+        notes: "NIST zeigt, dass die Aussenfassade nach internem Strukturversagen fiel. Freier Fall der Fassade ist mit sequentiellem innerem Versagen vereinbar."
+      - id: "rc2"
+        requirement: "Ausschluss des alternativen Mechanismus (sequentielles Innenversagen vor Fassadenfall)."
+        status: "missing"
+        notes: "Der NIST-Mechanismus ist eine plausible Erklaerung der Freifall-Periode ohne CD-Annahme. Er wurde nicht direkt ausgeschlossen."
+    evidence_refs: ["e001", "e005", "e006"]
+    source_refs: ["s001", "s004", "s005"]
+    requires:
+      - "Ausschluss des NIST-Mechanismus der sequentiellen internen Strukturversagen vor Fassadenfall"
+      - "positiver Mechanismusnachweis, dass nur CD dieses Muster erzeugen koennte"
+    counterclaims:
+      - "NIST erklaert: Die Fassade fiel nach innerem Versagen; Freifall der Fassade ist mit H1 vereinbar."
+      - "Andere Hochhauseinsturze (z.B. brandinduzierte Faelle) zeigen aehnliche lokale Beschleunigungsphasen."
+    forbidden_upgrades:
+      - "suspicion_to_proof"
+      - "absence_of_evidence_to_falsehood"
+    uncertainty:
+      score: 0.7
+      causes:
+        - "Der NIST-Mechanismus der sequentiellen internen Versagen ist eine zulassige Erklaerung, die den Freifall erklaert."
+        - "Kein Ausschlussnachweis fuer den NIST-Mechanismus vorhanden."
+    interpolation:
+      score: 0.6
+      assumptions:
+        - "Freifall allein impliziert simultane Unterstuetzungsentfernung — diese Annahme ist nicht zwingend, wenn sequentielles inneres Versagen der Fassadenfall vorausgeht."
+    notes: "Verdict 'speculative': Der Schluss von Freifall auf CD ist hypothetisch; er setzt voraus, dass der NIST-Alternativmechanismus ausgeschlossen ist. Das ist nicht der Fall."
+
+  - schema_version: "1.0"
+    claim_id: "c004"
+    claim_type: "factual_event_claim"
+    claim_kind: "factual_event_claim"
+    statement: "Das NIST-Untersuchungsmodell zu WTC 7 hat methodische Schwaechen: Modell-Eingabedaten wurden nicht vollstaendig veroeffentlicht; eine unabhaengige Reproduktion nach Journalstandard fand nicht statt."
+    status: "plausible"
+    evidence_refs: ["e002", "e003", "e004"]
+    source_refs: ["s001", "s002", "s003", "s006"]
+    requires:
+      - "Dokumentation der Nichtveroeffentlichung von Modell-Eingaben"
+      - "Nachweis fehlender externer Peer-Review nach Journalstandard"
+    counterclaims:
+      - "NIST ist eine Regierungsbehorde, kein Journal; Peer-Review erfolgte intern und durch oeffentliche Kommentarphasen."
+      - "Spaeter wurden mehr Modell-Eingaben veroeffentlicht."
+    forbidden_upgrades:
+      - "source_prestige_to_truth"
+      - "absence_of_evidence_to_falsehood"
+    uncertainty:
+      score: 0.25
+      causes:
+        - "Der Umfang der veroeffentlichten versus zurueckgehaltenen Eingaben ist nicht vollstaendig dokumentiert."
+    interpolation:
+      score: 0.2
+      assumptions:
+        - "Die UAF-Hulsey-Studie und oeffentliche NIST-Kommentatoren sind als Belege fuer methodische Kritik hinreichend."
+    notes: "Methodenclaim: NIST-Untersuchungsqualitaet ist legitim bestreitbar. Dieser Claim stuetzt nicht CD; er begrenzt nur die Starke des H1-Schlusses."
+
+  - schema_version: "1.0"
+    claim_id: "c005"
+    claim_type: "causal_claim"
+    claim_kind: "causal_claim"
+    statement: "Das NIST-Kollapsinitierungsmodell (thermisches Versagen von Pfeiler 79 durch Feuer) ist physikalisch plausibel und vereinbar mit den Beobachtungsdaten."
+    status: "plausible"
+    burden_profile: "causal_chain"
+    required_chain:
+      - id: "rc1"
+        requirement: "Physikalischer Mechanismus: thermische Ausdehnung von Bodentraegern druckt Pfeiler 79 vom Gebaeude."
+        status: "partially_satisfied"
+        notes: "NIST-Modell demonstriert dies rechnerisch; unabhaengige Replikation fehlt."
+      - id: "rc2"
+        requirement: "Struktureller Effekt: Versagen von Pfeiler 79 loest progressiven Gesamteinsturz aus."
+        status: "partially_satisfied"
+        notes: "NIST-Modell zeigt dies; UAF-Hulsey-Studie bestreitet es methodisch."
+      - id: "rc3"
+        requirement: "Beobachtungspassung: Osteinsturz des Ostpenthouse zuerst, dann Gesamteinsturz."
+        status: "satisfied"
+        notes: "Videobeobachtung bestaetigt Osteinsturz vor Gesamteinsturz; vereinbar mit H1."
+    evidence_refs: ["e001", "e002", "e003", "e004", "e005"]
+    source_refs: ["s001", "s005", "s006", "s007"]
+    requires:
+      - "NIST-Mechanismus: thermische Expansion"
+      - "Pfeiler-79-Versagen als Ausloeser"
+      - "sequentieller progressiver Kollaps"
+    counterclaims:
+      - "Die UAF-Hulsey-Studie bestreitet, dass der NIST-Mechanismus reproduzierbar ist."
+      - "WTC 7 ist der erste und einzige Stahlrahmen-Wolkenkratzer, der primaer durch Feuer kollabierte — ein einzigartiger Praezedenzfall ohne direkte Vergleichsfaelle."
+    forbidden_upgrades:
+      - "source_prestige_to_truth"
+    uncertainty:
+      score: 0.35
+      causes:
+        - "NIST-Modell wurde nicht vollstaendig unabhaengig repliziert."
+        - "Hulsey-Studie bestreitet den Mechanismus, ist ihrerseits aber methodisch kritisiert."
+        - "WTC 7 ist ein Einzelfall ohne direkten Praezedenzfall fuer primaer feuerinduzierte progressive Kollaps in einem Stahlrahmen-Hochhaus."
+    interpolation:
+      score: 0.3
+      assumptions:
+        - "Das NIST-Modell wird als korrekte Anwendung ingenieurswissenschaftlicher Methoden angesehen."
+    notes: "Verdict 'plausible': H1 hat einen dokumentierten mechanistischen Erklaerungsversuch, der mit Beobachtungsdaten vereinbar ist. Die fehlende unabhaengige Replikation und der Praezedenzfall-Mangel verhindern 'strongly_supported'."
+
+  - schema_version: "1.0"
+    claim_id: "c006"
+    claim_type: "causal_claim"
+    claim_kind: "causal_claim"
+    statement: "Physikalische Evidenz fuer eine kontrollierte Sprengung von WTC 7 (Sprengstoffreste, Explosionsschallsignaturen, Vorbereitung) ist in verifizierten Quellen nicht nachgewiesen."
+    status: "plausible"
+    burden_profile: "causal_chain"
+    required_chain:
+      - id: "rc1"
+        requirement: "Scope der Suche nach Sprengstoffresten: NIST-Untersuchung."
+        status: "partially_satisfied"
+        notes: "NIST suchte; fand keine. Die Vollstaendigkeit der Suche ist bestreitbar."
+      - id: "rc2"
+        requirement: "Seismische und akustische Messungen auf Explosionssignaturen."
+        status: "partially_satisfied"
+        notes: "Seismische Daten zeigen keine Sprengmuster vor dem Einsturz; akustische Quellen begrenzt."
+    evidence_refs: ["e005", "e007", "e008"]
+    source_refs: ["s001", "s005", "s008"]
+    requires:
+      - "systematische Suche nach physikalischer CD-Evidenz"
+      - "Scope-Begrenzung: Abwesenheitsclaim ist auf den Umfang der Suche begrenzt"
+    counterclaims:
+      - "Jones et al. (2009) behaupteten Thermit-Ruckstande in Staubproben; diese Studie ist aber methodisch kritisiert und nicht repliziert."
+      - "Die Tatsache, dass Trummerfeld nicht vollstaendig analysiert wurde, begrenzt den Abwesenheitsclaim."
+    forbidden_upgrades:
+      - "absence_of_evidence_to_falsehood"
+      - "source_prestige_to_truth"
+    uncertainty:
+      score: 0.4
+      causes:
+        - "Die NIST-Suche war nicht exhaustiv; Trummerfeld war begrenzt zuganglich."
+        - "Jones-et-al.-Studie liefert eine bestrittene Gegenevidenz."
+    interpolation:
+      score: 0.35
+      assumptions:
+        - "Abwesenheit in NIST-Suche wird als repraesentativ behandelt, obwohl die Suche begrenzt war."
+    notes: "Absence-Claim mit Scope-Begrenzung. Verdict 'plausible' statt 'established', weil die Suche nicht exhaustiv war. Negative Evidenz wird nicht als Falschevidenz umgedeutet."
+
+  - schema_version: "1.0"
+    claim_id: "c007"
+    claim_type: "factual_event_claim"
+    claim_kind: "factual_event_claim"
+    statement: "Kontrollierte Sprengungen (Gebaeudeimplosionen) erfordern typischerweise Wochen bis Monate der Vorbereitung und hinterlassen erkennbare Anzeichen der Installationsarbeit."
+    status: "plausible"
+    evidence_refs: ["e009"]
+    source_refs: ["s007"]
+    requires:
+      - "Referenzfaelle kontrollierter Gebaeudesprengungen"
+      - "Vergleich mit WTC-7-Betriebslage am 11. September 2001"
+    counterclaims:
+      - "CD-Proponenten argumentieren, dass eine Vorbereitung unter dem Deckmantel normaler Wartungsarbeiten haette stattfinden koennen."
+    forbidden_upgrades:
+      - "absence_of_evidence_to_falsehood"
+    uncertainty:
+      score: 0.2
+      causes:
+        - "Mangelnde direkte Referenzfaelle fuer heimliche Vorbereitung."
+    interpolation:
+      score: 0.15
+      assumptions:
+        - "Ingenieurserfahrung mit Gebaeudesprengungen wird als repraesentativ behandelt."
+    notes: "Operational-Placement-Burden-Claim. WTC 7 war bis kurz vor Kollaps in Betrieb (Regierungsbueros, Secret Service, CIA, SEC-Unterlagen). Heimliche Sprengvorbereitung ist theoretisch moeglich, aber operativ ungestuetzt."
+
+  - schema_version: "1.0"
+    claim_id: "c008"
+    claim_type: "meta_claim"
+    claim_kind: "meta_claim"
+    statement: "Diese Case auditiert den physikalischen Einsturzmechanismus und die komparative Wahrscheinlichkeitsbehauptung fuer WTC 7; Akteurszuschreibung, Taterschaft und weitergehende Vertuscungsbehauptungen sind explizit ausserhalb des Scope."
+    status: "established"
+    evidence_refs: ["e010"]
+    source_refs: ["s010"]
+    requires:
+      - "explizite Scope-Erklaerung in question.md"
+    counterclaims: []
+    forbidden_upgrades:
+      - "source_prestige_to_truth"
+    uncertainty:
+      score: 0.05
+      causes:
+        - "Case-konstitutive Aussage; Unsicherheit nur durch Scope-Verletzung."
+    interpolation:
+      score: 0.0
+      assumptions:
+        - "Die Scope-Beschraenkung in question.md wird eingehalten."
+    notes: "Meta-Claim zur Scope-Trennung. Verhindert, dass das Case als Verdict uber Akteure oder politische Folgefragen gelesen wird."

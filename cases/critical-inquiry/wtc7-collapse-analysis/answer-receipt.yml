@@ -1,0 +1,160 @@
+schema_version: "1.0"
+question: "Ist die Behauptung belastbar, dass die Wahrscheinlichkeit, dass WTC 7 durch eine kontrollierte Sprengung statt durch den Brand eingestürzt ist, hoch ist (P(CD) > P(Brand))?"
+task_classification: "claim_audit"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+review_date: "2026-05-19"
+
+answer_summary: >
+  Die Behauptung P(CD) > P(Brand) ist unzureichend gestutzt (c001: weak). H1 hat einen
+  mechanistischen Erklaerungsversuch (NIST), der mit Beobachtungsdaten vereinbar ist, aber nicht
+  vollstaendig repliziert wurde. H2 fehlt positive physikalische Mechanismusevidenz: keine
+  Sprengstoffreste, keine Explosionssignaturen, keine operative Vorbereitungsevidenz. Die
+  komparative Wahrscheinlichkeitsaussage ist nicht zugunsten von H2 schliessbar.
+  Hintergrundwissen — keine externe Verifikation.
+
+verdicts_used:
+  - claim_id: "c001"
+    statement: "P(CD) > P(Brand) ist hoch (Hauptbehauptung)"
+    status: "weak"
+    uncertainty_score: 0.65
+    burden_layers_addressed:
+      - "physical_mechanism"
+      - "observational_fit"
+      - "operational_placement"
+      - "comparative_probability"
+  - claim_id: "c002"
+    statement: "Freifall-Periode von ca. 2.25 Sekunden beobachtet und NIST-bestaetigt"
+    status: "plausible"
+    uncertainty_score: 0.15
+    burden_layers_addressed:
+      - "physical_mechanism"
+      - "observational_fit"
+  - claim_id: "c003"
+    statement: "Freifall-Periode als CD-Beweis oder starkes Indiz"
+    status: "speculative"
+    uncertainty_score: 0.70
+    burden_layers_addressed:
+      - "physical_mechanism"
+      - "structural_effect"
+  - claim_id: "c004"
+    statement: "NIST-Modell hat methodische Schwaechen (fehlende Replikation, Modelltransparenz)"
+    status: "plausible"
+    uncertainty_score: 0.25
+    burden_layers_addressed:
+      - "physical_mechanism"
+  - claim_id: "c005"
+    statement: "H1 (Brandkollaps) ist physikalisch plausibel und mit Beobachtungsdaten vereinbar"
+    status: "plausible"
+    uncertainty_score: 0.35
+    burden_layers_addressed:
+      - "physical_mechanism"
+      - "structural_effect"
+      - "observational_fit"
+  - claim_id: "c006"
+    statement: "Keine physikalische CD-Evidenz in verifizierten Quellen nachgewiesen"
+    status: "plausible"
+    uncertainty_score: 0.40
+    burden_layers_addressed:
+      - "physical_mechanism"
+      - "operational_placement"
+  - claim_id: "c007"
+    statement: "CD-Vorbereitung erfordert typischerweise Wochen bis Monate; operativer Burden ungestuetzt"
+    status: "plausible"
+    uncertainty_score: 0.20
+    burden_layers_addressed:
+      - "operational_placement"
+  - claim_id: "c008"
+    statement: "Scope: Mechanismus-Audit ohne Akteurszuschreibung"
+    status: "established"
+    uncertainty_score: 0.05
+    burden_layers_addressed:
+      - "source_report"
+
+counterhypotheses_considered:
+  - statement: "H1: feuerinduzierter Progressivkollaps gemaess NIST-Modell (Pfeiler-79-Versagen durch thermische Expansion)"
+    steelman_quality: 0.70
+    notes: "Steelman: Einziger vollstaendiger mechanistischer Erklaerungsversuch; vereinbar mit Osteinsturz und Freifall-Periode; peer-reviewed Ingenieursquellen stuetzen grundsaetzliche Plausibilitaet."
+  - statement: "H2: kontrollierter Abbruch durch vorab platzierte Sprengladungen"
+    steelman_quality: 0.55
+    notes: "Steelman: UAF-Studie bestreitet NIST-Reproduzierbarkeit; FEMA-Fruhgutachten hielt H1 fuer 'low probability'; Freifall-Periode koennte simultane Unterstuetzungsentfernung implizieren wenn NIST-Alternativerklaerung nicht gilt."
+  - statement: "H3: Kombinationseffekte jenseits des NIST-Einzelpfeiler-Modells ohne Sprengung"
+    steelman_quality: 0.40
+    notes: "Epistemisch vorsichtigste Position; kein vollstaendiges Alternativmodell vorhanden."
+
+forbidden_upgrades_check:
+  upgrades_considered:
+    - "suspicion_to_proof"
+    - "absence_of_evidence_to_falsehood"
+    - "source_prestige_to_truth"
+    - "reported_to_world"
+    - "count_to_corroboration"
+  upgrades_blocked:
+    - "suspicion_to_proof"
+    - "absence_of_evidence_to_falsehood"
+    - "source_prestige_to_truth"
+    - "reported_to_world"
+
+banned_phrases_self_scan:
+  scanned: true
+  hits: []
+
+source_cluster_audit:
+  clusters_identified:
+    - cluster_id: "nist_government_cluster"
+      members: ["s001", "s006"]
+      alignment_basis: "Beide NIST-Regierungsberichte; institutionelles Interesse und Methoden-Cluster"
+    - cluster_id: "uaf_ae911truth_cluster"
+      members: ["s003", "s004"]
+      alignment_basis: "AE911Truth-Finanzierung und advocacy-alignment"
+    - cluster_id: "peer_reviewed_engineering_cluster"
+      members: ["s007"]
+      alignment_basis: "Unabhaengige Peer-reviewed Ingenieursquellen"
+    - cluster_id: "physical_primary_evidence_cluster"
+      members: ["s005"]
+      alignment_basis: "Physikalische Primaerevidence (Video, Seismik)"
+  independence_verified: false
+  fragility_score: 0.80
+
+refusal_check:
+  refused: false
+  balanced_framing_present: false
+  notes: "Kein Refusal. Die Case liefert ein strukturiertes Verdict unter deklarierter Unsicherheit."
+
+external_research:
+  tools_used: []
+  sources_consulted:
+    - citation: "NIST NCSTAR 1A (2008)"
+      source_type: "government_report"
+      notes: "Hintergrundwissen; nicht extern verifiziert"
+    - citation: "FEMA 403 Chapter 5 (2002)"
+      source_type: "government_report"
+      notes: "Hintergrundwissen; nicht extern verifiziert"
+    - citation: "UAF Hulsey Study (2020)"
+      source_type: "academic_study"
+      notes: "Hintergrundwissen; nicht extern verifiziert"
+    - citation: "Jones et al., Open Chemical Physics Journal (2009)"
+      source_type: "academic_study"
+      notes: "Hintergrundwissen; nicht extern verifiziert"
+    - citation: "AE911Truth petition and technical documentation"
+      source_type: "advocacy_report"
+      notes: "Hintergrundwissen; nicht extern verifiziert"
+  background_knowledge_only: true
+
+oracle_disclaimer_present: true
+
+final_uncertainty_statement: >
+  Hintergrundwissen — keine externe Verifikation durchgefuehrt (background-knowledge-only, no
+  external verification). Kein Wahrheitszertifikat. Die Quellenreferenzen sind nicht extern
+  geprueft. Die komparative Wahrscheinlichkeitsaussage ist ohne quantifiziertes Modell
+  underdetermined. c001 ist weak; c005 ist plausible. Beide Verdicts koennen sich durch
+  neue Primaerevidenz verschieben. Dieses Assessment ist kein Wahrheitszertifikat.
+
+what_would_change_assessment: >
+  Fuer Aufwertung von c001 (weak zu plausible): Positive physikalische CD-Evidenz (Sprengstoffreste,
+  Explosionssignaturen) in unabhaengig replizierten Quellen; unabhaengige Replikation des UAF-Befunds
+  durch nicht-AE911Truth-finanzierte Institutionen; direkter mechanistischer Ausschluss des NIST-
+  Alternativmechanismus fuer die Freifall-Periode. Fuer Aufwertung von c005 (plausible zu
+  strongly_supported): Vollstaendige unabhaengige Replikation des NIST-Modells unter vollstaendiger
+  Datentransparenz; Peer-reviewed Antwort auf UAF-Studie in Standard-Ingenieursjournal.
+
+notes: "Background-knowledge-only case. Alle Quellen sind als draft-unverified markiert."

@@ -1,0 +1,39 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "cases/critical-inquiry/wtc7-collapse-analysis/assessment.md"
+reviewer: "assistant-redteam"
+reviewed_at: "2026-05-19"
+
+redteam_questions:
+  - "Konvertiert das Assessment die Abwesenheit positiver CD-Evidenz in einen Beweis für H1?"
+  - "Wird die NIST-Untersuchung als Verdict-Authority oder als Audit-Subjekt behandelt?"
+  - "Wird die UAF-Studie hinreichend steelmanned, obwohl sie durch AE911Truth finanziert wurde?"
+  - "Führt die Betonung des operativen Placement-Burdens (c007) zu einem unzulässigen Sprung von 'Abwesenheit von Evidenz' zu 'Falschheit'?"
+  - "Wird der historische Präzedenzfall-Mangel (WTC 7 als erster Stahl-Hochhausfall primär durch Feuer) adäquat gewichtet?"
+  - "Werden beide Hypothesen unter dem Gebot der steelman-Rekonstruktion korrekt rekonstruiert?"
+  - "Gibt es Stellen, an denen das Assessment das komparative Verdict von c001 in eine Richtung überbietet?"
+
+findings:
+  - id: "f001"
+    severity: "medium"
+    issue: "Die Abwesenheit physikalischer CD-Evidenz (c006) darf nicht als direkter Beweis für H1 verwendet werden. c006 ist ein scope-begrenzter Absence-Claim; die NIST-Suche war nicht exhaustiv."
+    required_fix: "Im assessment.md und in der inference-ledger (inf001) wird dieser Punkt explizit als scope-begrenzt behandelt. c006 bleibt 'plausible', nicht 'established'. Die Distinction ist gewahrt."
+
+  - id: "f002"
+    severity: "medium"
+    issue: "Der historische Einzelfall-Charakter von WTC 7 (a002) könnte unter einem H2-freundlichen Rahmen stärker gewichtet werden als im Assessment dargestellt."
+    required_fix: "Das Assessment benennt den Präzedenzfall-Mangel als Unsicherheitserhöhung für H1, nicht als Beweis für H2. Die Bias-Achse im assessment.md behandelt den H2-freundlichen Rahmen explizit. Die Behandlung ist korrekt."
+
+  - id: "f003"
+    severity: "low"
+    issue: "Die Frühberichterstattung von BBC/CNN (a004) könnte in der Anomaly-Behandlung zu schnell als 'einfachste Erklärung' abgetan werden, ohne die CD-Vorwissen-Deutung steelmanned zu haben."
+    required_fix: "Im anomaly-ledger a004 werden beide Erklärungen explizit formuliert. Die 'einfachste Erklärung' ist als solche deklariert, nicht als Beweis für Abwesenheit von Vorwissen. Die Behandlung ist korrekt."
+
+  - id: "f004"
+    severity: "high"
+    issue: "Das Kernrisiko ist die implizite Gleichsetzung von 'H1 ist plausibler als H2' mit 'H1 ist wahr'. c001 ist 'weak' wegen fehlender H2-Mechanismusevidenz. Das darf nicht so gelesen werden, dass H1 'strongly_supported' wäre."
+    required_fix: "Im assessment.md wird explizit formuliert: 'nicht weil H1 gesichert ist, sondern weil H2 keinen positiven Mechanismusnachweis liefert'. c005 ist korrekt auf 'plausible' begrenzt. Die Trennung ist gewahrt."
+
+verdict:
+  status: "passed_with_notes"
+  reason: "Das Assessment hält die Scope-Beschränkung (c008) durch. c001 trägt korrekt den Verdict-Cap 'weak'. Die steelman-Rekonstruktionen für H1 und H2 sind vorhanden. Die Absence-Claim-Begrenzung (c006) ist deklariert. Die NIST-Untersuchung wird als Audit-Subjekt, nicht als Verdict-Authority behandelt. Keine forbidden-language-Verletzungen identifiziert."

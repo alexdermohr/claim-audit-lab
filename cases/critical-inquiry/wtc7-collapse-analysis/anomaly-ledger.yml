@@ -1,0 +1,80 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+anomalies:
+  - anomaly_id: "a001"
+    anomaly_type: "method_gap"
+    source_refs: ["s001", "s006"]
+    affected_claims: ["c004", "c005"]
+    affected_hypotheses: ["h1"]
+    statement: "NIST veroeffentlichte die vollstaendigen Finite-Element-Modell-Eingaben fuer das WTC-7-Kollapsmodell nicht vollstaendig; vollstaendige unabhaengige Replikation des Modells durch externe Institutionen ist nicht dokumentiert."
+    materiality: 0.65
+    anomaly_direction: "contests_closure"
+    why_it_matters: "Fehlende Modell-Transparenz bedeutet, dass der zentrale mechanistische Erklaerungsversuch fuer H1 nicht vollstaendig verifizierbarer Wissenschaftsstandard erfuellt. Dies begrenzt H1-Closure auf 'plausible'."
+    possible_benign_explanations:
+      - "NIST ist eine Regierungsbehorde, nicht ein akademisches Journal; ihr Veroeffentlichungsprozess ist strukturell anders."
+      - "Modell-Eingaben wurden spaeter teilweise veroeffentlicht; vollstaendige Zurueckhaltung war zeitlich begrenzt."
+    possible_bias_explanations:
+      - "Selective non-disclosure koennte Modell-Schwaechen verschleiern — diese Hypothese ist moglich, aber nicht belegt."
+    missing_for_resolution:
+      - "Vollstaendige Veroeffentlichung der NIST-Modell-Eingaben und externe Replikation durch mindestens zwei unabhaengige Institutionen."
+    status: "unresolved"
+    notes: "Materiell fuer die Closure-Grenze von c005 (plausible statt strongly_supported). Keine Beweiskraft fuer CD durch diese Anomalie allein."
+
+  - anomaly_id: "a002"
+    anomaly_type: "base_rate_anomaly"
+    source_refs: ["s001", "s007"]
+    affected_claims: ["c005", "c001"]
+    affected_hypotheses: ["h1"]
+    statement: "WTC 7 ist der erste und bisher einzige dokumentierte Fall eines Stahl-Hochhaus-Einsturzes, der primaer auf Feuer zurueckgefuehrt wurde, in der Baugeschichte moderner Hochhaeuser bis 2001."
+    materiality: 0.6
+    anomaly_direction: "increases_uncertainty"
+    why_it_matters: "Das Fehlen von Praezedenzfaellen bedeutet, dass das NIST-Modell auf Grundlage des ersten und einzigen Falls kalibriert wurde. Einzelfall-Schlussfolgerungen ohne Vergleichsfaelle haben inhaerent hoehere Unsicherheit."
+    possible_benign_explanations:
+      - "WTC 7 hatte eine atypische Kombination aus langer Branddauer, fehlenden Loeschmitteln und strukturellen Besonderheiten (grosse Spannweiten), die einen historisch einmaligen Kollapstyp erzeugten."
+      - "Viele andere Feuer in Stahlrahmen-Hochhaeusern fuehrten nicht zum Kollaps, weil Loeschsysteme funktionierten oder Branddauer kurzer war."
+    possible_bias_explanations:
+      - "Die Einzigartigkeit koennte alternativ darauf hinweisen, dass ein anderer Mechanismus vorlag — diese Lesart ist epistemisch zulassig, aber nicht positiv gestutzt."
+    missing_for_resolution:
+      - "Vergleichsanalyse von brandinduziertem Versagen in aehnlichen Stahlrahmen-Hochhaeusern unter aehnlichen Brandlastbedingungen."
+    status: "unresolved"
+    notes: "Diese Anomalie rechtfertigt Skepsis gegenueber H1-Schluessen und erhoht die Grundunsicherheit des Falls. Sie ist kein Beweis fuer CD."
+
+  - anomaly_id: "a003"
+    anomaly_type: "method_gap"
+    source_refs: ["s003"]
+    affected_claims: ["c004", "c005"]
+    affected_hypotheses: ["h1"]
+    statement: "Die UAF-Hulsey-Studie (2020) findet, dass der spezifische NIST-Initierungsmechanismus (Pfeiler-79-Versagen durch thermische Expansion) in ihrer Finite-Element-Simulation nicht reproduziert werden konnte."
+    materiality: 0.55
+    anomaly_direction: "contests_closure"
+    why_it_matters: "Wenn die UAF-Studie methodisch standhalt, fehlt dem NIST-Mechanismus externe Verifikation. Dies erhoht die Unsicherheit von H1."
+    possible_benign_explanations:
+      - "Die UAF-Studie hat eigene methodische Schwaechen und eine problematische Finanzierungsquelle (AE911Truth)."
+      - "Unterschiede in Modellierungsannahmen koennen zu unterschiedlichen Ergebnissen fuehren, ohne dass eine der Studien grundsaetzlich falsch ist."
+      - "Die UAF-Studie wurde von Mainstream-Strukturingenieuren methodisch kritisiert."
+    possible_bias_explanations:
+      - "AE911Truth-Finanzierung schafft Anreiz zur Widerlegung von NIST, was methodische Entscheidungen beeinflussen koennte."
+    missing_for_resolution:
+      - "Unabhaengige, nicht-AE911Truth-finanzierte Replikation des UAF-Befunds."
+      - "Peer-reviewed Antwort auf die UAF-Studie in Standard-Ingenieursjournal."
+    status: "unresolved"
+    notes: "Mittlere Materialitaet. Die Studie selbst ist methodisch angreifbar, aber ihr Befund wurde nicht direkt widerlegt."
+
+  - anomaly_id: "a004"
+    anomaly_type: "unexplained_exclusion"
+    source_refs: ["s009"]
+    affected_claims: ["c001"]
+    affected_hypotheses: []
+    statement: "BBC und CNN berichteten am 11. September 2001 uber den Kollaps von WTC 7, bevor dieser eingetreten war. Das Gebaeude war waehrend der Berichterstattung im Hintergrund noch sichtbar stehend."
+    materiality: 0.25
+    anomaly_direction: "context_only"
+    why_it_matters: "Von CD-Proponenten wird dieser Befund als Vorwissen-Indikator gedeutet. Die einfachste Erklaerung ist Nachrichtenchaos in einer ausserordentlichen Situation. Die Anomalie schafft keine CD-Mechanismusevidenz."
+    possible_benign_explanations:
+      - "In Nachrichtenchaossituationen werden Geruchte und Fehlinformationen weitergegeben; Fruehberichte ueber nicht-eingetretene Ereignisse sind in Katastrophensituationen dokumentiert."
+      - "Die BBC/CNN-Korrespondenten erhielten moeglicherweise Berichte von offiziellen Stellen, die selbst auf Vorberichte basierten."
+    possible_bias_explanations:
+      - "Ein Informationsvorfluss von Behorden, die den Kollaps erwarteten, waere erklarungsbedurftig — aber Erwartung eines erwarteten Kollaps eines beschaedigten Gebaeudes ist nicht identisch mit CD-Kenntnis."
+    missing_for_resolution:
+      - "Dokumentation der Quellen, aus denen BBC/CNN die Fruhmeldungen bezogen."
+    status: "unresolved"
+    notes: "Geringe Materialitaet fuer Mechanismus-Claim. Keine CD-Mechanismusevidenz. Erklaerbarer Irrtum ist die einfachste Hypothese."

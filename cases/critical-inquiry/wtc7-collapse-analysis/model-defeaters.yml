@@ -1,0 +1,62 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+defeaters:
+  - defeater_id: "d001"
+    target_claim_ref: "c005"
+    target_hypothesis_ref: "h1"
+    defeater_type: "model_incompatibility"
+    source_refs: ["s003"]
+    evidence_refs: ["e003"]
+    statement: "Die UAF-Hulsey-Studie (2020) findet, dass der NIST-Mechanismus (Pfeiler-79-Versagen durch thermische Expansion als alleiniger Ausloeser) in ihrer Finite-Element-Simulation nicht reproduzierbar ist. Wenn dieser Befund methodisch standhalt, fehlt dem NIST-Modell ein verifizierbarer zentraler Kausalschritt."
+    materiality: 0.55
+    status: "unresolved"
+    rebuttal_evidence_refs: []
+    verdict_effect:
+      effect: "prevents_strong_positive_closure"
+      rationale: "Solange die UAF-Studie nicht durch unabhaengige Replikation oder methodische Widerlegung geklaert ist, kann H1 nicht ueber 'plausible' hinaus geschlossen werden."
+    notes: "Die UAF-Studie ist selbst methodisch angreifbar (Finanzierung, kein Standard-Peer-Review). Ihre Materialitaet ist 0.55 (nicht 0.75+), weil sie ihrerseits nicht unabhaengig repliziert wurde. Verhindert 'strongly_supported' fuer c005, nicht 'plausible'."
+
+  - defeater_id: "d002"
+    target_claim_ref: "c001"
+    target_hypothesis_ref: "h2"
+    defeater_type: "central_data_gap"
+    source_refs: ["s001", "s005", "s008"]
+    evidence_refs: ["e007", "e009"]
+    statement: "Die H2-Hypothese (kontrollierte Sprengung) hat keinen verifizierten physikalischen Mechanismusnachweis: keine Sprengstoffreste in unabhaengig verifizierten Quellen, keine konsistenten Explosionsschall-Signaturen, keine seismischen Explosionsmuster vor dem Einsturz."
+    materiality: 0.8
+    status: "unresolved"
+    rebuttal_evidence_refs: ["e007"]
+    verdict_effect:
+      effect: "prevents_strong_positive_closure"
+      rationale: "H2 fehlt der physikalische Mechanismusnachweis, der fuer eine starke positive Closure notwendig waere. c001 (P(CD) > P(Brand)) kann nicht 'plausible' oder staerker sein, wenn der CD-Mechanismus keine positive Evidenzbasis hat."
+    notes: "e007 enthalt Jones-et-al.-Gegenbefund als schwache Rebuttal-Evidenz, aber dieser ist methodisch bestritten und nicht repliziert. Materially verhindert dieser Defeater starke Closure fuer die CD-Richtung."
+
+  - defeater_id: "d003"
+    target_claim_ref: "c003"
+    target_hypothesis_ref: "h2"
+    defeater_type: "ignored_rival_model"
+    source_refs: ["s001"]
+    evidence_refs: ["e001", "e005"]
+    statement: "Der Schluss von der Freifall-Periode auf kontrollierte Sprengung erfordert, dass der NIST-Alternativmechanismus (Freifall der Aussenfassade nach sequentiellem internem Versagen) ausgeschlossen wird. Dieser Ausschluss ist nicht dokumentiert."
+    materiality: 0.7
+    status: "unresolved"
+    rebuttal_evidence_refs: []
+    verdict_effect:
+      effect: "prevents_strong_positive_closure"
+      rationale: "Solange der NIST-Alternativmechanismus fuer die Freifall-Periode nicht ausgeschlossen ist, ist der Schluss von Freifall auf CD logisch nicht zwingend und belaesst c003 bei 'speculative'."
+    notes: "Dieser Defeater ist mechanismusintern: Die Freifall-Beobachtung ist mit H1 und H2 kompatibel. CD-Schluss erfordert mehr als Freifall allein."
+
+  - defeater_id: "d004"
+    target_claim_ref: "c001"
+    target_hypothesis_ref: "h2"
+    defeater_type: "operational_placement_gap"
+    source_refs: ["s007"]
+    evidence_refs: ["e009"]
+    statement: "Keine Evidenz fuer Sprengstoffplatzierung oder Vorbereitungsoperationen in WTC 7 ist dokumentiert. Das Gebaeude war bis kurz vor dem Kollaps aktiv genutzt. Heimliche Sprengvorbereitung in einem betriebenen Gebaeude ist operativ extrem aufwendig und nicht belegt."
+    materiality: 0.6
+    status: "unresolved"
+    rebuttal_evidence_refs: []
+    verdict_effect:
+      effect: "downgrades_confidence"
+      rationale: "Fehlende Operational-Placement-Evidenz schwaecht die CD-Hypothese erheblich, falsifiziert sie aber nicht direkt (absence_of_evidence ist nicht absence_of_fact mit exhaustiver Suche)."
+    notes: "Operational-Placement-Layer ist fuer H2 ungestuetzt. Kein Beweis fuer Heimlichkeit. Der Defeater schwaecht H2, kann H2 aber nicht abschliessend widerlegen."

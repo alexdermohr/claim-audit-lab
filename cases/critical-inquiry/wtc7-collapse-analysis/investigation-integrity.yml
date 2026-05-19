@@ -1,0 +1,67 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001", "s006"]
+    lead_institution: "National Institute of Standards and Technology (NIST)"
+    report_role: "primary_investigation"
+    politically_sensitive: true
+    financially_sensitive: false
+    institutional_interest_risk: 0.65
+    hypothesis_space_declared:
+      - "NIST untersuchte Brandkollaps als primäre Hypothese (H1)."
+      - "NIST prüfte und verwarf die CD-Hypothese (H2) explizit, ohne einen vollständigen mechanistischen Gegentest zu liefern."
+    hypothesis_space_gaps:
+      - "Die vollständigen Modelleingaben wurden nicht unmittelbar mit dem Bericht veröffentlicht; vollständige externe Replikation war zum Veröffentlichungszeitpunkt nicht möglich."
+      - "Die UAF-Studie (2020) zeigt, dass der Initiierungsmechanismus in einer unabhängigen Simulation nicht reproduziert werden konnte; NIST hat darauf nicht formell geantwortet."
+      - "Das FEMA-Frühgutachten (2002) hielt H1 für 'low probability'; die Entwicklung des Verdicts zwischen 2002 und 2008 wurde nicht vollständig transparent dokumentiert."
+    non_tested_material_paths:
+      - path_id: "nt001"
+        expected_test: "Unabhängige externe Replikation des Finite-Element-Modells unter vollständiger Datentransparenz."
+        justification_present: "no"
+        justification_quality: 0.2
+        materiality: 0.70
+        notes: "Fehlende unabhängige Replikation ist der operative Grund, dass c005 auf 'plausible' begrenzt wird."
+      - path_id: "nt002"
+        expected_test: "Exhaustive physikalische Suche nach Sprengstoffresten aus dem Trümmerfeld."
+        justification_present: "partial"
+        justification_quality: 0.4
+        materiality: 0.55
+        notes: "NIST-Suche war scope-begrenzt; Trümmerfeld war nicht vollständig zugänglich. Begründung teilweise vorhanden."
+    adversarial_review:
+      present: "partial"
+      notes: "NIST-Kommentar-Prozess war öffentlich; UAF-Studie liefert nachträgliche adversarielle Überprüfung des Kernmechanismus, ohne Journal-Peer-Review-Standard zu erfüllen. Vollständige adversarielle Peer-Review nach Journalstandard fand nicht statt."
+    integrity_verdict: "incomplete_for_closure"
+    downstream_constraints:
+      - "NIST darf nicht als Wahrheitsinstanz für H1 behandelt werden."
+      - "Die Nichtveröffentlichung von Modelleingaben ist ein dokumentierter Methodenmangel, der c005-Closure auf 'plausible' begrenzt."
+      - "NIST-Ablehnung von H2 erfolgte ohne vollständigen positiven mechanistischen Gegentest; dies begrenzt H2-Ausschluss auf 'absence_of_evidence', nicht 'exclusion'."
+
+  - investigation_id: "inv002"
+    source_cluster_refs: ["s003"]
+    lead_institution: "University of Alaska Fairbanks, Prof. J. Leroy Hulsey"
+    report_role: "academic_study"
+    politically_sensitive: false
+    financially_sensitive: true
+    institutional_interest_risk: 0.50
+    hypothesis_space_declared:
+      - "UAF-Studie untersucht, ob der NIST-Initiierungsmechanismus (Pfeiler-79-Versagen) reproduzierbar ist."
+      - "UAF-Studie findet: simultanes Versagen aller Stützen nötig, kein einzelner Pfeiler als alleiniger Auslöser."
+    hypothesis_space_gaps:
+      - "UAF-Studie schlägt keinen alternativen Mechanismus vor; H2 wird nicht mechanistisch ausgearbeitet."
+      - "Die AE911Truth-Finanzierung erzeugt Anreizstruktur, die die Modellierungsannahmen beeinflussen könnte."
+    non_tested_material_paths:
+      - path_id: "nt003"
+        expected_test: "Test, ob die UAF-Modellierungsannahmen ihrerseits die NIST-Beobachtungsdaten (Osteinsturz-Timing) reproduzieren."
+        justification_present: "unknown"
+        justification_quality: 0.3
+        materiality: 0.50
+        notes: "UAF-Studie konzentriert sich auf Mechanismus-Reproduktion, nicht auf vollständige alternative Modellierung."
+    adversarial_review:
+      present: "partial"
+      notes: "Öffentliche Kommentarphase für UAF-Studie vorhanden. Mainstream-Strukturingenieure haben methodische Kritik geäußert. Kein Journal-Peer-Review-Standard."
+    integrity_verdict: "insufficient_information"
+    downstream_constraints:
+      - "UAF-Befund wird als Defeater für H1 (d001) behandelt, nicht als Beweis für H2."
+      - "UAF-Studie hat Materialität 0.55 (nicht höher), weil sie selbst nicht unabhängig repliziert wurde."

@@ -1,0 +1,157 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+relations:
+  # c001 — Hauptclaim: P(CD) > P(Brand) ist hoch
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "alternative_explanation"
+    strength: 0.7
+    explanation: "NIST-Bericht liefert eine alternative mechanistische Erklaerung (Brandkollaps) fuer den WTC-7-Einsturz, die den CD-Claim als nicht notwendig einordnet."
+
+  - relation_id: "r002"
+    evidence_ref: "e002"
+    claim_ref: "c001"
+    relation_type: "contextualizes"
+    strength: 0.4
+    explanation: "FEMA-Fruhbericht (2002) hielt das Feuer-Szenario fuer 'low probability' — ein adversariell relevantes Zitat, das die anfaengliche Unsicherheit dokumentiert, aber keinen CD-Mechanismus belegt."
+
+  - relation_id: "r003"
+    evidence_ref: "e003"
+    claim_ref: "c001"
+    relation_type: "supports_indirectly"
+    strength: 0.3
+    explanation: "UAF-Studie bestreitet NIST-Mechanismus, was die Unsicherheit ueber H1 erhoht. Unterstuetzt c001 indirekt durch Schwaechen des Alternativmechanismus, nicht durch positiven CD-Beweis."
+
+  - relation_id: "r004"
+    evidence_ref: "e005"
+    claim_ref: "c001"
+    relation_type: "contextualizes"
+    strength: 0.35
+    explanation: "Freifall-Periode ist eine beobachtbare Anomalie, die von CD-Proponenten als Beleg angefuhrt wird; NIST bietet eine Alternativerklarung."
+
+  - relation_id: "r005"
+    evidence_ref: "e006"
+    claim_ref: "c001"
+    relation_type: "reports"
+    strength: 0.2
+    explanation: "AE911Truth berichtet mehrere physikalische Merkmale als CD-Beleg; diese Quelle ist Advocacy, kein unabhaengiger Mechanismusnachweis."
+
+  - relation_id: "r006"
+    evidence_ref: "e007"
+    claim_ref: "c001"
+    relation_type: "weakens"
+    strength: 0.6
+    explanation: "NIST-Negativbefund bei Sprengstoffsuche schwaecht c001; Jones-et-al.-Gegenbefund ist methodisch bestritten und nicht repliziert."
+
+  - relation_id: "r007"
+    evidence_ref: "e009"
+    claim_ref: "c001"
+    relation_type: "weakens"
+    strength: 0.55
+    explanation: "Operational-Placement-Burden fuer CD in WTC 7 ist nicht gestutzt; die Schwierigkeiten heimlicher Vorbereitung schwaechendie CD-Hypothese operativ."
+
+  # c002 — Freifall-Factenclaim
+  - relation_id: "r008"
+    evidence_ref: "e005"
+    claim_ref: "c002"
+    relation_type: "supports_directly"
+    strength: 0.85
+    explanation: "NIST-Videoanalyse bestaetigt die ~2.25-Sekunden-Freifall-Periode direkt und quantitativ."
+
+  # c003 — Freifall als CD-Beweis
+  - relation_id: "r009"
+    evidence_ref: "e005"
+    claim_ref: "c003"
+    relation_type: "supports_indirectly"
+    strength: 0.3
+    explanation: "Freifall-Periode ist die Faktenbasis des Arguments; der Schluss auf CD erfordert zusaetzliche Ausschlusspraemissen."
+
+  - relation_id: "r010"
+    evidence_ref: "e001"
+    claim_ref: "c003"
+    relation_type: "alternative_explanation"
+    strength: 0.65
+    explanation: "NIST erklaert die Freifall-Periode durch sequentielles internes Versagen vor Fassadenfall; diese Erklaerung macht den CD-Schluss nicht notwendig."
+
+  # c004 — NIST-Methodenschwaechen
+  - relation_id: "r021"
+    evidence_ref: "e002"
+    claim_ref: "c004"
+    relation_type: "supports_indirectly"
+    strength: 0.35
+    explanation: "FEMA-Fruhgutachten bezeichnete das Brandkollaps-Szenario als 'low probability'; dass diese Einschaetzung spaeter grundlegend revidiert wurde, stuetzt die Aussage, dass die NIST-Untersuchung methodisch nicht abgeschlossen war."
+
+  - relation_id: "r011"
+    evidence_ref: "e003"
+    claim_ref: "c004"
+    relation_type: "supports_directly"
+    strength: 0.65
+    explanation: "UAF-Studie zeigt direkt, dass der NIST-Mechanismus in unabhaengiger Simulation nicht reproduzierbar war."
+
+  - relation_id: "r012"
+    evidence_ref: "e004"
+    claim_ref: "c004"
+    relation_type: "supports_directly"
+    strength: 0.6
+    explanation: "NIST NCSTAR 1-9 Nichtveroeffentlichung von Modell-Eingaben ist Beleg fuer eingeschraenkte Transparenz."
+
+  # c005 — H1 (Brandkollaps) physikalisch plausibel
+  - relation_id: "r013"
+    evidence_ref: "e001"
+    claim_ref: "c005"
+    relation_type: "supports_directly"
+    strength: 0.7
+    explanation: "NIST-Bericht liefert den ausfuehrlichsten mechanistischen Erklaerungsversuch fuer c005."
+
+  - relation_id: "r014"
+    evidence_ref: "e005"
+    claim_ref: "c005"
+    relation_type: "contextualizes"
+    strength: 0.45
+    explanation: "Freifall-Periode ist mit NIST-Erklaerung vereinbar (Fassadenfall nach innerem Versagen)."
+
+  - relation_id: "r015"
+    evidence_ref: "e003"
+    claim_ref: "c005"
+    relation_type: "method_challenge"
+    strength: 0.5
+    explanation: "UAF-Studie bestreitet methodisch die Reproduzierbarkeit des NIST-Mechanismus."
+
+  - relation_id: "r016"
+    evidence_ref: "e004"
+    claim_ref: "c005"
+    relation_type: "method_challenge"
+    strength: 0.45
+    explanation: "NIST-Modelltransparenzmaengel schwaechendie Vertrauenswurdigkeit des H1-Modells."
+
+  # c006 — Keine physikalische CD-Evidenz nachgewiesen
+  - relation_id: "r017"
+    evidence_ref: "e007"
+    claim_ref: "c006"
+    relation_type: "supports_directly"
+    strength: 0.6
+    explanation: "NIST-Negativbefund unterstuetzt den Abwesenheitsclaim; Jones-et-al.-Gegenbefund ist Contra-Evidenz mit eingeschraenkter Glaubwurdigkeit."
+
+  - relation_id: "r018"
+    evidence_ref: "e005"
+    claim_ref: "c006"
+    relation_type: "supports_indirectly"
+    strength: 0.5
+    explanation: "Seismische Daten zeigen keine Explosionssignaturen, die mit bekannten SprengmMustern vergleichbar waeren."
+
+  # c007 — Operative Vorbereitung fuer CD
+  - relation_id: "r019"
+    evidence_ref: "e009"
+    claim_ref: "c007"
+    relation_type: "supports_directly"
+    strength: 0.65
+    explanation: "Ingenieurspraxis zeigt, dass professionelle kontrollierte Sprengungen extensive Vorbereitung erfordern, was den operativen Burden-Layer fuer CD in WTC 7 hoch macht."
+
+  # c008 — Meta-Claim Scope
+  - relation_id: "r020"
+    evidence_ref: "e010"
+    claim_ref: "c008"
+    relation_type: "supports_directly"
+    strength: 0.95
+    explanation: "question.md definiert explizit den Scope als Mechanismus-Audit ohne Akteurszuschreibung."

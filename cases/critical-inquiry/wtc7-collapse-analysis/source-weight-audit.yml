@@ -1,0 +1,93 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+audited_at: "2026-05-19"
+auditor: "claim-audit-agent"
+records:
+  - source_ref: "s001"
+    questions:
+      - "Wird NIST als Verdict-Authority oder als Audit-Subjekt behandelt?"
+      - "Rechtfertigt das institutionelle Interesse (US-Bundesbehörde) eine Abwertung der institutional_interest_risk-Achse?"
+      - "Wie ist die Nicht-Veröffentlichung von Modelleingaben bei method_transparency zu gewichten?"
+    evidence_refs: ["e001"]
+    disputed: false
+    notes: "Audit-Subjekt. Hohes institutional_interest_risk (0.65), weil NIST Bundesbehörde ist. Niedrige reproducibility (0.5) wegen fehlender vollständiger Modell-Datentransparenz. Hohes primary_proximity (0.95), weil Primärquelle der H1-Hypothese. Wird nicht als Wahrheitsinstanz behandelt."
+
+  - source_ref: "s002"
+    questions:
+      - "Wie ist die FEMA-Formulierung 'low probability' für das Brandkollaps-Szenario methodisch einzuordnen?"
+      - "Hat das frühe Gutachten dieselbe Quellenqualität wie der spätere NIST-Bericht?"
+      - "Wird das Zitat als Quelle der H2-Position oder als Methodenkritik an H1 gewertet?"
+    evidence_refs: ["e002"]
+    disputed: false
+    notes: "Audit-Subjekt. Frühere Untersuchung mit weniger Daten als NIST 2008. Die Formulierung 'low probability' ist adversariell relevant (e002). Das Gutachten wird nicht als abschließendes Verdict behandelt, sondern als Kontextbeleg für die anfängliche Unsicherheit."
+
+  - source_ref: "s003"
+    questions:
+      - "Wie ist die AE911Truth-Finanzierung bei institutional_interest_risk zu gewichten?"
+      - "Hat die UAF-Studie Peer-Review in Standard-Ingenieursjournalen?"
+      - "Wird die UAF-Studie steelmanned, obwohl die Finanzierungsquelle problematisch ist?"
+    evidence_refs: ["e003"]
+    disputed: true
+    notes: "Akademische Studie mit Finanzierungskonflikt. institutional_interest_risk: 0.5 (AE911Truth-Finanzierung); reproducibility: 0.55 (Studie ist transparent, aber nicht in Standard-Journal peer-reviewed). Der UAF-Befund wird als materialer Defeater für H1 behandelt (d001), nicht als Beweis für H2."
+
+  - source_ref: "s004"
+    questions:
+      - "Ist AE911Truth eine geeignete Quelle für mechanistische Belege?"
+      - "Wie ist die Petitionsunterzeichnerzahl methodisch einzuordnen?"
+      - "Wird AE911Truth als Diskursbefund oder als Mechanismusbeleg behandelt?"
+    evidence_refs: ["e006"]
+    disputed: false
+    notes: "Advocacy-Quelle. Hohes institutional_interest_risk (0.75). Niedrige source_cluster_independence (0.3). Der AE911Truth-Beleg wird ausschließlich als Diskursbefund (Minderheitsposition unter Ingenieuren) verwendet, nicht als Mechanismusnachweis."
+
+  - source_ref: "s005"
+    questions:
+      - "Sind Video- und seismische Daten hinreichend unabhängig voneinander?"
+      - "Wird die Freifall-Messung als Faktenclaim (c002) oder als Kausalclaim (c003) behandelt?"
+      - "Wie sind seismische Negativbefunde zu gewichten?"
+    evidence_refs: ["e005"]
+    disputed: false
+    notes: "Physikalische Primärevidenz. Hohes primary_proximity (0.95) und reproducibility (0.8). Video- und seismische Daten sind methodisch unabhängige Instrumente. Die Freifall-Messung ist Faktenclaim (c002, plausibel); ihre kausale Interpretation ist davon getrennt (c003, spekulativ)."
+
+  - source_ref: "s006"
+    questions:
+      - "Enthält NCSTAR 1-9 mehr Modelldetails als NCSTAR 1A?"
+      - "Wurden die zurückgehaltenen Eingaben seitdem veröffentlicht?"
+      - "Wie ist die Nicht-Veröffentlichung bei der Quellengewichtung zu behandeln?"
+    evidence_refs: ["e004"]
+    disputed: false
+    notes: "Technischer Detailbericht. Dieselbe NIST-Cluster-Zugehörigkeit wie s001. Niedrige method_transparency (0.55) und reproducibility (0.45) wegen der Eingaben-Zurückhaltung. Stützt c004 (NIST-Methodenschwächen)."
+
+  - source_ref: "s007"
+    questions:
+      - "Sind Peer-reviewed Ingenieursquellen hinreichend unabhängig von NIST?"
+      - "Behandeln diese Quellen den WTC-7-Fall spezifisch oder generell?"
+      - "Welchen Grad an methodischer Unabhängigkeit bieten AISC-Publikationen?"
+    evidence_refs: ["e009"]
+    disputed: false
+    notes: "Peer-reviewed Quellen außerhalb des direkten NIST-Clusters. source_cluster_independence: 0.65. Untersützen die grundsätzliche Plausibilität brandinduzierter Progressivkollapse (c005) und den operativen Burden-Layer für CD (c007)."
+
+  - source_ref: "s008"
+    questions:
+      - "Sind der NIST-Negativbefund und der Jones-et-al.-Positivbefund komparativ zu behandeln?"
+      - "Welche Einschränkungen gelten für das Open Chemical Physics Journal?"
+      - "Wie ist der Nicht-Replikationsstatus der Jones-Studie zu gewichten?"
+    evidence_refs: ["e007"]
+    disputed: true
+    notes: "Zentraler Streitpunkt für physikalische CD-Evidenz. NIST: Negativbefund. Jones et al.: Positivbehauptung in Nicht-Standard-Journal, nicht repliziert. Beide Positionen sind in e007 als Quellenposition dargestellt. Niedrige reproducibility (0.35) für Jones-Studie; institutional_interest_risk (0.7) wegen AE911Truth-nahen Autoren."
+
+  - source_ref: "s009"
+    questions:
+      - "Sind BBC/CNN-Frühberichte als Vorwissen-Beleg oder als Nachrichtenchaos einzuordnen?"
+      - "Wie ist die Materialität dieses Befunds für den Mechanismus-Claim?"
+      - "Gibt es zeitgenössische Erklärungen für den Frühbericht?"
+    evidence_refs: ["e008"]
+    disputed: false
+    notes: "Medienbericht mit adversarieller Relevanz. Niedrige institutional_interest_risk (0.25), weil keine institutionelle Steuerung plausibel ist. Niedrige Materialität (a004: 0.25) für den Mechanismus-Claim. Benigne Erklärung (Nachrichtenchaos) ist methodisch plausibler als CD-Vorwissen."
+
+  - source_ref: "s010"
+    questions:
+      - "Ist die Selbstreferenz für c008 methodisch korrekt?"
+      - "Stützt die Selbstreferenz an anderer Stelle unzulässige Behauptungen?"
+    evidence_refs: ["e010"]
+    disputed: false
+    notes: "Selbstreferentielle Quelle für Meta-Claim c008 (Scope-Erklärung). Ausschließlich case-konstitutiv; keine Welt-Aussagen-Stützung."

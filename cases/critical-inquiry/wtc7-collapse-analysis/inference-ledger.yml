@@ -1,0 +1,88 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+inferences:
+  - inference_id: "inf001"
+    claim_ref: "c001"
+    triggered_by: "comparative_claim"
+    inference_steps:
+      - step_id: "step001"
+        premise_evidence_refs: ["e007", "e009"]
+        premise_claim_refs: ["c006", "c007"]
+        operation: "comparison"
+        produces: "H2 (CD) hat keinen positiven physikalischen Mechanismusnachweis; H1 (Brand) hat einen mechanistischen Erklaerungsversuch. Unter Standardbeweislast ist H1 aktuell besser gestutzt als H2."
+        uncertainty_effect: "lowers"
+        forbidden_upgrade_checked:
+          - "suspicion_to_proof"
+          - "absence_of_evidence_to_falsehood"
+          - "source_prestige_to_truth"
+          - "rival_weakness_to_own_proof"
+        notes: "Comparison-Schritt: Der fehlende CD-Mechanismusnachweis und der vorhandene H1-Erklaerungsrahmen ergeben eine komparative Einschaetzung zugunsten H1, die c001 (P(CD)>P(Brand)) auf 'weak' begrenzt."
+
+      - step_id: "step002"
+        premise_evidence_refs: ["e003", "e004"]
+        premise_claim_refs: ["c004"]
+        operation: "uncertainty_preservation"
+        produces: "Das NIST-Modell hat methodische Schwaechen (fehlende Replikation, UAF-Befund). Diese Schwaechen erhoehen die Grundunsicherheit, uebersetzen sich aber nicht in positive CD-Evidenz."
+        uncertainty_effect: "preserves"
+        forbidden_upgrade_checked:
+          - "absence_of_evidence_to_falsehood"
+          - "source_prestige_to_truth"
+        addresses_defeater_refs: ["d001"]
+        notes: "Uncertainty-Preservation: NIST-Schwaechen werden anerkannt, ohne daraus H2 als bestaetigt abzuleiten."
+
+  - inference_id: "inf002"
+    claim_ref: "c003"
+    triggered_by: "causal_chain"
+    inference_steps:
+      - step_id: "step003"
+        premise_evidence_refs: ["e005", "e001"]
+        premise_claim_refs: ["c002"]
+        operation: "uncertainty_preservation"
+        produces: "Die Freifall-Periode ist beobachtet (c002, plausible), aber mit dem NIST-Alternativmechanismus (sequentielles inneres Versagen vor Fassadenfall) vereinbar. Der Kausalschluss auf CD ist nicht zwingend."
+        uncertainty_effect: "preserves"
+        forbidden_upgrade_checked:
+          - "suspicion_to_proof"
+          - "absence_of_evidence_to_falsehood"
+        addresses_defeater_refs: ["d003"]
+        notes: "Der Kausalschluss von Freifall auf CD erfordert Ausschluss der NIST-Erklaerung; dieser fehlt. Daher 'speculative'."
+
+  - inference_id: "inf003"
+    claim_ref: "c005"
+    triggered_by: "causal_chain"
+    inference_steps:
+      - step_id: "step004"
+        premise_evidence_refs: ["e001", "e005"]
+        premise_claim_refs: []
+        operation: "corroboration"
+        produces: "NIST-Modell (e001) und Videobeobachtung (e005) unterstuetzen gemeinsam die Plausibilitaet von H1: Osteinsturz zuerst ist mit Pfeiler-79-Versagen vereinbar; Freifall der Fassade ist mit sequentiellem Versagen vereinbar."
+        uncertainty_effect: "lowers"
+        forbidden_upgrade_checked:
+          - "source_prestige_to_truth"
+          - "reported_to_world"
+        notes: "Corroboration zwischen NIST-Modell und physikalischer Videobeobachtung unterstuetzt H1 auf 'plausible'. UAF-Studie begrenzt auf 'nicht strongly_supported'."
+
+      - step_id: "step005"
+        premise_evidence_refs: ["e003", "e004"]
+        premise_claim_refs: ["c004"]
+        operation: "uncertainty_preservation"
+        produces: "UAF-Studie bestreitet Reproduzierbarkeit des NIST-Mechanismus; daher verbleibt H1 bei 'plausible', nicht 'strongly_supported'."
+        uncertainty_effect: "preserves"
+        forbidden_upgrade_checked:
+          - "source_prestige_to_truth"
+        addresses_defeater_refs: ["d001"]
+        notes: "UAF-Defeater wird anerkannt; Closure wird entsprechend begrenzt."
+
+  - inference_id: "inf004"
+    claim_ref: "c006"
+    triggered_by: "manual"
+    inference_steps:
+      - step_id: "step006"
+        premise_evidence_refs: ["e007", "e005"]
+        premise_claim_refs: []
+        operation: "scope_limit"
+        produces: "Physikalische CD-Evidenz ist in NIST-Suche und seismischen Daten nicht nachgewiesen. Dieser Befund ist auf den Scope der Suche begrenzt; exhaustive Abwesenheit ist nicht belegt."
+        uncertainty_effect: "preserves"
+        forbidden_upgrade_checked:
+          - "absence_of_evidence_to_falsehood"
+          - "source_prestige_to_truth"
+        notes: "Scope-Limit-Schritt: Abwesenheitsclaim ist bounded. c006 bleibt 'plausible', nicht 'established', wegen Scope-Begrenzung der Suche."

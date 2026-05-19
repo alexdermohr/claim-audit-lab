@@ -1,0 +1,132 @@
+schema_version: "1.0"
+
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001", "c003", "c005"]
+    type: "document_excerpt"
+    summary: "NIST NCSTAR 1A identifiziert thermisches Versagen von Pfeiler 79 als Ausloeser des progressiven Gesamteinsturzes von WTC 7 infolge von Braenden, die 7+ Stunden brannten, ohne ausreichende Bekaempfung."
+    verbatim_or_ref: "Siehe s001"
+    evidence_excerpt: "Source position from s001: 'The fires in WTC 7, which were started by debris from the collapse of WTC 1, burned out of control because the city water main had been broken by the collapse of WTC 1 and WTC 2. ... the expansion of the heated floor beams ... caused column 79 to fail.' (Quoted; source position of NIST.)"
+    locator: "NIST NCSTAR 1A, Executive Summary, pp. xxxv-xxxvii"
+    accessed_at: "2026-05-19"
+    supports: ["c005"]
+    contradicts: []
+    notes: "NIST-Hauptbefund. Unterstuetzt H1 (Brandkollaps). Als source position behandelt, nicht als Wahrheitszertifikat."
+
+  - evidence_id: "e002"
+    source_ref: "s002"
+    claim_refs: ["c001", "c004"]
+    type: "document_excerpt"
+    summary: "FEMA-Bericht von 2002 notiert, dass das 'best hypothesis' fuer WTC-7-Kollaps durch Feuer 'a low probability scenario' sei, weil Brandschaeden allein selten Stahlrahmen-Hochhaeuser zum Kollabieren bringen."
+    verbatim_or_ref: "Siehe s002"
+    evidence_excerpt: "Source position from s002: 'The sequence of events leading to the collapse of the building is still unknown at this time; however, the best hypothesis has only a low probability of occurrence.' (FEMA 403, Chapter 5, Sec. 5.5)"
+    locator: "FEMA 403, Chapter 5, Section 5.5"
+    accessed_at: "2026-05-19"
+    supports: ["c004"]
+    contradicts: []
+    notes: "Adversariell relevantes Zitat: Fruehe Regierungsuntersuchung haelt das Feuer-Szenario fuer 'low probability'. Wurde durch NIST 2008 revidiert. Die Formulierung zeigt, dass das offizielle Narrativ sich zwischen 2002 und 2008 entwickelte."
+
+  - evidence_id: "e003"
+    source_ref: "s003"
+    claim_refs: ["c001", "c004", "c005"]
+    type: "document_excerpt"
+    summary: "UAF-Hulsey-Studie (2020) findet, dass der von NIST beschriebene Kollapsinitierungsmechanismus (Versagen Pfeiler 79 durch thermische Expansion) in ihren Finite-Elemente-Simulationen nicht reproduzierbar ist."
+    verbatim_or_ref: "Siehe s003"
+    evidence_excerpt: "Source position from s003: 'The principal conclusion of our study is that fire did not cause the collapse of WTC 7 on 9/11 ... Our study found that the collapse of WTC 7 was a global collapse that involved the simultaneous failure of every column in the building.' (Quoted; source position of UAF study.)"
+    locator: "UAF Final Report, Executive Summary, pp. 1-2"
+    accessed_at: "2026-05-19"
+    supports: ["c004"]
+    contradicts: []
+    notes: "UAF-Befund: NIST-Mechanismus nicht reproduzierbar in UAF-Simulation. Die Studie schliesst nicht auf CD; sie bestreitet H1-Mechanismus. Methodische Kritik: Finanzierung durch AE911Truth; Peer-Review-Status begrenzt."
+
+  - evidence_id: "e004"
+    source_ref: "s006"
+    claim_refs: ["c004", "c005"]
+    type: "document_excerpt"
+    summary: "NIST NCSTAR 1-9 legt das detaillierte Computational-Modell fuer den WTC-7-Kollaps dar, das auf Annahmen uber Feuerlast, Stahltemperaturen und Verbindungssteifigkeit beruht, die nicht vollstaendig publiziert wurden."
+    verbatim_or_ref: "Siehe s006"
+    evidence_excerpt: "Source position from s006: The NIST model relies on a complex finite element simulation with temperature inputs derived from fire modeling. NIST initially declined to release the full model inputs, citing potential public safety concerns. (Paraphrased from public commentary and NIST responses.)"
+    locator: "NIST NCSTAR 1-9, technical chapters; NIST FOIA correspondence"
+    accessed_at: "2026-05-19"
+    supports: ["c004"]
+    contradicts: []
+    notes: "Methodenmangel: Nichtveroeffentlichung von Modell-Eingaben verhindert unabhaengige Verifikation. Spaeter wurden mehr Daten veroeffentlicht; vollstaendige Reproduzierbarkeit bleibt offen."
+
+  - evidence_id: "e005"
+    source_ref: "s005"
+    claim_refs: ["c001", "c002", "c003", "c005", "c006"]
+    type: "dataset"
+    summary: "Video-Analyse des WTC-7-Einsturzes zeigt, dass die obere Fassade des Gebaeudes fuer ca. 2.25 Sekunden nahezu mit freier Fallbeschleunigung (g) sank. NIST bestaetigt diese Messung."
+    verbatim_or_ref: "Siehe s005"
+    evidence_excerpt: "Source position from s001: 'This free fall drop continued for approximately 8 stories, or 32.0 m (105 ft), the distance traveled between times 1.75 s and 4.0 s ... the upper portion of the north face of the building fell at gravitational acceleration for approximately 2.25 s.' (Quoted from NIST NCSTAR 1A.)"
+    locator: "NIST NCSTAR 1A, Appendix on Video Analysis; s005 video archive"
+    accessed_at: "2026-05-19"
+    supports: ["c002"]
+    contradicts: []
+    notes: "Physikalischer Messungsbefund. Die Freifall-Periode ist faktisch und konsentiiert. Ihre kausale Interpretation (Beweis fuer CD vs. Erklaerung durch sequentielles Versagen) ist strittig."
+
+  - evidence_id: "e006"
+    source_ref: "s004"
+    claim_refs: ["c001", "c003"]
+    type: "document_excerpt"
+    summary: "AE911Truth-Petition und technische Berichte argumentieren, dass mehrere physikalische Merkmale des WTC-7-Einsturzes (Freifall, Symmetrie, Molten-Metal-Berichte) nur durch kontrollierte Sprengung erklarbar seien."
+    verbatim_or_ref: "Siehe s004"
+    evidence_excerpt: "Source position from s004: 'The building fell symmetrically, at near free-fall speed, through what was its path of greatest resistance — all hallmarks of controlled demolition.' (Quoted; advocacy source position.)"
+    locator: "AE911Truth technical FAQ / petition documentation"
+    accessed_at: "2026-05-19"
+    supports: []
+    contradicts: []
+    notes: "Advocacy-Position. Stellt mechanistische Argumente fuer CD vor. Die Symmetrie-Behauptung ist durch den Osteinsturz des Ostpenthouse vor dem Gesamteinsturz partiell konterkariert. Advocacy-Quelle mit explizitem CD-Foerderinteresse."
+
+  - evidence_id: "e007"
+    source_ref: "s008"
+    claim_refs: ["c001", "c006"]
+    type: "document_excerpt"
+    summary: "NIST NCSTAR 1A und Jones et al. (2009): NIST berichtet keinen Befund von Sprengstoffresten; Jones et al. behaupten Thermit-Ruckstande in Staubproben, aber die Studie wurde in einem nicht-Standard-Journal veroeffentlicht und nicht unabhaengig repliziert."
+    verbatim_or_ref: "Siehe s008"
+    evidence_excerpt: "Source position from s001: 'NIST found no evidence of a blast or controlled demolition event.' Source position from s008 (Jones et al.): 'We have found red/gray chips in all the samples we have studied ... These red/gray chips show marked similarities in all four samples ... FTIR and EDX ... This is not a red paint ... Iron-rich spheres... thermitic materials.' (Quoted; contested claim.)"
+    locator: "NIST NCSTAR 1A p. 48; Jones et al. Open Chemical Physics Journal 2:1 (2009)"
+    accessed_at: "2026-05-19"
+    supports: []
+    contradicts: []
+    notes: "Kontroverser Befund. NIST-Negativbefund versus Jones-Positivbehauptung. Jones-Studie wurde von Mainstream-Chemikern und dem AISC nicht bestaetigt; Replikation fehlt. Kein Consensus-Befund fuer CD-Physikalevidenz."
+
+  - evidence_id: "e008"
+    source_ref: "s009"
+    claim_refs: ["c001"]
+    type: "document_excerpt"
+    summary: "BBC berichtete am 11. September 2001 ca. 23 Minuten vor dem Einsturz ueber den Kollaps von WTC 7; CNN berichtete aehnlich. Das Gebaeude war waehrend der Berichterstattung noch sichtbar im Hintergrund stehend."
+    verbatim_or_ref: "Siehe s009"
+    evidence_excerpt: "Source position from s009 (BBC): 'The Salomon Brothers building in New York, otherwise known as 7 World Trade Center, collapsed about half an hour ago.' (BBC broadcast, September 11, 2001; WTC 7 still visible in background.)"
+    locator: "BBC broadcast archive, ~16:57 UTC September 11, 2001; WTC 7 collapsed ~17:20 UTC"
+    accessed_at: "2026-05-19"
+    supports: []
+    contradicts: []
+    notes: "Kontroverse Fruehberichterstattung. Einfachste Erklaerung: Nachrichtenchaos und Weitergabe von Geruchten in einer aussergewoehnlichen Situation. Fuer CD-Proponenten: Vorwissen-Argument. Kein direkter Mechanismusnachweis fuer CD."
+
+  - evidence_id: "e009"
+    source_ref: "s007"
+    claim_refs: ["c001", "c007"]
+    type: "secondary_summary"
+    summary: "Ingenieurserfahrung mit kontrollierten Gebaeudesprengungen zeigt, dass professionelle Abbruchunternehmen typischerweise Wochen bis Monate benoetigen, um ein Gebaeude fuer den kontrollierten Abriss vorzubereiten, einschliesslich Freilegung von Stuetzstrukturen und Installation von Sprengstoffen."
+    verbatim_or_ref: "Siehe s007"
+    evidence_excerpt: "Source position from s007: Controlled demolition of large steel-framed structures typically requires removal of interior walls and fireproofing, installation of explosive charges on multiple structural members, and wiring of sequential detonation systems. This typically requires months of preparatory access."
+    locator: "Structural engineering literature on controlled demolition; AISC publications"
+    accessed_at: "2026-05-19"
+    supports: ["c007"]
+    contradicts: []
+    notes: "Stutzt den Operational-Placement-Burden-Layer fuer c007: Heimliche Vorbereitung in einem bis kurz vor Kollaps betriebenen Gebaeude waere operativ ausserordentlich komplex."
+
+  - evidence_id: "e010"
+    source_ref: "s010"
+    claim_refs: ["c008"]
+    type: "document_excerpt"
+    summary: "Die question.md dieser Case enthaelt eine explizite Scope-Erklaerung, die Akteurszuschreibung, Taterschaft und politische Folgefragen als out-of-scope deklariert."
+    verbatim_or_ref: "Siehe s010"
+    evidence_excerpt: "Aus question.md: 'Out of Scope: Akteurszuschreibung oder Taeterschaft (dieser Case bewertet den Mechanismus, nicht die Verantwortung)'"
+    locator: "question.md, Abschnitt 'Scope'"
+    accessed_at: "2026-05-19"
+    supports: ["c008"]
+    contradicts: []
+    notes: "Selbstreferentielle Evidenz fuer c008 (Meta-Claim). Case-konstitutiv."

@@ -1,0 +1,64 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+audited_at: "2026-05-19"
+auditor: "claim-audit-agent"
+records:
+  - hypothesis_ref: "h1"
+    support_search_status: "completed"
+    strongest_supporting_argument: "Das NIST-Modell liefert den einzigen vollstaendigen mechanistischen Erklaerungsversuch fuer den WTC-7-Einsturz durch Feuer. Es ist mit dem beobachtbaren Osteinsturz (Ostpenthouse zuerst), der Brandausdehnung (dokumentiert) und der Freifall-Periode (erklaert durch sequentielles inneres Versagen) vereinbar. Peer-reviewed Ingenieursquellen unterstuetzen grundsaetzlich die Plausibilitaet brandinduzierter Progressivkollapse."
+    supporting_evidence_refs: ["e001", "e005", "e009"]
+    best_supporting_source_refs: ["s001", "s005", "s007"]
+    steelman: "Feuerinduzierter Progressivkollaps ist als Mechanismus ingenieurswissenschaftlich nicht grundsaetzlich ausgeschlossen; das NIST-Modell zeigt einen vollstaendigen (wenn auch nicht vollstaendig replizierten) Kausalweg."
+    missing_for_upgrade:
+      - "Unabhaengige Replikation des NIST-Modells unter vollstaendiger Datentransparenz."
+      - "Direkter Ausschluss der UAF-Studie durch Peer-reviewed Replikation oder methodische Widerlegung."
+      - "Vergleichsfaelle brandinduzierter Progressivkollapse in Stahlrahmen-Hochhaeusern."
+    searched_for:
+      - "Peer-reviewed Ingenieursanalysen des WTC-7-Kollaps."
+      - "Unabhaengige Replikationen des NIST-Modells."
+      - "Seismische und akustische Evidenz gegen Explosionen."
+    not_found:
+      - "Vollstaendige unabhaengige Replikation des NIST-Finite-Element-Modells."
+      - "Direkter Praezedenzfall fuer primaer brandinduzierte progressive Kollapse in vergleichbaren Stahlrahmen-Hochhaeusern."
+    notes: "H1 hat den staerksten mechanistischen Erklarungsrahmen aber eingeschraenkte unabhaengige Replikation."
+    support_quality_score: 0.6
+
+  - hypothesis_ref: "h2"
+    support_search_status: "completed"
+    strongest_supporting_argument: "Die UAF-Hulsey-Studie (2020) bestreitet, dass der NIST-Mechanismus reproduzierbar ist. Die Freifall-Periode ist physikalisch dokumentiert. Das FEMA-Fruehgutachten (2002) bezeichnete das Brandkollaps-Szenario als 'low probability'. Eine Minderheit von Ingenieuren und Architekten unterzeichnete die AE911Truth-Petition."
+    supporting_evidence_refs: ["e003", "e005", "e006"]
+    best_supporting_source_refs: ["s003", "s004", "s005"]
+    steelman: "Wenn das NIST-Modell methodisch nicht reproduzierbar ist und die Freifall-Erklaerung des NIST als zu simpel abgetan werden koennte, waere CD eine alternative Erklaerung, die die beobachtbaren Merkmale erklaert."
+    missing_for_upgrade:
+      - "Physikalische Evidenz fuer Sprengstoffeinsatz (Sprengstoffreste, Explosionssignaturen) in verifizierten, unabhaengigen Quellen."
+      - "Operational-Placement-Nachweis: Wie und wann haette eine CD-Vorbereitung stattgefunden?"
+      - "Unabhaengige Replikation des UAF-Befunds durch nicht-AE911Truth-finanzierte Institutionen."
+      - "Ausschluss des NIST-Erklaerungsrahmens durch direkten mechanistischen Gegenbeweis."
+    searched_for:
+      - "Physikalische Sprengstoffnachweise in verifizierten Quellen."
+      - "Explosionsschall-Belege in Video- oder Audioaufnahmen des Kollapszeitpunkts."
+      - "Seismische Explosionssignaturen."
+      - "Zeugenberichte von Sprengungen zum Kollapszeitpunkt."
+    not_found:
+      - "Physikalische Sprengstoffnachweise in unabhaengig verifizierten Quellen."
+      - "Konsistente Explosionsschall-Signaturen in Video-/Audiobelegen."
+      - "Seismische Explosionsmuster vor dem Einsturz."
+      - "Zeugenberichte von Sprengungen zum Kollapszeitpunkt in zeitgenoessischen Quellen."
+    notes: "H2 hat keine positive physikalische Mechanismusevidenz in verifizierten Quellen. Die unterstuetzenden Argumente sind ueberwiegend Kritik an H1, nicht positive Beweise fuer H2."
+    support_quality_score: 0.2
+
+  - hypothesis_ref: "h3"
+    support_search_status: "completed"
+    strongest_supporting_argument: "Kombinationseffekte aus Feuer, Trummerbeschuss und eventuell strukturellen Vorschaeden koennen das NIST-Einzelpfeiler-Modell ergaenzen ohne CD-Annahme. H3 ist methodisch die vorsichtigste Position."
+    supporting_evidence_refs: ["e001", "e002"]
+    best_supporting_source_refs: ["s001", "s002"]
+    steelman: "Unter grossen Unsicherheiten ueber den genauen Mechanismus ist H3 eine angemessene Beschreibung des epistemischen Zustands: Feuer (mindestens mitursaechlich), aber nicht ausschliesslich durch den NIST-Einzelpfeiler-Mechanismus."
+    missing_for_upgrade:
+      - "Spezifisches alternatives mechanistisches Modell mit Kausaldetails."
+      - "Quantifizierung der relativen Beitraege verschiedener Faktoren."
+    searched_for:
+      - "Alternative Ingenieursmodelle jenseits des NIST-Einzelpfeiler-Ansatzes."
+    not_found:
+      - "Vollstaendig ausgearbeitetes H3-Modell."
+    notes: "H3 ist eine epistemisch vorsichtige Position, die das Unsicherheitsprofil korrekt beschreibt, aber kein vollstaendiges Alternativmodell bietet."
+    support_quality_score: 0.4

@@ -1,0 +1,93 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+clusters:
+  - cluster_id: "nist_government_cluster"
+    source_refs: ["s001", "s006"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.65
+    compromise_scenarios:
+      - scenario_id: "cs1"
+        premise: "Wenn NIST institutionelles Interesse daran hatte, einen komplexen Brandkollaps als einzige Erklärung zu etablieren, könnten alternative Mechanismen im Modell untergewichtet worden sein."
+        treatment: "require_independent_replication"
+        affected_claims: ["c005"]
+        rationale: "NIST wird als Audit-Subjekt behandelt; c005 ist auf 'plausible' begrenzt, weil die fehlende unabhängige Replikation der operative Verdictcap-Mechanismus ist."
+      - scenario_id: "cs2"
+        premise: "Wenn die zurückgehaltenen Modelleingaben die NIST-Schlussfolgerung nicht tragen, wäre das H1-Modell nicht verifizierbar."
+        treatment: "require_independent_replication"
+        affected_claims: ["c004", "c005"]
+        rationale: "c004 (NIST-Methodenschwächen) ist als unabhängiger Claim etabliert. Die Nicht-Replikation begrenzt c005 mechanisch."
+    notes: "Regierungsbehörden-Cluster. Institutionelles Interesse ist dokumentierter Kontextfaktor. NIST hat die einzige vollständige Untersuchung durchgeführt; Quellen außerhalb dieses Clusters prüfen Teile des Modells."
+
+  - cluster_id: "uaf_ae911truth_cluster"
+    source_refs: ["s003", "s004"]
+    cluster_role: "anti_official_cluster"
+    independence_risk: 0.75
+    compromise_scenarios:
+      - scenario_id: "cs3"
+        premise: "Wenn die AE911Truth-Finanzierung methodische Entscheidungen in der UAF-Studie beeinflusst hat, wäre der UAF-Befund (NIST-Mechanismus nicht reproduzierbar) möglicherweise nicht valide."
+        treatment: "require_independent_replication"
+        affected_claims: ["c004"]
+        rationale: "d001 (UAF-Defeater für H1) hat Materialität 0.55 statt höher, weil die Studie selbst nicht unabhängig repliziert wurde. Ohne unabhängige Replikation des UAF-Befunds bleibt c004 auf 'plausible'."
+      - scenario_id: "cs4"
+        premise: "Wenn AE911Truth als organisierter Advocacy-Cluster alle CD-Evidenzbehauptungen koordiniert, wäre die scheinbare Evidenzbreite in Wirklichkeit Cluster-Effekt."
+        treatment: "downgrade_to_reported_claim_only"
+        affected_claims: ["c001"]
+        rationale: "e006 (AE911Truth-Advocacy) wird ausschließlich als Diskursbefund behandelt, nicht als Mechanismusbeleg. Das Cluster-Effekt-Risiko ist durch diese Behandlung mitigiert."
+    notes: "Advocacy-Cluster mit explizitem CD-Förderinteresse. UAF-Studie ist methodisch stärker als AE911Truth-Petitionsmaterial, aber Finanzierungsstruktur erhöht independence_risk."
+
+  - cluster_id: "peer_reviewed_engineering_cluster"
+    source_refs: ["s007"]
+    cluster_role: "independent_replication"
+    independence_risk: 0.35
+    compromise_scenarios:
+      - scenario_id: "cs5"
+        premise: "Wenn die Mainstream-Ingenieursgemeinschaft systematisch Ergebnisse produziert, die mit staatlichen Untersuchungen übereinstimmen, ohne unabhängige Mechanismus-Verifikation durchzuführen, wäre die scheinbare Unabhängigkeit begrenzt."
+        treatment: "require_independent_replication"
+        affected_claims: ["c005"]
+        rationale: "c005 ist bereits auf 'plausible' begrenzt. Die Ingenieursquellen stützen grundsätzliche Plausibilität von brandinduziertem Progressivkollaps, nicht das spezifische NIST-Modell."
+    notes: "Stärkster unabhängiger Cluster für H1-Plausibilität. Nicht WTC-7-spezifisch, sondern allgemein strukturingenieurswissenschaftlich."
+
+  - cluster_id: "physical_primary_evidence_cluster"
+    source_refs: ["s005"]
+    cluster_role: "primary_investigation"
+    independence_risk: 0.3
+    compromise_scenarios:
+      - scenario_id: "cs6"
+        premise: "Wenn die Videoanalyse durch NIST durchgeführt wurde, könnte die Freifall-Messung (c002) methodisch mit dem NIST-Interesse verflochten sein."
+        treatment: "require_independent_replication"
+        affected_claims: ["c002"]
+        rationale: "Seismische Daten (Lamont-Doherty Earth Observatory) sind unabhängig von NIST. Die Freifall-Messung ist konsistent zwischen Video-Analyse und seismischen Daten. c002 bleibt 'plausible'."
+    notes: "Physikalische Primärevidenz. Seismische Daten sind methodisch unabhängig von NIST. Independence_risk ist gering."
+
+knockout_tests:
+  - test_id: "kt1"
+    removed_cluster_refs: ["nist_government_cluster"]
+    affected_claims: ["c001", "c005"]
+    verdict_without_cluster: "unresolved"
+    verdict_delta: "c005 würde von 'plausible' auf 'unresolved' verschoben. c001 bleibt 'weak', weil H2 weiterhin keinen positiven Mechanismusnachweis hat. Ohne NIST fehlt der einzige vollständige H1-Erklärungs-Mechanismus."
+    fragility_score: 0.65
+    rationale: "Der NIST-Cluster trägt den einzigen vollständigen mechanistischen Erklärungs-Versuch für H1. Sein Wegfall würde c005 auf 'unresolved' reduzieren."
+
+  - test_id: "kt2"
+    removed_cluster_refs: ["uaf_ae911truth_cluster"]
+    affected_claims: ["c004", "c001"]
+    verdict_without_cluster: "weak"
+    verdict_delta: "c004 würde von 'plausible' auf 'weak' verschoben. Der stärkste methodische Einwand gegen das NIST-Modell (UAF-Befund) würde wegfallen. c001 bliebe 'weak' weil weiterhin keine positive CD-Mechanismusevidenz vorhanden ist."
+    fragility_score: 0.45
+    rationale: "Der UAF-Befund ist der Hauptträger von d001 (NIST-Defeater). Sein Wegfall würde c005 leicht stärken, aber c001 nicht aufwerten."
+
+  - test_id: "kt3"
+    removed_cluster_refs: ["peer_reviewed_engineering_cluster"]
+    affected_claims: ["c005", "c007"]
+    verdict_without_cluster: "weak"
+    verdict_delta: "c005 würde von 'plausible' auf 'weak' verschoben. c007 (operative Komplexität der CD) würde auf 'unresolved' verschoben."
+    fragility_score: 0.40
+    rationale: "Die Peer-reviewed Ingenieursquellen liefern die unabhängigste Stützung für H1-Plausibilität. Ihr Wegfall reduziert die Evidenzbasis für c005."
+
+  - test_id: "kt4"
+    removed_cluster_refs: ["nist_government_cluster", "peer_reviewed_engineering_cluster"]
+    affected_claims: ["c001", "c005"]
+    verdict_without_cluster: "no_verdict_possible"
+    verdict_delta: "Ohne NIST und Peer-Review-Cluster fehlt jede systematische mechanistische Stützung für H1. c005 wird 'no_verdict_possible'. c001 verbleibt formal 'weak' da H2 weiterhin keine Mechanismusbasis hat, aber die komparative Einschätzung verliert ihre Grundlage."
+    fragility_score: 0.80
+    rationale: "Gemeinsamer Wegfall der H1-Evidenzcluster löst das gesamte komparative Verdictfundament auf. Fragility-Score 0.80 zeigt die hohe Abhängigkeit von diesen zwei Clustern. Dieser Befund ist in assessment.md als Cluster-Robustness-Vorbehalt ausgewiesen."

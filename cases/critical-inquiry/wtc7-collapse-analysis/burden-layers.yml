@@ -1,0 +1,102 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-collapse-analysis"
+claims:
+  - claim_ref: "c001"
+    burden_profile: "comparative"
+    layers:
+      physical_mechanism:
+        status: "contested"
+        evidence_refs: ["e001", "e003", "e005"]
+        notes: "H1 (Brand): NIST-Modell vorhanden, aber nicht vollstaendig repliziert. H2 (CD): Kein verifizierter physikalischer Mechanismusnachweis. UAF-Studie bestreitet H1-Mechanismus, schlaegt aber keinen H2-Mechanismus vor."
+      structural_effect:
+        status: "partially_resolved"
+        evidence_refs: ["e001", "e003"]
+        notes: "Fuer H1: NIST-Modell zeigt progressiven Kollaps nach Pfeiler-79-Versagen. Fuer H2: Kein spezifisches Strukturversagensmodell durch Sprengung vorhanden."
+      observational_fit:
+        status: "partially_resolved"
+        evidence_refs: ["e005", "e001"]
+        notes: "Osteinsturz (Ostpenthouse zuerst) ist mit H1 vereinbar. Freifall-Periode erklaert H1 durch sequentielles Versagen; H2-Proponenten argumentieren, Freifall passe besser zu CD. Videobeobachtung ist fuer beide Hypothesen partiell kompatibel."
+      operational_placement:
+        status: "missing"
+        evidence_refs: ["e009"]
+        notes: "Fuer H2: Keine Evidenz fuer Vorbereitung, Installation oder Platzierung von Sprengstoffen. Das Gebaeude war bis kurz vor Kollaps operativ genutzt. Fuer H1: Nicht anwendbar."
+      actor_attribution:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: "Explizit out of scope laut question.md. Diese Case bewertet den Mechanismus, nicht die Verantwortung."
+      comparative_probability:
+        status: "unresolved"
+        evidence_refs: ["e001", "e003", "e005", "e007", "e009"]
+        notes: "Die komparative Wahrscheinlichkeitsbehauptung (P(CD) > P(Brand)) ist ungestuetzt. H1 hat einen mechanistischen Erklaerungsversuch; H2 hat keine positive physikalische Mechanismusevidenz. Ohne quantifiziertes Modell ist die komparative Aussage underdetermined."
+
+  - claim_ref: "c003"
+    burden_profile: "causal_chain"
+    layers:
+      physical_mechanism:
+        status: "missing"
+        evidence_refs: ["e005", "e001"]
+        notes: "Der Schluss von Freifall auf CD erfordert, dass Freifall nur durch simultane Unterstuetzungsentfernung (CD) erklaerbar ist. NIST bietet eine Alternativerklarung (sequentielles inneres Versagen), die nicht ausgeschlossen wurde."
+      structural_effect:
+        status: "missing"
+        evidence_refs: []
+        notes: "Kein Nachweis, dass die Freifall-Periode strukturell nur durch CD erklaert werden kann."
+      observational_fit:
+        status: "contested"
+        evidence_refs: ["e005"]
+        notes: "Freifall-Periode ist beobachtet; Erklaerung durch H1 oder H2 ist strittig."
+      operational_placement:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: "Fuer den isolierten Freifall-Claim nicht bewertet."
+      actor_attribution:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: "Explizit out of scope."
+
+  - claim_ref: "c005"
+    burden_profile: "causal_chain"
+    layers:
+      physical_mechanism:
+        status: "partially_resolved"
+        evidence_refs: ["e001", "e003"]
+        notes: "NIST-Modell: thermische Expansion von Bodentraegern -> Pfeiler-79-Versagen. UAF-Studie bestreitet Reproduzierbarkeit. Nicht vollstaendig verifiziert."
+      structural_effect:
+        status: "partially_resolved"
+        evidence_refs: ["e001"]
+        notes: "Pfeiler-79-Versagen loest progressiven Gesamteinsturz aus — im NIST-Modell demonstriert, aber nicht unabhaengig repliziert."
+      observational_fit:
+        status: "satisfied"
+        evidence_refs: ["e005", "e001"]
+        notes: "Osteinsturz des Ostpenthouse zuerst ist mit H1 vereinbar und beobachtbar. Freifall-Periode erklaert im NIST-Kontext."
+      operational_placement:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: "Nicht relevant fuer brandinduzierte Hypothese."
+      actor_attribution:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: "Explizit out of scope."
+
+  - claim_ref: "c006"
+    burden_profile: "causal_chain"
+    layers:
+      physical_mechanism:
+        status: "partially_resolved"
+        evidence_refs: ["e007"]
+        notes: "NIST-Suche nach Sprengstoffresten negativ. Jones-et-al.-Gegenbefund nicht repliziert. Seismische Daten: keine Explosionssignaturen."
+      structural_effect:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: "Fuer Absence-Claim nicht anwendbar."
+      observational_fit:
+        status: "partially_resolved"
+        evidence_refs: ["e005", "e007"]
+        notes: "Keine konsistenten Explosionsschall-Signaturen in Video-/Audiobelegen zum Kollapszeitpunkt."
+      operational_placement:
+        status: "missing"
+        evidence_refs: ["e009"]
+        notes: "Keine Evidenz fuer CD-Vorbereitungsoperationen. Abwesenheit ist bounded: Scope der Suche war begrenzt."
+      actor_attribution:
+        status: "out_of_scope"
+        evidence_refs: []
+        notes: "Explizit out of scope."

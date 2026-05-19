@@ -1,0 +1,52 @@
+schema_version: "1.0"
+
+hypotheses:
+  - id: "h1"
+    label: "feuerinduzierter_progressiver_kollaps"
+    description: "WTC 7 kollabierte als Folge von Braenden, die durch Trummerfall der WTC-1-Zwillingsturme ausgeloest wurden und 7+ Stunden brannten. Thermische Ausdehnung von Bodentraegern fuhrte zum Versagen von Pfeiler 79, was einen progressiven Gesamteinsturz ausloste. Dies ist das NIST-Modell."
+    status: "plausible"
+    supporting_evidence: ["e001", "e005", "e009"]
+    weaknesses:
+      - "WTC 7 ist der erste und bisher einzige dokumentierte Fall eines Stahl-Hochhauseinsturzes primaer durch Feuer in der Geschichte (bis 2001)."
+      - "Das NIST-Computermodell wurde nicht vollstaendig unabhaengig repliziert."
+      - "Modell-Eingaben wurden zeitweise zurueckgehalten."
+      - "Die UAF-Hulsey-Studie bestreitet die Reproduzierbarkeit des Kollapsinitierungsmechanismus."
+      - "Das fruehe FEMA-Gutachten bezeichnete das Feuer-Szenario als 'low probability'."
+
+  - id: "h2"
+    label: "kontrollierter_abbruch_sprengung"
+    description: "WTC 7 wurde durch vorab installierte Sprengladungen zum Einsturz gebracht (kontrollierte Sprengung/Implosion). Physikalische Merkmale wie Freifall-Beschleunigung, symmetrischer Kollaps und Molten-Metal-Berichte werden als Indikatoren angefuehrt."
+    status: "speculative"
+    supporting_evidence: ["e003", "e006"]
+    weaknesses:
+      - "Kein physikalischer Nachweis von Sprengstoffresten in unabhaengig verifizierten Quellen."
+      - "Keine Explosionsschallsignaturen, die mit professionellen kontrollierten Sprengungen vergleichbar waeren, in Videoaufnahmen oder Zeugenbergichten zum Kollapszeitpunkt."
+      - "Keine seismischen Explosionsmuster vor dem Einsturz."
+      - "WTC 7 war bis kurz vor Kollaps aktiv genutzt; heimliche Sprengvorbereitung waere operativ ausserordentlich komplex."
+      - "Die Freifall-Periode wird vom NIST-Modell erklaert (sequentielles internes Versagen); kein zwingender Ausschluss von H1."
+      - "Die symmetrische Erscheinung ist partiell konterkariert durch den beobachtbaren Osteinsturz des Ostpenthouse vor dem Gesamteinsturz."
+      - "Jones-et-al.-Thermit-Befund wurde nicht unabhaengig repliziert und in einem nicht-Standard-Journal veroeffentlicht."
+
+  - id: "h3"
+    label: "unbekanntes_strukturversagen_oder_kombinationseffekte"
+    description: "WTC 7 kollabierte durch einen Kombinationseffekt aus Feuer, Trummerbeschuss, eventuell strukturellen Vorschaeden und moeglicherweise Dieselkraftstoff-Tankspeicher-Effekten, der uber das NIST-Einzelpfeiler-Modell hinausgeht, aber keine aktive Sprengung erfordert."
+    status: "plausible"
+    supporting_evidence: ["e001", "e002", "e005"]
+    weaknesses:
+      - "Kein spezifisches alternatives Modell mit vollstaendigen mechanistischen Details vorhanden."
+      - "Die Kombination von Faktoren ist plausibel, aber nicht praezise quantifiziert."
+
+steelmans:
+  - hypothesis_id: "h2"
+    strongest_version: "Das NIST-Modell ist methodisch nicht unabhaengig replizierbar (UAF-Befund). Die Freifall-Periode impliziert simultane Unterstuetzungsentfernung auf mehreren Ebenen. Das FEMA-Fruehgutachten hielt Brandkollaps fuer unwahrscheinlich. Die Kombination dieser offenen Fragen schafft eine residuale Unsicherheit, die eine weitere Untersuchung rechtfertigt. Unter der Annahme, dass das NIST-Modell falsch ist, und wenn die Freifall-Erklaerung auf simultane Unterstuetzungsentfernung angewiesen ist, waere CD ein moeglicher Mechanismus."
+    best_supporting_evidence: ["e003", "e005", "e002"]
+    strongest_objection_to_mainline: "Das NIST-Modell wurde nicht vollstaendig unabhaengig repliziert, und die UAF-Studie bestreitet explizit die Reproduzierbarkeit des zentralen Mechanismus. Wenn das NIST-Modell falsch ist, fehlt H1 ein gestutzter physikalischer Mechanismus."
+    what_would_change_the_verdict: "Unabhaengige, von AE911Truth unfinanzierte Replikation des UAF-Befunds durch mehrere Ingenieursinstitutionen; physikalische CD-Evidenz (Sprengstoffreste, Explosionssignaturen) in verifizierten Quellen."
+    quality_score: 0.55
+
+  - hypothesis_id: "h1"
+    strongest_version: "Das NIST-Modell ist das einzige vollstaendige mechanistische Modell des WTC-7-Einsturzes. Es ist mit allen unabhaengig beobachtbaren Faktoren vereinbar: Freifall (erklaert durch sequentielles inneres Versagen), Osteinsturz (erster Pfeiler 79), Brandausdehnung (7+ Stunden, kein Loeschwasser). Die UAF-Studie bestreitet einen Teilschritt, aber sie pruft nicht alle NIST-Annahmen und ist ihrerseits methodisch kritisiert. Dass WTC 7 ein historischer Praezedenzfall war, macht den Kollaps nicht unmoeglich."
+    best_supporting_evidence: ["e001", "e005", "e009"]
+    strongest_objection_to_mainline: "Die UAF-Studie legt nahe, dass der spezifische NIST-Initiierungsmechanismus (Pfeiler-79-Versagen durch thermische Expansion) nicht reproduzierbar ist. Wenn diese Kritik methodisch standhalt, fehlt H1 ein verifizierter Kausalschritt."
+    what_would_change_the_verdict: "Unabhaengige Replikation des NIST-Modells unter vollstaendiger Datentransparenz, oder Veroeffentlichung eines Gegenmodells, das den UAF-Befund und die NIST-Beobachtungsdaten gleichzeitig erklart."
+    quality_score: 0.7
