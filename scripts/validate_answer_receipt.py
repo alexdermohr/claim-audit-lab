@@ -86,6 +86,10 @@ def semantic_checks(receipt: dict) -> list[str]:
         errors.append("banned_phrases_self_scan.scanned must be true")
     if not isinstance(self_scan.get("hits", []), list):
         errors.append("banned_phrases_self_scan.hits must be a list")
+    if len(answer_summary) > 600:
+        errors.append(
+            "answer_summary exceeds 600 characters (maxLength enforcement for fallback schema validator)"
+        )
 
     # 2. Counterhypothesis floor for strong verdicts on causal/motive claims.
     needs_counterhypotheses = False
@@ -330,7 +334,3 @@ def main(cases_root: str) -> int:
 if __name__ == "__main__":
     cases_dir = sys.argv[1] if len(sys.argv) > 1 else "cases"
     sys.exit(main(cases_dir))
-    if len(answer_summary) > 600:
-        errors.append(
-            "answer_summary exceeds 600 characters (maxLength enforcement for fallback schema validator)"
-        )
