@@ -1,0 +1,15 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+defeaters:
+  - defeater_id: "d001"
+    target_claim_ref: "c001"
+    defeater_type: "observation_mismatch"
+    statement: "Absence of seismic spikes is physically incompatible with explosive demolition."
+    materiality: 1.0
+    status: "unresolved"
+    evidence_refs: ["e002"]
+    source_refs: ["s003"]
+    verdict_effect:
+      effect: "prevents_strong_positive_closure"
+      rationale: "If no explosions happened, controlled demolition is impossible."
+    notes: "Defeats claim c001."

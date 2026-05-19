@@ -1,0 +1,14 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "cases/history/wtc-controlled-demolition/assessment.md"
+reviewer: "Red Team"
+reviewed_at: "2023-10-25"
+
+redteam_questions:
+  - "Are the defeaters truly fatal to the model?"
+
+findings: []
+
+verdict:
+  status: "passed"
+  reason: "Reviewed and closed."

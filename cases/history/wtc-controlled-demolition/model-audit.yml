@@ -1,0 +1,16 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+models:
+  - model_id: "m001"
+    claim_ref: "c001"
+    hypothesis_ref: "h1"
+    model_summary: "Controlled Demolition model."
+    central_chain_steps: ["Explosives placed", "Explosives detonated"]
+    assumptions_public: 1.0
+    sensitivity_analysis: 1.0
+    independent_reproducibility: 1.0
+    observed_feature_fit: 0.0
+    adversarial_response_quality: 0.0
+    unresolved_defeater_refs: ["d001"]
+    model_confidence: 0.0
+    notes: "Model fails observed feature fit completely."

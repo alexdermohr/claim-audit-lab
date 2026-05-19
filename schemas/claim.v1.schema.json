@@ -191,6 +191,7 @@
               "partially_satisfied",
               "missing",
               "contested",
+              "refuted",
               "not_applicable"
             ]
           },

@@ -1,0 +1,53 @@
+schema_version: "1.0"
+sources:
+  - source_id: "s001"
+    schema_version: "1.0"
+    label: "NIST WTC Towers Investigation Report"
+    url_or_ref: "https://www.nist.gov/engineering-laboratory/main-reports-wtc-towers"
+    source_type: "government_report"
+    publication_date: "2005-09-01"
+    author_or_org: "NIST"
+    source_weight:
+      primary_proximity: 0.9
+      method_transparency: 1.0
+      reproducibility: 0.9
+      source_cluster_independence: 0.8
+      institutional_interest_risk: 0.2
+      adversarial_relevance: 0.1
+      historical_track_record: 0.9
+      update_latency_risk: 0.1
+    notes: "NIST Report."
+  - source_id: "s002"
+    schema_version: "1.0"
+    label: "FEMA WTC Building Performance Study"
+    url_or_ref: "https://www.fema.gov"
+    source_type: "government_report"
+    publication_date: "2002-05-01"
+    author_or_org: "FEMA"
+    source_weight:
+      primary_proximity: 0.8
+      method_transparency: 0.9
+      reproducibility: 0.8
+      source_cluster_independence: 0.7
+      institutional_interest_risk: 0.2
+      adversarial_relevance: 0.1
+      historical_track_record: 0.9
+      update_latency_risk: 0.2
+    notes: "FEMA study."
+  - source_id: "s003"
+    schema_version: "1.0"
+    label: "Columbia University Seismic Data"
+    url_or_ref: "Lamont-Doherty Earth Observatory"
+    source_type: "primary_data"
+    publication_date: "2001-09-11"
+    author_or_org: "Lamont-Doherty"
+    source_weight:
+      primary_proximity: 1.0
+      method_transparency: 1.0
+      reproducibility: 1.0
+      source_cluster_independence: 1.0
+      institutional_interest_risk: 0.0
+      adversarial_relevance: 0.0
+      historical_track_record: 1.0
+      update_latency_risk: 0.0
+    notes: "Seismic records."

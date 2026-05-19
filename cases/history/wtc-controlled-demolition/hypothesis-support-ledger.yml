@@ -1,0 +1,27 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+audited_at: "2023-10-25"
+auditor: "Agent"
+records:
+  - hypothesis_ref: "h1"
+    support_search_status: "completed"
+    strongest_supporting_argument: "Visual appearance."
+    supporting_evidence_refs: []
+    best_supporting_source_refs: []
+    steelman: "Explosives perfectly timed."
+    missing_for_upgrade: ["Seismic spikes"]
+    searched_for: ["Seismic spikes"]
+    not_found: ["Seismic spikes"]
+    notes: "Contradicted by physics."
+    support_quality_score: 0.1
+  - hypothesis_ref: "h2"
+    support_search_status: "completed"
+    strongest_supporting_argument: "Scientific consensus."
+    supporting_evidence_refs: ["e001", "e002", "e003"]
+    best_supporting_source_refs: ["s001", "s002", "s003"]
+    steelman: "Aircraft impacts caused progressive collapse."
+    missing_for_upgrade: ["None"]
+    searched_for: ["Seismic data"]
+    not_found: []
+    notes: "Supported."
+    support_quality_score: 0.9

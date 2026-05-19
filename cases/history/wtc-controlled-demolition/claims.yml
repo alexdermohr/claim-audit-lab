@@ -1,0 +1,84 @@
+schema_version: '1.0'
+claims:
+- claim_id: c001
+  schema_version: '1.0'
+  claim_type: causal_claim
+  claim_kind: causal_claim
+  statement: 'Kontrollierte Sprengungen (Controlled Demolition) verursachten oder mitverursachten den Einsturz von WTC 1 und WTC 2.'
+  status: contradicted
+  evidence_refs: ["e001", "e002", "e003"]
+  source_refs: []
+  requires: []
+  counterclaims: ["c002", "c003"]
+  forbidden_upgrades: []
+  uncertainty:
+    score: 0.1
+    causes:
+    - minor_anomalies
+  interpolation:
+    score: 0.1
+    assumptions:
+    - none
+  direct_incompatibility_basis: "The robust scientific consensus explicitly rules out explosive demolition based on the physical impossibility of explosions occurring without seismic registration, breaking the rc3 link."
+  burden_profile: causal_chain
+  required_chain:
+    - id: "rc1"
+      requirement: "Explosives placed"
+      status: "refuted"
+    - id: "rc2"
+      requirement: "Explosives detonated"
+      status: "refuted"
+    - id: "rc3"
+      requirement: "Seismic signature"
+      status: "refuted"
+- claim_id: c002
+  schema_version: '1.0'
+  claim_type: causal_claim
+  claim_kind: causal_claim
+  statement: 'Hitze und Strukturschäden durch den Flugzeugeinschlag verursachten den Einsturz (Progressive Collapse).'
+  status: established
+  evidence_refs: ["e001", "e002"]
+  source_refs: ["s001"]
+  requires: []
+  counterclaims: ["c001", "c003"]
+  forbidden_upgrades: []
+  uncertainty:
+    score: 0.0
+    causes: []
+  interpolation:
+    score: 0.0
+    assumptions: []
+  burden_profile: causal_chain
+  required_chain:
+    - id: "rc1"
+      requirement: "Planes hit"
+      status: "satisfied"
+    - id: "rc2"
+      requirement: "Fires started"
+      status: "satisfied"
+    - id: "rc3"
+      requirement: "Structure weakened"
+      status: "satisfied"
+- claim_id: c003
+  schema_version: '1.0'
+  claim_type: causal_claim
+  claim_kind: causal_claim
+  statement: 'Die Gebäude stürzten aufgrund natürlicher oder systembedingter struktureller Mängel unverbunden mit dem Einschlag ein.'
+  status: contradicted
+  evidence_refs: ["e001"]
+  source_refs: ["s001"]
+  requires: []
+  counterclaims: ["c001", "c002"]
+  forbidden_upgrades: []
+  uncertainty:
+    score: 0.0
+    causes: []
+  interpolation:
+    score: 0.0
+    assumptions: []
+  direct_incompatibility_basis: "Building design was sound and explicitly proven to be able to withstand normal conditions; failure requires the plane impacts, explicitly rules out spontaneous collapse."
+  burden_profile: causal_chain
+  required_chain:
+    - id: "rc1"
+      requirement: "Design flawed"
+      status: "refuted"

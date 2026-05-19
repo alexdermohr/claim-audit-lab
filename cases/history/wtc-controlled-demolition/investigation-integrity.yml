@@ -1,0 +1,20 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001", "s002"]
+    lead_institution: "NIST"
+    report_role: "primary_investigation"
+    politically_sensitive: true
+    financially_sensitive: false
+    institutional_interest_risk: 0.2
+    hypothesis_space_declared:
+      - "Investigated plane impact and fires as primary cause."
+      - "Considered and ruled out explosives due to lack of evidence."
+    hypothesis_space_gaps: []
+    non_tested_material_paths: []
+    adversarial_review:
+      present: "yes"
+      notes: "Independent academics and engineers reviewed and concurred."
+    integrity_verdict: "high_integrity"
+    downstream_constraints: []

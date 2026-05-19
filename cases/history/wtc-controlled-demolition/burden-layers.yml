@@ -1,0 +1,26 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+claims:
+  - claim_ref: "c001"
+    burden_profile: "causal_chain"
+    layers:
+      physical_mechanism:
+        status: "resolved"
+        evidence_refs: ["e001", "e002"]
+        notes: ""
+      structural_effect:
+        status: "resolved"
+        evidence_refs: ["e001"]
+        notes: ""
+      observational_fit:
+        status: "resolved"
+        evidence_refs: ["e002"]
+        notes: ""
+      operational_placement:
+        status: "resolved"
+        evidence_refs: []
+        notes: ""
+      actor_attribution:
+        status: "resolved"
+        evidence_refs: []
+        notes: ""

@@ -1,0 +1,8 @@
+schema_version: "1.0"
+hypotheses:
+  - id: "h1"
+    statement: "Controlled Demolition."
+    counter_hypotheses: ["h2"]
+  - id: "h2"
+    statement: "Progressive Collapse due to impact and fire."
+    counter_hypotheses: ["h1"]

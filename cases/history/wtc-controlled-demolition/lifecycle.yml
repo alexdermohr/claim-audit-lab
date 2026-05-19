@@ -1,0 +1,15 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: "cases/history/wtc-controlled-demolition"
+status: "final_under_uncertainty"
+created_at: "2023-10-25"
+last_reviewed_at: "2023-10-25"
+review_after: "2024-10-25"
+redteam_ref: "redteam.yml"
+reopen_triggers:
+  - new_primary_source
+  - major_contradiction
+history:
+  - date: "2023-10-25"
+    status: "final_under_uncertainty"
+    note: "Case closed after red team review."

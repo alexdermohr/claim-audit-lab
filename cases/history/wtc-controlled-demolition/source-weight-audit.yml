@@ -1,0 +1,20 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+audited_at: "2023-10-25"
+auditor: "Agent"
+records:
+  - source_ref: "s001"
+    questions: ["Is NIST impartial?"]
+    evidence_refs: ["e001"]
+    disputed: false
+    notes: "NIST is public."
+  - source_ref: "s002"
+    questions: ["Is FEMA reliable?"]
+    evidence_refs: ["e003"]
+    disputed: false
+    notes: "FEMA."
+  - source_ref: "s003"
+    questions: ["Seismic data intact?"]
+    evidence_refs: ["e002"]
+    disputed: false
+    notes: "Raw public data."

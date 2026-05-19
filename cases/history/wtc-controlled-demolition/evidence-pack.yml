@@ -1,0 +1,29 @@
+schema_version: "1.0"
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001", "c002", "c003"]
+    type: "document_excerpt"
+    summary: "NIST conclusions."
+    verbatim_or_ref: "The structural collapse of WTC 1 and 2 was initiated by the aircraft impact damage and subsequent fires."
+    supports: ["c002"]
+    contradicts: ["c001", "c003"]
+    notes: "Refutes demolition."
+  - evidence_id: "e002"
+    source_ref: "s003"
+    claim_refs: ["c001", "c002"]
+    type: "dataset"
+    summary: "No seismic spikes."
+    verbatim_or_ref: "Seismic records show no high-frequency spikes indicative of massive high-explosive detonations."
+    supports: ["c002"]
+    contradicts: ["c001"]
+    notes: "Physical evidence refuting explosives."
+  - evidence_id: "e003"
+    source_ref: "s002"
+    claim_refs: ["c001"]
+    type: "document_excerpt"
+    summary: "FEMA study."
+    verbatim_or_ref: "FEMA structural engineers concluded the towers failed due to fire and impact."
+    supports: []
+    contradicts: ["c001"]
+    notes: "FEMA report."

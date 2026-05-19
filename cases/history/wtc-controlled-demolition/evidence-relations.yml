@@ -1,0 +1,43 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "contradicts_directly"
+    strength: 1.0
+    explanation: "Directly refutes explosives."
+    incompatible_proposition: "Building blew up."
+  - relation_id: "r002"
+    evidence_ref: "e002"
+    claim_ref: "c001"
+    relation_type: "contradicts_directly"
+    strength: 1.0
+    explanation: "Lack of seismic data."
+    incompatible_proposition: "Explosion occurred."
+  - relation_id: "r003"
+    evidence_ref: "e003"
+    claim_ref: "c001"
+    relation_type: "contradicts_directly"
+    strength: 1.0
+    explanation: "FEMA finds impact caused collapse."
+    incompatible_proposition: "Explosion caused it."
+  - relation_id: "r004"
+    evidence_ref: "e001"
+    claim_ref: "c002"
+    relation_type: "supports_directly"
+    strength: 1.0
+    explanation: "NIST concludes fire and impact."
+  - relation_id: "r005"
+    evidence_ref: "e002"
+    claim_ref: "c002"
+    relation_type: "supports_directly"
+    strength: 1.0
+    explanation: "Seismic aligns with impact."
+  - relation_id: "r006"
+    evidence_ref: "e001"
+    claim_ref: "c003"
+    relation_type: "contradicts_directly"
+    strength: 1.0
+    explanation: "Buildings were structurally sound."
+    incompatible_proposition: "Buildings fell without impact."

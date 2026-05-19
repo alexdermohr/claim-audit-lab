@@ -1,0 +1,28 @@
+schema_version: "1.0"
+case_ref: "cases/history/wtc-controlled-demolition"
+clusters:
+  - cluster_id: "sc001"
+    source_refs: ["s001", "s002"]
+    cluster_role: "primary_investigation"
+knockout_tests:
+  - test_id: "kt001"
+    removed_cluster_refs: ["sc001"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "contradicted"
+    verdict_delta: "None. The seismic data (s003) alone contradicts explosives."
+    fragility_score: 0.1
+    rationale: "Even without NIST/FEMA, Columbia seismic data rules out explosives."
+  - test_id: "kt002"
+    removed_cluster_refs: ["sc001"]
+    affected_claims: ["c002"]
+    verdict_without_cluster: "plausible"
+    verdict_delta: "Downgraded from established to plausible."
+    fragility_score: 0.9
+    rationale: "Without NIST/FEMA, we only have seismic data showing progressive collapse, but lack detailed engineering proof of the progressive collapse mechanics."
+  - test_id: "kt003"
+    removed_cluster_refs: ["sc001"]
+    affected_claims: ["c003"]
+    verdict_without_cluster: "unresolved"
+    verdict_delta: "Downgraded from contradicted to unresolved."
+    fragility_score: 0.9
+    rationale: "Without NIST, we wouldn't have the engineering proof that the building design was flawless until impact."

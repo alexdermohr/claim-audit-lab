@@ -1,0 +1,8 @@
+schema_version: "1.0"
+contradictions:
+  - contradiction_id: "con001"
+    claim_a_ref: "c001"
+    claim_b_ref: "c002"
+    description: "Controlled demolition vs Progressive collapse."
+    resolution_status: "logically_resolved"
+    resolution_notes: "Resolved via physical modeling."
