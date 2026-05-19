@@ -57,6 +57,17 @@ MVP 0.1-alpha validiert derzeit:
 - falllokale Quellen-/Evidence-Referenzen (keine hängenden IDs)
 - Lifecycle-Format und Statusübergänge
 - Red-Team-Finalisierungsgate
+- **Verbotene Sprache** in Agent-Prosa (`docs/forbidden-language.md`)
+- **Status/Prosa-Konsistenz** zwischen `claims.yml` und `assessment.md` (`docs/status-prose-consistency.md`)
+- **Answer-Receipt-Disziplin**: strukturierte Pflicht-Output-Quittung für jede Agent-Antwort (`docs/answer-receipt-discipline.md`)
+- **Refusal-Disziplin**: Verweigerung als deklariertes strukturiertes Ereignis, nicht als Neutralitäts-Maske (`docs/refusal-discipline.md`)
+- **Aggregations-Disziplin**: Reported-Claims aggregieren nicht zu World-Claims ohne Bridge-Evidenz (`docs/aggregation-discipline.md`)
+
+Diese fünf neuen Validatoren bilden den Enforcement-Layer gegen agentenseitige
+Bias-Smuggle-Wege: Prosa, die strukturierte Verdicts hinterrücks aufwertet;
+Bias-Phrasen, die als Neutralität getarnt sind; Verweigerung, die als Balance
+verkleidet ist; Mehrfach-Reports, die als unabhängige Korroboration gewertet
+werden; freie Antworten ohne auditierbare Quittung.
 
 Noch nicht implementiert:
 
@@ -96,6 +107,45 @@ make test
 - Keine Zensur kontroverser Hypothesen
 - Keine automatische politische Empfehlung
 - Kein Black-Box-Urteil ohne auditierbare Artefakte
+
+## Enforcement-Layer
+
+Agents, die in diesem Repository operieren, unterliegen dem **bindenden
+Vertrag** in `docs/agent-contract.md`. Compliance ist mechanisch: die
+Validatoren in `scripts/` weisen Outputs zurück, die den Vertrag brechen.
+Es gibt keine "Soft-Compliance" und keinen "Balance"-Escape.
+
+Die zentrale Innovation des Enforcement-Layers ist die **Answer-Receipt**
+(`docs/answer-receipt-discipline.md`, `schemas/answer-receipt.v1.schema.json`):
+ein strukturiertes, schema-validiertes YAML-Artefakt, das jeder Agent
+zusammen mit jeder substantiellen Antwort emittieren MUSS. Die Quittung
+deklariert:
+
+- die Task-Klassifikation,
+- die verwendeten Verdicts (mit Status und Unsicherheit),
+- die berücksichtigten Gegenhypothesen (mit Steelman-Qualität),
+- die geprüften und blockierten verbotenen Upgrades,
+- den Self-Scan auf verbotene Phrasen,
+- das Quellencluster-Audit mit Unabhängigkeitsverifikation oder Fragility-Score,
+- den Refusal-Check,
+- die externe Recherche (Tools, Quellen, oder Background-Knowledge-Only),
+- die Oracle-Disclaimer-Bestätigung,
+- die finale Unsicherheitserklärung,
+- was die Bewertung ändern würde.
+
+Eine Antwort ohne parseable Receipt ist ungültiger Output. Ein Receipt,
+das schema- oder semantische Checks nicht besteht, ist ungültiger Output.
+Die CI weist Pull Requests mit fehlgeschlagenen Validierungen zurück.
+
+Begleitende Mechanismen:
+
+| Mechanismus | Datei | Was er blockiert |
+|---|---|---|
+| Forbidden Language | `scripts/validate_forbidden_language.py` | False-closure, Dismissal, Authority-Laundering, Smoothing, Refusal-as-Neutrality (Kategorie A-E) |
+| Status/Prose Consistency | `scripts/validate_status_prose_consistency.py` | Prosa, deren Register vom strukturierten `status` divergiert |
+| Answer Receipt | `scripts/validate_answer_receipt.py` | Receipts, die Schema oder Semantik-Checks verfehlen |
+| Refusal Discipline | `scripts/validate_refusal_discipline.py` | Verdeckte Verweigerung, Kontroverse-als-Refusal-Grund, Balanced-Framing ohne Burden-Layer-Aufschlüsselung |
+| Aggregation Discipline | `scripts/validate_aggregation_discipline.py` | Reported-Claims, die in einen `strongly_supported`/`established` World-Claim aggregiert werden, ohne Bridge-Evidenz oder Robustheits-Audit |
 
 ## Model Defeater und Burden-Layer
 

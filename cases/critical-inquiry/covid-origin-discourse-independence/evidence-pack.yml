@@ -1,0 +1,106 @@
+schema_version: "1.0"
+
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001", "c004", "c005"]
+    type: "document_excerpt"
+    summary: "Die Lancet-Korrespondenz vom 19. Februar 2020 ist von 27 Wissenschaftlern unterzeichnet, darunter Peter Daszak (EcoHealth Alliance). Der Text rahmt Lab-Origin-Hypothesen als 'conspiracy theories' und behauptet 'overwhelming' wissenschaftlichen Konsens für natürlichen Ursprung."
+    verbatim_or_ref: "Siehe s001"
+    evidence_excerpt: "Source position from s001: 'We stand together to strongly condemn conspiracy theories suggesting that COVID-19 does not have a natural origin.' (Quoted verbatim; the source language is being audited.)"
+    locator: "s001, opening and closing paragraphs"
+    accessed_at: "2026-05-19"
+    supports: ["c001", "c004"]
+    contradicts: []
+    notes: "Die Korrespondenz selbst ist Diskursartefakt. Sie verwendet Kategorie-B-Dismissal-Sprache (Quoted: 'conspiracy theories'). Daszaks EcoHealth-Alliance-Rolle und seine dokumentierten Förder-Verbindungen zum WIV werden in s004 nachträglich offengelegt."
+
+  - evidence_id: "e002"
+    source_ref: "s003"
+    claim_refs: ["c002", "c004"]
+    type: "document_excerpt"
+    summary: "FOIA-freigegebene E-Mails zwischen Andersen, Rambaut, Holmes, Garry und Fauci/Collins/Farrar in der Zeit vom 31. Januar bis 17. März 2020 zeigen, dass die Autoren intern zunächst eine 'unusual' und 'inconsistent with expectations from evolutionary theory' Charakterisierung des Virus-Genoms diskutierten."
+    verbatim_or_ref: "Siehe s003"
+    evidence_excerpt: "Quoted from s003: Andersen email Feb 1 2020: 'The unusual features of the virus make up a really small part of the genome (<0.1%) so one has to look really closely at all the sequences to see that some of the features (potentially) look engineered.' (Excerpt verbatim; subsequent communications shift the public framing.)"
+    locator: "s003, Andersen-Fauci-Collins email thread, January 31 – February 4, 2020; March 6-17 thread"
+    accessed_at: "2026-05-19"
+    supports: ["c002", "c004"]
+    contradicts: []
+    notes: "Primärdokumente. Der interne Sprachgebrauch der Autoren vor Publikation differiert deutlich von dem Sprachgebrauch der publizierten Fassung des Proximal-Origin-Papers."
+
+  - evidence_id: "e003"
+    source_ref: "s002"
+    claim_refs: ["c002", "c004"]
+    type: "document_excerpt"
+    summary: "Das publizierte Proximal-Origin-Paper schließt: 'Our analyses clearly show that SARS-CoV-2 is not a laboratory construct or a purposefully manipulated virus.' Der zitierte Schluss ist stärker formuliert als die in s003 dokumentierte Pre-Publication-Unsicherheit."
+    verbatim_or_ref: "Siehe s002"
+    evidence_excerpt: "Quoted from s002: 'Our analyses clearly show that SARS-CoV-2 is not a laboratory construct or a purposefully manipulated virus.' The published phrasing contrasts with the pre-publication phrasing documented in e002."
+    locator: "s002, concluding paragraph"
+    accessed_at: "2026-05-19"
+    supports: ["c002", "c004"]
+    contradicts: []
+    notes: "Vergleich zwischen e002 (Pre-Publication-Korrespondenz) und e003 (publizierte Fassung) zeigt eine Rahmungsverschiebung. Die Frage, ob die Rahmungsverschiebung wissenschaftlich gerechtfertigt war, ist außerhalb des Scope; in-scope ist die Existenz der Verschiebung."
+
+  - evidence_id: "e004"
+    source_ref: "s005"
+    claim_refs: ["c003"]
+    type: "document_excerpt"
+    summary: "Beispielartikel großer Outlets im Auditzeitraum kategorisieren Lab-Origin-Hypothesen als 'conspiracy theory' oder 'debunked' unter Berufung auf das Proximal-Origin-Paper oder die Lancet-Korrespondenz, ohne unabhängige Burden-Layer-Begründung."
+    verbatim_or_ref: "Siehe s005"
+    evidence_excerpt: "Quoted source position from s005 (Washington Post 2020-02-17): 'Tom Cotton keeps repeating a coronavirus fringe theory that scientists have disputed.' (Quoted verbatim; label-application example.) Similar framings appear in Vox, BBC, NYT during the audit window."
+    locator: "s005, sample article cluster Feb 2020 – May 2021"
+    accessed_at: "2026-05-19"
+    supports: ["c003"]
+    contradicts: []
+    notes: "Die zitierten Labels wenden Kategorie B (Dismissal) an. Im Audit-Sinn relevant: die Begründung für die Labels war typischerweise Verweis auf s001/s002, nicht auf einen unabhängigen Burden-Layer-Test."
+
+  - evidence_id: "e005"
+    source_ref: "s007"
+    claim_refs: ["c007", "c005"]
+    type: "document_excerpt"
+    summary: "Nicholson Bakers Essay in New York Magazine (Januar 2021) und Nicholas Wades Essay in Bulletin of the Atomic Scientists (Mai 2021) publizieren ausgearbeitete Argumente für die Plausibilität der Lab-Origin-Hypothese, vor der späteren Mainstream-Reassessement-Welle ab Mai 2021."
+    verbatim_or_ref: "Siehe s007"
+    evidence_excerpt: "Source position from s007 (Wade, May 5 2021): 'Neither the natural emergence nor the lab escape hypothesis can yet be ruled out.' (Quoted verbatim.) Both essays predate the Wall Street Journal's May 23, 2021 article and the wider mainstream re-evaluation."
+    locator: "s007, Baker NYMag 2021-01-04; Wade BAS 2021-05-05"
+    accessed_at: "2026-05-19"
+    supports: ["c005", "c007"]
+    contradicts: []
+    notes: "Belegt unabhängige Stimmen außerhalb der dokumentierten Cluster. Stützt c007 direkt; stützt c005 schwach (gegen die Negativ-Aussage der Cluster-Universalität)."
+
+  - evidence_id: "e006"
+    source_ref: "s004"
+    claim_refs: ["c001", "c004", "c005"]
+    type: "official_statement"
+    summary: "The Lancet publiziert am 21. Juni 2021 ein Addendum, das anerkennt, dass 26 der 27 Original-Unterzeichner der Februar-2020-Korrespondenz nicht offengelegte Förder-/institutionelle Verflechtungen mit EcoHealth Alliance und Forschung am Wuhan Institute of Virology hatten."
+    verbatim_or_ref: "Siehe s004"
+    evidence_excerpt: "Quoted from s004: 'Some signatories declared their competing interests in the original statement, but most others either had no competing interests to declare or did not declare them at the time. We are publishing addended competing-interest statements herein.'"
+    locator: "s004, addendum body, June 21 2021"
+    accessed_at: "2026-05-19"
+    supports: ["c001", "c004"]
+    contradicts: []
+    notes: "Primärquelle der Lancet selbst, gegen das Eigeninteresse der Zeitschrift. Die Bekenntnis der nicht-offenliegenden Förderverflechtungen ist nahezu 16 Monate nach der Originalkorrespondenz."
+
+  - evidence_id: "e008"
+    source_ref: "s008"
+    claim_refs: ["c006"]
+    type: "document_excerpt"
+    summary: "Die question.md dieses Cases enthält eine explizite Scope-Erklärung, die in-scope und out-of-scope Bereiche aufführt; in-scope ist die Diskursunabhängigkeit, out-of-scope ist die Ursprungsfrage."
+    verbatim_or_ref: "Siehe s008"
+    evidence_excerpt: "Aus question.md Scope-Abschnitt: 'Out-of-scope (explizit): Whether SARS-CoV-2 originated in a laboratory. ... Diese Case produces no verdict on origin.'"
+    locator: "question.md, Abschnitt 'Scope', Unterabschnitt 'Out-of-scope'"
+    accessed_at: "2026-05-19"
+    supports: ["c006"]
+    contradicts: []
+    notes: "Selbstreferenzielle Evidenz für die meta_claim c006. Die Case definiert ihren eigenen Scope; das ist case-konstitutiv."
+
+  - evidence_id: "e007"
+    source_ref: "s006"
+    claim_refs: ["c002", "c004"]
+    type: "document_excerpt"
+    summary: "Vom House Oversight Subcommittee freigegebene Slack-Nachrichten zwischen Andersen et al. zeigen die Autoren intern bei der Diskussion der Pre-Publication-Rahmung des Papers, einschließlich der Frage, wie 'engineered'/'lab-leak' angemessen behandelt werden soll."
+    verbatim_or_ref: "Siehe s006"
+    evidence_excerpt: "Quoted source position from s006 (Slack messages, Feb 2020): 'I really can't think of a plausible natural scenario where you get from the bat virus or one very similar to it to nCoV.' (Andersen, internal Slack, Feb 2 2020.) Subsequent Slack thread discusses publication strategy."
+    locator: "s006, Slack message appendix, House Oversight staff report July 2023"
+    accessed_at: "2026-05-19"
+    supports: ["c002", "c004"]
+    contradicts: []
+    notes: "Primäre interne Kommunikation der Proximal-Origin-Autoren. Die zitierte Pre-Publication-Slack-Äußerung steht in deutlichem Kontrast zur publizierten Schlussfassung des Papers (e003)."

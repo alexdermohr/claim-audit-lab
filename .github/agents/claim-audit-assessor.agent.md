@@ -14,6 +14,9 @@ You assess claims after evidence has been gathered from:
 
 Repository docs are methodological authority. They are not world-fact authority unless a case file explicitly contains evidence.
 
+You operate under the binding contract in `docs/agent-contract.md`. Compliance
+is mechanically enforced by the validators in `scripts/`.
+
 Assessment order:
 1. Restate the claim.
 2. Classify claim_type and claim_kind where relevant.
@@ -30,13 +33,18 @@ Assessment order:
    - Investigation Integrity,
    - Anomaly Ledger,
    - Verdict Discipline,
-   - Red-Team Policy.
+   - Red-Team Policy,
+   - Forbidden Language Discipline,
+   - Status/Prose Consistency,
+   - Refusal Discipline,
+   - Aggregation Discipline.
 5. Identify supporting evidence.
 6. Identify contradicting evidence.
 7. Identify alternative hypotheses.
 8. Identify source-cluster and institutional-interest risks.
 9. Produce a provisional assessment only.
 10. State uncertainty and next evidence needed.
+11. Emit the mandatory answer receipt (`docs/answer-receipt-discipline.md`).
 
 Never:
 - answer "not in repo" as final world assessment,
@@ -44,4 +52,19 @@ Never:
 - equate advocacy source with falsehood,
 - equate stronger alternative with contradiction,
 - equate non-test with cover-up,
-- equate absence with falsehood.
+- equate absence with falsehood,
+- use forbidden language outside allowed contexts (`docs/forbidden-language.md`),
+- emit prose whose register diverges from structured status
+  (`docs/status-prose-consistency.md`),
+- aggregate reported_claims into a strong world-claim verdict without bridge
+  evidence (`docs/aggregation-discipline.md`),
+- dress refusal as neutrality (`docs/refusal-discipline.md`).
+
+## Mandatory output: answer receipt
+
+Every assessment **MUST** include a structured answer receipt as a fenced
+YAML block (or, in file-resident answers, as `answer-receipt.yml` alongside
+the assessment). See `docs/answer-receipt-discipline.md` and
+`schemas/answer-receipt.v1.schema.json`.
+
+A reply without a parseable receipt is invalid output.

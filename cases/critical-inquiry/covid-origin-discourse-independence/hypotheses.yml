@@ -1,0 +1,61 @@
+schema_version: "1.0"
+
+hypotheses:
+  - id: "h1"
+    label: "mainstream_discourse_was_independent"
+    description: "Die Mainstream-Bewertung der Lab-Origin-Hypothese im Auditzeitraum war substantiell unabhängig von Quellencluster-Effekten; die Konvergenz dismissiver Bewertungen reflektierte echte unabhängige fachliche Übereinstimmung."
+    status: "weak"
+    supporting_evidence: ["e005"]
+    weaknesses:
+      - "Primärdokumente (e001, e002, e003, e006, e007) zeigen dokumentierte Cluster-Bezogenheit in den hochrezipierten Diskurskanälen."
+      - "Die nachträgliche Lancet-Adde (e006) erkennt nicht-offengelegte Förderverflechtungen an, die zum Publikationszeitpunkt nicht transparent waren."
+
+  - id: "h2"
+    label: "cluster_effects_materially_contributed_to_convergence"
+    description: "Quellencluster-Effekte (überlappende Förder-, Autoren- und institutionelle Bezüge zwischen Lancet-Unterzeichnern und Proximal-Origin-Autoren) trugen substantiell zur Konvergenz dismissiver Bewertungen in den hochrezipierten Diskurskanälen bei."
+    status: "strongly_supported"
+    supporting_evidence: ["e001", "e002", "e003", "e006", "e007"]
+    weaknesses:
+      - "Cluster-Korrelation ist nicht logisch identisch mit Cluster-Verursachung."
+      - "Quantifizierung des relativen Anteils der Cluster-Beitragung ist mit den verfügbaren Quellen nicht präzise möglich."
+
+  - id: "h3"
+    label: "dismissal_language_was_label_application_not_burden_layer_test"
+    description: "Die Anwendung von Kategorie-B-Labels ('conspiracy theory', 'debunked', 'fringe') in Mainstream-Outlets stützte sich auf Quellenprestige (Verweis auf Lancet/Proximal Origin) statt auf unabhängige Burden-Layer-Tests."
+    status: "strongly_supported"
+    supporting_evidence: ["e004"]
+    weaknesses:
+      - "Eine vollständige Korpus-Analyse aller Mainstream-Coverage ist nicht durchgeführt; die Stichprobe ist illustrativ."
+
+  - id: "h4"
+    label: "independent_voices_existed_within_window"
+    description: "Unabhängige Stimmen außerhalb der dokumentierten Cluster (Baker, Wade) publizierten innerhalb des Auditzeitraums ausgearbeitete Argumente, die die dismissive Linie öffentlich infrage stellten, vor der Wall-Street-Journal-Reassessement-Welle ab Mai 2021."
+    status: "established"
+    supporting_evidence: ["e005"]
+    weaknesses:
+      - "Die Existenz unabhängiger Stimmen schwächt h2 nicht; sie zeigt, dass die Cluster-Bezogenheit nicht universell war."
+
+  - id: "h5"
+    label: "lab_origin_question_resolved_by_discourse_audit"
+    description: "Die dokumentierten Cluster-Effekte und die Pre-Publication-Korrespondenz beweisen, dass SARS-CoV-2 aus einem Labor stammt."
+    status: "speculative"
+    supporting_evidence: []
+    weaknesses:
+      - "Diskursintegritäts-Audit liefert keine Burden-Layer-Evidenz für die Ursprungsfrage."
+      - "Dies ist explizit out-of-scope der Case (c006)."
+      - "Aus Cluster-Bezogenheit der Dismissal-Diskurses folgt nicht logisch die Wahrheit der dismissed Hypothese."
+
+steelmans:
+  - hypothesis_id: "h1"
+    strongest_version: "Die in s001 und s002 publizierten Bewertungen reflektierten zum Zeitpunkt ihrer Publikation die ehrliche fachliche Einschätzung der Autoren, basierend auf den damals verfügbaren Sequenzdaten und epidemiologischen Mustern. Die spätere Offenlegung von Förderverflechtungen ändert nicht zwangsläufig die wissenschaftliche Gültigkeit der damaligen Einschätzung. Independent voices wie Baker und Wade nahmen am selben Diskurs teil; ihre Existenz weist darauf hin, dass die Mainstream-Bewertung nicht durch absolute Cluster-Kontrolle erzeugt wurde."
+    best_supporting_evidence: ["e005"]
+    strongest_objection_to_mainline: "Die Hauptantwort könnte das Gewicht der nicht-cluster-bezogenen unabhängigen Stimmen unterschätzen und damit den Cluster-Effekt zu pauschalisieren."
+    what_would_change_the_verdict: "Eine vollständige Korpus-Analyse aller Mainstream-Coverage im Auditzeitraum, die zeigt, dass nicht-cluster-bezogene Stimmen quantitativ dominierten, würde h1 stützen."
+    quality_score: 0.65
+
+  - hypothesis_id: "h2"
+    strongest_version: "Die dokumentierten Förder-, Autoren- und institutionellen Verflechtungen zwischen Lancet-Unterzeichnern, Proximal-Origin-Autoren und NIH-Leitung erzeugten ein Quellencluster, das in den hochrezipierten Diskurskanälen konvergente dismissive Bewertungen produzierte. Diese Konvergenz war substantiell durch das Cluster mitgetragen, weil die Pre-Publication-Korrespondenz und die Slack-Nachrichten interne Unsicherheit dokumentieren, die in den publizierten Fassungen rahmungsmäßig reduziert wurde."
+    best_supporting_evidence: ["e001", "e002", "e006", "e007"]
+    strongest_objection_to_mainline: "Die Steelman muss anerkennen, dass Cluster-Korrelation nicht zwingend Cluster-Verursachung impliziert."
+    what_would_change_the_verdict: "Evidenz, dass die Pre-Publication-interne Unsicherheit nicht in eine Rahmungsverschiebung mündete, würde h2 schwächen."
+    quality_score: 0.85
