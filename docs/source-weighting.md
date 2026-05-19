@@ -30,6 +30,20 @@ Jede Achse wird von 0.0 bis 1.0 bewertet. Die Polarität ist achsenspezifisch:
 
 Scores werden nicht ohne Begründung zu einem Einzelgewicht gemittelt. Die mehrachsige Sicht bleibt erhalten, damit Schwächen nicht verdeckt werden.
 
+## `source_weight` vs. `source_verification`
+
+`source_weight` und `source_verification` sind unterschiedliche Signale:
+
+- `source_weight`: epistemische Qualitäts- und Risikoachsen der Quelle.
+- `source_verification`: ob die konkrete Quelle in dieser Case tatsächlich
+  geprüft wurde (`verified`, `partially_verified`, `unverified`).
+
+Unverified bedeutet **nicht** „falsch“. Es bedeutet: keine starke Closure für
+World-Claims. Der Gate-Validator
+`scripts/validate_source_verification_gate.py` blockiert
+`established`/`strongly_supported`, wenn stützende Quellen unverified sind
+(inklusive Übergangsmarker `UNVERIFIED_REFERENCE` in `notes`).
+
 ## Pflichtaudit
 
 Jede in einem Case vergebene Quellengewichtung muss einen zugehörigen `source-weight-audit`-Record haben, der enthält:

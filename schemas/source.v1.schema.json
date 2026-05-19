@@ -101,6 +101,36 @@
         }
       }
     },
+    "source_verification": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "partially_verified",
+            "unverified"
+          ]
+        },
+        "method": {
+          "type": "string"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "verifier": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
     "notes": {
       "type": "string"
     },

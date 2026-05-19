@@ -51,6 +51,31 @@ def test_source_audit_locator_fields_pass(schema):
     assert errors == [], f"Expected no errors, got: {errors}"
 
 
+def test_source_verification_block_passes(schema):
+    errors = validate_sources.validate_source(
+        base_source(
+            source_verification={
+                "status": "partially_verified",
+                "method": "manual spot check",
+                "verified_at": "2026-05-19",
+                "verifier": "auditor",
+                "notes": "Partial verification completed",
+            }
+        ),
+        schema,
+    )
+    assert errors == [], f"Expected no errors, got: {errors}"
+
+
+def test_source_verification_invalid_status_fails(schema):
+    errors = validate_sources.validate_source(
+        base_source(source_verification={"status": "pending"}),
+        schema,
+    )
+    assert len(errors) >= 1
+    assert any("source_verification" in e or "pending" in e for e in errors)
+
+
 def test_invalid_source_type_fails(schema):
     errors = validate_sources.validate_source(base_source(source_type="blog_post"), schema)
     assert len(errors) >= 1

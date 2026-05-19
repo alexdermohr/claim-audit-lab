@@ -63,7 +63,7 @@ is `scripts/validate_answer_receipt.py`. The required top-level fields are:
   `source_comparison`, `case_building`, `repo_navigation`, `repo_maintenance`
 - `answer_summary` — ≤ 600 characters; the actual answer in short form
 - `verdicts_used` — list of structured verdicts (may be empty for
-  repo_navigation)
+  repo_navigation/repo_maintenance or non-substantive sandbox fixtures)
 - `counterhypotheses_considered` — list of counterhypotheses with
   steelman_quality scores ≥ 0.5
 - `forbidden_upgrades_check` — explicit declaration of which upgrades were
@@ -111,6 +111,21 @@ semantic checks:
    `final_uncertainty_statement` must.
 7. **Receipt-presence gate for cases**: a case fails if no receipt is present
    while `assessment.md` exists or `lifecycle.status != draft`.
+8. **Receipt↔Claims consistency gate** (`scripts/validate_answer_receipt_claims_consistency.py`):
+   for substantive cases with `assessment.md` + `claims.yml` +
+   `answer-receipt.yml` and task classification in
+   {`world_question`, `claim_audit`, `source_comparison`, `case_building`}:
+   - `verdicts_used` must be non-empty when `claims.yml` contains claims with
+     statuses.
+   - Every `verdicts_used[].claim_id` must exist in `claims.yml`.
+   - `verdicts_used[].status` must match the corresponding claim status exactly.
+   - Strong world claims (`established`, `strongly_supported`) from `claims.yml`
+     must appear in `verdicts_used` (except local meta/source-report exceptions).
+   - `external_research.background_knowledge_only=true` cannot coexist with
+     strong world-claim closure.
+
+The receipt is therefore not only a process declaration; it is a semantic
+cross-artifact commitment that must stay consistent with `claims.yml`.
 
 ## Failure mode
 

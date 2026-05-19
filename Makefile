@@ -16,6 +16,7 @@ validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_mechanical_migration_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_claims.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_sources.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_verification_gate.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_weight_audit.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_hypothesis_support_ledger.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_contradictions.py cases
@@ -32,6 +33,7 @@ validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_forbidden_language.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_status_prose_consistency.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_answer_receipt.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_answer_receipt_claims_consistency.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_refusal_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_aggregation_discipline.py cases
 

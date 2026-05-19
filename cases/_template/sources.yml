@@ -16,4 +16,10 @@ sources:
       adversarial_relevance: 0.0
       historical_track_record: 0.0
       update_latency_risk: 0.0
+    source_verification:
+      status: "unverified"
+      method: ""
+      verified_at: "YYYY-MM-DD"
+      verifier: ""
+      notes: ""
     notes: ""

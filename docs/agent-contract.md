@@ -120,6 +120,11 @@ without separate evaluation of each side under the methodology.
 a `world_claim` verdict without separately satisfying the burden layers for the
 world claim (`docs/aggregation-discipline.md`).
 
+7.4 Strong world-claim verdicts (`established`, `strongly_supported`) require a
+verified or partially verified source basis. If supporting sources are
+unverified, closure is capped below strong (except local case-constitutive
+meta claims and source-report claims).
+
 ## Article 8: Verdict discipline
 
 8.1 The agent uses **only** the verdicts listed in

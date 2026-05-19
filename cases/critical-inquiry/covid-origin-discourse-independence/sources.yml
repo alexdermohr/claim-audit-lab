@@ -19,6 +19,12 @@ sources:
       adversarial_relevance: 0.9
       historical_track_record: 0.55
       update_latency_risk: 0.1
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; see notes marker."
     notes: "UNVERIFIED_REFERENCE (draft): Audit-Subjekt, kein Verdict-Authority. Die Korrespondenz selbst ist eines der auditierten Diskursartefakte; die Lancet-Adde vom Juni 2021 (s004) dokumentiert die Förder- und Autorenverflechtungen primärquellig."
 
   - schema_version: "1.0"
@@ -39,6 +45,12 @@ sources:
       adversarial_relevance: 0.9
       historical_track_record: 0.6
       update_latency_risk: 0.15
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; see notes marker."
     notes: "UNVERIFIED_REFERENCE (draft): Audit-Subjekt. Pre-Publication-Korrespondenz mit NIH-Vertretern und interne Slack-Nachrichten der Autoren sind durch FOIA und Komitee-Releases öffentlich (s003, s006)."
 
   - schema_version: "1.0"
@@ -59,6 +71,12 @@ sources:
       adversarial_relevance: 0.95
       historical_track_record: 0.85
       update_latency_risk: 0.3
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; see notes marker."
     notes: "UNVERIFIED_REFERENCE (draft): Primärdokumente; FOIA-Prozess ist dokumentiert. Redaktion und Auswahl der freigegebenen Dokumente sind nicht vollständig transparent."
 
   - schema_version: "1.0"
@@ -79,6 +97,12 @@ sources:
       adversarial_relevance: 0.95
       historical_track_record: 0.65
       update_latency_risk: 0.15
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; see notes marker."
     notes: "UNVERIFIED_REFERENCE (draft): Primäre Selbstdeklaration der Förder-/Autorenverflechtungen, die in der Originalkorrespondenz von Februar 2020 nicht offengelegt waren. Adversariell relevant trotz Lancet-Eigeninteresse, weil die Aussage gegen das Eigeninteresse geht."
 
   - schema_version: "1.0"
@@ -99,6 +123,12 @@ sources:
       adversarial_relevance: 0.8
       historical_track_record: 0.55
       update_latency_risk: 0.3
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; see notes marker."
     notes: "UNVERIFIED_REFERENCE (draft): Audit-Subjekt. Die Artikel sind eine Stichprobe; das Audit beansprucht keine vollständige Diskursanalyse. Die Beispiele sind öffentlich archiviert und nachvollziehbar."
 
   - schema_version: "1.0"
@@ -119,6 +149,12 @@ sources:
       adversarial_relevance: 0.95
       historical_track_record: 0.6
       update_latency_risk: 0.3
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; see notes marker."
     notes: "UNVERIFIED_REFERENCE (draft): Primärdokumente unter Komitee-Aufsicht freigegeben. Komitee-Mehrheit hat politisches Eigeninteresse; das Material selbst (Slack-Nachrichten, E-Mails) ist primärquellig und gegen das Interesse der Originalautoren freigegeben."
 
   - schema_version: "1.0"
@@ -139,6 +175,12 @@ sources:
       adversarial_relevance: 0.3
       historical_track_record: 0.5
       update_latency_risk: 0.1
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; case-local meta source."
     notes: "UNVERIFIED_REFERENCE (draft): Selbstreferenz für die meta_claim c006. Die Case definiert ihren eigenen Scope; die Selbstreferenz ist case-konstitutiv und nicht als historischer Beleg verwendbar."
 
   - schema_version: "1.0"
@@ -159,4 +201,10 @@ sources:
       adversarial_relevance: 0.85
       historical_track_record: 0.6
       update_latency_risk: 0.2
+    source_verification:
+      status: "unverified"
+      method: "draft_marker"
+      verified_at: "2026-05-19"
+      verifier: "case-author"
+      notes: "Transitional unverified state; see notes marker."
     notes: "UNVERIFIED_REFERENCE (draft): Außerhalb der dokumentierten Lancet/Proximal-Origin-Cluster publiziert. Die Essays selbst sind keine Primärforschung; sie sind das Diskursartefakt, das c007 stützt."
