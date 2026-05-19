@@ -256,7 +256,7 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
                 lifecycle_status = str(raw_status).strip().lower()
 
     has_assessment = (case_dir / "assessment.md").exists()
-    lifecycle_requires_receipt = lifecycle_status not in (None, "draft")
+    lifecycle_requires_receipt = lifecycle_status is not None and lifecycle_status != "draft"
     if (has_assessment or lifecycle_requires_receipt) and not receipt_paths:
         reason = []
         if has_assessment:

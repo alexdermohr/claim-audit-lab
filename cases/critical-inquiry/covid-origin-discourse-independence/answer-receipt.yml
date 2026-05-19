@@ -41,4 +41,4 @@ final_uncertainty_statement: "background-knowledge-only, no external verificatio
 what_would_change_assessment: "Erst nach externer Quellenverifikation, evidenzbasierten Claim-Verdicts und Red-Team-Neuprüfung kann die Draft-Einstufung verlassen werden."
 case_ref: "cases/critical-inquiry/covid-origin-discourse-independence"
 review_date: "2026-05-19"
-notes: "Draft-Receipt für Case-Konstruktion. Konkrete Quellenbehauptungen sind bis zur externen Verifikation nur Referenzen ohne externe Prüfung."
+notes: "Draft-Receipt für Case-Konstruktion. Konkrete Quellenbehauptungen sind bis zur externen Verifikation nur Referenzen ohne externe Prüfung. fragility_score=1.0 kodiert maximale Unsicherheit im Draft-Zustand."
