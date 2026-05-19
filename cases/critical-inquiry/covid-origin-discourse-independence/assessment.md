@@ -56,7 +56,7 @@ unverified Quellenlage nur **schwach** gestützt.
 |---|---|---|---|---|
 | e001 | s001 | c001, c004 | c005 | Die Lancet-Korrespondenz ist Diskursartefakt. Sie verwendet Kategorie-B-Sprache (Source position: "conspiracy theories"). |
 | e002 | s003 | c002, c004 | c005 | FOIA-freigegebene Pre-Publication-E-Mails. Primärquellig. |
-| e003 | s002 | c002, c004 | — | Publizierte Schlussfassung des Proximal-Origin-Papers. Textvergleich mit e002 belegt Rahmungsverschiebung. |
+| e003 | s002 | c002, c004 | — | Publizierte Schlussfassung des Proximal-Origin-Papers. Textvergleich mit e002 zeigt eine plausible Rahmungsverschiebung. |
 | e004 | s005 | c003 | — | Stichprobe von Mainstream-Outlets mit Dismissal-Labels. |
 | e005 | s007 | c007, c005 | — | Baker NYMag Jan 2021, Wade BAS Mai 2021. Unabhängige Stimmen außerhalb der dokumentierten Cluster. |
 | e006 | s004 | c001, c004 | c005 | Lancet-Addendum Juni 2021. Nachträgliche Selbstdeklaration der Verflechtungen, gegen Eigeninteresse der Lancet. |

@@ -43,35 +43,35 @@ def _claims(status: str = "established", claim_type: str = "factual_event_claim"
 
 
 def _receipt(verdicts_block: str, *, background_only: bool = False, task: str = "case_building") -> str:
+    indented_verdicts = "\n".join(f"  {line}" if line.strip() else line for line in verdicts_block.splitlines())
     bg_line = "  background_knowledge_only: true\n" if background_only else ""
-    return textwrap.dedent(
-        f"""
-        schema_version: "1.0"
-        question: "q"
-        task_classification: {task}
-        answer_summary: "Not a truth certificate."
-        verdicts_used:
-        {verdicts_block}
-        counterhypotheses_considered: []
-        forbidden_upgrades_check:
-          upgrades_considered: []
-          upgrades_blocked: []
-        banned_phrases_self_scan:
-          scanned: true
-          hits: []
-        source_cluster_audit:
-          clusters_identified: []
-          independence_verified: true
-        refusal_check:
-          refused: false
-        external_research:
-          tools_used: []
-          sources_consulted: []
-        {bg_line}oracle_disclaimer_present: true
-        final_uncertainty_statement: "background-knowledge-only, no external verification; not a truth certificate."
-        what_would_change_assessment: "More evidence."
-        """
-    ).strip() + "\n"
+    return (
+        'schema_version: "1.0"\n'
+        'question: "q"\n'
+        f"task_classification: {task}\n"
+        'answer_summary: "Not a truth certificate."\n'
+        "verdicts_used:\n"
+        f"{indented_verdicts}\n"
+        "counterhypotheses_considered: []\n"
+        "forbidden_upgrades_check:\n"
+        "  upgrades_considered: []\n"
+        "  upgrades_blocked: []\n"
+        "banned_phrases_self_scan:\n"
+        "  scanned: true\n"
+        "  hits: []\n"
+        "source_cluster_audit:\n"
+        "  clusters_identified: []\n"
+        "  independence_verified: true\n"
+        "refusal_check:\n"
+        "  refused: false\n"
+        "external_research:\n"
+        "  tools_used: []\n"
+        "  sources_consulted: []\n"
+        f"{bg_line}"
+        "oracle_disclaimer_present: true\n"
+        'final_uncertainty_statement: "background-knowledge-only, no external verification; not a truth certificate."\n'
+        'what_would_change_assessment: "More evidence."\n'
+    )
 
 
 def test_claims_established_receipt_empty_fails(tmp_path):
@@ -160,4 +160,3 @@ def test_sandbox_case_can_keep_empty_verdicts(tmp_path):
         path=("sandbox", "fixture"),
     )
     assert validate_answer_receipt_claims_consistency.main(str(tmp_path / "cases")) == 0
-

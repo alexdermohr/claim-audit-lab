@@ -132,7 +132,7 @@ claims:
     claim_id: "c006"
     claim_type: "meta_claim"
     statement: "Diese Case auditiert die Unabhängigkeit der Diskursbewertung, nicht die zugrunde liegende Frage nach dem Ursprung von SARS-CoV-2; die Burden-Layer (physical_mechanism, observational_fit, operational_placement) für die Ursprungsfrage werden in dieser Case nicht aufgebaut."
-    status: "plausible"
+    status: "established"
     evidence_refs: ["e008"]
     source_refs: ["s008"]
     requires: ["explizite Scope-Erklärung in question.md"]
@@ -152,7 +152,7 @@ claims:
     claim_id: "c007"
     claim_type: "factual_event_claim"
     statement: "Unabhängige Stimmen außerhalb der dokumentierten Cluster (z.B. Nicholson Baker in New York Magazine, Januar 2021; Nicholas Wade in Bulletin of the Atomic Scientists, Mai 2021) publizierten innerhalb des Auditzeitraums Bewertungen, die die dominante Dismissal-Linie öffentlich infrage stellten."
-    status: "established"
+    status: "plausible"
     evidence_refs: ["e005"]
     source_refs: ["s007"]
     requires: ["publizierte Beispiele", "Chronologie", "Nachweis fehlender Cluster-Überlappung"]

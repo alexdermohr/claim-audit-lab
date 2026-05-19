@@ -26,8 +26,16 @@ verdicts_used:
     status: "plausible"
 counterhypotheses_considered: []
 forbidden_upgrades_check:
-  upgrades_considered: []
-  upgrades_blocked: []
+  upgrades_considered:
+    - "source_prestige_to_truth"
+    - "benefit_to_motive"
+    - "correlation_to_causation"
+    - "suspicion_to_proof"
+  upgrades_blocked:
+    - "source_prestige_to_truth"
+    - "benefit_to_motive"
+    - "correlation_to_causation"
+    - "suspicion_to_proof"
 banned_phrases_self_scan:
   scanned: true
   hits: []

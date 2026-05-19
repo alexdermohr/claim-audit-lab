@@ -42,20 +42,22 @@ def _claims(status: str, claim_type: str = "factual_event_claim", claim_kind: st
 
 
 def _sources(verification_block: str, notes: str = "") -> str:
+    indented_verification = "\n".join(
+        f"    {line}" if line.strip() else line for line in verification_block.splitlines()
+    )
     notes_line = f'    notes: "{notes}"\n' if notes else ""
-    return textwrap.dedent(
-        f"""
-        schema_version: "1.0"
-        sources:
-          - schema_version: "1.0"
-            source_id: "s001"
-            label: "Source"
-            url_or_ref: "https://example.org/source"
-            source_type: "official_body"
-            {verification_block}
-        {notes_line}
-        """
-    ).strip() + "\n"
+    verification_section = f"{indented_verification}\n" if indented_verification else ""
+    return (
+        'schema_version: "1.0"\n'
+        "sources:\n"
+        '  - schema_version: "1.0"\n'
+        '    source_id: "s001"\n'
+        '    label: "Source"\n'
+        '    url_or_ref: "https://example.org/source"\n'
+        '    source_type: "official_body"\n'
+        f"{verification_section}"
+        f"{notes_line}"
+    )
 
 
 def test_unverified_source_blocks_established_world_claim(tmp_path):
@@ -135,4 +137,3 @@ def test_causal_claim_strongly_supported_with_unverified_source_fails(tmp_path):
         ),
     )
     assert validate_source_verification_gate.main(str(tmp_path / "cases")) == 1
-
