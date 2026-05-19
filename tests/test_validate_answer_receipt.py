@@ -17,6 +17,13 @@ def _make_case_with_receipt(tmp_path, receipt_yaml, name="case-a"):
     return case_dir
 
 
+def _make_case_without_receipt(tmp_path, name="case-no-receipt"):
+    case_dir = tmp_path / "cases" / "history" / name
+    case_dir.mkdir(parents=True)
+    (case_dir / "claims.yml").write_text("claims: []\n", encoding="utf-8")
+    return case_dir
+
+
 VALID_RECEIPT = textwrap.dedent("""
 schema_version: "1.0"
 question: "Test question?"
@@ -171,3 +178,33 @@ def test_answer_summary_too_long_fails(tmp_path):
     )
     _make_case_with_receipt(tmp_path, receipt)
     assert validate_answer_receipt.main(str(tmp_path / "cases")) == 1
+
+
+def test_missing_receipt_fails_when_assessment_exists(tmp_path):
+    case_dir = _make_case_without_receipt(tmp_path, "case-assessment")
+    (case_dir / "assessment.md").write_text("# Assessment\n", encoding="utf-8")
+    assert validate_answer_receipt.main(str(tmp_path / "cases")) == 1
+
+
+def test_missing_receipt_fails_when_lifecycle_non_draft(tmp_path):
+    case_dir = _make_case_without_receipt(tmp_path, "case-lifecycle")
+    (case_dir / "lifecycle.yml").write_text(
+        textwrap.dedent("""
+        schema_version: "1.0"
+        status: "provisional_under_uncertainty"
+        """).strip() + "\n",
+        encoding="utf-8",
+    )
+    assert validate_answer_receipt.main(str(tmp_path / "cases")) == 1
+
+
+def test_missing_receipt_passes_for_draft_without_assessment(tmp_path):
+    case_dir = _make_case_without_receipt(tmp_path, "case-draft")
+    (case_dir / "lifecycle.yml").write_text(
+        textwrap.dedent("""
+        schema_version: "1.0"
+        status: "draft"
+        """).strip() + "\n",
+        encoding="utf-8",
+    )
+    assert validate_answer_receipt.main(str(tmp_path / "cases")) == 0

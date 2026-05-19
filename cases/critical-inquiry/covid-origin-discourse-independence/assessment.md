@@ -1,14 +1,14 @@
 # Assessment: Diskursintegritäts-Audit zu Lab-Origin-Hypothesen 2020–2021
 
 **Case:** cases/critical-inquiry/covid-origin-discourse-independence
-**Status:** provisional_under_uncertainty
+**Status:** draft (background-knowledge demo; unverified references)
 **Datum:** 2026-05-19
 
 ---
 
-> Dieses Assessment ist kein Wahrheitszertifikat. Es ist ein evidenzstrukturiertes Urteil unter deklarierter Unsicherheit.
+> Dieses Assessment ist ein Draft-Demonstrator mit unverified references. Es ist kein Wahrheitszertifikat.
 
-> This assessment is not a truth certificate. It is an evidence-structured judgment under declared uncertainty.
+> This assessment is a draft demonstrator with unverified references. It is not a truth certificate.
 
 ## Scope (binding)
 

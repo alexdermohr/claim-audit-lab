@@ -13,6 +13,7 @@ scientific mainstream discourse?
 ## Scope
 
 This case audits the **discourse**, not the underlying origin question.
+Current repository state: **draft demonstrator** with unverified references until external source verification is performed.
 
 In-scope:
 - Whether the mainstream evaluation of lab-origin hypotheses in the named

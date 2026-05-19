@@ -48,9 +48,9 @@ question: ...
 ```
 ````
 
-The runtime is responsible for capturing this block and validating it.
-A response without a parseable receipt block is treated as a failed
-response.
+The host runtime must capture this block and validate it.
+This repository does not implement runtime chat capture itself; CI here
+enforces repository-resident artifacts.
 
 ## Receipt schema
 
@@ -88,30 +88,29 @@ semantic checks:
 1. **Banned-phrases consistency**: if `banned_phrases_self_scan.hits` is
    empty, the validator scans `answer_summary` itself with the
    `forbidden-language.md` patterns; any hit fails.
-2. **Verdict-prose consistency**: every claim in `verdicts_used` must have
-   an `answer_summary` paragraph that uses the register allowed by
-   `status-prose-consistency.md`.
-3. **Counterhypothesis floor**: for any verdict ∈ {`strongly_supported`,
+2. **Counterhypothesis floor**: for any verdict ∈ {`strongly_supported`,
    `established`} on a `causal_claim` or `motive_claim`, at least 1
    `counterhypotheses_considered` entry with `steelman_quality ≥ 0.5`.
-4. **Refusal-as-neutrality**: if `refusal_check.refused = true`, the
+3. **Refusal-as-neutrality**: if `refusal_check.refused = true`, the
    `task_classification` must be a repo-* type, and the
    `final_uncertainty_statement` must say why a substantive answer was
    blocked (missing tools, missing evidence, etc.).
-5. **External-research declaration**: if
+4. **External-research declaration**: if
    `external_research.tools_used` is empty AND
    `task_classification` is not a repo-* type, the
    `final_uncertainty_statement` must explicitly mark the answer as
    "background-knowledge-only, no external verification."
-6. **Source-cluster independence**: if any verdict ∈
+5. **Source-cluster independence**: if any verdict ∈
    {`strongly_supported`, `established`} is asserted, the
    `source_cluster_audit.independence_verified` must be `true` OR
    the receipt must list a `fragility_score` ≥ 0.7 with documented
    reasoning.
-7. **Oracle disclaimer**: `oracle_disclaimer_present` must be `true`; the
+6. **Oracle disclaimer**: `oracle_disclaimer_present` must be `true`; the
    `answer_summary` text must contain the disclaimer phrase
    ("not a truth certificate" / "kein Wahrheitszertifikat") or the
    `final_uncertainty_statement` must.
+7. **Receipt-presence gate for cases**: a case fails if no receipt is present
+   while `assessment.md` exists or `lifecycle.status != draft`.
 
 ## Failure mode
 
@@ -120,18 +119,16 @@ A receipt that fails any check causes:
 - the CI workflow to fail
 - the PR to be blocked from merge
 
-A free-text answer **without** a receipt fails check 1 by definition
-(no parseable receipt block found).
+For repository-resident cases, missing required receipts fail validation.
+For runtime chat answers, enforcement requires runtime capture integration.
 
 ## Why this is enforceable
 
-The receipt is a finite, parseable YAML document. The validator does not
-need to understand natural language to enforce most rules — it checks
-presence, structure, and pattern matches. The agent cannot bypass the
-receipt by writing a better-sounding answer. The receipt is the audit
-trail.
+The receipt is a finite, parseable YAML document. The validator checks
+presence, structure, and declared constraints for repository artifacts.
+The receipt is the audit trail.
 
-The validator does not certify truth. It certifies that the agent
-**executed the discipline**. Whether the discipline was applied honestly
-to the substance is a question for the human reviewer and the red-team
-gate — but the discipline itself is no longer optional.
+The validator does not certify truth and does not verify every factual
+inference step. It certifies that required structure and declaration gates
+are present. Substantive evidence quality and inference correctness still
+require human review and red-team challenge.

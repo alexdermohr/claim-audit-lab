@@ -146,8 +146,8 @@ in its own draft.
 
 ## Article 10: Enforcement
 
-10.1 The validators are the enforcement. Compliance is mechanical, not
-hortatory.
+10.1 The validators are the enforcement for repository-resident artifacts.
+Compliance is mechanical there, not hortatory.
 
 10.2 If a validator rejects an output, the agent re-drafts. The agent does not
 disable, weaken, or argue with the validator. If the validator appears wrong,

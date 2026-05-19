@@ -1,6 +1,6 @@
 # Agent Operating Rules
 
-> These rules are mechanically enforced. The validators in `scripts/` reject
+> These rules are mechanically enforced for repository-resident artifacts. The validators in `scripts/` reject
 > outputs that violate them. There is no soft compliance and no "balanced"
 > escape hatch. See `docs/agent-contract.md` for the full binding contract.
 
@@ -148,8 +148,9 @@ schema_version: "1.0"
 ```
 ````
 
-The runtime captures the block and runs the same validator. A reply without a
-parseable receipt block is an invalid reply.
+If the host runtime is integrated to capture reply blocks, it can run the same
+validator and reject replies without a parseable receipt block. This repository
+does not itself implement runtime chat capture.
 
 ## Refusal discipline
 
@@ -167,7 +168,7 @@ per-side burden-layer breakdown.
 
 ## Enforcement
 
-The validators are the contract. An agent that ships an answer:
+The validators are the contract for repository-resident artifacts. An agent that ships an answer:
 - without a receipt,
 - with a receipt that fails schema validation,
 - with a forbidden phrase outside an allowed context,

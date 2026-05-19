@@ -1,0 +1,29 @@
+schema_version: "1.0"
+question: "Case-building receipt for minimal-valid-case."
+task_classification: "case_building"
+answer_summary: "Sandbox draft receipt for repository validation. Not a truth certificate."
+verdicts_used: []
+counterhypotheses_considered: []
+forbidden_upgrades_check:
+  upgrades_considered: []
+  upgrades_blocked: []
+banned_phrases_self_scan:
+  scanned: true
+  hits: []
+source_cluster_audit:
+  clusters_identified: []
+  independence_verified: true
+refusal_check:
+  refused: false
+  balanced_framing_present: false
+  notes: "No refusal."
+external_research:
+  tools_used: []
+  sources_consulted: []
+  background_knowledge_only: true
+oracle_disclaimer_present: true
+final_uncertainty_statement: "background-knowledge-only, no external verification. This sandbox receipt is not a truth certificate."
+what_would_change_assessment: "Using externally verified evidence and substantive verdict entries would change the assessment."
+case_ref: "cases/sandbox/minimal-valid-case"
+review_date: "2026-05-19"
+notes: "Receipt for draft sandbox case to satisfy mandatory receipt gate when assessment.md exists."

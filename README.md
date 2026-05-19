@@ -111,7 +111,7 @@ make test
 ## Enforcement-Layer
 
 Agents, die in diesem Repository operieren, unterliegen dem **bindenden
-Vertrag** in `docs/agent-contract.md`. Compliance ist mechanisch: die
+Vertrag** in `docs/agent-contract.md`. Compliance ist für repository-residente Artefakte mechanisch: die
 Validatoren in `scripts/` weisen Outputs zurück, die den Vertrag brechen.
 Es gibt keine "Soft-Compliance" und keinen "Balance"-Escape.
 
@@ -133,9 +133,9 @@ deklariert:
 - die finale Unsicherheitserklärung,
 - was die Bewertung ändern würde.
 
-Eine Antwort ohne parseable Receipt ist ungültiger Output. Ein Receipt,
+Eine repository-residente Antwort ohne parseable Receipt ist ungültiger Output. Ein Receipt,
 das schema- oder semantische Checks nicht besteht, ist ungültiger Output.
-Die CI weist Pull Requests mit fehlgeschlagenen Validierungen zurück.
+Die CI weist Pull Requests mit fehlgeschlagenen Validierungen zurück. Chat-Runtime-Capture ist eine Integrationsanforderung außerhalb dieses Repos.
 
 Begleitende Mechanismen:
 

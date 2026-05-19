@@ -1,65 +1,9 @@
 schema_version: "1.0"
 question: "Wurde die Lab-Origin-Hypothese zum Ursprung von SARS-CoV-2 zwischen Februar 2020 und Mai 2021 im wissenschaftlichen Mainstream-Diskurs unabhängig von Quellencluster-Effekten bewertet?"
-task_classification: "claim_audit"
-answer_summary: "c004: Cluster-Effekte trugen substantiell zur Konvergenz dismissiver Bewertungen in den hochrezipierten Kanälen bei (strongly_supported via Lancet-Adde, FOIA, House-Oversight). c005: Pauschalbehauptung der Mainstream-Unabhängigkeit ist schwach, weil unabhängige Stimmen (c007) im Auditzeitraum publizierten. c006: Die Case bewertet nicht die Ursprungsfrage. Kein Wahrheitszertifikat; evidenzstrukturiertes Urteil unter deklarierter Unsicherheit."
-verdicts_used:
-  - claim_id: "c001"
-    statement: "Lancet-Korrespondenz-Autoren hatten zum Publikationszeitpunkt nicht-offengelegte Förder-/Autorenverflechtungen mit Forschung am WIV."
-    status: "established"
-    uncertainty_score: 0.1
-    burden_layers_addressed:
-      - "source_report"
-      - "actor_attribution"
-  - claim_id: "c002"
-    statement: "Pre-Publication-Kommunikation der Proximal-Origin-Autoren mit NIH-Leitung zeigte interne Unsicherheit, die in der publizierten Fassung rahmungsmäßig reduziert wurde."
-    status: "strongly_supported"
-    uncertainty_score: 0.18
-    burden_layers_addressed:
-      - "source_report"
-      - "observational_fit"
-  - claim_id: "c003"
-    statement: "Beispielartikel in hochrezipierten Outlets wendeten Kategorie-B-Dismissal-Sprache mit Stützung auf Quellenprestige statt auf unabhängige Burden-Layer-Tests an."
-    status: "strongly_supported"
-    uncertainty_score: 0.22
-    burden_layers_addressed:
-      - "observational_fit"
-      - "structural_effect"
-  - claim_id: "c004"
-    statement: "Cluster-Effekte trugen substantiell zur Konvergenz dismissiver Bewertungen in den dokumentierten hochrezipierten Kanälen bei."
-    status: "strongly_supported"
-    uncertainty_score: 0.28
-    burden_layers_addressed:
-      - "structural_effect"
-      - "actor_attribution"
-      - "source_report"
-  - claim_id: "c005"
-    statement: "Die Mainstream-Bewertung der Lab-Origin-Hypothese im Auditzeitraum war unabhängig von Quellencluster-Effekten."
-    status: "weak"
-    uncertainty_score: 0.55
-    burden_layers_addressed:
-      - "structural_effect"
-  - claim_id: "c006"
-    statement: "Die Case auditiert die Diskursunabhängigkeit, nicht die Ursprungsfrage."
-    status: "established"
-    uncertainty_score: 0.05
-    burden_layers_addressed:
-      - "source_report"
-  - claim_id: "c007"
-    statement: "Unabhängige Stimmen (Baker, Wade) publizierten innerhalb des Auditzeitraums außerhalb der dokumentierten Cluster."
-    status: "established"
-    uncertainty_score: 0.12
-    burden_layers_addressed:
-      - "source_report"
-counterhypotheses_considered:
-  - statement: "Die publizierten Bewertungen reflektierten zum Zeitpunkt ihrer Publikation die ehrliche fachliche Einschätzung der Autoren; spätere Offenlegung von Förderverflechtungen ändert nicht zwangsläufig die wissenschaftliche Gültigkeit der damaligen Einschätzung."
-    steelman_quality: 0.65
-    notes: "Steelman zu h1. Zulässige Lesart; weniger primärquellig gestützt als h2."
-  - statement: "Cluster-Korrelation ist nicht logisch identisch mit Cluster-Verursachung; unabhängige fachliche Übereinstimmung bleibt eine zulässige Erklärung der beobachteten Konvergenz."
-    steelman_quality: 0.55
-    notes: "Counterclaim zu c004."
-  - statement: "Aus der dokumentierten Cluster-Bezogenheit des Dismissal-Diskurses folgt nicht die Wahrheit der dismissed Hypothese (h5)."
-    steelman_quality: 0.95
-    notes: "Critical methodological constraint; explicit no-oracle separation."
+task_classification: "case_building"
+answer_summary: "Draft-Demonstrator für den Enforcement-Layer. Kein Wahrheitszertifikat; evidenzstrukturiertes Urteil ist bis externer Verifikation ausgesetzt."
+verdicts_used: []
+counterhypotheses_considered: []
 forbidden_upgrades_check:
   upgrades_considered:
     - "source_prestige_to_truth"
@@ -81,53 +25,20 @@ banned_phrases_self_scan:
   scanned: true
   hits: []
 source_cluster_audit:
-  clusters_identified:
-    - cluster_id: "lancet_proximal_origin_cluster"
-      members:
-        - "s001"
-        - "s002"
-        - "s004"
-      alignment_basis: "Dokumentierte Förder-, Autoren- und institutionelle Verflechtungen via EcoHealth Alliance und WIV (s004)."
-    - cluster_id: "primary_correspondence_release_cluster"
-      members:
-        - "s003"
-        - "s006"
-      alignment_basis: "Primärquellige Releases der Pre-Publication-Kommunikation; freigebende Stellen mit eigenem politischen Interesse, aber Material gegen Interesse der Originalautoren."
-    - cluster_id: "independent_journalism_cluster"
-      members:
-        - "s007"
-      alignment_basis: "Außerhalb der dokumentierten Lancet/Proximal-Origin-Cluster; nicht peer-reviewed; eigene Track Records."
-  independence_verified: true
-  fragility_score: 0.25
+  clusters_identified: []
+  independence_verified: false
+  fragility_score: 1.0
 refusal_check:
   refused: false
   balanced_framing_present: false
   notes: "Keine Verweigerung; die Case produziert verdicts mit deklarierter Unsicherheit."
 external_research:
   tools_used: []
-  sources_consulted:
-    - citation: "The Lancet, Calisher/Daszak et al. correspondence, 19 Feb 2020"
-      source_type: "peer_reviewed"
-      notes: "Audit-Subjekt; aus Training-Knowledge zitiert."
-    - citation: "Andersen et al., Nature Medicine, 17 March 2020"
-      source_type: "peer_reviewed"
-      notes: "Audit-Subjekt; aus Training-Knowledge zitiert."
-    - citation: "BuzzFeed/Leopold FOIA NIH email release, June 2021"
-      source_type: "primary_document"
-      notes: "Primärdokument; aus Training-Knowledge zitiert."
-    - citation: "The Lancet competing-interest addendum, June 2021"
-      source_type: "peer_reviewed"
-      notes: "Primäre Selbstdeklaration; aus Training-Knowledge zitiert."
-    - citation: "U.S. House Select Subcommittee staff report on Proximal Origin, July 2023"
-      source_type: "government_report"
-      notes: "Primärdokumente unter Komitee-Aufsicht; aus Training-Knowledge zitiert."
-    - citation: "Baker, NYMag, Jan 2021; Wade, Bulletin of the Atomic Scientists, May 2021"
-      source_type: "journalism"
-      notes: "Beispiele unabhängiger Stimmen; aus Training-Knowledge zitiert."
+  sources_consulted: []
   background_knowledge_only: true
 oracle_disclaimer_present: true
-final_uncertainty_statement: "background-knowledge-only, no external verification: Die Antwort stützt sich auf bekannte publizierte Primärdokumente, die der Leser eigenständig verifizieren soll. Die Case beansprucht keine vollständige Korpus-Analyse des Mainstream-Diskurses; sie operiert auf einer Stichprobe und auf primärquelligen Selbstdeklarationen. Die Pauschalaussage c005 bleibt deshalb 'weak'. Dies ist kein Wahrheitszertifikat / not a truth certificate; es ist ein evidenzstrukturiertes Urteil unter deklarierter Unsicherheit."
-what_would_change_assessment: "Eine vollständige Korpus-Analyse aller Mainstream-Coverage im Auditzeitraum würde c003 und c005 entweder schwächen oder stärken. Eine unabhängige Veröffentlichung der vollständigen Pre-Publication-Korrespondenz der Proximal-Origin-Autoren würde c002 stärken oder schwächen. Eine substantielle Widerlegung der in s004 deklarierten Verflechtungen würde c001 und c004 schwächen."
+final_uncertainty_statement: "background-knowledge-only, no external verification. Diese Draft-Case enthält methodische Referenzen ohne externe Prüfung und unverified references bis zur externen Quellenprüfung. Dies ist kein Wahrheitszertifikat / not a truth certificate."
+what_would_change_assessment: "Erst nach externer Quellenverifikation, evidenzbasierten Claim-Verdicts und Red-Team-Neuprüfung kann die Draft-Einstufung verlassen werden."
 case_ref: "cases/critical-inquiry/covid-origin-discourse-independence"
 review_date: "2026-05-19"
-notes: "Receipt für die Case-Konstruktion. Demonstriert die Anwendung des Enforcement-Layers (answer-receipt-discipline, forbidden-language, status-prose-consistency, refusal-discipline, aggregation-discipline)."
+notes: "Draft-Receipt für Case-Konstruktion. Konkrete Quellenbehauptungen sind bis zur externen Verifikation nur Referenzen ohne externe Prüfung."

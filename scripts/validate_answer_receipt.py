@@ -242,6 +242,32 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
         receipt_paths.extend(sorted(answers_dir.glob("*answer-receipt*.yml")))
         receipt_paths.extend(sorted(answers_dir.glob("*.receipt.yml")))
 
+    lifecycle_status = None
+    lifecycle_path = case_dir / "lifecycle.yml"
+    if lifecycle_path.exists():
+        lifecycle, lifecycle_err = safe_load_yaml(lifecycle_path)
+        if lifecycle_err:
+            errors.append(f"could not parse lifecycle.yml while checking receipt requirement: {lifecycle_err}")
+        elif isinstance(lifecycle, dict):
+            raw_status = lifecycle.get("status")
+            if isinstance(raw_status, str):
+                lifecycle_status = raw_status.strip().lower()
+            elif raw_status is not None:
+                lifecycle_status = str(raw_status).strip().lower()
+
+    has_assessment = (case_dir / "assessment.md").exists()
+    lifecycle_requires_receipt = lifecycle_status not in (None, "draft")
+    if (has_assessment or lifecycle_requires_receipt) and not receipt_paths:
+        reason = []
+        if has_assessment:
+            reason.append("assessment.md exists")
+        if lifecycle_requires_receipt:
+            reason.append(f"lifecycle.status={lifecycle_status!r}")
+        errors.append(
+            "missing answer-receipt.yml: required when "
+            + " and ".join(reason)
+        )
+
     for path in receipt_paths:
         rel = path.relative_to(case_dir)
         for err in validate_receipt_file(path, schema):
