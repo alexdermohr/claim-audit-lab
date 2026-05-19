@@ -292,3 +292,68 @@ def test_valid_uncertainty_preservation_with_premise_and_specific_ref(tmp_path):
     )
     write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
     assert validate(tmp_path) == []
+
+
+# --- evidence-pack absence tests ---
+
+def _claims_only(case_dir, claims):
+    """Write only claims.yml, no evidence-pack.yml."""
+    write_yaml(case_dir / "claims.yml", {"schema_version": "1.0", "claims": claims})
+
+
+def test_invalid_evidence_refs_without_evidence_pack(tmp_path):
+    """premise_evidence_refs cited but evidence-pack.yml is absent → error."""
+    _claims_only(tmp_path, [claim(status="strongly_supported")])
+    s = step(premise_evidence_refs=["e001"], premise_claim_refs=[])
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    errors = validate(tmp_path)
+    assert any("evidence-pack.yml is absent" in e for e in errors), errors
+
+
+def test_valid_claim_refs_only_without_evidence_pack(tmp_path):
+    """premise_claim_refs-only step is valid when evidence-pack.yml is absent."""
+    _claims_only(tmp_path, [
+        claim(claim_id="c000", status="plausible"),
+        claim(claim_id="c001", status="strongly_supported"),
+    ])
+    s = step(premise_evidence_refs=[], premise_claim_refs=["c000"])
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    assert validate(tmp_path) == []
+
+
+# --- comparison and comparative branch tests ---
+
+def test_invalid_comparison_step_without_rival_weakness_check(tmp_path):
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    s = step(
+        operation="comparison",
+        produces="Claim is better supported than the rival.",
+        forbidden_upgrade_checked=["source_prestige_to_truth"],  # missing rival_weakness_to_own_proof
+    )
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    errors = validate(tmp_path)
+    assert any("rival_weakness_to_own_proof" in e and "comparison" in e for e in errors), errors
+
+
+def test_valid_comparison_step_with_rival_weakness_check(tmp_path):
+    write_base(tmp_path, [claim(status="strongly_supported")])
+    s = step(
+        operation="comparison",
+        produces="Claim is better supported than the rival; rival weakness alone is not sufficient.",
+        forbidden_upgrade_checked=["rival_weakness_to_own_proof", "source_prestige_to_truth"],
+    )
+    write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
+    assert validate(tmp_path) == []
+
+
+def test_invalid_comparative_burden_plausible_without_ledger(tmp_path):
+    """burden_profile: comparative with status plausible requires inference-ledger."""
+    write_base(tmp_path, [claim(status="plausible", burden_profile="comparative")])
+    errors = validate(tmp_path)
+    assert any("requires an inference-ledger entry" in e and "c001" in e for e in errors), errors
+
+
+def test_valid_comparative_burden_unresolved_no_ledger_required(tmp_path):
+    """burden_profile: comparative with status unresolved does not require inference-ledger."""
+    write_base(tmp_path, [claim(status="unresolved", burden_profile="comparative")])
+    assert validate(tmp_path) == []

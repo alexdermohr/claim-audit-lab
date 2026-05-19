@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/inference-ledger.v1.schema.json",
   "title": "Inference Ledger v1",
   "description": "Explicit derivation chain between evidence and verdict for strong or contentious claims.",
   "type": "object",

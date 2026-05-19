@@ -48,7 +48,7 @@ Top-level fields:
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `step_id` | string | yes | Pattern `^step[0-9]{3,}$`; case-local unique |
-| `premise_evidence_refs` | array[string] | no | Must reference existing `evidence_id` values in `evidence-pack.yml` |
+| `premise_evidence_refs` | array[string] | no | Must reference existing `evidence_id` values in `evidence-pack.yml`; **requires `evidence-pack.yml` to be present** |
 | `premise_claim_refs` | array[string] | no | Must reference existing `claim_id` values in `claims.yml` |
 | `operation` | enum | yes | See operations table below |
 | `produces` | string | yes | One-line summary of what the step concludes; min 1 character |
@@ -75,12 +75,13 @@ Top-level fields:
 Checks:
 1. Schema validity
 2. `claim_ref` exists in `claims.yml`
-3. `premise_evidence_refs` exist in `evidence-pack.yml`
-4. `premise_claim_refs` exist in `claims.yml`
-5. `inference_id` and `step_id` are case-locally unique
-6. Every claim that requires a ledger entry has one
-7. High-materiality unresolved/partially_resolved defeaters targeting strong claims have a `defeater_response` or `uncertainty_preservation` step
-8. `comparison` steps declare `rival_weakness_to_own_proof` in `forbidden_upgrade_checked`
+3. Every step must have at least one non-empty `premise_evidence_ref` or `premise_claim_ref` — the validator is the authority on this rule; the schema does not enforce it to avoid `anyOf` complexity.
+4. `premise_evidence_refs` require `evidence-pack.yml` to be present; each ref must match an existing `evidence_id`.
+5. `premise_claim_refs` exist in `claims.yml`
+6. `inference_id` and `step_id` are case-locally unique
+7. Every claim that requires a ledger entry has one
+8. High-materiality unresolved/partially_resolved defeaters targeting strong claims must have a `defeater_response` or `uncertainty_preservation` step whose `addresses_defeater_refs` contains the exact `defeater_id` — a generic response without that field does not satisfy the gate.
+9. `comparison` steps declare `rival_weakness_to_own_proof` in `forbidden_upgrade_checked`
 
 ## Authoring notes
 
