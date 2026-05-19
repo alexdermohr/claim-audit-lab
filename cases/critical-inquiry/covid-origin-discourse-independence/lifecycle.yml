@@ -1,0 +1,20 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: "cases/critical-inquiry/covid-origin-discourse-independence"
+status: "draft"
+created_at: "2026-05-19"
+last_reviewed_at: "2026-05-19"
+review_after: "2026-11-19"
+redteam_ref: "redteam.yml"
+reopen_triggers:
+  - new_primary_source
+  - major_contradiction
+  - source_discredited
+  - dataset_revision
+history:
+  - date: "2026-05-19"
+    status: "draft"
+    note: "Case eröffnet zur Demonstration des claim-audit-lab Enforcement-Layers an einer politisch unbequemen Frage."
+  - date: "2026-05-19"
+    status: "draft"
+    note: "Als Draft-Demonstrator geführt: Quellenreferenzen sind methodische Referenzen ohne externe Prüfung bis zur externen Verifikation."

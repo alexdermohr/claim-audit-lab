@@ -1,0 +1,114 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/covid-origin-discourse-independence"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "supports_directly"
+    strength: 0.85
+    explanation: "Die Lancet-Korrespondenz selbst (e001) ist das Diskursartefakt; ihre Autorenliste und institutionellen Affiliationen werden direkt durch das Addendum s004 dokumentiert."
+
+  - relation_id: "r002"
+    evidence_ref: "e006"
+    claim_ref: "c001"
+    relation_type: "supports_directly"
+    strength: 0.95
+    explanation: "Das Lancet-Addendum vom Juni 2021 (s004) ist primärquellige Selbstdeklaration der Förder-/Autorenverflechtungen, gegen das Eigeninteresse der Zeitschrift."
+
+  - relation_id: "r003"
+    evidence_ref: "e002"
+    claim_ref: "c002"
+    relation_type: "supports_directly"
+    strength: 0.85
+    explanation: "FOIA-freigegebene Pre-Publication-E-Mails dokumentieren die interne Unsicherheit der Autoren, die in der publizierten Fassung nicht in derselben Form sichtbar war."
+
+  - relation_id: "r004"
+    evidence_ref: "e003"
+    claim_ref: "c002"
+    relation_type: "supports_directly"
+    strength: 0.8
+    explanation: "Der direkte Textvergleich zwischen der publizierten Schlussfassung und den in e002 dokumentierten Pre-Publication-Äußerungen zeigt die Rahmungsverschiebung."
+
+  - relation_id: "r005"
+    evidence_ref: "e007"
+    claim_ref: "c002"
+    relation_type: "supports_directly"
+    strength: 0.85
+    explanation: "Die freigegebenen Slack-Nachrichten sind primäre interne Kommunikation und zeigen, dass die Autoren intern andere Formulierungen diskutierten als die publizierten."
+
+  - relation_id: "r006"
+    evidence_ref: "e004"
+    claim_ref: "c003"
+    relation_type: "supports_directly"
+    strength: 0.75
+    explanation: "Die Sample-Artikel zeigen Anwendung von Kategorie-B-Labels mit Begründung über Quellenprestige (Verweis auf s001/s002) statt über unabhängige Burden-Layer."
+
+  - relation_id: "r007"
+    evidence_ref: "e001"
+    claim_ref: "c004"
+    relation_type: "supports_indirectly"
+    strength: 0.7
+    explanation: "Die Korrespondenz ist eines der hochrezipierten Diskursartefakte mit dokumentierter Cluster-Bezogenheit (via e006)."
+
+  - relation_id: "r008"
+    evidence_ref: "e002"
+    claim_ref: "c004"
+    relation_type: "supports_directly"
+    strength: 0.75
+    explanation: "Die Pre-Publication-Korrespondenz zwischen Autoren und NIH-Leitung dokumentiert die Cluster-Koordination der Rahmungsentscheidung."
+
+  - relation_id: "r009"
+    evidence_ref: "e003"
+    claim_ref: "c004"
+    relation_type: "supports_indirectly"
+    strength: 0.65
+    explanation: "Die publizierte Fassung des Proximal-Origin-Papers ist Diskurs-Output der dokumentierten Cluster-Koordination."
+
+  - relation_id: "r010"
+    evidence_ref: "e006"
+    claim_ref: "c004"
+    relation_type: "supports_directly"
+    strength: 0.9
+    explanation: "Die Lancet-Adde von Juni 2021 ist primäre Dokumentation der nicht-offengelegten Förder-/Autorenverflechtungen, die das Cluster konstituieren."
+
+  - relation_id: "r011"
+    evidence_ref: "e007"
+    claim_ref: "c004"
+    relation_type: "supports_directly"
+    strength: 0.8
+    explanation: "Die Slack-Nachrichten dokumentieren die interne Koordination zwischen Cluster-Mitgliedern."
+
+  - relation_id: "r012"
+    evidence_ref: "e005"
+    claim_ref: "c007"
+    relation_type: "supports_directly"
+    strength: 0.85
+    explanation: "Die Baker- und Wade-Essays sind primärquellige Publikationen außerhalb der dokumentierten Cluster im Auditzeitraum."
+
+  - relation_id: "r013"
+    evidence_ref: "e005"
+    claim_ref: "c005"
+    relation_type: "supports_indirectly"
+    strength: 0.4
+    explanation: "Unabhängige Stimmen (Baker, Wade) außerhalb des Clusters stützen schwach die Idee, dass die Mainstream-Bewertung nicht vollständig cluster-abhängig war. Reicht nicht für eine Aussage stärker als 'weak' bei c005."
+
+  - relation_id: "r014"
+    evidence_ref: "e001"
+    claim_ref: "c005"
+    relation_type: "weakens"
+    strength: 0.7
+    explanation: "Die Lancet-Korrespondenz ist ein Beispiel für Mainstream-Bewertung mit dokumentierter Cluster-Bezogenheit; sie weakensc005 (die Behauptung der Unabhängigkeit)."
+
+  - relation_id: "r015"
+    evidence_ref: "e006"
+    claim_ref: "c005"
+    relation_type: "weakens"
+    strength: 0.8
+    explanation: "Die nachträgliche Lancet-Selbstdeklaration der Verflechtungen weakens die Behauptung, die ursprüngliche Bewertung sei cluster-unabhängig gewesen."
+
+  - relation_id: "r016"
+    evidence_ref: "e008"
+    claim_ref: "c006"
+    relation_type: "supports_directly"
+    strength: 1.0
+    explanation: "Die question.md dieses Cases ist die definitorische Quelle für die Scope-Erklärung; c006 ist case-konstitutiv und durch diese Quelle direkt gestützt."

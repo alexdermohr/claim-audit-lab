@@ -1,0 +1,320 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/answer-receipt.v1.schema.json",
+  "title": "Answer Receipt v1",
+  "description": "Structured agent answer artifact. Required for any non-repo-navigation task that asserts a verdict on a real-world claim.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "question",
+    "task_classification",
+    "answer_summary",
+    "verdicts_used",
+    "counterhypotheses_considered",
+    "forbidden_upgrades_check",
+    "banned_phrases_self_scan",
+    "source_cluster_audit",
+    "refusal_check",
+    "external_research",
+    "oracle_disclaimer_present",
+    "final_uncertainty_statement",
+    "what_would_change_assessment"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_classification": {
+      "type": "string",
+      "enum": [
+        "world_question",
+        "claim_audit",
+        "source_comparison",
+        "case_building",
+        "repo_navigation",
+        "repo_maintenance"
+      ]
+    },
+    "answer_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 600
+    },
+    "verdicts_used": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "statement", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "pattern": "^c[0-9]{3,}$"
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "established",
+              "strongly_supported",
+              "plausible",
+              "weak",
+              "speculative",
+              "contradicted",
+              "unresolved",
+              "no_verdict_possible"
+            ]
+          },
+          "uncertainty_score": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          },
+          "burden_layers_addressed": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "physical_mechanism",
+                "structural_effect",
+                "observational_fit",
+                "operational_placement",
+                "actor_attribution",
+                "source_report",
+                "comparative_probability"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "counterhypotheses_considered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["statement", "steelman_quality"],
+        "additionalProperties": false,
+        "properties": {
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "steelman_quality": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "forbidden_upgrades_check": {
+      "type": "object",
+      "required": ["upgrades_considered", "upgrades_blocked"],
+      "additionalProperties": false,
+      "properties": {
+        "upgrades_considered": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "correlation_to_causation",
+              "benefit_to_motive",
+              "source_prestige_to_truth",
+              "suspicion_to_proof",
+              "absence_of_evidence_to_falsehood",
+              "reported_to_world",
+              "majority_to_independent",
+              "count_to_corroboration"
+            ]
+          }
+        },
+        "upgrades_blocked": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "correlation_to_causation",
+              "benefit_to_motive",
+              "source_prestige_to_truth",
+              "suspicion_to_proof",
+              "absence_of_evidence_to_falsehood",
+              "reported_to_world",
+              "majority_to_independent",
+              "count_to_corroboration"
+            ]
+          }
+        }
+      }
+    },
+    "banned_phrases_self_scan": {
+      "type": "object",
+      "required": ["scanned", "hits"],
+      "additionalProperties": false,
+      "properties": {
+        "scanned": {
+          "type": "boolean"
+        },
+        "hits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["phrase", "category"],
+            "additionalProperties": false,
+            "properties": {
+              "phrase": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "false_closure",
+                  "dismissal",
+                  "authority_laundering",
+                  "smoothing",
+                  "refusal_as_neutrality"
+                ]
+              },
+              "context_allowed": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "source_cluster_audit": {
+      "type": "object",
+      "required": ["clusters_identified", "independence_verified"],
+      "additionalProperties": false,
+      "properties": {
+        "clusters_identified": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["cluster_id", "members", "alignment_basis"],
+            "additionalProperties": false,
+            "properties": {
+              "cluster_id": {
+                "type": "string"
+              },
+              "members": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "alignment_basis": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "independence_verified": {
+          "type": "boolean"
+        },
+        "fragility_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "refusal_check": {
+      "type": "object",
+      "required": ["refused"],
+      "additionalProperties": false,
+      "properties": {
+        "refused": {
+          "type": "boolean"
+        },
+        "refusal_type": {
+          "type": "string",
+          "enum": [
+            "out_of_scope",
+            "missing_tools",
+            "missing_evidence",
+            "capability"
+          ]
+        },
+        "balanced_framing_present": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "external_research": {
+      "type": "object",
+      "required": ["tools_used", "sources_consulted"],
+      "additionalProperties": false,
+      "properties": {
+        "tools_used": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sources_consulted": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["citation", "source_type"],
+            "additionalProperties": false,
+            "properties": {
+              "citation": {
+                "type": "string"
+              },
+              "source_type": {
+                "type": "string"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "background_knowledge_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "oracle_disclaimer_present": {
+      "type": "boolean"
+    },
+    "final_uncertainty_statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "what_would_change_assessment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_ref": {
+      "type": "string",
+      "description": "Optional path to the case directory this answer is associated with."
+    },
+    "review_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

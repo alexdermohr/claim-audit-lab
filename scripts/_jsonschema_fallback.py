@@ -112,6 +112,11 @@ class Draft7Validator:
                 yield ValidationError(
                     f"{instance!r} is too short; minimum length is {min_length}", path.copy()
                 )
+            max_length = schema.get("maxLength")
+            if max_length is not None and len(instance) > max_length:
+                yield ValidationError(
+                    f"{instance!r} is too long; maximum length is {max_length}", path.copy()
+                )
             pattern = schema.get("pattern")
             if pattern and re.search(pattern, instance) is None:
                 yield ValidationError(

@@ -1,0 +1,44 @@
+schema_version: "1.0"
+question: "Wurde die Lab-Origin-Hypothese zum Ursprung von SARS-CoV-2 zwischen Februar 2020 und Mai 2021 im wissenschaftlichen Mainstream-Diskurs unabhängig von Quellencluster-Effekten bewertet?"
+task_classification: "case_building"
+answer_summary: "Draft-Demonstrator für den Enforcement-Layer. Kein Wahrheitszertifikat; evidenzstrukturiertes Urteil ist bis externer Verifikation ausgesetzt."
+verdicts_used: []
+counterhypotheses_considered: []
+forbidden_upgrades_check:
+  upgrades_considered:
+    - "source_prestige_to_truth"
+    - "correlation_to_causation"
+    - "suspicion_to_proof"
+    - "absence_of_evidence_to_falsehood"
+    - "majority_to_independent"
+    - "count_to_corroboration"
+    - "reported_to_world"
+  upgrades_blocked:
+    - "source_prestige_to_truth"
+    - "correlation_to_causation"
+    - "suspicion_to_proof"
+    - "absence_of_evidence_to_falsehood"
+    - "majority_to_independent"
+    - "count_to_corroboration"
+    - "reported_to_world"
+banned_phrases_self_scan:
+  scanned: true
+  hits: []
+source_cluster_audit:
+  clusters_identified: []
+  independence_verified: false
+  fragility_score: 1.0
+refusal_check:
+  refused: false
+  balanced_framing_present: false
+  notes: "Keine Verweigerung; die Case produziert verdicts mit deklarierter Unsicherheit."
+external_research:
+  tools_used: []
+  sources_consulted: []
+  background_knowledge_only: true
+oracle_disclaimer_present: true
+final_uncertainty_statement: "background-knowledge-only, no external verification. Diese Draft-Case enthält methodische Referenzen ohne externe Prüfung und unverified references bis zur externen Quellenprüfung. Dies ist kein Wahrheitszertifikat / not a truth certificate."
+what_would_change_assessment: "Erst nach externer Quellenverifikation, evidenzbasierten Claim-Verdicts und Red-Team-Neuprüfung kann die Draft-Einstufung verlassen werden."
+case_ref: "cases/critical-inquiry/covid-origin-discourse-independence"
+review_date: "2026-05-19"
+notes: "Draft-Receipt für Case-Konstruktion. Konkrete Quellenbehauptungen sind bis zur externen Verifikation nur Referenzen ohne externe Prüfung. fragility_score=1.0 kodiert maximale Unsicherheit im Draft-Zustand."

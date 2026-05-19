@@ -1,0 +1,29 @@
+schema_version: "1.0"
+question: "Case-building receipt for mccloy-nazi-finance-support."
+task_classification: "case_building"
+answer_summary: "This is a case-building receipt for a repository-resident audit artifact. Not a truth certificate."
+verdicts_used: []
+counterhypotheses_considered: []
+forbidden_upgrades_check:
+  upgrades_considered: []
+  upgrades_blocked: []
+banned_phrases_self_scan:
+  scanned: true
+  hits: []
+source_cluster_audit:
+  clusters_identified: []
+  independence_verified: true
+refusal_check:
+  refused: false
+  balanced_framing_present: false
+  notes: "No refusal."
+external_research:
+  tools_used: []
+  sources_consulted: []
+  background_knowledge_only: true
+oracle_disclaimer_present: true
+final_uncertainty_statement: "background-knowledge-only, no external verification. This receipt documents process state and is not a truth certificate."
+what_would_change_assessment: "Adding externally verified source retrieval and a fresh red-team pass would change confidence."
+case_ref: "cases/history/mccloy-nazi-finance-support"
+review_date: "2026-05-19"
+notes: "Repository-resident receipt added for receipt-required case state."

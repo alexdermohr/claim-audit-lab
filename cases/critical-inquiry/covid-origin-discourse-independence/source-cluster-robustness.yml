@@ -1,0 +1,84 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/covid-origin-discourse-independence"
+clusters:
+  - cluster_id: "lancet_proximal_origin_authors_cluster"
+    source_refs: ["s001", "s002", "s004"]
+    cluster_role: "academic_study"
+    independence_risk: 0.85
+    compromise_scenarios:
+      - scenario_id: "cs1"
+        premise: "Wenn die in s004 dokumentierten Förder-/institutionellen Verflechtungen als ausschließliche Erklärung der Konvergenz interpretiert würden, wäre das Cluster-Korrelation als Cluster-Verursachung gelesen."
+        treatment: "cap_negative_closure"
+        affected_claims: ["c004", "c005"]
+        rationale: "Cluster-Korrelation impliziert nicht logisch Cluster-Verursachung. Cap der c004-Closure auf strongly_supported (nicht established) hält diesen Vorbehalt mechanisch."
+      - scenario_id: "cs2"
+        premise: "Wenn die Lancet-Selbstdeklaration s004 selbst als selektiv oder nicht-vollständig bewertet würde, wäre die Cluster-Bezogenheit nur teilweise belegt."
+        treatment: "require_independent_replication"
+        affected_claims: ["c001", "c004"]
+        rationale: "Independent replication erfolgt durch s003 (FOIA) und s006 (House Oversight); diese Quellen sind außerhalb des Lancet-Clusters und stützen die Cluster-Bezogenheit unabhängig."
+    notes: "Hauptcluster der dokumentierten Diskursartefakte; primäre Belastung durch die Lancet-eigene Selbstdeklaration s004."
+
+  - cluster_id: "primary_correspondence_release_cluster"
+    source_refs: ["s003", "s006"]
+    cluster_role: "official_summary"
+    independence_risk: 0.5
+    compromise_scenarios:
+      - scenario_id: "cs3"
+        premise: "Wenn die freigebenden Stellen (NIH FOIA, House Oversight) ihre Releases selektiv kuratieren, wäre die Bewertung der Pre-Publication-Korrespondenz unvollständig."
+        treatment: "require_independent_replication"
+        affected_claims: ["c002", "c004"]
+        rationale: "Independent replication erfolgt indirekt durch die Lancet-Selbstdeklaration s004 (anderes Cluster) und durch direkten Text-Vergleich mit s002."
+    notes: "Primärdokumente, aber unter Aufsicht von Stellen mit eigenem politischen Interesse freigegeben."
+
+  - cluster_id: "independent_journalism_cluster"
+    source_refs: ["s007"]
+    cluster_role: "independent_replication"
+    independence_risk: 0.2
+    compromise_scenarios:
+      - scenario_id: "cs4"
+        premise: "Wenn Baker/Wade selbst Teil eines unentdeckten Counter-Clusters wären (z.B. politische Motivation), wäre c007 weniger stark."
+        treatment: "downgrade_to_reported_claim_only"
+        affected_claims: ["c007"]
+        rationale: "Im Falle eines Counter-Clusters bliebe c007 als reported_claim ('Baker und Wade publizierten') established, aber die Implikation für c005 schwächt sich."
+    notes: "Außerhalb der dokumentierten Lancet/Proximal-Origin-Cluster publiziert. Die Quelle bleibt journalistisch, nicht peer-reviewed."
+
+knockout_tests:
+  - test_id: "kt1"
+    removed_cluster_refs: ["lancet_proximal_origin_authors_cluster"]
+    affected_claims: ["c004"]
+    verdict_without_cluster: "strongly_supported"
+    verdict_delta: "Keine Verschiebung für c004. Auch ohne s001/s002/s004 belegen s003 (FOIA-E-Mails, e002) und s006 (House-Oversight-Slack, e007) die Cluster-Koordination primärquellig."
+    fragility_score: 0.2
+    rationale: "Die Cluster-Bezogenheit (c004) ist durch mehrere unabhängige Source-Cluster gestützt; das Lancet-Cluster ist nicht der einzige Beleg."
+
+  - test_id: "kt1b"
+    removed_cluster_refs: ["lancet_proximal_origin_authors_cluster"]
+    affected_claims: ["c001"]
+    verdict_without_cluster: "no_verdict_possible"
+    verdict_delta: "Verschiebung von established auf no_verdict_possible. c001 ist die spezifische Aussage über die Lancet-Korrespondenz-Autoren; ihre primäre Stützung kommt aus dem Lancet-Cluster selbst (e001 die Korrespondenz; e006 die Adde). Ohne dieses Cluster fehlt jede direkte Stützung."
+    fragility_score: 0.9
+    rationale: "Erwarteter Befund. c001 ist eine Aussage über die Lancet-Korrespondenz und kann nicht ohne Lancet-Quellen belegt werden. Die Closure ist nicht in mehreren Clustern dupliziert, weil sie nicht zu duplizieren ist."
+
+  - test_id: "kt2"
+    removed_cluster_refs: ["primary_correspondence_release_cluster"]
+    affected_claims: ["c002", "c004"]
+    verdict_without_cluster: "plausible"
+    verdict_delta: "Verschiebung von strongly_supported auf plausible für c002. Ohne FOIA und House Oversight wäre die Pre-Publication-Korrespondenz nur indirekt belegt (durch Lancet-Selbstdeklaration und Text-Vergleich)."
+    fragility_score: 0.55
+    rationale: "Die FOIA- und Oversight-Releases liefern den primärquelligen Inhalt der Pre-Publication-Kommunikation. Ihr Wegfall würde c002 von strongly_supported auf plausible reduzieren."
+
+  - test_id: "kt3"
+    removed_cluster_refs: ["independent_journalism_cluster"]
+    affected_claims: ["c005", "c007"]
+    verdict_without_cluster: "no_verdict_possible"
+    verdict_delta: "c005 würde von weak auf no_verdict_possible verschoben. c007 würde wegfallen (kein Beleg für unabhängige Stimmen)."
+    fragility_score: 0.6
+    rationale: "Die schwache positive Stützung von c005 (durch unabhängige Stimmen) hängt am s007-Cluster. Ohne diesen bleibt für c005 keine positive Stützung."
+
+  - test_id: "kt4"
+    removed_cluster_refs: ["lancet_proximal_origin_authors_cluster", "primary_correspondence_release_cluster"]
+    affected_claims: ["c001", "c002", "c004"]
+    verdict_without_cluster: "weak"
+    verdict_delta: "Ohne beide Cluster gleichzeitig bleibt nur s005 (Mainstream-Coverage) und s007 (unabhängige Stimmen). c001, c002, c004 wären weak."
+    fragility_score: 0.8
+    rationale: "Gemeinsamer Wegfall beider Primärquellen-Cluster würde die starke Closure aufheben. Das ist methodisch erwartbar und kein Schwäche-Indikator; es zeigt, dass die starke Closure auf zwei unabhängigen Source-Clustern beruht, was den Audit-Discipline-Standard erfüllt."

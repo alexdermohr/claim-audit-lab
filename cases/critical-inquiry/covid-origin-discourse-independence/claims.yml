@@ -1,0 +1,169 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "factual_event_claim"
+    statement: "Die Autoren des Lancet-Korrespondenzbriefs vom 19. Februar 2020 (Calisher, Daszak et al.) hatten zum Zeitpunkt der Publikation dokumentierte institutionelle und Förder-Verflechtungen mit Forschung am Wuhan Institute of Virology."
+    status: "established"
+    evidence_refs: ["e001", "e006"]
+    source_refs: ["s001", "s004"]
+    requires: ["dokumentierte Förderbeziehungen", "Autorenliste", "Chronologie"]
+    counterclaims: []
+    forbidden_upgrades: ["source_prestige_to_truth", "suspicion_to_proof"]
+    uncertainty:
+      score: 0.1
+      causes:
+        - "Die spätere Lancet-Statement-Adde vom Juni 2021 dokumentiert die Verflechtungen primärquellig."
+    interpolation:
+      score: 0.05
+      assumptions:
+        - "Die nachträglich publizierte Conflict-of-Interest-Erklärung wird als korrekte Darstellung der zum Publikationszeitpunkt bestehenden Verhältnisse behandelt."
+    notes: "Dies ist eine Aussage über Förder- und Autoren-Verhältnisse, keine Aussage über Motive der Autoren."
+
+  - schema_version: "1.0"
+    claim_id: "c002"
+    claim_type: "factual_event_claim"
+    statement: "Zwischen den Autoren des Proximal-Origin-Manuskripts (Andersen et al., Nature Medicine, März 2020) und leitenden NIH-Vertretern (Fauci, Collins) gab es vor der Publikation Kommunikation, in der die Autoren intern Unsicherheit zu einem natürlichen Ursprung äußerten, die in der publizierten Fassung nicht in derselben Form sichtbar war."
+    status: "strongly_supported"
+    evidence_refs: ["e002", "e003", "e007"]
+    source_refs: ["s002", "s003", "s006"]
+    requires: ["Primärdokumente der Kommunikation", "Vergleich mit publizierter Fassung", "Chronologie"]
+    counterclaims:
+      - "Interne wissenschaftliche Unsicherheit vor Publikation ist Teil normaler Manuskriptentwicklung; sie impliziert keinen koordinierten Diskursdruck."
+    forbidden_upgrades: ["source_prestige_to_truth", "benefit_to_motive", "suspicion_to_proof"]
+    uncertainty:
+      score: 0.18
+      causes:
+        - "Die freigegebenen E-Mails und Slack-Nachrichten sind durch FOIA- und Komitee-Releases vermittelt; Auswahl und Redaktionsentscheidungen sind nicht vollständig transparent."
+        - "Die Bewertung von 'derselben Form' verlangt einen Textvergleich, der hier nur summarisch vorgenommen wird."
+    interpolation:
+      score: 0.2
+      assumptions:
+        - "Die freigegebenen Kommunikationen werden als authentisch und als repräsentativ für die Kommunikation in dem Zeitraum behandelt."
+    notes: "Aussage über dokumentierte Kommunikation, nicht über die Glaubwürdigkeit der Autoren oder über den Ursprung des Virus."
+
+  - schema_version: "1.0"
+    claim_id: "c003"
+    claim_type: "narrative_claim"
+    statement: "Zwischen Februar 2020 und Mai 2021 verwendeten zahlreiche Beiträge in hochrezipierten Mainstream-Outlets die Sprache von Kategorie B (Dismissal: 'conspiracy theory', 'debunked', 'fringe') gegen Lab-Origin-Hypothesen, ohne dabei einen Test, eine Methodenkritik oder eine direkte Exklusion auf Burden-Layer-Niveau zu zitieren."
+    status: "strongly_supported"
+    evidence_refs: ["e004", "e007"]
+    source_refs: ["s005", "s006"]
+    requires: ["Beispielartikel", "Vergleich von Label-Anwendung und Burden-Layer-Begründung"]
+    counterclaims:
+      - "Manche Outlets zitierten implizit oder explizit das Proximal-Origin-Paper oder das Lancet-Statement als Begründung; das ist eine Form von Begründung, auch wenn sie aus Sicht des Frameworks Quellenprestige in Wahrheit überträgt."
+    forbidden_upgrades: ["source_prestige_to_truth", "suspicion_to_proof"]
+    uncertainty:
+      score: 0.22
+      causes:
+        - "Eine vollständige Diskursanalyse aller Outlets ist nicht abgedeckt; das Audit stützt sich auf dokumentierte Beispiele und auf die offene Verfügbarkeit der Quellen."
+        - "Die Grenze zwischen Dismissal-Sprache und legitimer Berichterstattung erfordert sentence-level Bewertung."
+    interpolation:
+      score: 0.25
+      assumptions:
+        - "Die ausgewählten Beispiel-Outlets sind ausreichend repräsentativ, um den allgemeinen Diskursmuster zu belegen, ohne einen vollständigen Korpus zu durchlaufen."
+    notes: "Diese Aussage betrifft die Anwendung von Dismissal-Labels in der Berichterstattung, nicht die Wahrheit der zugrunde liegenden Hypothesen."
+
+  - schema_version: "1.0"
+    claim_id: "c004"
+    claim_type: "causal_claim"
+    statement: "Die Konvergenz dismissiver Bewertungen der Lab-Origin-Hypothese in den dokumentierten hochrezipierten Kanälen (Lancet-Korrespondenz, Proximal-Origin-Paper, große Mainstream-Outlets) zwischen Februar 2020 und Mai 2021 wurde substantiell durch Quellencluster-Effekte (überlappende Förder-, Autoren- und institutionelle Bezüge) mitgetragen."
+    status: "strongly_supported"
+    evidence_refs: ["e001", "e002", "e003", "e006", "e007"]
+    source_refs: ["s001", "s002", "s003", "s004", "s006"]
+    burden_profile: "causal_chain"
+    required_chain:
+      - id: "rc1"
+        requirement: "Dokumentierte Förder-/institutionelle Überlappung zwischen den Akteuren der hochrezipierten Kanäle."
+        status: "satisfied"
+        notes: "Primärquellig durch s004 (Lancet-Adde Juni 2021) bestätigt."
+      - id: "rc2"
+        requirement: "Pre-Publication-Koordination/Kommunikation zwischen den Akteuren des Clusters."
+        status: "satisfied"
+        notes: "Primärquellig durch s003 (FOIA-E-Mails) und s006 (House-Oversight-Slack) bestätigt."
+      - id: "rc3"
+        requirement: "Beobachtbare Konvergenz der Rahmung in den Diskurs-Outputs."
+        status: "satisfied"
+        notes: "Lancet-Korrespondenz und Proximal-Origin-Paper als Diskurs-Output dokumentiert."
+      - id: "rc4"
+        requirement: "Quantitative Trennung zwischen Cluster-Beitragung und unabhängiger fachlicher Übereinstimmung."
+        status: "partially_satisfied"
+        notes: "Qualitative Begründung vorhanden (siehe assessment.md); präzise Quantifizierung mit verfügbaren Quellen nicht möglich. Deshalb 'substantiell mitgetragen', nicht 'allein verursacht'."
+    requires: ["dokumentierte Überlappung", "Chronologie", "Vergleich mit nicht-überlappenden Stimmen", "Burden-Layer: structural_effect (Cluster auf Diskurs), nicht physical_mechanism (Ursprung des Virus)"]
+    counterclaims:
+      - "Die Konvergenz könnte echte unabhängige fachliche Übereinstimmung widerspiegeln; institutionelle Überlappung impliziert nicht zwangsläufig nicht-unabhängige Bewertung."
+      - "Unabhängige Stimmen außerhalb der dokumentierten Cluster (z.B. Nicholson Baker, Nicholas Wade) erschienen im selben Zeitraum öffentlich, was den Cluster-Effekt nicht ausschließt, ihn aber begrenzt."
+    forbidden_upgrades: ["correlation_to_causation", "benefit_to_motive", "source_prestige_to_truth", "suspicion_to_proof"]
+    uncertainty:
+      score: 0.28
+      causes:
+        - "Quantifizierung der relativen Gewichte zwischen Cluster-Effekt und echter unabhängiger Übereinstimmung ist mit den verfügbaren Quellen nicht präzise möglich."
+        - "Die Auswahl der 'dokumentierten hochrezipierten Kanäle' enthält eine analytische Vorentscheidung."
+    interpolation:
+      score: 0.32
+      assumptions:
+        - "Die dokumentierten Cluster werden als Hauptursache, nicht als alleinige Ursache der Konvergenz behandelt; der Claim sagt 'substantiell mitgetragen', nicht 'allein verursacht'."
+    notes: "Dies ist ein co-causation-Claim über den Diskurs. Er sagt nicht aus, dass jede einzelne dismissive Stimme cluster-induziert war. Er sagt auch nichts darüber aus, ob die Lab-Origin-Hypothese wahr ist."
+
+  - schema_version: "1.0"
+    claim_id: "c005"
+    claim_type: "causal_claim"
+    statement: "Die wissenschaftliche Mainstream-Bewertung der Lab-Origin-Hypothese zwischen Februar 2020 und Mai 2021 war unabhängig von Quellencluster-Effekten."
+    status: "weak"
+    evidence_refs: ["e001", "e002", "e003", "e006", "e004", "e007", "e005"]
+    source_refs: ["s001", "s002", "s003", "s004", "s005", "s006", "s007"]
+    requires: ["Definition von 'Mainstream-Bewertung'", "Nachweis nicht-überlappender Stimmen mit derselben Bewertung", "Burden-Layer: structural_effect über Diskurs"]
+    counterclaims:
+      - "Die dokumentierten Cluster-Effekte gelten für spezifische hochrezipierte Kanäle; die 'Mainstream-Bewertung' als Ganzes könnte unabhängige Stimmen einschließen, die im Audit nicht erfasst sind."
+      - "Cluster-Korrelation impliziert nicht logisch Cluster-Verursachung; unabhängige fachliche Übereinstimmung bleibt eine zulässige Erklärung der beobachteten Konvergenz."
+    forbidden_upgrades: ["correlation_to_causation", "source_prestige_to_truth", "suspicion_to_proof", "absence_of_evidence_to_falsehood"]
+    uncertainty:
+      score: 0.55
+      causes:
+        - "Die Frage hängt entscheidend daran, wie 'Mainstream-Bewertung' und 'unabhängig' operationalisiert werden."
+        - "Die im Audit dokumentierten Cluster-Effekte erfassen hochrezipierte Kanäle, aber nicht den Gesamtkorpus aller Bewertungen."
+    interpolation:
+      score: 0.45
+      assumptions:
+        - "Die dokumentierten Cluster-Effekte in hochrezipierten Kanälen werden als hinreichend gewichtig betrachtet, um die Pauschalbehauptung 'unabhängig' zu schwächen."
+    notes: "Dies ist die zentrale Frage der Nutzerformulierung. Verdict 'weak' bedeutet: die Pauschalbehauptung der Unabhängigkeit ist durch die dokumentierten Cluster-Effekte gegenangezweifelt, aber nicht direkt ausgeschlossen. Eine engere Aussage (c004: Cluster-Effekte trugen substantiell mit) ist stärker gestützt."
+
+  - schema_version: "1.0"
+    claim_id: "c006"
+    claim_type: "meta_claim"
+    statement: "Diese Case auditiert die Unabhängigkeit der Diskursbewertung, nicht die zugrunde liegende Frage nach dem Ursprung von SARS-CoV-2; die Burden-Layer (physical_mechanism, observational_fit, operational_placement) für die Ursprungsfrage werden in dieser Case nicht aufgebaut."
+    status: "established"
+    evidence_refs: ["e008"]
+    source_refs: ["s008"]
+    requires: ["explizite Scope-Erklärung in question.md"]
+    counterclaims: []
+    forbidden_upgrades: ["source_prestige_to_truth"]
+    uncertainty:
+      score: 0.05
+      causes:
+        - "Diese Aussage ist case-konstitutiv und folgt aus der explizit deklarierten Scope-Beschränkung."
+    interpolation:
+      score: 0.0
+      assumptions:
+        - "Die Scope-Beschränkung in question.md wird befolgt."
+    notes: "Diese Meta-Aussage ist notwendig, damit die Case nicht versehentlich als Verdict über die Ursprungsfrage gelesen wird."
+
+  - schema_version: "1.0"
+    claim_id: "c007"
+    claim_type: "factual_event_claim"
+    statement: "Unabhängige Stimmen außerhalb der dokumentierten Cluster (z.B. Nicholson Baker in New York Magazine, Januar 2021; Nicholas Wade in Bulletin of the Atomic Scientists, Mai 2021) publizierten innerhalb des Auditzeitraums Bewertungen, die die dominante Dismissal-Linie öffentlich infrage stellten."
+    status: "established"
+    evidence_refs: ["e005"]
+    source_refs: ["s007"]
+    requires: ["publizierte Beispiele", "Chronologie", "Nachweis fehlender Cluster-Überlappung"]
+    counterclaims: []
+    forbidden_upgrades: ["source_prestige_to_truth"]
+    uncertainty:
+      score: 0.12
+      causes:
+        - "Die genannten Beispiele sind dokumentiert und überprüfbar; die Auswahl ist nicht erschöpfend."
+    interpolation:
+      score: 0.1
+      assumptions:
+        - "Die Autoren werden als nicht zu den dokumentierten Lancet/Proximal-Origin-Clustern gehörig behandelt; gegenteilige Cluster-Bezüge sind nicht dokumentiert."
+    notes: "Dieser Claim ist relevant, weil er c005 (Unabhängigkeit der Mainstream-Bewertung) teilweise stützt: Es gab unabhängige Stimmen. Er widerlegt c004 (Cluster-Effekte mitgetragen) nicht."
