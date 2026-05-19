@@ -54,6 +54,7 @@ Top-level fields:
 | `produces` | string | yes | One-line summary of what the step concludes; min 1 character |
 | `uncertainty_effect` | enum | yes | `raises`, `lowers`, `preserves`, `localizes` |
 | `forbidden_upgrade_checked` | array[enum] | no | List upgrades the author explicitly considered and blocked |
+| `addresses_defeater_refs` | array[string] | conditional | Required when operation is `defeater_response` or `uncertainty_preservation` and a high-materiality unresolved/partially_resolved defeater must be explicitly addressed; each value must match a `defeater_id` in `model-defeaters.yml` |
 | `notes` | string | no | Authoring notes |
 
 ### Operations
