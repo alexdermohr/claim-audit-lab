@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Block forbidden language in agent prose.
 
-Scans assessment.md, redteam.md, and answer-receipt.yml free-text fields
-for phrases listed in docs/forbidden-language.md. Skips quoted material,
-source-position descriptions, and steelman blocks.
+Scans assessment.md, redteam.md, question.md agent-framing sections, and
+answer-receipt.yml free-text fields for phrases listed in
+docs/forbidden-language.md. Skips quoted material, source-position
+descriptions, and fenced code blocks (including steelman blocks).
 
 See: docs/forbidden-language.md
 """
@@ -172,34 +173,6 @@ def safe_load_yaml(path: pathlib.Path):
         return None, str(exc)
 
 
-def is_in_steelman_block(lines: list[str], idx: int) -> bool:
-    """Check if line idx is inside a fenced ```steelman block."""
-    inside = False
-    for i, line in enumerate(lines[:idx + 1]):
-        stripped = line.strip()
-        if stripped.startswith("```steelman"):
-            inside = True
-        elif inside and stripped.startswith("```"):
-            inside = False
-    return inside
-
-
-def is_in_code_block(lines: list[str], idx: int) -> bool:
-    """Check if line idx is inside a fenced code block of any kind."""
-    inside = False
-    fence_lang = None
-    for i, line in enumerate(lines[:idx + 1]):
-        stripped = line.strip()
-        if stripped.startswith("```"):
-            if not inside:
-                inside = True
-                fence_lang = stripped[3:].strip()
-            else:
-                inside = False
-                fence_lang = None
-    return inside
-
-
 def is_in_meta_doc(path: pathlib.Path) -> bool:
     """The banned-language doc itself and agent-contract.md contain examples; skip."""
     name = path.name
@@ -219,31 +192,57 @@ def line_is_allowed_context(line: str) -> bool:
     return False
 
 
-def scan_markdown_text(path: pathlib.Path) -> list[tuple[int, str, str, str]]:
+def _split_question_user_and_agent_sections(text: str) -> tuple[str, str, int]:
+    """Return (user_question_section, agent_framing_section, agent_start_line_offset)."""
+    lines = text.splitlines()
+    for idx, line in enumerate(lines):
+        lower = line.strip().lower()
+        if lower.startswith("## scope") or lower.startswith("## method") or lower.startswith("## why"):
+            return ("\n".join(lines[:idx]), "\n".join(lines[idx:]), idx)
+    return (text, "", 0)
+
+
+def scan_markdown_text(path: pathlib.Path, *, scan_question_agent_framing_only: bool = False) -> list[tuple[int, str, str, str]]:
     """Scan a markdown file. Returns list of (line_no, category, phrase, line_text)."""
     if not path.exists():
         return []
     if is_in_meta_doc(path):
         return []
-    text = path.read_text(encoding="utf-8")
+    full_text = path.read_text(encoding="utf-8")
+    line_offset = 0
+    text = full_text
+    if scan_question_agent_framing_only:
+        _, agent_text, start_line = _split_question_user_and_agent_sections(full_text)
+        if not agent_text.strip():
+            return []
+        text = agent_text
+        line_offset = start_line
     lines = text.splitlines()
     hits: list[tuple[int, str, str, str]] = []
+    inside_code_block = False
+    inside_steelman = False
     for idx, line in enumerate(lines):
-        if line_is_allowed_context(line):
+        stripped = line.strip()
+        if stripped.startswith("```steelman"):
+            inside_code_block = True
+            inside_steelman = True
             continue
-        if is_in_code_block(lines, idx) and not is_in_steelman_block(lines, idx):
-            # Inside a non-steelman code block: still scan, code blocks may
-            # contain narrative. But skip pure code fences like ```yaml.
-            stripped = line.strip()
-            if stripped.startswith("```"):
-                continue
-        if is_in_steelman_block(lines, idx):
+        if stripped.startswith("```"):
+            inside_code_block = not inside_code_block
+            if not inside_code_block:
+                inside_steelman = False
+            continue
+        if inside_steelman:
+            continue
+        if inside_code_block:
+            continue
+        if line_is_allowed_context(line):
             continue
         lowered = line.lower()
         for category, patterns in CATEGORIES:
             for pattern in patterns:
                 for match in re.finditer(pattern, lowered, flags=re.IGNORECASE):
-                    hits.append((idx + 1, category, match.group(0), line.strip()))
+                    hits.append((idx + 1 + line_offset, category, match.group(0), line.strip()))
     return hits
 
 
@@ -297,12 +296,19 @@ def scan_case(case_dir: pathlib.Path) -> list[str]:
     if legacy_error:
         return [legacy_error]
 
-    for filename in ("assessment.md", "redteam.md", "question.md"):
+    for filename in ("assessment.md", "redteam.md"):
         hits = scan_markdown_text(case_dir / filename)
         for line_no, category, phrase, text in hits:
             errors.append(
                 f"{filename}:{line_no} category={category} phrase='{phrase}' line='{text[:100]}'"
             )
+
+    question_path = case_dir / "question.md"
+    question_hits = scan_markdown_text(question_path, scan_question_agent_framing_only=True)
+    for line_no, category, phrase, text in question_hits:
+        errors.append(
+            f"question.md:{line_no} category={category} phrase='{phrase}' line='{text[:100]}'"
+        )
 
     receipt_hits = scan_receipt_yaml(case_dir / "answer-receipt.yml")
     for field, category, phrase, text in receipt_hits:

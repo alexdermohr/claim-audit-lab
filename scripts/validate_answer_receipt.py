@@ -22,9 +22,6 @@ SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "answer-receipt
 STRONG_STATUSES = {"strongly_supported", "established"}
 WEAK_STATUSES = {"weak", "speculative", "unresolved", "no_verdict_possible"}
 NON_FINAL_STATUSES = WEAK_STATUSES | {"plausible", "contradicted"}
-WORLD_CLAIM_TYPES_REQUIRING_COUNTERHYPOTHESES = {
-    "causal_claim", "motive_claim", "narrative_claim", "beneficiary_claim",
-}
 
 REPO_TASK_TYPES = {"repo_navigation", "repo_maintenance"}
 
@@ -121,22 +118,39 @@ def semantic_checks(receipt: dict) -> list[str]:
     # 3. Refusal-as-neutrality semantics
     refused = refusal_check.get("refused", False)
     refusal_type = refusal_check.get("refusal_type")
-    if refused:
+    if refusal_type is not None:
         valid_types = {"out_of_scope", "missing_tools", "missing_evidence", "capability"}
         if refusal_type not in valid_types:
             errors.append(
-                f"refusal_check.refused=true but refusal_type='{refusal_type}' is not one of {sorted(valid_types)}"
+                f"refusal_check.refusal_type='{refusal_type}' is not one of {sorted(valid_types)}"
             )
-        # If refusal_type is missing_evidence, require at least one no_verdict_possible/unresolved verdict
-        if refusal_type == "missing_evidence":
-            has_unresolved = any(
-                isinstance(v, dict) and v.get("status") in {"no_verdict_possible", "unresolved"}
-                for v in verdicts
+    if refused and refusal_type is None:
+        errors.append(
+            "refusal_check.refused=true requires refusal_check.refusal_type to be set"
+        )
+
+    if refusal_type in {"missing_tools", "missing_evidence"} and refused:
+        errors.append(
+            f"refusal_check.refusal_type={refusal_type} requires refusal_check.refused=false "
+            "(tool-limited/non-verdict path, not refusal)"
+        )
+    if refusal_type in {"out_of_scope", "capability"} and not refused:
+        errors.append(
+            f"refusal_check.refusal_type={refusal_type} requires refusal_check.refused=true"
+        )
+
+    if refusal_type == "missing_evidence":
+        has_unresolved = any(
+            isinstance(v, dict) and v.get("status") in {"no_verdict_possible", "unresolved"}
+            for v in verdicts
+        )
+        if not has_unresolved:
+            errors.append(
+                "refusal_type=missing_evidence requires at least one verdict with status "
+                "no_verdict_possible or unresolved"
             )
-            if not has_unresolved:
-                errors.append(
-                    "refusal_type=missing_evidence requires at least one verdict with status no_verdict_possible or unresolved"
-                )
+
+    if refused:
         # Refusal cannot cite controversy/sensitivity as reason
         combined_unc = (final_unc + " " + refusal_check.get("notes", "")).lower()
         for marker in CONTROVERSY_REFUSAL_MARKERS:
@@ -316,3 +330,7 @@ def main(cases_root: str) -> int:
 if __name__ == "__main__":
     cases_dir = sys.argv[1] if len(sys.argv) > 1 else "cases"
     sys.exit(main(cases_dir))
+    if len(answer_summary) > 600:
+        errors.append(
+            "answer_summary exceeds 600 characters (maxLength enforcement for fallback schema validator)"
+        )

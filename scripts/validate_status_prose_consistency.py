@@ -137,9 +137,6 @@ def get_window_sentences(sentences: list[tuple[int, str]], idx: int, window: int
     return [s for _, s in sentences[start:end]]
 
 
-STICKY_WINDOW = 3  # sentences after an explicit reference also count
-
-
 def check_prose_against_status(
     assessment_text: str,
     claim: dict,
@@ -155,28 +152,17 @@ def check_prose_against_status(
     statement_tokens = tokenize_statement(statement)
     sentences = split_sentences(assessment_text)
 
-    # Pre-compute sticky-reference windows: any sentence within
-    # STICKY_WINDOW following a reference also counts as referencing,
-    # unless we encounter (a) a different claim_id, or (b) a paragraph
-    # break / heading, which reset the window.
-    sticky_until = -1
     referenced: list[bool] = [False] * len(sentences)
+    reference_indices: list[int] = []
     for idx, (char_start, sentence) in enumerate(sentences):
-        # Detect resets:
-        line_start = assessment_text.rfind("\n", 0, char_start) + 1
-        line_end = assessment_text.find("\n", char_start)
-        if line_end == -1:
-            line_end = len(assessment_text)
-        line = assessment_text[line_start:line_end]
-        other_ids = [m for m in CLAIM_ID_PATTERN.findall(sentence) if m.lower() != claim_id.lower()]
-        if other_ids:
-            sticky_until = -1  # reset on different claim_id
-        if line.lstrip().startswith("#") or line.strip() == "":
-            sticky_until = -1  # reset on heading/blank line
         if references_claim_in_sentence(sentence, claim_id, statement_tokens):
-            sticky_until = idx + STICKY_WINDOW
-        if idx <= sticky_until and not other_ids:
-            referenced[idx] = True
+            reference_indices.append(idx)
+
+    for idx in reference_indices:
+        window_start = max(0, idx - 2)
+        window_end = min(len(sentences), idx + 3)
+        for j in range(window_start, window_end):
+            referenced[j] = True
 
     for idx, (char_start, sentence) in enumerate(sentences):
         # Skip table status cell lines
@@ -193,6 +179,9 @@ def check_prose_against_status(
             continue
 
         if not referenced[idx]:
+            continue
+        other_ids = [m for m in CLAIM_ID_PATTERN.findall(sentence) if m.lower() != claim_id.lower()]
+        if other_ids:
             continue
 
         # Check global upgrade patterns

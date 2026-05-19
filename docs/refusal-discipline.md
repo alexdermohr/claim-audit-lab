@@ -92,16 +92,19 @@ Forbidden refusal forms:
 1. If `answer_summary` contains a Category E banned phrase from
    `docs/forbidden-language.md` (refusal-as-neutrality phrases) and the
    `refusal_check.refused` is `false` — fail.
-2. If `refusal_check.refused` is `true` but no `refusal_check.refusal_type` is
-   set, or the type is not one of `out_of_scope`, `missing_tools`,
-   `missing_evidence`, `capability` — fail.
-3. If `refusal_check.refused` is `true` and `refusal_check.refusal_type` is
-   `missing_evidence` but the receipt does not list specific
+2. If `refusal_check.refusal_type` is present but not one of
+   `out_of_scope`, `missing_tools`, `missing_evidence`, `capability` — fail.
+   If `refusal_check.refused` is `true` and `refusal_type` is missing — fail.
+3. If `refusal_check.refusal_type` is `missing_tools` or `missing_evidence`
+   while `refusal_check.refused` is `true` — fail (these are non-refusal
+   structured outputs). If `refusal_type` is `out_of_scope` or `capability`
+   while `refused` is `false` — fail.
+4. If `refusal_check.refusal_type` is `missing_evidence` but the receipt does
+   not list specific
    `verdicts_used` with `status: no_verdict_possible` or `unresolved` — fail.
-4. If `refusal_check.refused` is `true` and the
-   `final_uncertainty_statement` mentions controversy, sensitivity, or
-   political alignment as the reason — fail.
-5. If the receipt contains a "both sides" framing
+5. If refusal notes/uncertainty cite controversy, sensitivity, or political
+   alignment as reason for refusal/tool-limited output — fail.
+6. If the receipt contains a "both sides" framing
    (`balanced_framing_present: true`) without a per-side burden-layer
    breakdown in the verdicts list — fail.
 

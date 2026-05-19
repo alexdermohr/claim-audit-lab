@@ -155,3 +155,13 @@ def test_table_row_with_status_cell_does_not_fail(tmp_path):
 """
     _make_case(tmp_path, WEAK_CLAIM, assessment)
     assert validate_status_prose_consistency.main(str(tmp_path / "cases")) == 0
+
+
+def test_preceding_sentence_in_reference_window_is_checked(tmp_path):
+    assessment = """# Title
+
+This is established and documented.
+The c001 claim is discussed here in detail.
+"""
+    _make_case(tmp_path, WEAK_CLAIM, assessment)
+    assert validate_status_prose_consistency.main(str(tmp_path / "cases")) == 1

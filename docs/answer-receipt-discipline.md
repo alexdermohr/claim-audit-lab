@@ -85,9 +85,9 @@ is `scripts/validate_answer_receipt.py`. The required top-level fields are:
 Beyond schema validation, `scripts/validate_answer_receipt.py` runs these
 semantic checks:
 
-1. **Banned-phrases consistency**: if `banned_phrases_self_scan.hits` is
-   empty, the validator scans `answer_summary` itself with the
-   `forbidden-language.md` patterns; any hit fails.
+1. **Banned-phrases declaration**: `banned_phrases_self_scan.scanned` must be
+   `true` and `hits` must be a list. Phrase detection itself is enforced by
+   `scripts/validate_forbidden_language.py` on receipt free-text fields.
 2. **Counterhypothesis floor**: for any verdict ∈ {`strongly_supported`,
    `established`} on a `causal_claim` or `motive_claim`, at least 1
    `counterhypotheses_considered` entry with `steelman_quality ≥ 0.5`.

@@ -22,7 +22,8 @@ as the surrounding context clearly attributes them to a source and not to the ag
 The validator scans these files in every case:
 - `assessment.md`
 - `redteam.md`
-- `question.md` (only the agent's framing section, not the user's question text)
+- `question.md` (only the agent's framing section from headings like `## Scope`,
+  not the user's question text)
 - `answer-receipt.yml` free-text fields (`answer_summary`, `final_uncertainty_statement`,
   `what_would_change_assessment`, `notes`)
 

@@ -27,6 +27,7 @@ def _receipt(task="claim_audit", **overrides):
         "verdicts_used": "[]",
         "final_uncertainty_statement": '"Standard."',
         "notes": '"none"',
+        "tools_used": '["web"]',
     }
     fields.update(overrides)
     yaml = f"""schema_version: "1.0"
@@ -53,7 +54,7 @@ refusal_check:
     yaml += f"""
   notes: {fields['notes']}
 external_research:
-  tools_used: ["web"]
+  tools_used: {fields['tools_used']}
   sources_consulted: []
 oracle_disclaimer_present: true
 final_uncertainty_statement: {fields['final_uncertainty_statement']}
@@ -84,7 +85,7 @@ def test_refusal_with_controversy_reason_fails(tmp_path):
     _make_case(
         tmp_path,
         _receipt(
-            refused="true",
+            refused="false",
             refusal_type="missing_evidence",
             final_uncertainty_statement='"this is a controversial topic"',
             verdicts_used='[{claim_id: c001, statement: "x", status: no_verdict_possible}]',
@@ -97,7 +98,7 @@ def test_missing_evidence_refusal_without_verdict_fails(tmp_path):
     _make_case(
         tmp_path,
         _receipt(
-            refused="true",
+            refused="false",
             refusal_type="missing_evidence",
             verdicts_used='[]',
         ),
@@ -109,10 +110,46 @@ def test_missing_evidence_refusal_with_no_verdict_possible_passes(tmp_path):
     _make_case(
         tmp_path,
         _receipt(
-            refused="true",
+            refused="false",
             refusal_type="missing_evidence",
             verdicts_used='[{claim_id: c001, statement: "x", status: no_verdict_possible}]',
             final_uncertainty_statement='"missing tools and primary evidence; not a truth certificate"',
+        ),
+    )
+    assert validate_refusal_discipline.main(str(tmp_path / "cases")) == 0
+
+
+def test_missing_evidence_with_refused_true_fails(tmp_path):
+    _make_case(
+        tmp_path,
+        _receipt(
+            refused="true",
+            refusal_type="missing_evidence",
+            verdicts_used='[{claim_id: c001, statement: "x", status: no_verdict_possible}]',
+        ),
+    )
+    assert validate_refusal_discipline.main(str(tmp_path / "cases")) == 1
+
+
+def test_missing_tools_requires_refused_false(tmp_path):
+    _make_case(
+        tmp_path,
+        _receipt(
+            refused="true",
+            refusal_type="missing_tools",
+            tools_used="[]",
+        ),
+    )
+    assert validate_refusal_discipline.main(str(tmp_path / "cases")) == 1
+
+
+def test_missing_tools_with_refused_false_and_empty_tools_passes(tmp_path):
+    _make_case(
+        tmp_path,
+        _receipt(
+            refused="false",
+            refusal_type="missing_tools",
+            tools_used="[]",
         ),
     )
     assert validate_refusal_discipline.main(str(tmp_path / "cases")) == 0

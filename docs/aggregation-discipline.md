@@ -59,15 +59,15 @@ status `strongly_supported` or higher, the case must contain:
 and `status` in {`strongly_supported`, `established`}:
 
 1. Collect the claim's `evidence_refs`.
-2. Resolve each evidence to its `evidence_type` in `evidence-pack.yml`.
-3. Resolve each evidence to its relation type via `evidence-relations.yml`.
-4. If ≥ 80% of the resolved relations are `reports` (the relation type used
+2. Resolve claim support via `evidence-relations.yml` for that claim
+   (`reports`, `supports_directly`, `supports_indirectly`, `contextualizes`).
+3. If ≥ 80% of the resolved supporting relations are `reports` (the relation type used
    for "this source reports X"), the validator requires the case to contain
    either:
    (a) at least one non-`reports` relation supporting the same claim, OR
-   (b) a `source-cluster-robustness.yml` entry for the claim with
-       `independence_verified: true`.
-5. If neither is present, the claim fails: it is a counted-reports
+   (b) a `source-cluster-robustness.yml` entry covering the claim (e.g. via
+       knockout tests / independence audit).
+4. If neither is present, the claim fails: it is a counted-reports
    aggregation, not a structurally supported world claim.
 
 ## Examples

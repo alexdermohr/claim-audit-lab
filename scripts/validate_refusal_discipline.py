@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Block refusal-as-neutrality across agent outputs.
+"""Block refusal-as-neutrality in answer-receipt artifacts.
 
-Scans answer-receipt.yml and assessment.md for refusal patterns that
-present themselves as balance or neutrality without declaring refusal
-explicitly per docs/refusal-discipline.md.
+Checks answer-receipt.yml files for refusal patterns that present
+themselves as balance or neutrality without structured declaration per
+docs/refusal-discipline.md.
 """
 
 from __future__ import annotations
@@ -77,6 +77,7 @@ def check_receipt(receipt: dict) -> list[str]:
     answer_summary = receipt.get("answer_summary", "") or ""
     final_unc = receipt.get("final_uncertainty_statement", "") or ""
     refusal_notes = refusal_check.get("notes", "") or ""
+    external = receipt.get("external_research", {}) or {}
 
     # Rule 1: covert refusal phrase in answer_summary but refused=false
     covert_hits = scan_text_for_covert_refusal(answer_summary)
@@ -86,27 +87,52 @@ def check_receipt(receipt: dict) -> list[str]:
             f"refusal must be declared explicitly per docs/refusal-discipline.md"
         )
 
-    # Rule 2: refused=true but refusal_type missing or invalid
-    if refused:
-        valid_types = {"out_of_scope", "missing_tools", "missing_evidence", "capability"}
-        if refusal_type not in valid_types:
+    # Rule 2: refusal_type, when present, must be valid.
+    valid_types = {"out_of_scope", "missing_tools", "missing_evidence", "capability"}
+    if refusal_type is not None and refusal_type not in valid_types:
+        errors.append(
+            f"refusal_check.refusal_type='{refusal_type}' is invalid; "
+            f"must be one of {sorted(valid_types)}"
+        )
+    if refused and refusal_type is None:
+        errors.append(
+            "refusal_check.refused=true requires refusal_check.refusal_type to be set"
+        )
+
+    # Rule 3: declared refusal types must match refused semantics from policy.
+    if refusal_type in {"missing_tools", "missing_evidence"} and refused:
+        errors.append(
+            f"refusal_type={refusal_type} requires refusal_check.refused=false "
+            "(tool-limited/non-verdict path, not refusal)"
+        )
+    if refusal_type in {"out_of_scope", "capability"} and not refused:
+        errors.append(
+            f"refusal_type={refusal_type} requires refusal_check.refused=true"
+        )
+
+    # Rule 4: missing_evidence requires unresolved/no_verdict_possible verdict(s).
+    if refusal_type == "missing_evidence":
+        verdicts = receipt.get("verdicts_used", []) or []
+        has_unresolved = any(
+            isinstance(v, dict) and v.get("status") in {"no_verdict_possible", "unresolved"}
+            for v in verdicts
+        )
+        if not has_unresolved:
             errors.append(
-                f"refusal_check.refused=true but refusal_type='{refusal_type}' is invalid; "
-                f"must be one of {sorted(valid_types)}"
+                "refusal_type=missing_evidence requires at least one verdict_used with status "
+                "no_verdict_possible or unresolved"
             )
-        # Rule 3: refusal_type=missing_evidence requires no_verdict_possible/unresolved verdict
-        if refusal_type == "missing_evidence":
-            verdicts = receipt.get("verdicts_used", []) or []
-            has_unresolved = any(
-                isinstance(v, dict) and v.get("status") in {"no_verdict_possible", "unresolved"}
-                for v in verdicts
+
+    # Rule 5: missing_tools should declare no external tools used.
+    if refusal_type == "missing_tools":
+        tools = external.get("tools_used") or []
+        if tools:
+            errors.append(
+                "refusal_type=missing_tools requires external_research.tools_used to be empty"
             )
-            if not has_unresolved:
-                errors.append(
-                    "refusal_type=missing_evidence requires at least one verdict_used with status "
-                    "no_verdict_possible or unresolved"
-                )
-        # Rule 4: refusal cannot cite controversy
+
+    # Rule 6: refusal cannot cite controversy/sensitivity as reason.
+    if refused or refusal_type in {"missing_tools", "missing_evidence"}:
         combined = (final_unc + " " + refusal_notes).lower()
         for marker in CONTROVERSY_REASONS:
             # Match word boundary, but allow as part of a phrase like "controversial"
@@ -116,7 +142,7 @@ def check_receipt(receipt: dict) -> list[str]:
                     f"is not a valid refusal type (docs/refusal-discipline.md)"
                 )
 
-    # Rule 5: balanced_framing without burden-layer breakdown
+    # Rule 7: balanced_framing without burden-layer breakdown
     balanced = refusal_check.get("balanced_framing_present", False)
     if balanced:
         verdicts = receipt.get("verdicts_used", []) or []
@@ -130,7 +156,7 @@ def check_receipt(receipt: dict) -> list[str]:
                 "burden_layers_addressed; balanced framing requires per-side burden-layer breakdown"
             )
 
-    # Rule 6: refused=true but task is not repo-* and no missing-tools/evidence/capability reason
+    # Rule 8: refused=true but task is not repo-* and no missing-tools/evidence/capability reason
     if refused and task not in REPO_TASK_TYPES:
         if refusal_type == "out_of_scope":
             # out_of_scope is fine for repo tasks; for world questions, it implies refusal-as-neutrality

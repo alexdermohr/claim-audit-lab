@@ -208,3 +208,27 @@ def test_missing_receipt_passes_for_draft_without_assessment(tmp_path):
         encoding="utf-8",
     )
     assert validate_answer_receipt.main(str(tmp_path / "cases")) == 0
+
+
+def test_missing_evidence_requires_refused_false(tmp_path):
+    receipt = VALID_RECEIPT.replace(
+        'refused: false',
+        'refused: true\n  refusal_type: missing_evidence',
+    ).replace(
+        'status: "plausible"',
+        'status: "no_verdict_possible"',
+    )
+    _make_case_with_receipt(tmp_path, receipt)
+    assert validate_answer_receipt.main(str(tmp_path / "cases")) == 1
+
+
+def test_missing_evidence_with_refused_false_and_unresolved_verdict_passes(tmp_path):
+    receipt = VALID_RECEIPT.replace(
+        'status: "plausible"',
+        'status: "no_verdict_possible"',
+    ).replace(
+        'refused: false',
+        'refused: false\n  refusal_type: missing_evidence',
+    )
+    _make_case_with_receipt(tmp_path, receipt)
+    assert validate_answer_receipt.main(str(tmp_path / "cases")) == 0

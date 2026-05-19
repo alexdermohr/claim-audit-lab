@@ -138,6 +138,43 @@ The opposing view holds that this is definitively the correct interpretation.
     assert validate_forbidden_language.main(str(tmp_path / "cases")) == 0
 
 
+def test_non_steelman_fenced_code_block_is_skipped(tmp_path):
+    content = """# Title
+
+```yaml
+summary: "This is definitively proven"
+```
+"""
+    _make_minimal_case(tmp_path, **{"assessment.md": content})
+    assert validate_forbidden_language.main(str(tmp_path / "cases")) == 0
+
+
+def test_question_user_text_is_not_scanned_but_scope_is(tmp_path):
+    question_md = """# Frage / Question
+
+**Original question (EN):**
+Is this a conspiracy theory?
+
+## Scope
+The agent framing should avoid dismissal labels.
+"""
+    _make_minimal_case(tmp_path, **{"question.md": question_md})
+    assert validate_forbidden_language.main(str(tmp_path / "cases")) == 0
+
+
+def test_question_agent_scope_is_scanned(tmp_path):
+    question_md = """# Frage / Question
+
+**Original question (EN):**
+Neutral user input.
+
+## Scope
+This section says it is definitively true.
+"""
+    _make_minimal_case(tmp_path, **{"question.md": question_md})
+    assert validate_forbidden_language.main(str(tmp_path / "cases")) == 1
+
+
 def test_redteam_md_is_scanned(tmp_path):
     _make_minimal_case(
         tmp_path,
