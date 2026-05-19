@@ -1,0 +1,37 @@
+schema_version: "1.0"
+case_ref: "cases/_template"
+inferences:
+  - inference_id: "inf001"
+    claim_ref: "c001"
+    # triggered_by: why this entry exists
+    #   strong_positive_verdict  → claim status is established or strongly_supported
+    #   strong_negative_verdict  → claim status is contradicted
+    #   causal_chain             → claim uses burden_profile: causal_chain at non-trivial status
+    #   comparative_claim        → claim uses burden_profile: comparative at non-trivial status
+    #   unresolved_high_materiality_defeater → high-materiality defeater forces explicit treatment
+    #   manual                   → author-initiated documentation
+    triggered_by: "strong_positive_verdict"
+    inference_steps:
+      - step_id: "step001"
+        premise_evidence_refs:
+          - "e001"
+        premise_claim_refs: []
+        # operation choices:
+        #   corroboration            → multiple evidence items support same conclusion
+        #   contradiction            → evidence rules out alternative
+        #   comparison               → claim is stronger than competing explanation (MUST include rival_weakness_to_own_proof in forbidden_upgrade_checked)
+        #   exclusion                → scope, timing, or mechanism logically excludes rival
+        #   scope_limit              → evidence bounds but does not close the claim
+        #   defeater_response        → step addresses a specific defeater
+        #   uncertainty_preservation → step documents irreducible uncertainty rather than resolving it
+        operation: "corroboration"
+        produces: "Describe in one sentence what this step concludes from the premises above."
+        uncertainty_effect: "lowers"
+        forbidden_upgrade_checked:
+          - "source_prestige_to_truth"
+        # addresses_defeater_refs: required when operation is defeater_response or
+        # uncertainty_preservation and a high-materiality defeater must be covered.
+        # Example:
+        #   addresses_defeater_refs:
+        #     - "d001"
+        notes: ""

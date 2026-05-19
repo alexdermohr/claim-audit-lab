@@ -118,6 +118,16 @@ When a `causal_claim` reaches `strongly_supported`, `established`, or `contradic
 
 **A knockout test is a fragility measurement, not a proof of the counter-hypothesis.** It answers: "how much does the verdict depend on this cluster?" — not "is the cluster wrong?" or "is the alternative true?" Compromise scenarios are stress hypotheses, not proofs. A compromise scenario may never be used as positive evidence for a counter-hypothesis. An official cluster does not automatically win because it is official; an anti-official cluster does not automatically win because it is adversarial. The validator does not decide which source is true; it enforces that strong verdicts make their cluster dependence visible.
 
+## Inference-ledger requirement
+
+Strong closure without an inference-ledger entry is invalid. An agent or author who assigns `established`, `strongly_supported`, or `contradicted` to a non-exempt claim must supply a corresponding entry in `inference-ledger.yml`. The entry names each operative step — corroboration, exclusion, comparison, defeater_response, or uncertainty_preservation — grounds it in specific evidence or claim refs, and declares which forbidden upgrades were checked.
+
+The same requirement applies to any claim with `burden_profile: causal_chain` or `comparative` once its status moves beyond `unresolved` or `no_verdict_possible`. A causal-chain claim at `weak` with an open quantification gap records this honestly through `uncertainty_preservation` rather than through prose hedging.
+
+Exempt from this requirement: `claim_kind: reported_claim`, `burden_profile: source_report`, and `claim_type: meta_claim`. These claims assert provenance or scope, not world-fact derivations.
+
+See `docs/inference-ledger.md` for the full schema, operations, and authoring guidance.
+
 ## Overclosure guard
 
 The overclosure validator blocks direct-negative verdicts that are really weaker operations under another label. `contradicts_directly` must not be used when the explanation or `incompatible_proposition` only says that a stronger alternative explanation exists, positive evidence was not found, a causal bridge is missing, an official source did not corroborate the proposition, or a method/non-test gap remains.

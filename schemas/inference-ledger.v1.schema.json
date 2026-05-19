@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/inference-ledger.v1.schema.json",
+  "title": "Inference Ledger v1",
+  "description": "Explicit derivation chain between evidence and verdict for strong or contentious claims.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "inferences"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "case_ref": {
+      "type": "string"
+    },
+    "inferences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/inference"
+      }
+    }
+  },
+  "definitions": {
+    "inference": {
+      "type": "object",
+      "required": ["inference_id", "claim_ref", "triggered_by", "inference_steps"],
+      "additionalProperties": false,
+      "properties": {
+        "inference_id": {
+          "type": "string",
+          "pattern": "^inf[0-9]{3,}$"
+        },
+        "claim_ref": {
+          "type": "string"
+        },
+        "triggered_by": {
+          "type": "string",
+          "enum": [
+            "strong_positive_verdict",
+            "strong_negative_verdict",
+            "causal_chain",
+            "comparative_claim",
+            "unresolved_high_materiality_defeater",
+            "manual"
+          ]
+        },
+        "inference_steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/inference_step"
+          }
+        }
+      }
+    },
+    "inference_step": {
+      "type": "object",
+      "required": ["step_id", "operation", "produces", "uncertainty_effect"],
+      "additionalProperties": false,
+      "properties": {
+        "step_id": {
+          "type": "string",
+          "pattern": "^step[0-9]{3,}$"
+        },
+        "premise_evidence_refs": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "premise_claim_refs": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "corroboration",
+            "contradiction",
+            "comparison",
+            "exclusion",
+            "scope_limit",
+            "defeater_response",
+            "uncertainty_preservation"
+          ]
+        },
+        "produces": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uncertainty_effect": {
+          "type": "string",
+          "enum": ["raises", "lowers", "preserves", "localizes"]
+        },
+        "forbidden_upgrade_checked": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "source_prestige_to_truth",
+              "benefit_to_motive",
+              "correlation_to_causation",
+              "suspicion_to_proof",
+              "absence_of_evidence_to_falsehood",
+              "rival_weakness_to_own_proof"
+            ]
+          }
+        },
+        "addresses_defeater_refs": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "defeater_ids from model-defeaters.yml that this step explicitly addresses; required when operation is defeater_response or uncertainty_preservation and a matching high-materiality defeater exists."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
