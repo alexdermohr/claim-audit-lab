@@ -45,7 +45,7 @@ Relation types:
 
 Strength threshold: ≥ 0.6
 
-Major-effect threshold: ≥ 0.75 for `alternative_explanation`, `method_challenge`, `supports`, `supports_directly`, `contradicts`, and `contradicts_directly`. At or above that threshold, `reported_to_world` alone is not enough in `argument-provenance.yml`: the argument must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`.
+Major-effect threshold: ≥ 0.75 for `alternative_explanation`, `method_challenge`, `supports`, `supports_directly`, `contradicts`, and `contradicts_directly`. At or above that threshold, `reported_to_world` alone is not enough in either `inference-ledger.yml` or `argument-provenance.yml`: the matching entry must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`.
 
 Then one of the following must exist:
 
@@ -82,7 +82,7 @@ inferences:
 
 Both `forbidden_upgrades_checked` (plural) and `forbidden_upgrade_checked` (singular) are accepted in either format.
 
-The presence of `reported_to_world` in the checks explicitly asserts that the author has considered and justified why a source position is being used as a strong world argument.
+The presence of `reported_to_world` in the checks explicitly asserts that the author has considered and justified why a source position is being used as a strong world argument. For major-effect relations (≥ 0.75), this check is necessary but insufficient without the matching major-effect fields.
 
 ### Option 2: Argument Provenance Entry
 
@@ -112,7 +112,7 @@ Both `forbidden_upgrades_checked` (plural) and `forbidden_upgrade_checked` (sing
 
 The validator supports both `evidence_ref` (singular string) and `evidence_refs` (list) in evidence-relations entries. When both are present, they are merged and deduplicated.
 
-Evidence is detected as report-derived when either its `claim_refs` list contains a `reported_claim` id, or the evidence entry itself is marked with `burden_profile: source_report` / `claim_kind: reported_claim`.
+Evidence is detected as report-derived when either its `claim_refs` list contains a `reported_claim` id, or the evidence entry itself is marked with `burden_profile: source_report` / `claim_kind: reported_claim`. For direct source-report evidence without a reported claim ref, provenance must reference the specific evidence id via `premise_evidence_refs`.
 
 ## Rationale
 
@@ -186,9 +186,9 @@ The validator `validate_reported_claim_world_effect.py` enforces this discipline
 1. For each `reported_claim` or `source_report`-burden claim.
 2. For each strong relation (strength ≥ 0.6) using report-derived evidence.
    - Both `evidence_ref` (singular) and `evidence_refs` (list) are supported.
-3. Check inference-ledger.yml (top-level or nested inference_steps) for `reported_to_world`.
-4. Check argument-provenance.yml for a valid argument entry with `reported_to_world` and an `allowed_effect` that is compatible with the relation type and strength.
-5. For major-effect relations at strength ≥ 0.75, require `major_with_independent_support` plus independent support source refs.
+3. Check inference-ledger.yml (top-level or nested inference_steps) for `reported_to_world` plus matching premises (`premise_claim_refs` or `premise_evidence_refs` for direct source-report evidence).
+4. Check argument-provenance.yml for a valid argument entry with `reported_to_world` and matching premises (`premise_claim_refs` or `premise_evidence_refs`).
+5. For major-effect relations at strength ≥ 0.75, require `major_with_independent_support` plus independent support source refs in whichever artifact is used.
 6. If neither: Emit error.
 
 This blocks the semantic shortcut early, at framework level, before case content diverges.

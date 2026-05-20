@@ -26,6 +26,12 @@ WORLD_CLAIM_TYPES = {
     "beneficiary_claim",
     "factual_event_claim",
     "statistical_claim",
+    "legal_claim",
+    "capability_claim",
+    "suppression_claim",
+    "forecast_claim",
+    "value_claim",
+    "absence_claim",
 }
 
 STRONG_EFFECT_RELATIONS = {
@@ -54,8 +60,12 @@ MAJOR_EFFECT_THRESHOLD = 0.75
 DIRECT_REPORTED_EVIDENCE_MARKER = "_direct_reported_evidence_marker"
 
 
+# (marker, evidence_id_for_direct_marker)
+ProvenanceToken = Tuple[str, Optional[str]]
+
+
 def load_yaml_file(path: Path) -> Tuple[Dict[str, Any], Optional[str]]:
-    """Load a YAML file as an object, returning a parse error instead of swallowing it."""
+    """Load YAML and return (content, error_message)."""
     if not path.exists():
         return {}, None
     try:
@@ -126,57 +136,87 @@ def parse_strength(
         )
 
 
-def reported_claim_markers(
-    evidence: Dict[str, Any], claims_by_id: Dict[str, Dict[str, Any]]
-) -> List[str]:
-    markers: List[str] = []
+def is_major_relation(relation_type: str, strength: float) -> bool:
+    return relation_type in MAJOR_EFFECT_RELATIONS and strength >= MAJOR_EFFECT_THRESHOLD
+
+
+def evidence_provenance_tokens(
+    evidence: Dict[str, Any],
+    evidence_id: str,
+    claims_by_id: Dict[str, Dict[str, Any]],
+) -> List[ProvenanceToken]:
+    tokens: List[ProvenanceToken] = []
+
     claim_refs = evidence.get("claim_refs", [])
     if isinstance(claim_refs, list):
         for ref in claim_refs:
             if isinstance(ref, str) and is_reported_claim(claims_by_id, ref):
-                markers.append(ref)
+                tokens.append((ref, None))
 
     if (
         evidence.get("burden_profile") == "source_report"
         or evidence.get("claim_kind") == "reported_claim"
-    ) and not markers:
-        markers.append(DIRECT_REPORTED_EVIDENCE_MARKER)
+    ) and not tokens:
+        tokens.append((DIRECT_REPORTED_EVIDENCE_MARKER, evidence_id))
 
-    seen: Set[str] = set()
-    deduped: List[str] = []
-    for marker in markers:
-        if marker not in seen:
-            seen.add(marker)
-            deduped.append(marker)
+    seen: Set[ProvenanceToken] = set()
+    deduped: List[ProvenanceToken] = []
+    for token in tokens:
+        if token not in seen:
+            seen.add(token)
+            deduped.append(token)
     return deduped
 
 
 def provenance_matches_premises(
-    premises: Any, reported_claim_marker: str
+    premise_claim_refs: Any,
+    premise_evidence_refs: Any,
+    token: ProvenanceToken,
 ) -> bool:
-    if reported_claim_marker == DIRECT_REPORTED_EVIDENCE_MARKER:
-        return True
-    return isinstance(premises, list) and reported_claim_marker in premises
+    marker, direct_evidence_id = token
+    if marker == DIRECT_REPORTED_EVIDENCE_MARKER:
+        return isinstance(premise_evidence_refs, list) and direct_evidence_id in premise_evidence_refs
+    return isinstance(premise_claim_refs, list) and marker in premise_claim_refs
+
+
+def has_required_major_effect_support(obj: Dict[str, Any]) -> bool:
+    allowed_effect = obj.get("allowed_effect", "")
+    independent_support = obj.get("independent_support_source_refs", [])
+    has_independent_support = isinstance(independent_support, list) and bool(independent_support)
+    return (
+        allowed_effect == "major_with_independent_support"
+        and has_independent_support
+    )
 
 
 def has_inference_provenance(
-    inference_ledger: Dict[str, Any], world_claim_id: str, reported_claim_marker: str
+    inference_ledger: Dict[str, Any],
+    world_claim_id: str,
+    token: ProvenanceToken,
+    relation_type: str,
+    strength: float,
 ) -> bool:
     inferences = inference_ledger.get("inferences", [])
     if not isinstance(inferences, list):
         return False
 
+    major_relation = is_major_relation(relation_type, strength)
+
     for inference in inferences:
         if not isinstance(inference, dict) or inference.get("claim_ref") != world_claim_id:
             continue
 
-        top_premises = inference.get("premise_claim_refs", [])
+        top_claim_premises = inference.get("premise_claim_refs", [])
+        top_evidence_premises = inference.get("premise_evidence_refs", [])
         top_checks = get_forbidden_upgrade_checks(inference)
         if (
-            provenance_matches_premises(top_premises, reported_claim_marker)
+            provenance_matches_premises(top_claim_premises, top_evidence_premises, token)
             and "reported_to_world" in top_checks
         ):
-            return True
+            if major_relation and not has_required_major_effect_support(inference):
+                pass
+            else:
+                return True
 
         steps = inference.get("inference_steps", [])
         if not isinstance(steps, list):
@@ -184,12 +224,15 @@ def has_inference_provenance(
         for step in steps:
             if not isinstance(step, dict):
                 continue
-            step_premises = step.get("premise_claim_refs", [])
+            step_claim_premises = step.get("premise_claim_refs", [])
+            step_evidence_premises = step.get("premise_evidence_refs", [])
             step_checks = get_forbidden_upgrade_checks(step)
             if (
-                provenance_matches_premises(step_premises, reported_claim_marker)
+                provenance_matches_premises(step_claim_premises, step_evidence_premises, token)
                 and "reported_to_world" in step_checks
             ):
+                if major_relation and not has_required_major_effect_support(step):
+                    continue
                 return True
 
     return False
@@ -198,7 +241,7 @@ def has_inference_provenance(
 def has_argument_provenance(
     argument_provenance: Dict[str, Any],
     world_claim_id: str,
-    reported_claim_marker: str,
+    token: ProvenanceToken,
     relation_type: str,
     strength: float,
 ) -> bool:
@@ -206,34 +249,32 @@ def has_argument_provenance(
     if not isinstance(arguments, list):
         return False
 
-    major_relation = (
-        relation_type in MAJOR_EFFECT_RELATIONS and strength >= MAJOR_EFFECT_THRESHOLD
-    )
+    major_relation = is_major_relation(relation_type, strength)
 
     for arg in arguments:
         if not isinstance(arg, dict) or arg.get("target_claim_ref") != world_claim_id:
             continue
-        premises = arg.get("premise_claim_refs", [])
-        if not provenance_matches_premises(premises, reported_claim_marker):
+
+        premise_claim_refs = arg.get("premise_claim_refs", [])
+        premise_evidence_refs = arg.get("premise_evidence_refs", [])
+        if not provenance_matches_premises(premise_claim_refs, premise_evidence_refs, token):
             continue
+
         checks = get_forbidden_upgrade_checks(arg)
         if "reported_to_world" not in checks:
             continue
 
-        allowed_effect = arg.get("allowed_effect", "")
-        independent_support = arg.get("independent_support_source_refs", [])
-        has_independent_support = isinstance(independent_support, list) and bool(independent_support)
-
         if major_relation:
-            if allowed_effect != "major_with_independent_support":
-                continue
-            if not has_independent_support:
+            if not has_required_major_effect_support(arg):
                 continue
             return True
 
-        if allowed_effect == "major_with_independent_support" and not has_independent_support:
-            continue
-        if allowed_effect in {"non_decisive", "uncertainty_only", "major_with_independent_support"}:
+        allowed_effect = arg.get("allowed_effect", "")
+        if allowed_effect == "major_with_independent_support":
+            if not has_required_major_effect_support(arg):
+                continue
+            return True
+        if allowed_effect in {"non_decisive", "uncertainty_only"}:
             return True
 
     return False
@@ -292,18 +333,10 @@ def validate_case(case_dir: Path) -> List[str]:
         if not isinstance(relation, dict):
             continue
 
-        relation_id = relation.get("relation_id", "unknown")
+        relation_id = str(relation.get("relation_id", "unknown"))
         claim_ref = relation.get("claim_ref", "")
         relation_type = relation.get("relation_type", "")
-        strength_value, strength_error = parse_strength(
-            relations_file, str(relation_id), relation.get("strength")
-        )
-        if strength_error:
-            errors.append(strength_error)
-            continue
 
-        if strength_value < STRENGTH_THRESHOLD:
-            continue
         if relation_type not in STRONG_EFFECT_RELATIONS:
             continue
         if not isinstance(claim_ref, str) or not is_world_claim(claims_by_id, claim_ref):
@@ -311,42 +344,54 @@ def validate_case(case_dir: Path) -> List[str]:
 
         evidence_ids = get_evidence_refs(relation)
         report_derived_ids: List[str] = []
-        report_markers: List[str] = []
+        tokens: List[ProvenanceToken] = []
         for evidence_id in evidence_ids:
             evidence = evidence_by_id.get(evidence_id)
             if not evidence:
                 continue
-            markers = reported_claim_markers(evidence, claims_by_id)
-            if markers:
+            evidence_tokens = evidence_provenance_tokens(evidence, evidence_id, claims_by_id)
+            if evidence_tokens:
                 report_derived_ids.append(evidence_id)
-                report_markers.extend(markers)
+                tokens.extend(evidence_tokens)
 
         if not report_derived_ids:
             continue
 
-        unique_markers: List[str] = []
-        seen_markers: Set[str] = set()
-        for marker in report_markers:
-            if marker not in seen_markers:
-                seen_markers.add(marker)
-                unique_markers.append(marker)
+        strength_value, strength_error = parse_strength(
+            relations_file, relation_id, relation.get("strength")
+        )
+        if strength_error:
+            errors.append(strength_error)
+            continue
+        if strength_value is None or strength_value < STRENGTH_THRESHOLD:
+            continue
 
-        has_valid_provenance = False
-        for marker in unique_markers:
-            if has_inference_provenance(inference_ledger, claim_ref, marker):
-                has_valid_provenance = True
-                break
-            if has_argument_provenance(
-                argument_provenance,
+        unique_tokens: List[ProvenanceToken] = []
+        seen_tokens: Set[ProvenanceToken] = set()
+        for token in tokens:
+            if token not in seen_tokens:
+                seen_tokens.add(token)
+                unique_tokens.append(token)
+
+        all_markers_valid = all(
+            has_inference_provenance(
+                inference_ledger,
                 claim_ref,
-                marker,
+                token,
                 str(relation_type),
                 strength_value,
-            ):
-                has_valid_provenance = True
-                break
+            )
+            or has_argument_provenance(
+                argument_provenance,
+                claim_ref,
+                token,
+                str(relation_type),
+                strength_value,
+            )
+            for token in unique_tokens
+        )
 
-        if has_valid_provenance:
+        if all_markers_valid:
             continue
 
         evidence_str = ", ".join(report_derived_ids)
