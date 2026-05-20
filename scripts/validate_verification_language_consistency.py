@@ -43,6 +43,10 @@ POSITIVE_VERIFICATION_PATTERNS = [
 NEGATION_PATTERNS = [
     "nicht extern verifiziert",
     "nicht verifiziert",
+    "nicht extern geprüft",
+    "nicht extern geprueft",
+    "nicht unabhängig geprüft",
+    "nicht unabhaengig geprueft",
     "not externally verified",
     "not verified",
     "not independently verified",

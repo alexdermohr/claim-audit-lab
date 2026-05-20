@@ -215,6 +215,18 @@ def test_not_externally_verified_sentence_passes(tmp_path):
     assert result == 0, "Expected pass: negated verification statement should not be flagged"
 
 
+def test_nicht_extern_geprueft_passes(tmp_path):
+    """German negated verification phrase must not be flagged in background-only mode."""
+    _write_case(
+        tmp_path,
+        case_id="pass-negated-german-verification",
+        receipt_data=_receipt(background_only=True),
+        assessment_text="Nicht extern geprüft.",
+    )
+    result = validate_verification_language_consistency.main(str(tmp_path / "cases"))
+    assert result == 0, "Expected pass: 'Nicht extern geprüft.' is a disciplined negation, not positive verification"
+
+
 def test_background_only_with_disciplined_absence_language_passes(tmp_path):
     """background_knowledge_only: true + disciplined absence language → pass."""
     _write_case(
