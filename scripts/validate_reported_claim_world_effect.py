@@ -51,7 +51,7 @@ MAJOR_EFFECT_RELATIONS = {
 
 STRENGTH_THRESHOLD = 0.6
 MAJOR_EFFECT_THRESHOLD = 0.75
-DIRECT_REPORTED_EVIDENCE = "__direct_reported_evidence__"
+DIRECT_REPORTED_EVIDENCE_MARKER = "_direct_reported_evidence_marker"
 
 
 def load_yaml_file(path: Path) -> Tuple[Dict[str, Any], Optional[str]]:
@@ -140,7 +140,7 @@ def reported_claim_markers(
         evidence.get("burden_profile") == "source_report"
         or evidence.get("claim_kind") == "reported_claim"
     ) and not markers:
-        markers.append(DIRECT_REPORTED_EVIDENCE)
+        markers.append(DIRECT_REPORTED_EVIDENCE_MARKER)
 
     seen: Set[str] = set()
     deduped: List[str] = []
@@ -154,7 +154,7 @@ def reported_claim_markers(
 def provenance_matches_premises(
     premises: Any, reported_claim_marker: str
 ) -> bool:
-    if reported_claim_marker == DIRECT_REPORTED_EVIDENCE:
+    if reported_claim_marker == DIRECT_REPORTED_EVIDENCE_MARKER:
         return True
     return isinstance(premises, list) and reported_claim_marker in premises
 
