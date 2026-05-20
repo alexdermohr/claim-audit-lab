@@ -23,7 +23,7 @@ a reported_claim id. Evidence without claim_refs is not checked.
 
 import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Set
 
 try:
     import yaml
@@ -84,7 +84,7 @@ def get_evidence_refs(relation: Dict[str, Any]) -> List[str]:
     plural = relation.get("evidence_refs", [])
     if isinstance(plural, list):
         refs.extend(plural)
-    seen: set = set()
+    seen: Set[str] = set()
     result: List[str] = []
     for ref in refs:
         if ref not in seen:
