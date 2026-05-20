@@ -130,6 +130,8 @@ Absence-language trigger terms (for example "nicht nachgewiesen", "kein Nachweis
 
 In schema v1, `absence_scope` is represented as a string field, not an object.
 
+Object-shaped `absence_scope` is deferred to a later schema version.
+
 Strong closure for absence claims (`established` or `strongly_supported`) requires explicit exhaustivity markers and `evidence_refs` that show what was searched.
 
 `forbidden_upgrades` must include `absence_of_evidence_to_falsehood` for absence claims.

@@ -116,6 +116,24 @@ def test_error_message_includes_reviewer_and_verdict(tmp_path):
     assert "passed_with_notes" in output
 
 
+def test_empty_reviewer_with_pass_verdict_fails(tmp_path):
+    """reviewer: '' + verdict.status: passed_with_notes must fail without independence metadata."""
+    from io import StringIO
+    import contextlib
+
+    data = _base_redteam(reviewer="", verdict={"status": "passed_with_notes"})
+    _write_case(tmp_path, data, case_id="case-empty-reviewer")
+
+    buf = StringIO()
+    with contextlib.redirect_stdout(buf):
+        result = validate_redteam_independence.main(str(tmp_path / "cases"))
+
+    assert result == 1
+    output = buf.getvalue()
+    assert "reviewer" in output or "<empty>" in output
+    assert "passed_with_notes" in output
+
+
 # ---------- Pass tests ----------
 
 

@@ -76,7 +76,7 @@ Top-level fields:
 Checks:
 1. Schema validity
 2. `claim_ref` exists in `claims.yml`
-3. Every step must have at least one non-empty `premise_evidence_ref` or `premise_claim_ref` (enforced by schema and validator).
+3. Every step must have at least one non-empty `premise_evidence_refs` or `premise_claim_refs` (enforced by schema and validator).
 4. `premise_evidence_refs` require `evidence-pack.yml` to be present; each ref must match an existing `evidence_id`.
 5. `premise_claim_refs` exist in `claims.yml`
 6. `inference_id` and `step_id` are case-locally unique

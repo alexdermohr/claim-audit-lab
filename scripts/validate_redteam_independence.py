@@ -96,7 +96,7 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
 
     verdict = data.get("verdict") or {}
     verdict_status = verdict.get("status", "")
-    reviewer = data.get("reviewer") or ""
+    reviewer = data.get("reviewer")
     reviewer_independence = data.get("reviewer_independence")
     findings = data.get("findings") or []
 
@@ -116,11 +116,12 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
                 )
     else:
         # Fallback heuristic on reviewer string
-        if reviewer and _is_non_independent_reviewer(reviewer):
+        reviewer_str = str(reviewer or "")
+        if _is_non_independent_reviewer(reviewer_str):
             if verdict_status in PASS_STATUSES:
                 errors.append(
                     f"FAIL {rt_file}: verdict.status: "
-                    f"reviewer '{reviewer}' matches non-independent reviewer pattern "
+                    f"reviewer '{reviewer_str or '<empty>'}' matches non-independent reviewer pattern "
                     f"but verdict.status is '{verdict_status}'. "
                     f"Add reviewer_independence.status: self_review and change "
                     f"verdict.status to self_review_only (if no high findings) "

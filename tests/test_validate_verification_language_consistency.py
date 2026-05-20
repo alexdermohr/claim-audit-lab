@@ -156,6 +156,18 @@ def test_background_only_with_positive_language_in_assessment_fails(tmp_path):
     assert result == 1, "Expected failure: background-only with positive language in assessment.md"
 
 
+def test_negation_in_one_sentence_does_not_exempt_positive_claim_elsewhere(tmp_path):
+    """Negation in one sentence must not neutralize positive verification language in another."""
+    _write_case(
+        tmp_path,
+        case_id="fail-sentence-scoped-negation",
+        receipt_data=_receipt(background_only=True),
+        assessment_text="Not externally verified. Verified sources show no evidence.",
+    )
+    result = validate_verification_language_consistency.main(str(tmp_path / "cases"))
+    assert result == 1, "Expected failure: positive claim in separate sentence must still be flagged"
+
+
 # ---------- Pass tests ----------
 
 

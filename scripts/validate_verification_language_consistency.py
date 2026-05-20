@@ -87,15 +87,22 @@ def discover_case_dirs(root: pathlib.Path) -> list[pathlib.Path]:
     )
 
 
+def _iter_units(text: str) -> list[str]:
+    """Split text into sentence/line-sized units for local negation handling."""
+    parts = re.split(r"(?<=[.!?])\s+|\n+", text)
+    return [p for p in parts if p.strip()]
+
+
 def _has_positive_pattern(text: str) -> str | None:
     """Return the first matched positive verification pattern, or None."""
-    lower = text.lower()
-    for pat in POSITIVE_VERIFICATION_PATTERNS:
-        if pat in lower:
-            # Check if a negation pattern is also present in the same text
-            if any(neg in lower for neg in NEGATION_PATTERNS):
-                continue
-            return pat
+    for unit in _iter_units(text):
+        lower = unit.lower()
+        for pat in POSITIVE_VERIFICATION_PATTERNS:
+            if pat in lower:
+                # Negation only neutralises within the same sentence/line unit.
+                if any(neg in lower for neg in NEGATION_PATTERNS):
+                    continue
+                return pat
     return None
 
 
