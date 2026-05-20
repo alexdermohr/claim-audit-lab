@@ -98,6 +98,8 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
     verdict_status = verdict.get("status", "")
     reviewer = data.get("reviewer")
     reviewer_independence = data.get("reviewer_independence")
+    reviewer_str = str(reviewer or "")
+    reviewer_looks_non_independent = _is_non_independent_reviewer(reviewer_str)
     findings = data.get("findings") or []
 
     errors: list[str] = []
@@ -114,10 +116,19 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
                     f"Self-review or unknown reviewer cannot produce a pass verdict. "
                     f"Use self_review_only or pending_independent_review instead."
                 )
+        if reviewer_looks_non_independent and indep_status == "independent":
+            if verdict_status in PASS_STATUSES:
+                errors.append(
+                    f"FAIL {rt_file}: verdict.status: "
+                    f"reviewer '{reviewer_str or '<empty>'}' matches non-independent reviewer pattern "
+                    f"but reviewer_independence.status is '{indep_status}' and "
+                    f"verdict.status is '{verdict_status}'. "
+                    f"Non-independent reviewer identities cannot self-declare independent for pass verdicts. "
+                    f"Set reviewer_independence.status: self_review and use self_review_only or blocked."
+                )
     else:
         # Fallback heuristic on reviewer string
-        reviewer_str = str(reviewer or "")
-        if _is_non_independent_reviewer(reviewer_str):
+        if reviewer_looks_non_independent:
             if verdict_status in PASS_STATUSES:
                 errors.append(
                     f"FAIL {rt_file}: verdict.status: "

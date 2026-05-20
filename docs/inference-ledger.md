@@ -89,5 +89,5 @@ Checks:
 - The ledger is not a narrative. Each step should be one sentence in `produces`.
 - `uncertainty_preservation` is not defeat. Documenting an open question is stronger than hiding it in prose.
 - `comparison` is the highest-risk operation. The validator enforces that the author has checked `rival_weakness_to_own_proof`. A claim is not stronger because its rival is weaker; it is stronger because its own evidence chain is stronger.
-- A step without both premise types is invalid.
+- A step with neither `premise_evidence_refs` nor `premise_claim_refs` is invalid.
 - A ledger entry for a `weak` causal-chain claim will typically use `uncertainty_preservation` with `uncertainty_effect: preserves` — this is the correct honest record of a bounded but unresolved derivation.

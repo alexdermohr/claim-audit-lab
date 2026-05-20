@@ -168,6 +168,18 @@ def test_negation_in_one_sentence_does_not_exempt_positive_claim_elsewhere(tmp_p
     assert result == 1, "Expected failure: positive claim in separate sentence must still be flagged"
 
 
+def test_not_externally_verified_sentence_passes(tmp_path):
+    """A purely negated verification sentence is allowed in background-only mode."""
+    _write_case(
+        tmp_path,
+        case_id="pass-negated-english-verification",
+        receipt_data=_receipt(background_only=True),
+        assessment_text="Not externally verified.",
+    )
+    result = validate_verification_language_consistency.main(str(tmp_path / "cases"))
+    assert result == 0, "Expected pass: negated verification statement should not be flagged"
+
+
 # ---------- Pass tests ----------
 
 
