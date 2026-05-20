@@ -38,7 +38,6 @@ A claim that A causes B.
 
 ---
 
-### `motive_claim`
 ### `comparative_claim`
 A claim comparing the probability, likelihood, or strength of two or more hypotheses.
 

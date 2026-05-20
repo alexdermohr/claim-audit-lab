@@ -4,13 +4,13 @@ Validate that comparative probability claims are correctly typed.
 
 Comparative claims (P(A) > P(B), "more likely than", etc.) must be typed
 as `claim_kind: comparative_claim` or `burden_profile: comparative` and must
-declare `comparative_probability` in their requirements.
+declare `comparative_probability` in their requirements (unless burden_profile
+is already set to `comparative`, which serves as the declaration).
 
 This prevents the error class: comparative language → simple causal_claim.
 """
 
 import sys
-import os
 import re
 from pathlib import Path
 from typing import Dict, List, Any
@@ -52,12 +52,20 @@ def has_comparative_language(text: str) -> bool:
     return any(re.search(pattern, text_lower) for pattern in COMPARATIVE_PATTERNS)
 
 
+def discover_case_dirs(root: Path) -> List[Path]:
+    """Discover case directories containing claims.yml, skipping _template."""
+    return sorted({
+        marker.parent for marker in root.rglob("claims.yml")
+        if "_template" not in marker.parts
+    })
+
+
 def validate_case(case_dir: Path) -> List[str]:
     """
     Validate claims in a single case directory.
     Returns list of error messages (empty list if all valid).
     """
-    errors = []
+    errors: List[str] = []
     claims_file = case_dir / "claims.yml"
 
     if not claims_file.exists():
@@ -112,12 +120,7 @@ def validate_case(case_dir: Path) -> List[str]:
             and "comparative_probability" in requires
         )
 
-        if is_comparative_kind or is_comparative_burden:
-            # Type is correct. Check that it also declares the requirement.
-            if not has_comp_requirement:
-                # Warn but don't fail—type is correct, just missing requirement declaration
-                pass
-        else:
+        if not (is_comparative_kind or is_comparative_burden):
             # Comparative language detected but claim is not typed as comparative
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "
@@ -126,37 +129,49 @@ def validate_case(case_dir: Path) -> List[str]:
                 f"and burden_profile={burden_profile!r} is not 'comparative'. "
                 f"Expected: claim_kind='comparative_claim' or burden_profile='comparative'."
             )
+        elif is_comparative_kind and not is_comparative_burden and not has_comp_requirement:
+            # Type is comparative_claim but requires is missing comparative_probability
+            # (burden_profile=comparative already serves as the declaration)
+            errors.append(
+                f"{claims_file} claim_id={claim_id}: "
+                f"claim_kind='comparative_claim' but 'comparative_probability' is not "
+                f"declared in 'requires' and burden_profile is not 'comparative'. "
+                f"Add 'comparative_probability' to requires, "
+                f"or set burden_profile='comparative'."
+            )
 
     return errors
 
 
-def main():
+def main() -> int:
     if len(sys.argv) < 2:
         print("Usage: validate_comparative_claim_profile.py <cases_dir>", file=sys.stderr)
-        sys.exit(1)
+        return 1
 
     cases_dir = Path(sys.argv[1])
 
     if not cases_dir.is_dir():
         print(f"ERROR: {cases_dir} is not a directory", file=sys.stderr)
-        sys.exit(1)
+        return 1
 
-    all_errors = []
+    case_dirs = discover_case_dirs(cases_dir)
+    if not case_dirs:
+        print(f"No claims.yml files found under {cases_dir}")
+        return 0
 
-    # Find all case directories (those containing claims.yml)
-    for case_path in sorted(cases_dir.rglob("claims.yml")):
-        case_dir = case_path.parent
+    all_errors: List[str] = []
+    for case_dir in case_dirs:
         errors = validate_case(case_dir)
         all_errors.extend(errors)
 
     if all_errors:
         for error in all_errors:
             print(error)
-        sys.exit(1)
-    else:
-        print("All comparative-claim profiles valid.")
-        sys.exit(0)
+        return 1
+
+    print("All comparative-claim profiles valid.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

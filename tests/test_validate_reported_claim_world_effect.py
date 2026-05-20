@@ -4,11 +4,12 @@ Tests for validate_reported_claim_world_effect.py
 """
 
 import pytest
-import tempfile
 from pathlib import Path
 import yaml
 import subprocess
 import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture
@@ -34,7 +35,7 @@ def run_validator(cases_dir: Path) -> tuple[int, str]:
             "scripts/validate_reported_claim_world_effect.py",
             str(cases_dir),
         ],
-        cwd="/home/alex/repos/claim-audit-lab",
+        cwd=REPO_ROOT,
         capture_output=True,
         text=True,
     )
@@ -453,3 +454,304 @@ class TestReportedClaimWorldEffect:
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "contradicts_directly" in output
+
+    def test_singular_evidence_ref_fails_without_provenance(self, tmp_path):
+        """Fail: singular evidence_ref (not evidence_refs) pointing to reported claim."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c001",
+                    "statement": "Controlled demolition caused collapse",
+                    "claim_kind": "causal_claim",
+                },
+                {
+                    "claim_id": "c002",
+                    "statement": "NIST reported fire collapse",
+                    "claim_kind": "reported_claim",
+                },
+            ]
+        }
+        evidence_data = {
+            "evidence": [
+                {
+                    "evidence_id": "e001",
+                    "claim_refs": ["c002"],
+                }
+            ]
+        }
+        # Use singular evidence_ref (real artifact format)
+        relations_data = {
+            "relations": [
+                {
+                    "relation_id": "r001",
+                    "claim_ref": "c001",
+                    "evidence_ref": "e001",
+                    "relation_type": "alternative_explanation",
+                    "strength": 0.74,
+                }
+            ]
+        }
+
+        write_yml_file(case_dir, "claims.yml", claims_data)
+        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
+        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r001" in output
+        assert "alternative_explanation" in output
+
+    def test_nested_inference_steps_with_singular_forbidden_upgrade_passes(self, tmp_path):
+        """Pass: inference-ledger with nested inference_steps and forbidden_upgrade_checked singular."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c001",
+                    "statement": "Controlled demolition",
+                    "claim_kind": "causal_claim",
+                },
+                {
+                    "claim_id": "c002",
+                    "statement": "NIST reported fire collapse",
+                    "claim_kind": "reported_claim",
+                },
+            ]
+        }
+        evidence_data = {
+            "evidence": [
+                {
+                    "evidence_id": "e001",
+                    "claim_refs": ["c002"],
+                }
+            ]
+        }
+        relations_data = {
+            "relations": [
+                {
+                    "relation_id": "r001",
+                    "claim_ref": "c001",
+                    "evidence_ref": "e001",
+                    "relation_type": "alternative_explanation",
+                    "strength": 0.74,
+                }
+            ]
+        }
+        # Nested inference_steps with singular forbidden_upgrade_checked (real artifact format)
+        inference_data = {
+            "inferences": [
+                {
+                    "inference_id": "inf001",
+                    "claim_ref": "c001",
+                    "triggered_by": "strong_positive_verdict",
+                    "inference_steps": [
+                        {
+                            "step_id": "step001",
+                            "premise_claim_refs": ["c002"],
+                            "operation": "corroboration",
+                            "produces": "NIST engineering assessment used as world argument with justification",
+                            "forbidden_upgrade_checked": ["reported_to_world"],
+                        }
+                    ],
+                }
+            ]
+        }
+
+        write_yml_file(case_dir, "claims.yml", claims_data)
+        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
+        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
+        write_yml_file(case_dir, "inference-ledger.yml", inference_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0
+
+    def test_argument_provenance_passes(self, tmp_path):
+        """Pass: argument-provenance.yml with forbidden_upgrades_checked=[reported_to_world]."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c001",
+                    "statement": "Controlled demolition",
+                    "claim_kind": "causal_claim",
+                },
+                {
+                    "claim_id": "c002",
+                    "statement": "NIST reported fire collapse",
+                    "claim_kind": "reported_claim",
+                },
+            ]
+        }
+        evidence_data = {
+            "evidence": [
+                {
+                    "evidence_id": "e001",
+                    "claim_refs": ["c002"],
+                }
+            ]
+        }
+        relations_data = {
+            "relations": [
+                {
+                    "relation_id": "r001",
+                    "claim_ref": "c001",
+                    "evidence_refs": ["e001"],
+                    "relation_type": "alternative_explanation",
+                    "strength": 0.74,
+                }
+            ]
+        }
+        provenance_data = {
+            "arguments": [
+                {
+                    "argument_id": "arg001",
+                    "target_claim_ref": "c001",
+                    "premise_claim_refs": ["c002"],
+                    "role": "non_decisive_defeater",
+                    "allowed_effect": "non_decisive",
+                    "forbidden_upgrades_checked": ["reported_to_world"],
+                }
+            ]
+        }
+
+        write_yml_file(case_dir, "claims.yml", claims_data)
+        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
+        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
+        write_yml_file(case_dir, "argument-provenance.yml", provenance_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0
+
+    def test_argument_provenance_major_with_empty_independent_support_fails(self, tmp_path):
+        """Fail: argument-provenance.yml with major_with_independent_support but empty independent_support_source_refs."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c001",
+                    "statement": "Controlled demolition",
+                    "claim_kind": "causal_claim",
+                },
+                {
+                    "claim_id": "c002",
+                    "statement": "NIST reported fire collapse",
+                    "claim_kind": "reported_claim",
+                },
+            ]
+        }
+        evidence_data = {
+            "evidence": [
+                {
+                    "evidence_id": "e001",
+                    "claim_refs": ["c002"],
+                }
+            ]
+        }
+        relations_data = {
+            "relations": [
+                {
+                    "relation_id": "r001",
+                    "claim_ref": "c001",
+                    "evidence_refs": ["e001"],
+                    "relation_type": "alternative_explanation",
+                    "strength": 0.74,
+                }
+            ]
+        }
+        provenance_data = {
+            "arguments": [
+                {
+                    "argument_id": "arg001",
+                    "target_claim_ref": "c001",
+                    "premise_claim_refs": ["c002"],
+                    "role": "major_defeater",
+                    "allowed_effect": "major_with_independent_support",
+                    "forbidden_upgrades_checked": ["reported_to_world"],
+                    "independent_support_source_refs": [],  # empty → invalid
+                }
+            ]
+        }
+
+        write_yml_file(case_dir, "claims.yml", claims_data)
+        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
+        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
+        write_yml_file(case_dir, "argument-provenance.yml", provenance_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r001" in output
+
+    def test_inference_ledger_exists_but_missing_reported_to_world_fails(self, tmp_path):
+        """Fail: inference-ledger.yml exists but does not check reported_to_world."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c001",
+                    "statement": "Controlled demolition",
+                    "claim_kind": "causal_claim",
+                },
+                {
+                    "claim_id": "c002",
+                    "statement": "NIST reported fire collapse",
+                    "claim_kind": "reported_claim",
+                },
+            ]
+        }
+        evidence_data = {
+            "evidence": [
+                {
+                    "evidence_id": "e001",
+                    "claim_refs": ["c002"],
+                }
+            ]
+        }
+        relations_data = {
+            "relations": [
+                {
+                    "relation_id": "r001",
+                    "claim_ref": "c001",
+                    "evidence_refs": ["e001"],
+                    "relation_type": "alternative_explanation",
+                    "strength": 0.74,
+                }
+            ]
+        }
+        # Inference entry for the right claim but wrong forbidden_upgrade check
+        inference_data = {
+            "inferences": [
+                {
+                    "inference_id": "inf001",
+                    "claim_ref": "c001",
+                    "inference_steps": [
+                        {
+                            "step_id": "step001",
+                            "premise_claim_refs": ["c002"],
+                            "operation": "corroboration",
+                            "produces": "Some justification",
+                            "forbidden_upgrade_checked": ["source_prestige_to_truth"],  # wrong check
+                        }
+                    ],
+                }
+            ]
+        }
+
+        write_yml_file(case_dir, "claims.yml", claims_data)
+        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
+        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
+        write_yml_file(case_dir, "inference-ledger.yml", inference_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r001" in output

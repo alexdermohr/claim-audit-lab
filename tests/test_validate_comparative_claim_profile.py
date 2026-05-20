@@ -4,11 +4,12 @@ Tests for validate_comparative_claim_profile.py
 """
 
 import pytest
-import tempfile
 from pathlib import Path
 import yaml
 import subprocess
 import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture
@@ -30,7 +31,7 @@ def run_validator(cases_dir: Path) -> tuple[int, str]:
     """Run the validator and return exit code and output."""
     result = subprocess.run(
         [sys.executable, "scripts/validate_comparative_claim_profile.py", str(cases_dir)],
-        cwd="/home/alex/repos/claim-audit-lab",
+        cwd=REPO_ROOT,
         capture_output=True,
         text=True,
     )
@@ -86,7 +87,7 @@ class TestComparativeClaimProfile:
         assert "c002" in output
 
     def test_comparative_claim_kind_passes(self, tmp_path):
-        """Pass: causal_claim with comparative language but claim_kind=comparative_claim."""
+        """Pass: claim_kind=comparative_claim with comparative_probability in requires."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
 
@@ -97,6 +98,7 @@ class TestComparativeClaimProfile:
                     "statement": "P(A) > P(B)",
                     "claim_type": "causal_claim",
                     "claim_kind": "comparative_claim",
+                    "requires": ["comparative_probability"],
                 }
             ]
         }
@@ -236,3 +238,67 @@ class TestComparativeClaimProfile:
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "c_case" in output
+
+    def test_comparative_claim_kind_without_comparative_probability_requirement_fails(self, tmp_path):
+        """Fail: claim_kind=comparative_claim, requires missing comparative_probability, burden_profile not comparative."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c_req_fail",
+                    "statement": "P(A) > P(B)",
+                    "claim_kind": "comparative_claim",
+                    "requires": ["timeline", "mechanism"],  # no comparative_probability
+                }
+            ]
+        }
+        write_claims_yml(case_dir, claims_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "c_req_fail" in output
+        assert "comparative_probability" in output
+
+    def test_burden_profile_comparative_passes_without_requires(self, tmp_path):
+        """Pass: burden_profile=comparative serves as declaration; no comparative_probability in requires needed."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c_burden_ok",
+                    "statement": "More likely than the fire hypothesis",
+                    "claim_type": "causal_claim",
+                    "claim_kind": "causal_claim",
+                    "burden_profile": "comparative",
+                    "requires": [],  # no comparative_probability — ok because burden_profile=comparative
+                }
+            ]
+        }
+        write_claims_yml(case_dir, claims_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0
+
+    def test_comparative_claim_kind_with_comparative_probability_in_requires_passes(self, tmp_path):
+        """Pass: claim_kind=comparative_claim + requires=[comparative_probability]."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+
+        claims_data = {
+            "claims": [
+                {
+                    "claim_id": "c_req_ok",
+                    "statement": "P(A) > P(B)",
+                    "claim_kind": "comparative_claim",
+                    "requires": ["comparative_probability", "two_alternatives"],
+                }
+            ]
+        }
+        write_claims_yml(case_dir, claims_data)
+
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0

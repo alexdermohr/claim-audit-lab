@@ -46,6 +46,10 @@ Then one of the following must exist:
 
 ### Option 1: Inference Ledger Entry
 
+The validator supports two formats within `inference-ledger.yml`:
+
+**Top-level form** (direct premise declaration):
+
 ```yaml
 inferences:
   - claim_ref: <world_claim>
@@ -56,9 +60,26 @@ inferences:
     inference_type: direct_premise
 ```
 
-The `forbidden_upgrades_checked: [reported_to_world]` field explicitly asserts that the author has considered and justified why a source position is being used as a strong world argument.
+**Nested form** (using `inference_steps`, the standard case artifact format):
 
-### Option 2: Argument Provenance Entry (optional in this PR)
+```yaml
+inferences:
+  - claim_ref: <world_claim>
+    inference_steps:
+      - step_id: "step001"
+        premise_claim_refs:
+          - <reported_claim_id>
+        forbidden_upgrade_checked:
+          - reported_to_world
+        operation: corroboration
+        produces: "Justification for using reported claim as world argument"
+```
+
+Both `forbidden_upgrades_checked` (plural) and `forbidden_upgrade_checked` (singular) are accepted in either format.
+
+The presence of `reported_to_world` in the checks explicitly asserts that the author has considered and justified why a source position is being used as a strong world argument.
+
+### Option 2: Argument Provenance Entry
 
 When a single `inference-ledger.yml` entry is insufficient, an optional `argument-provenance.yml` can document the full argument structure:
 
@@ -77,6 +98,16 @@ arguments:
       - reported_to_world
     independent_support_source_refs: [...]  # required if allowed_effect: major_with_independent_support
 ```
+
+Both `forbidden_upgrades_checked` (plural) and `forbidden_upgrade_checked` (singular) are accepted.
+
+When `allowed_effect: major_with_independent_support`, `independent_support_source_refs` must be a non-empty list; otherwise the argument is not considered valid justification.
+
+## Evidence Field Support
+
+The validator supports both `evidence_ref` (singular string) and `evidence_refs` (list) in evidence-relations entries. When both are present, they are merged and deduplicated.
+
+**Limitation:** Evidence is only detected as report-derived when its `claim_refs` list contains a `reported_claim` id. Evidence entries without `claim_refs` are not checked.
 
 ## Rationale
 
@@ -149,11 +180,13 @@ The validator `validate_reported_claim_world_effect.py` enforces this discipline
 
 1. For each `reported_claim` or `source_report`-burden claim.
 2. For each strong relation (strength ≥ 0.6) using report-derived evidence.
-3. Check: Does `inference-ledger.yml` have an entry with `reported_to_world` checked?
-4. If not: Emit error.
+   - Both `evidence_ref` (singular) and `evidence_refs` (list) are supported.
+3. Check inference-ledger.yml (top-level or nested inference_steps) for `reported_to_world`.
+4. Check argument-provenance.yml for a valid argument entry with `reported_to_world`.
+5. If neither: Emit error.
 
 This blocks the semantic shortcut early, at framework level, before case content diverges.
 
 ## Evolution
 
-This discipline is not a permanent schema requirement. As the framework matures, cases may graduate to using `argument-provenance.yml` for fine-grained argument provenance tracking. For now, `inference-ledger.yml` + `forbidden_upgrades_checked` is the minimal gate.
+This discipline is not a permanent schema requirement. As the framework matures, cases may graduate to using `argument-provenance.yml` for fine-grained argument provenance tracking. Both `inference-ledger.yml` and `argument-provenance.yml` are supported as justification mechanisms.
