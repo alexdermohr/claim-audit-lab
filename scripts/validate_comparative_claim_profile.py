@@ -107,6 +107,8 @@ def validate_case(case_dir: Path) -> List[str]:
             isinstance(requires, list) and "comparative_probability" in requires
         )
 
+        # Consistency gate for explicit comparative typing, independent of
+        # comparative-language regex detection.
         if is_comparative_kind and not is_comparative_burden and not has_comp_requirement:
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "
@@ -119,6 +121,8 @@ def validate_case(case_dir: Path) -> List[str]:
         if not has_comparative:
             continue
 
+        # Language-detection gate: comparative wording must be represented in
+        # typing/burden metadata.
         if not (is_comparative_kind or is_comparative_burden):
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "

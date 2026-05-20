@@ -49,6 +49,9 @@ STRONG_EFFECT_RELATIONS = {
 MAJOR_EFFECT_RELATIONS = {
     *STRONG_EFFECT_RELATIONS,
 }
+# For high-strength relations (>= MAJOR_EFFECT_THRESHOLD), all strong-effect relation
+# types are treated as major effects to prevent semantic bypass via relation-label
+# switching (for example, high-strength `weakens` instead of `contradicts`).
 
 STRENGTH_THRESHOLD = 0.6
 MAJOR_EFFECT_THRESHOLD = 0.75
@@ -100,6 +103,12 @@ def get_forbidden_upgrade_checks(obj: Dict[str, Any]) -> List[str]:
     if isinstance(singular, list):
         checks.update(item for item in singular if isinstance(item, str))
     return list(checks)
+
+
+def normalize_source_refs(refs: Any) -> Set[str]:
+    if not isinstance(refs, list):
+        return set()
+    return {src for src in refs if isinstance(src, str) and src}
 
 
 def is_reported_claim(claims_by_id: Dict[str, Dict[str, Any]], claim_id: str) -> bool:
@@ -187,10 +196,8 @@ def get_major_effect_support_issue(obj: Dict[str, Any]) -> Optional[str]:
         return "independent_support_source_refs must be a non-empty list"
     origin_sources = obj.get("origin_source_refs")
     if isinstance(origin_sources, list):
-        independent_set = {
-            src for src in independent_support if isinstance(src, str) and src
-        }
-        origin_set = {src for src in origin_sources if isinstance(src, str) and src}
+        independent_set = normalize_source_refs(independent_support)
+        origin_set = normalize_source_refs(origin_sources)
         overlap = sorted(independent_set.intersection(origin_set))
         if overlap:
             return (
@@ -325,6 +332,11 @@ def describe_token(token: ProvenanceToken) -> str:
     return f"reported claim marker '{marker}' (requires premise_claim_refs match)"
 
 
+def deduplicate_preserving_order(items: List[str]) -> List[str]:
+    """Preserve first-seen order for stable, readable diagnostics."""
+    return list(dict.fromkeys(items))
+
+
 def discover_case_dirs(root: Path) -> List[Path]:
     return sorted({
         marker.parent for marker in root.rglob("claims.yml")
@@ -446,7 +458,7 @@ def validate_case(case_dir: Path) -> List[str]:
             token_desc = describe_token(token)
             missing_tokens.append(token_desc)
             if token_failures:
-                deduped_failures = list(dict.fromkeys(token_failures))
+                deduped_failures = deduplicate_preserving_order(token_failures)
                 marker_issues.append(f"{token_desc}: {'; '.join(deduped_failures)}")
 
         if not missing_tokens:
