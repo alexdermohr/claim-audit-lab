@@ -615,7 +615,6 @@ class TestReportedClaimWorldEffect:
         assert exit_code == 1
         assert "r_suppression" in output
 
-
     @pytest.mark.parametrize("claim_kind,relation_id", [
         ("capability_claim", "r_capability"),
         ("forecast_claim", "r_forecast"),

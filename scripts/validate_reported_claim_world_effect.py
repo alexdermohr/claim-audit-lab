@@ -64,7 +64,7 @@ ProvenanceToken = Tuple[str, Optional[str]]  # (marker, direct_evidence_id_or_no
 
 
 def load_yaml_file(path: Path) -> Tuple[Dict[str, Any], Optional[str]]:
-    """Load YAML and return (content, error_message) instead of raising parse exceptions."""
+    """Load YAML and return (content, error_message), with parse failures captured in error_message instead of raising."""
     if not path.exists():
         return {}, None
     try:
@@ -362,7 +362,9 @@ def validate_case(case_dir: Path) -> List[str]:
             continue
         # Strength parsing happens only after relation/target/report-derived relevance checks.
         # Keep this guard so invalid/missing strengths fail relevant strong-effect relations only.
-        if strength_value is None or strength_value < STRENGTH_THRESHOLD:
+        if strength_value is None:
+            continue
+        if strength_value < STRENGTH_THRESHOLD:
             continue
 
         unique_tokens: List[ProvenanceToken] = []
