@@ -1,0 +1,32 @@
+schema_version: "1.0"
+
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001", "c002"]
+    type: "official_statement"
+    summary: "NIST beschreibt den WTC-7-Kollaps als fire-induced progressive collapse und verneint Hinweise auf blast events als Kollapstreiber."
+    verbatim_or_ref: "NIST FAQ WTC 7, Abschnitte zum Collapse-Mechanismus und zu Alternative Theories (Blast/Thermite)."
+    supports: ["c002"]
+    contradicts: []
+    notes: "Diese Evidenz stuetzt eine offizielle Erklaerung und schwacht die Formulierung 'hohe' Sprengungswahrscheinlichkeit."
+
+  - evidence_id: "e002"
+    source_ref: "s002"
+    claim_refs: ["c001", "c003"]
+    type: "document_excerpt"
+    summary: "Die AE911Truth-Seite beschreibt die UAF-Position, wonach Feuer den Kollaps nicht verursacht habe und eine nahezu gleichzeitige Stuetzenversagenshypothese erforderlich sei."
+    verbatim_or_ref: "AE911Truth WTC 7 page, project summary and final-report positioning text."
+    supports: ["c003"]
+    contradicts: []
+    notes: "Positionsquelle aus Advocacy-Cluster; sie liefert eine relevante Gegenhypothese, aber keine alleinige Basis fuer 'hoch'."
+
+  - evidence_id: "e003"
+    source_ref: "s003"
+    claim_refs: ["c001", "c002"]
+    type: "other"
+    summary: "Der Hub fuer NIST-Final-Reports ist als Referenzpfad angelegt, wurde im Abruf jedoch nicht direkt validiert."
+    verbatim_or_ref: "Reference path for NCSTAR report entry point; retrieval issue observed."
+    supports: []
+    contradicts: []
+    notes: "Methodischer Hinweis auf Verifikationsluecke; erhoeht Unsicherheit, ohne die Richtung der vorhandenen Evidenz umzukehren."

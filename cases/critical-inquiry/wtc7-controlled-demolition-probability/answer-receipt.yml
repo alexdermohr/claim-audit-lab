@@ -1,0 +1,71 @@
+schema_version: "1.0"
+question: "Bewerte die Aussage: die Wahrscheinlichkeit, dass WTC 7 durch eine kontrollierte Sprengung statt durch den Brand eingestuerzt ist, ist hoch."
+task_classification: "case_building"
+answer_summary: "Aktuelle Einstufung im Case: c001=weak. Im erfassten Quellenpaket stehen sich NIST- und UAF/AE-Positionen gegenueber; fuer die starke Formulierung 'hoch' fehlt derzeit eine ausreichend robuste, clusterunabhaengige comparative Evidenzbasis. Kein Wahrheitszertifikat."
+verdicts_used:
+  - claim_id: "c001"
+    statement: "Die Wahrscheinlichkeit fuer kontrollierte Sprengung statt Brand sei hoch."
+    status: "weak"
+  - claim_id: "c002"
+    statement: "NIST berichtet fire-induced progressive collapse und keine tragfaehigen Blast-Hinweise als Kollapstreiber."
+    status: "plausible"
+  - claim_id: "c003"
+    statement: "UAF/AE-Position behauptet nicht-brandinduzierten Kollaps mit nahezu simultanem Stuetzenversagen."
+    status: "plausible"
+counterhypotheses_considered:
+  - statement: "Brandinduzierter progressiver Kollaps erklaert die beobachtete Sequenz besser als eine These hoher Sprengungswahrscheinlichkeit."
+    steelman_quality: 0.76
+    notes: "Technische Sequenzargumente in NIST-FAQ dokumentiert."
+  - statement: "Die Gegenhypothese kontrollierter Sprengung kann einzelne Beobachtungen adressieren, erreicht aber ohne breitere unabhängige Replikation nicht die Schwelle 'hoch'."
+    steelman_quality: 0.71
+    notes: "UAF/AE-Position als strongest form aufgenommen, ohne reported->world upgrade."
+forbidden_upgrades_check:
+  upgrades_considered:
+    - "correlation_to_causation"
+    - "source_prestige_to_truth"
+    - "suspicion_to_proof"
+    - "absence_of_evidence_to_falsehood"
+    - "reported_to_world"
+    - "majority_to_independent"
+    - "count_to_corroboration"
+  upgrades_blocked:
+    - "correlation_to_causation"
+    - "source_prestige_to_truth"
+    - "suspicion_to_proof"
+    - "absence_of_evidence_to_falsehood"
+    - "reported_to_world"
+    - "majority_to_independent"
+    - "count_to_corroboration"
+banned_phrases_self_scan:
+  scanned: true
+  hits: []
+source_cluster_audit:
+  clusters_identified:
+    - cluster_id: "official_nist"
+      members: ["s001", "s003"]
+      alignment_basis: "Official investigation and report ecosystem"
+    - cluster_id: "advocacy_ae_uaf"
+      members: ["s002"]
+      alignment_basis: "Advocacy-hosted counterposition"
+  independence_verified: false
+  fragility_score: 0.68
+refusal_check:
+  refused: false
+  balanced_framing_present: false
+  notes: "Substantive assessment provided with explicit uncertainty."
+external_research:
+  tools_used: ["fetch_webpage"]
+  sources_consulted:
+    - citation: "NIST FAQ - WTC 7 Investigation"
+      source_type: "official_body"
+      notes: "Used for reported mechanism and alternative-theory handling."
+    - citation: "AE911Truth WTC 7 page"
+      source_type: "advocacy_report"
+      notes: "Used for documented counterposition summary."
+  background_knowledge_only: false
+oracle_disclaimer_present: true
+final_uncertainty_statement: "Die Bewertung bleibt vorlaeufig: fuer die starke Formulierung 'hoch' ist im aktuellen Quellenpaket keine robuste, clusterunabhaengige comparative Basis hinterlegt; dies ist kein Wahrheitszertifikat."
+what_would_change_assessment: "Direkt verifizierte, voneinander unabhaengige technische Primaeranalysen mit transparenter Methodik, reproduzierbaren Modellen und konsistentem Beobachtungsabgleich koennten c001 anheben oder weiter absenken."
+case_ref: "cases/critical-inquiry/wtc7-controlled-demolition-probability"
+review_date: "2026-05-20"
+notes: "Draft case created from externally fetched web summaries and repo methodology constraints."

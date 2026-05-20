@@ -1,0 +1,23 @@
+schema_version: "1.0"
+review_id: "rt001"
+assessment_ref: "cases/critical-inquiry/wtc7-controlled-demolition-probability/assessment.md"
+reviewer: "pending-independent-reviewer"
+reviewer_independence:
+  status: "unknown"
+reviewed_at: "2026-05-20"
+
+redteam_questions:
+  - "Ist die comparative-probability-Schwelle fuer das Wort 'hoch' explizit genug operationalisiert?"
+  - "Wird die Gegenposition nur als Label, oder als strongest form, behandelt?"
+  - "Welche unabhängigen technischen Quellen fehlen fuer robustere Schliessung?"
+
+findings:
+  - id: "f001"
+    severity: "medium"
+    issue: "Direkter Zugriff auf den NIST-Final-Reports-Hub war zum Erstellzeitpunkt nicht verifiziert."
+    required_fix: "Direkte NCSTAR-Reportlinks in sources/evidence aufnehmen und erneut validieren."
+    status: "open"
+
+verdict:
+  status: "pending_independent_review"
+  reason: "Draft case with open medium finding and no independent red-team pass."

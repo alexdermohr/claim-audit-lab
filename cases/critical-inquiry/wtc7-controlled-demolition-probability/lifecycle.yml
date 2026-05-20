@@ -1,0 +1,22 @@
+schema_version: "1.0"
+assessment_id: "a001"
+case_ref: "cases/critical-inquiry/wtc7-controlled-demolition-probability"
+
+status: "draft"
+created_at: "2026-05-20"
+last_reviewed_at: "2026-05-20"
+review_after: "2026-08-20"
+
+redteam_ref: "redteam.yml"
+
+reopen_triggers:
+  - new_primary_source
+  - major_contradiction
+  - source_discredited
+  - legal_update
+  - dataset_revision
+
+history:
+  - date: "2026-05-20"
+    status: "draft"
+    note: "Case opened with initial external-source comparison for WTC 7 probability claim."

@@ -1,0 +1,37 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-controlled-demolition-probability"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "alternative_explanation"
+    strength: 0.74
+    explanation: "Die dokumentierte Fire-Progressive-Collapse-Erklaerung wirkt als starke Alternative zur Aussage einer hohen Sprengungswahrscheinlichkeit."
+
+  - relation_id: "r002"
+    evidence_ref: "e002"
+    claim_ref: "c001"
+    relation_type: "supports_indirectly"
+    strength: 0.45
+    explanation: "Die UAF/AE-Position liefert einen moeglichen Gegenmechanismus, reicht im vorliegenden Quellenpaket aber nicht fuer eine belastbare 'hoch'-Einstufung."
+
+  - relation_id: "r003"
+    evidence_ref: "e001"
+    claim_ref: "c002"
+    relation_type: "reports"
+    strength: 0.86
+    explanation: "Die Quelle dokumentiert explizit die NIST-Position zum Mechanismus und zu Blast-Hypothesen."
+
+  - relation_id: "r004"
+    evidence_ref: "e002"
+    claim_ref: "c003"
+    relation_type: "reports"
+    strength: 0.82
+    explanation: "Die Quelle dokumentiert explizit die UAF/AE-Positionsdarstellung."
+
+  - relation_id: "r005"
+    evidence_ref: "e003"
+    claim_ref: "c001"
+    relation_type: "method_challenge"
+    strength: 0.31
+    explanation: "Der nicht direkt verifizierte Report-Hub reduziert methodische Sicherheit und verhindert eine ueberzogene Schliessung."

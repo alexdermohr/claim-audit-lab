@@ -1,0 +1,79 @@
+schema_version: "1.0"
+claims:
+  - schema_version: "1.0"
+    claim_id: "c001"
+    claim_type: "causal_claim"
+    claim_kind: "causal_claim"
+    statement: "Die Wahrscheinlichkeit, dass WTC 7 durch eine kontrollierte Sprengung statt durch den Brand eingestuerzt ist, ist hoch."
+    status: "weak"
+    evidence_refs: ["e001", "e002", "e003"]
+    source_refs: ["s001", "s002", "s003"]
+    requires:
+      - "Direkte physische Nachweise fuer eine vorbereitete Sprengung"
+      - "Nachvollziehbarer Mechanismus mit Beobachtungsabgleich"
+      - "Unabhaengige technische Replikation ueber mehrere Quellencluster"
+    counterclaims:
+      - "Das beobachtete Muster ist besser mit einem brandinduzierten progressiven Kollaps vereinbar als mit einer These hoher Sprengungswahrscheinlichkeit."
+      - "Die derzeit vorliegenden Gegenmodelle reichen nicht aus, um eine hohe comparative probability fuer Sprengung robust zu tragen."
+    forbidden_upgrades:
+      - "correlation_to_causation"
+      - "source_prestige_to_truth"
+      - "suspicion_to_proof"
+      - "absence_of_evidence_to_falsehood"
+    uncertainty:
+      score: 0.42
+      causes:
+        - "Die Beleglage ist cluster-gespalten und methodisch nicht vollstaendig gegenseitig repliziert."
+        - "Der vorliegende Case nutzt veroeffentlichte Berichte und keine eigene forensische Neuberechnung."
+    interpolation:
+      score: 0.28
+      assumptions:
+        - "Die zitierten Quellen geben ihre jeweiligen Positionen zutreffend wieder."
+        - "Die erfassten Quellen repraesentieren zentrale Positionen, aber nicht den gesamten Diskurs."
+    notes: "Die Einstufung weak bedeutet hier: fuer die Formulierung 'hoch' liegt im erfassten Quellenpaket keine robuste, clusterunabhaengige Evidenzbasis vor."
+
+  - schema_version: "1.0"
+    claim_id: "c002"
+    claim_type: "factual_event_claim"
+    claim_kind: "reported_claim"
+    burden_profile: "source_report"
+    statement: "NIST berichtet fuer WTC 7 einen brandinduzierten progressiven Kollaps und verneint belastbare Hinweise auf einen kollapsausloesenden Blast-Event."
+    status: "plausible"
+    evidence_refs: ["e001", "e003"]
+    source_refs: ["s001", "s003"]
+    requires:
+      - "Dokumentierte NIST-Position"
+    counterclaims: []
+    forbidden_upgrades:
+      - "source_prestige_to_truth"
+    uncertainty:
+      score: 0.16
+      causes:
+        - "Dies ist eine Positionsaussage ueber NIST-Berichte, nicht automatisch ein Weltbeweis."
+    interpolation:
+      score: 0.12
+      assumptions:
+        - "Die referenzierten NIST-Seiten sind inhaltlich konsistent mit den Berichten."
+
+  - schema_version: "1.0"
+    claim_id: "c003"
+    claim_type: "factual_event_claim"
+    claim_kind: "reported_claim"
+    burden_profile: "source_report"
+    statement: "Die UAF/AE911Truth-Position behauptet, Feuer habe WTC 7 nicht verursacht und es sei ein nahezu gleichzeitiges Versagen aller Stuetzen erforderlich."
+    status: "plausible"
+    evidence_refs: ["e002"]
+    source_refs: ["s002"]
+    requires:
+      - "Dokumentierte Positionsdarstellung der UAF/AE911Truth-Seite"
+    counterclaims: []
+    forbidden_upgrades:
+      - "source_prestige_to_truth"
+    uncertainty:
+      score: 0.24
+      causes:
+        - "Die Aussage liegt hier als Positionsquelle in Advocacy-Kontext vor."
+    interpolation:
+      score: 0.22
+      assumptions:
+        - "Die Webseite stellt die eigene Studienposition korrekt zusammenfassend dar."
