@@ -39,6 +39,23 @@ A claim that A causes B.
 ---
 
 ### `motive_claim`
+### `comparative_claim`
+A claim comparing the probability, likelihood, or strength of two or more hypotheses.
+
+*Examples:*
+- P(A) > P(B)
+- "A is more likely than B"
+- "The evidence stronger supports A over B"
+- "A rather than B explains the data"
+
+*Requires:* explicit comparative framing, at least two alternatives, burden specification (e.g., `burden_profile: comparative`)  
+*Forbidden upgrades:* probability calculus to certainty, suppression of the null hypothesis
+
+*Relationship to causal claims:* A comparative claim often asks "which mechanism is more probable?" but differs from a simple causal claim because it foregrounds the comparison. If a claim includes comparative-probability language (`wahrscheinlicher als`, `P(X) > P(Y)`, "more likely than", "instead of"), it must be typed as `comparative_claim` or carry `burden_profile: comparative`.
+
+---
+
+### `motive_claim`
 A claim that an actor intended X.
 
 *Requires:* actor interest + capability + timeline  
