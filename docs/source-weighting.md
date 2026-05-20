@@ -28,6 +28,16 @@ Jede Achse wird von 0.0 bis 1.0 bewertet. Die Polarität ist achsenspezifisch:
 - Bei Fähigkeits- oder Qualitätsachsen (`primary_proximity`, `method_transparency`, `reproducibility`, `source_cluster_independence`, `adversarial_relevance`, `historical_track_record`) bedeutet höher: stärkere Grundlage, sich entlang dieser Dimension auf die Quelle zu stützen.
 - Bei Risikoachsen (`institutional_interest_risk`, `update_latency_risk`) bedeutet höher: höheres deklariertes Risiko, nicht höhere Glaubwürdigkeit. Diese Werte müssen in jeder Aggregation als sichtbare Abzüge oder Caveats erhalten bleiben.
 
+## Verifizierungsstatus und Sprache
+
+`source_weight` beschreibt methodische Nutzbarkeit und Gewichtung einer Quelle im Audit. Er ist nicht identisch mit externem Verifizierungsstatus.
+
+Der externe Prüfstatus wird in `source_verification.status` geführt. `unverified` bedeutet nicht "falsch". Er bedeutet: derzeit nicht extern bestätigt.
+
+Wenn ein Case nur mit Hintergrundwissen arbeitet oder alle relevanten Quellen als `unverified` markiert sind, darf keine positive Verifikationssprache verwendet werden (z. B. "verified sources", "extern verifiziert").
+
+Erlaubt bleibt hypothetische Verifikationssprache im Feld `what_would_change_assessment`, da dieses Feld explizit zukünftige Evidenzbedingungen beschreibt.
+
 Scores werden nicht ohne Begründung zu einem Einzelgewicht gemittelt. Die mehrachsige Sicht bleibt erhalten, damit Schwächen nicht verdeckt werden.
 
 ## `source_weight` vs. `source_verification`

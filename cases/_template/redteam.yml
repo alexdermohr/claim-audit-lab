@@ -2,6 +2,8 @@ schema_version: "1.0"
 review_id: "rt001"
 assessment_ref: "cases/_template/assessment.md"
 reviewer: ""
+reviewer_independence:
+  status: "unknown"
 reviewed_at: "YYYY-MM-DD"
 
 redteam_questions:
