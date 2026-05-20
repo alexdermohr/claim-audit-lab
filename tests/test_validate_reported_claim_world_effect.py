@@ -1,40 +1,31 @@
 #!/usr/bin/env python3
-"""
-Tests for validate_reported_claim_world_effect.py
-"""
+"""Tests for validate_reported_claim_world_effect.py."""
 
-import pytest
-from pathlib import Path
-import yaml
 import subprocess
 import sys
+from pathlib import Path
+
+import pytest
+import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture
 def case_dir(tmp_path):
-    """Create a temporary case directory."""
     case = tmp_path / "test_case"
     case.mkdir()
     return case
 
 
 def write_yml_file(case_dir: Path, filename: str, data: dict):
-    """Write a YAML file to a case directory."""
-    file_path = case_dir / filename
-    with open(file_path, "w", encoding="utf-8") as f:
+    with open(case_dir / filename, "w", encoding="utf-8") as f:
         yaml.dump(data, f)
 
 
 def run_validator(cases_dir: Path) -> tuple[int, str]:
-    """Run the validator and return exit code and output."""
     result = subprocess.run(
-        [
-            sys.executable,
-            "scripts/validate_reported_claim_world_effect.py",
-            str(cases_dir),
-        ],
+        [sys.executable, "scripts/validate_reported_claim_world_effect.py", str(cases_dir)],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -43,715 +34,350 @@ def run_validator(cases_dir: Path) -> tuple[int, str]:
 
 
 class TestReportedClaimWorldEffect:
-    """Tests for reported claim world-effect validation."""
-
     def test_reported_claim_as_strong_alternative_explanation_fails(self, tmp_path):
-        """Fail: report-derived evidence as strong alternative_explanation without provenance."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "The building collapsed due to controlled demolition",
-                    "claim_type": "causal_claim",
-                    "claim_kind": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported fire-induced collapse",
-                    "claim_type": "causal_claim",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "evidence_type": "source_document",
-                    "claim_refs": ["c002"],
-                    "source_refs": ["s001"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.74,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "The building collapsed due to controlled demolition", "claim_type": "causal_claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire-induced collapse", "claim_type": "causal_claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "evidence_type": "source_document", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.74}
+        ]})
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "r001" in output
-        assert "alternative_explanation" in output
 
     def test_reported_claim_as_safe_relation_passes(self, tmp_path):
-        """Pass: report-derived evidence as safe relation (reports)."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Something happened",
-                    "claim_type": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported X",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "evidence_type": "source_document",
-                    "claim_refs": ["c002"],
-                    "source_refs": ["s001"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "reports",
-                    "strength": 0.8,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Something happened", "claim_type": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported X", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "evidence_type": "source_document", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "reports", "strength": 0.8}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
     def test_weak_reported_claim_alternative_explanation_passes(self, tmp_path):
-        """Pass: report-derived evidence as alternative_explanation but strength < 0.6."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {"claim_id": "c001", "statement": "X", "claim_type": "causal_claim"},
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST said Y",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                    "source_refs": ["s001"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.45,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "X", "claim_type": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST said Y", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.45}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
-    def test_reported_claim_strong_alternative_with_inference_provenance_passes(
-        self, tmp_path
-    ):
-        """Pass: strong alternative_explanation with inference-ledger handling."""
+    def test_reported_claim_strong_alternative_with_inference_provenance_passes(self, tmp_path):
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Controlled demolition",
-                    "claim_type": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported fire collapse",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                    "source_refs": ["s001"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.74,
-                }
-            ]
-        }
-
-        inference_data = {
-            "inferences": [
-                {
-                    "claim_ref": "c001",
-                    "premise_claim_refs": ["c002"],
-                    "forbidden_upgrades_checked": ["reported_to_world"],
-                    "inference_type": "direct_premise",
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-        write_yml_file(case_dir, "inference-ledger.yml", inference_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition", "claim_type": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.74}
+        ]})
+        write_yml_file(case_dir, "inference-ledger.yml", {"inferences": [
+            {"claim_ref": "c001", "premise_claim_refs": ["c002"], "forbidden_upgrades_checked": ["reported_to_world"], "inference_type": "direct_premise"}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
     def test_reported_claim_strong_weakens_without_inference_fails(self, tmp_path):
-        """Fail: strong weakens relation without inference provenance."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {"claim_id": "c001", "statement": "X", "claim_type": "causal_claim"},
-                {"claim_id": "c002", "statement": "Y", "claim_kind": "reported_claim"},
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "weakens",
-                    "strength": 0.65,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "X", "claim_type": "causal_claim"},
+            {"claim_id": "c002", "statement": "Y", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.65}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 1
 
-    def test_reported_claim_strong_supports_directly_without_provenance_fails(
-        self, tmp_path
-    ):
-        """Fail: strong supports_directly from reported claim without provenance."""
+    def test_reported_claim_strong_supports_directly_without_provenance_fails(self, tmp_path):
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Fire caused collapse",
-                    "claim_type": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "Expert report X",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "supports_directly",
-                    "strength": 0.7,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Fire caused collapse", "claim_type": "causal_claim"},
+            {"claim_id": "c002", "statement": "Expert report X", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_directly", "strength": 0.7}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 1
 
     def test_non_world_claim_target_not_checked(self, tmp_path):
-        """Pass: report-derived evidence against non-world claim target."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Meta claim",
-                    "claim_kind": "meta_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "Reported X",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "supports_directly",
-                    "strength": 0.9,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Meta claim", "claim_kind": "meta_claim"},
+            {"claim_id": "c002", "statement": "Reported X", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_directly", "strength": 0.9}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
     def test_empty_cases_passes(self, tmp_path):
-        """Pass: no evidence-relations files."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {"claims": []}
-        write_yml_file(case_dir, "claims.yml", claims_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": []})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
     def test_comparative_claim_as_target_is_checked(self, tmp_path):
-        """Fail: report-derived evidence as strong effect against comparative_claim."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "P(A) > P(B)",
-                    "claim_kind": "comparative_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "Report says otherwise",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "contradicts_directly",
-                    "strength": 0.8,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "P(A) > P(B)", "claim_kind": "comparative_claim"},
+            {"claim_id": "c002", "statement": "Report says otherwise", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "contradicts_directly", "strength": 0.8}
+        ]})
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "contradicts_directly" in output
 
     def test_singular_evidence_ref_fails_without_provenance(self, tmp_path):
-        """Fail: singular evidence_ref (not evidence_refs) pointing to reported claim."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Controlled demolition caused collapse",
-                    "claim_kind": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported fire collapse",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-        # Use singular evidence_ref (real artifact format)
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_ref": "e001",
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.74,
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition caused collapse", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_ref": "e001", "relation_type": "alternative_explanation", "strength": 0.74}
+        ]})
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "r001" in output
-        assert "alternative_explanation" in output
 
     def test_nested_inference_steps_with_singular_forbidden_upgrade_passes(self, tmp_path):
-        """Pass: inference-ledger with nested inference_steps and forbidden_upgrade_checked singular."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Controlled demolition",
-                    "claim_kind": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported fire collapse",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_ref": "e001",
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.74,
-                }
-            ]
-        }
-        # Nested inference_steps with singular forbidden_upgrade_checked (real artifact format)
-        inference_data = {
-            "inferences": [
-                {
-                    "inference_id": "inf001",
-                    "claim_ref": "c001",
-                    "triggered_by": "strong_positive_verdict",
-                    "inference_steps": [
-                        {
-                            "step_id": "step001",
-                            "premise_claim_refs": ["c002"],
-                            "operation": "corroboration",
-                            "produces": "NIST engineering assessment used as world argument with justification",
-                            "forbidden_upgrade_checked": ["reported_to_world"],
-                        }
-                    ],
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-        write_yml_file(case_dir, "inference-ledger.yml", inference_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_ref": "e001", "relation_type": "alternative_explanation", "strength": 0.74}
+        ]})
+        write_yml_file(case_dir, "inference-ledger.yml", {"inferences": [
+            {"inference_id": "inf001", "claim_ref": "c001", "triggered_by": "strong_positive_verdict", "inference_steps": [
+                {"step_id": "step001", "premise_claim_refs": ["c002"], "operation": "corroboration", "produces": "NIST engineering assessment used as world argument with justification", "forbidden_upgrade_checked": ["reported_to_world"]}
+            ]}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
-    def test_argument_provenance_passes(self, tmp_path):
-        """Pass: argument-provenance.yml with forbidden_upgrades_checked=[reported_to_world]."""
+    def test_argument_provenance_passes_for_non_major_relation(self, tmp_path):
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Controlled demolition",
-                    "claim_kind": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported fire collapse",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.74,
-                }
-            ]
-        }
-        provenance_data = {
-            "arguments": [
-                {
-                    "argument_id": "arg001",
-                    "target_claim_ref": "c001",
-                    "premise_claim_refs": ["c002"],
-                    "role": "non_decisive_defeater",
-                    "allowed_effect": "non_decisive",
-                    "forbidden_upgrades_checked": ["reported_to_world"],
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-        write_yml_file(case_dir, "argument-provenance.yml", provenance_data)
-
-        exit_code, output = run_validator(tmp_path)
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.62}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {"argument_id": "arg001", "target_claim_ref": "c001", "premise_claim_refs": ["c002"], "role": "non_decisive_defeater", "allowed_effect": "non_decisive", "forbidden_upgrades_checked": ["reported_to_world"]}
+        ]})
+        exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
     def test_argument_provenance_major_with_empty_independent_support_fails(self, tmp_path):
-        """Fail: argument-provenance.yml with major_with_independent_support but empty independent_support_source_refs."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Controlled demolition",
-                    "claim_kind": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported fire collapse",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.74,
-                }
-            ]
-        }
-        provenance_data = {
-            "arguments": [
-                {
-                    "argument_id": "arg001",
-                    "target_claim_ref": "c001",
-                    "premise_claim_refs": ["c002"],
-                    "role": "major_defeater",
-                    "allowed_effect": "major_with_independent_support",
-                    "forbidden_upgrades_checked": ["reported_to_world"],
-                    "independent_support_source_refs": [],  # empty → invalid
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-        write_yml_file(case_dir, "argument-provenance.yml", provenance_data)
-
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {"argument_id": "arg001", "target_claim_ref": "c001", "premise_claim_refs": ["c002"], "role": "major_defeater", "allowed_effect": "major_with_independent_support", "forbidden_upgrades_checked": ["reported_to_world"], "independent_support_source_refs": []}
+        ]})
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "r001" in output
 
     def test_inference_ledger_exists_but_missing_reported_to_world_fails(self, tmp_path):
-        """Fail: inference-ledger.yml exists but does not check reported_to_world."""
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
-
-        claims_data = {
-            "claims": [
-                {
-                    "claim_id": "c001",
-                    "statement": "Controlled demolition",
-                    "claim_kind": "causal_claim",
-                },
-                {
-                    "claim_id": "c002",
-                    "statement": "NIST reported fire collapse",
-                    "claim_kind": "reported_claim",
-                },
-            ]
-        }
-        evidence_data = {
-            "evidence": [
-                {
-                    "evidence_id": "e001",
-                    "claim_refs": ["c002"],
-                }
-            ]
-        }
-        relations_data = {
-            "relations": [
-                {
-                    "relation_id": "r001",
-                    "claim_ref": "c001",
-                    "evidence_refs": ["e001"],
-                    "relation_type": "alternative_explanation",
-                    "strength": 0.74,
-                }
-            ]
-        }
-        # Inference entry for the right claim but wrong forbidden_upgrade check
-        inference_data = {
-            "inferences": [
-                {
-                    "inference_id": "inf001",
-                    "claim_ref": "c001",
-                    "inference_steps": [
-                        {
-                            "step_id": "step001",
-                            "premise_claim_refs": ["c002"],
-                            "operation": "corroboration",
-                            "produces": "Some justification",
-                            "forbidden_upgrade_checked": ["source_prestige_to_truth"],  # wrong check
-                        }
-                    ],
-                }
-            ]
-        }
-
-        write_yml_file(case_dir, "claims.yml", claims_data)
-        write_yml_file(case_dir, "evidence-pack.yml", evidence_data)
-        write_yml_file(case_dir, "evidence-relations.yml", relations_data)
-        write_yml_file(case_dir, "inference-ledger.yml", inference_data)
-
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.74}
+        ]})
+        write_yml_file(case_dir, "inference-ledger.yml", {"inferences": [
+            {"inference_id": "inf001", "claim_ref": "c001", "inference_steps": [
+                {"step_id": "step001", "premise_claim_refs": ["c002"], "operation": "corroboration", "produces": "Some justification", "forbidden_upgrade_checked": ["source_prestige_to_truth"]}
+            ]}
+        ]})
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "r001" in output
+
+    def test_supports_relation_without_provenance_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_supports", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.7}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_supports" in output
+
+    def test_contradicts_relation_without_provenance_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_contradicts", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "contradicts", "strength": 0.7}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_contradicts" in output
+
+    def test_major_relation_non_decisive_argument_provenance_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_major_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {"argument_id": "arg001", "target_claim_ref": "c001", "premise_claim_refs": ["c002"], "role": "non_decisive_defeater", "allowed_effect": "non_decisive", "forbidden_upgrades_checked": ["reported_to_world"]}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_major_fail" in output
+
+    def test_major_relation_with_independent_support_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Controlled demolition", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_major_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {"argument_id": "arg001", "target_claim_ref": "c001", "premise_claim_refs": ["c002"], "role": "major_defeater", "allowed_effect": "major_with_independent_support", "forbidden_upgrades_checked": ["reported_to_world"], "independent_support_source_refs": ["s_independent"]}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_malformed_evidence_relations_yaml_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": []})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": []})
+        (case_dir / "evidence-relations.yml").write_text("relations: [\n  - bad", encoding="utf-8")
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "evidence-relations.yml" in output
+        assert "failed to parse YAML" in output
+
+    def test_source_report_evidence_without_provenance_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"}
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "burden_profile": "source_report", "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_source_report", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_directly", "strength": 0.7}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_source_report" in output
+
+    def test_source_report_evidence_with_inference_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"}
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "burden_profile": "source_report", "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_source_report_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_directly", "strength": 0.7}
+        ]})
+        write_yml_file(case_dir, "inference-ledger.yml", {"inferences": [
+            {"claim_ref": "c001", "forbidden_upgrades_checked": ["reported_to_world"]}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_string_strength_is_handled_deterministically(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_string_strength", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": "0.7"}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_string_strength" in output

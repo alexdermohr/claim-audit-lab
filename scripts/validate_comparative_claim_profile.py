@@ -10,10 +10,10 @@ is already set to `comparative`, which serves as the declaration).
 This prevents the error class: comparative language → simple causal_claim.
 """
 
-import sys
 import re
+import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import List
 
 try:
     import yaml
@@ -25,27 +25,24 @@ except ImportError:
     sys.exit(1)
 
 
-# Patterns for comparative probability language (case-insensitive)
 COMPARATIVE_PATTERNS = [
-    r'\bwahrscheinlichkeit\b',
-    r'\bprobability\b',
-    r'\bP\s*\(',
-    r'\s>\s',
-    r'\s<\s',
-    r'\bhöher\s+als\b',
-    r'\bhoeher\s+als\b',
-    r'\bwahrscheinlicher\s+als\b',
-    r'\bmore\s+likely\s+than\b',
-    r'\bless\s+likely\s+than\b',
-    r'\bstatt\s+durch\b',
-    r'\binstead\s+of\b',
-    r'\bcomparative\s+probability\b',
-    r'\bcomparative-probability\b',
+    r"\bp\s*\([^)]*\)\s*[<>]\s*p\s*\([^)]*\)",
+    r"\bwahrscheinlicher\s+als\b",
+    r"\bhöher\s+als\b",
+    r"\bhoeher\s+als\b",
+    r"\bmore\s+likely\s+than\b",
+    r"\bless\s+likely\s+than\b",
+    r"\bhigher\s+than\b",
+    r"\binstead\s+of\b",
+    r"\brather\s+than\b",
+    r"\bstatt\s+durch\b",
+    r"\bgegenüber\b",
+    r"\bcompared\s+to\b",
 ]
 
 
 def has_comparative_language(text: str) -> bool:
-    """Check if text contains comparative probability patterns."""
+    """Check if text contains explicit comparative probability patterns."""
     if not text:
         return False
     text_lower = text.lower()
@@ -61,10 +58,7 @@ def discover_case_dirs(root: Path) -> List[Path]:
 
 
 def validate_case(case_dir: Path) -> List[str]:
-    """
-    Validate claims in a single case directory.
-    Returns list of error messages (empty list if all valid).
-    """
+    """Validate claims in a single case directory."""
     errors: List[str] = []
     claims_file = case_dir / "claims.yml"
 
@@ -74,8 +68,8 @@ def validate_case(case_dir: Path) -> List[str]:
     try:
         with open(claims_file, "r", encoding="utf-8") as f:
             content = yaml.safe_load(f)
-    except Exception as e:
-        errors.append(f"{claims_file}: failed to parse YAML: {e}")
+    except Exception as exc:
+        errors.append(f"{claims_file}: failed to parse YAML: {exc}")
         return errors
 
     if not content or "claims" not in content:
@@ -94,34 +88,26 @@ def validate_case(case_dir: Path) -> List[str]:
         notes = claim.get("notes", "")
         requires = claim.get("requires", [])
 
-        # Check if any field has comparative language
         has_comparative = (
             has_comparative_language(statement)
             or has_comparative_language(notes)
             or any(
-                has_comparative_language(r) if isinstance(r, str) else False
-                for r in (requires if isinstance(requires, list) else [])
+                has_comparative_language(item) if isinstance(item, str) else False
+                for item in (requires if isinstance(requires, list) else [])
             )
         )
-
         if not has_comparative:
             continue
 
-        # Found comparative language. Check if properly typed.
         claim_kind = claim.get("claim_kind", "")
         burden_profile = claim.get("burden_profile", "")
-
         is_comparative_kind = claim_kind == "comparative_claim"
         is_comparative_burden = burden_profile == "comparative"
-
-        # Check if requires includes comparative_probability
         has_comp_requirement = (
-            isinstance(requires, list)
-            and "comparative_probability" in requires
+            isinstance(requires, list) and "comparative_probability" in requires
         )
 
         if not (is_comparative_kind or is_comparative_burden):
-            # Comparative language detected but claim is not typed as comparative
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "
                 f"comparative-language detected in statement/notes/requires "
@@ -130,14 +116,11 @@ def validate_case(case_dir: Path) -> List[str]:
                 f"Expected: claim_kind='comparative_claim' or burden_profile='comparative'."
             )
         elif is_comparative_kind and not is_comparative_burden and not has_comp_requirement:
-            # Type is comparative_claim but requires is missing comparative_probability
-            # (burden_profile=comparative already serves as the declaration)
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "
                 f"claim_kind='comparative_claim' but 'comparative_probability' is not "
                 f"declared in 'requires' and burden_profile is not 'comparative'. "
-                f"Add 'comparative_probability' to requires, "
-                f"or set burden_profile='comparative'."
+                f"Add 'comparative_probability' to requires, or set burden_profile='comparative'."
             )
 
     return errors
@@ -149,7 +132,6 @@ def main() -> int:
         return 1
 
     cases_dir = Path(sys.argv[1])
-
     if not cases_dir.is_dir():
         print(f"ERROR: {cases_dir} is not a directory", file=sys.stderr)
         return 1
@@ -161,8 +143,7 @@ def main() -> int:
 
     all_errors: List[str] = []
     for case_dir in case_dirs:
-        errors = validate_case(case_dir)
-        all_errors.extend(errors)
+        all_errors.extend(validate_case(case_dir))
 
     if all_errors:
         for error in all_errors:

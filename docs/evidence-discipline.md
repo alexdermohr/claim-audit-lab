@@ -36,13 +36,18 @@ Strong relations (strength ≥ 0.6) of these types, when using report-derived ev
 
 - `alternative_explanation`
 - `weakens`
+- `contradicts`
 - `contradicts_directly`
+- `contradicts_indirectly`
+- `supports`
 - `supports_directly`
 - `supports_indirectly`
 - `method_challenge`
 
 Justification must appear in:
 1. `inference-ledger.yml` with `forbidden_upgrades_checked: [reported_to_world]`, **or**
-2. `argument-provenance.yml` entry (optional, reserved for future use).
+2. `argument-provenance.yml` entry with `reported_to_world` and an `allowed_effect` compatible with the relation strength.
+
+For major-effect relations (`alternative_explanation`, `method_challenge`, `supports`, `supports_directly`, `contradicts`, `contradicts_directly`) at strength ≥ 0.75, `argument-provenance.yml` must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`. A bare `reported_to_world` acknowledgement does not justify high-strength world effects.
 
 See `docs/argument-provenance-discipline.md` for details and examples.

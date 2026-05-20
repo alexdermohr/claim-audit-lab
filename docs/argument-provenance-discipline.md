@@ -35,12 +35,17 @@ If a report-derived evidence is used with a strong effect against or for a world
 Relation types:
 - `alternative_explanation`
 - `weakens`
+- `contradicts`
 - `contradicts_directly`
+- `contradicts_indirectly`
+- `supports`
 - `supports_directly`
 - `supports_indirectly`
 - `method_challenge`
 
 Strength threshold: ≥ 0.6
+
+Major-effect threshold: ≥ 0.75 for `alternative_explanation`, `method_challenge`, `supports`, `supports_directly`, `contradicts`, and `contradicts_directly`. At or above that threshold, `reported_to_world` alone is not enough in `argument-provenance.yml`: the argument must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`.
 
 Then one of the following must exist:
 
@@ -101,13 +106,13 @@ arguments:
 
 Both `forbidden_upgrades_checked` (plural) and `forbidden_upgrade_checked` (singular) are accepted.
 
-When `allowed_effect: major_with_independent_support`, `independent_support_source_refs` must be a non-empty list; otherwise the argument is not considered valid justification.
+`reported_to_world` is a necessary check, not a free pass. For major-effect relations at strength ≥ 0.75, `allowed_effect: non_decisive` does not justify the relation. In that range the argument must use `allowed_effect: major_with_independent_support`, and `independent_support_source_refs` must be a non-empty list.
 
 ## Evidence Field Support
 
 The validator supports both `evidence_ref` (singular string) and `evidence_refs` (list) in evidence-relations entries. When both are present, they are merged and deduplicated.
 
-**Limitation:** Evidence is only detected as report-derived when its `claim_refs` list contains a `reported_claim` id. Evidence entries without `claim_refs` are not checked.
+Evidence is detected as report-derived when either its `claim_refs` list contains a `reported_claim` id, or the evidence entry itself is marked with `burden_profile: source_report` / `claim_kind: reported_claim`.
 
 ## Rationale
 
@@ -182,8 +187,9 @@ The validator `validate_reported_claim_world_effect.py` enforces this discipline
 2. For each strong relation (strength ≥ 0.6) using report-derived evidence.
    - Both `evidence_ref` (singular) and `evidence_refs` (list) are supported.
 3. Check inference-ledger.yml (top-level or nested inference_steps) for `reported_to_world`.
-4. Check argument-provenance.yml for a valid argument entry with `reported_to_world`.
-5. If neither: Emit error.
+4. Check argument-provenance.yml for a valid argument entry with `reported_to_world` and an `allowed_effect` that is compatible with the relation type and strength.
+5. For major-effect relations at strength ≥ 0.75, require `major_with_independent_support` plus independent support source refs.
+6. If neither: Emit error.
 
 This blocks the semantic shortcut early, at framework level, before case content diverges.
 
