@@ -307,7 +307,7 @@ def test_invalid_evidence_refs_without_evidence_pack(tmp_path):
     s = step(premise_evidence_refs=["e001"], premise_claim_refs=[])
     write_yaml(tmp_path / "inference-ledger.yml", ledger([inference(inference_steps=[s])]))
     errors = validate(tmp_path)
-    assert any("evidence-pack.yml is absent" in e for e in errors), errors
+    assert any("premise_evidence_refs require evidence-pack.yml" in e for e in errors), errors
 
 
 def test_valid_claim_refs_only_without_evidence_pack(tmp_path):
@@ -351,6 +351,21 @@ def test_invalid_comparative_burden_plausible_without_ledger(tmp_path):
     write_base(tmp_path, [claim(status="plausible", burden_profile="comparative")])
     errors = validate(tmp_path)
     assert any("requires an inference-ledger entry" in e and "c001" in e for e in errors), errors
+
+
+def test_valid_comparative_burden_plausible_with_ledger(tmp_path):
+    """burden_profile: comparative with status plausible passes with comparative ledger entry."""
+    write_base(tmp_path, [claim(status="plausible", burden_profile="comparative")])
+    s = step(
+        operation="comparison",
+        produces="Comparative burden handled with explicit own-proof discipline.",
+        forbidden_upgrade_checked=["rival_weakness_to_own_proof"],
+    )
+    write_yaml(
+        tmp_path / "inference-ledger.yml",
+        ledger([inference(triggered_by="comparative_claim", inference_steps=[s])]),
+    )
+    assert validate(tmp_path) == []
 
 
 def test_valid_comparative_burden_unresolved_no_ledger_required(tmp_path):

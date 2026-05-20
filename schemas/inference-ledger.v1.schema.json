@@ -58,6 +58,28 @@
       "type": "object",
       "required": ["step_id", "operation", "produces", "uncertainty_effect"],
       "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": ["premise_evidence_refs"],
+          "properties": {
+            "premise_evidence_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        {
+          "required": ["premise_claim_refs"],
+          "properties": {
+            "premise_claim_refs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ],
       "properties": {
         "step_id": {
           "type": "string",
