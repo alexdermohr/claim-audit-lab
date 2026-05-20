@@ -2,6 +2,8 @@ schema_version: "1.0"
 review_id: "rt001"
 assessment_ref: "cases/critical-inquiry/covid-origin-discourse-independence/assessment.md"
 reviewer: "assistant-redteam"
+reviewer_independence:
+  status: "self_review"
 reviewed_at: "2026-05-19"
 redteam_questions:
   - "Konvertiert die Case Cluster-Bezogenheit des Diskurses in eine Aussage über die zugrunde liegende Ursprungsfrage?"
@@ -24,8 +26,9 @@ findings:
     required_fix: "Im assessment.md die Stichprobenartigkeit explizit benennen und die fehlende Vollständigkeit als Reopen-Trigger in lifecycle.yml vermerken (corpus_level_discourse_analysis_published)."
   - id: "f004"
     severity: "high"
+    status: "open"
     issue: "Die Case auditiert Quellen, die in der Mainstream-Wahrnehmung als Verdict-Authority gelten (Lancet, Nature Medicine, große Outlets). Das Risiko der unzulässigen Quellenprestige-Konversion ist hoch — sowohl als unzulässige Stützung als auch als unzulässige Verwerfung."
     required_fix: "Anwendung der no-oracle-policy und der source-weighting-policy in allen Verdict-Schritten; die Case behandelt s001-s006 als Audit-Subjekte mit primary_proximity=1.0 und source_cluster_independence ≤ 0.5."
 verdict:
-  status: "passed_with_notes"
+  status: "blocked"
   reason: "Das Assessment hält die Trennung zwischen Diskursintegritäts-Audit und Ursprungsfrage durch (c006). c005 trägt den Verdict-Cap 'weak'. Die Stichprobenartigkeit von e004 ist deklariert. Die Audit-Subjekt-Behandlung von s001-s006 ist konsistent."

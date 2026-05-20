@@ -30,6 +30,17 @@
       "type": "array",
       "items": { "type": "string" }
     },
+    "reviewer_independence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["independent", "self_review", "unknown"]
+        },
+        "relation_to_author": { "type": "string" }
+      }
+    },
     "findings": {
       "type": "array",
       "items": {
@@ -43,7 +54,15 @@
             "enum": ["low", "medium", "high"]
           },
           "issue": { "type": "string", "minLength": 1 },
-          "required_fix": { "type": "string" }
+          "required_fix": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["open", "acknowledged", "resolved"]
+          },
+          "resolution_refs": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
         }
       }
     },
@@ -54,7 +73,14 @@
       "properties": {
         "status": {
           "type": "string",
-          "enum": ["pending", "passed", "blocked", "passed_with_notes"]
+          "enum": [
+            "pending",
+            "passed",
+            "blocked",
+            "passed_with_notes",
+            "self_review_only",
+            "pending_independent_review"
+          ]
         },
         "reason": { "type": "string" }
       }

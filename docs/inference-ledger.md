@@ -76,7 +76,7 @@ Top-level fields:
 Checks:
 1. Schema validity
 2. `claim_ref` exists in `claims.yml`
-3. Every step must have at least one non-empty `premise_evidence_ref` or `premise_claim_ref` — the validator is the authority on this rule; the schema does not enforce it to avoid `anyOf` complexity.
+3. Every step must have at least one non-empty `premise_evidence_refs` or `premise_claim_refs` (enforced by schema and validator).
 4. `premise_evidence_refs` require `evidence-pack.yml` to be present; each ref must match an existing `evidence_id`.
 5. `premise_claim_refs` exist in `claims.yml`
 6. `inference_id` and `step_id` are case-locally unique
@@ -89,4 +89,5 @@ Checks:
 - The ledger is not a narrative. Each step should be one sentence in `produces`.
 - `uncertainty_preservation` is not defeat. Documenting an open question is stronger than hiding it in prose.
 - `comparison` is the highest-risk operation. The validator enforces that the author has checked `rival_weakness_to_own_proof`. A claim is not stronger because its rival is weaker; it is stronger because its own evidence chain is stronger.
+- A step with neither `premise_evidence_refs` nor `premise_claim_refs` is invalid.
 - A ledger entry for a `weak` causal-chain claim will typically use `uncertainty_preservation` with `uncertainty_effect: preserves` — this is the correct honest record of a bounded but unresolved derivation.

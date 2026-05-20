@@ -125,3 +125,13 @@ A `reported_claim` must use `burden_profile: source_report` so validators can di
 ### `absence_claim`
 
 `claim_kind: absence_claim` means “no matching evidence was found inside a declared scope,” not “the thing exists nowhere.” The claim must declare that scope, such as the current evidence pack, a named source, or a named dataset, and must guard against `absence_of_evidence_to_falsehood`.
+
+Absence-language trigger terms (for example "nicht nachgewiesen", "kein Nachweis", "no evidence", "not documented") require classification as `absence_claim`.
+
+In schema v1, `absence_scope` is represented as a string field, not an object.
+
+Object-shaped `absence_scope` is deferred to a later schema version.
+
+Strong closure for absence claims (`established` or `strongly_supported`) requires explicit exhaustivity markers and `evidence_refs` that show what was searched.
+
+`forbidden_upgrades` must include `absence_of_evidence_to_falsehood` for absence claims.

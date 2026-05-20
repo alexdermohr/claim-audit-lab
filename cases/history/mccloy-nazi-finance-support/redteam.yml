@@ -2,6 +2,8 @@ schema_version: "1.0"
 review_id: "rt001"
 assessment_ref: "cases/history/mccloy-nazi-finance-support/assessment.md"
 reviewer: "assistant-redteam"
+reviewer_independence:
+  status: "self_review"
 reviewed_at: "2026-05-14"
 redteam_questions:
   - "Überträgt das Assessment institutionelles Chase-Handeln unzulässig auf McCloys persönliches Handeln?"
@@ -17,5 +19,5 @@ findings:
     issue: "Das Quellenset stützt sich auf öffentliche Zusammenfassungen statt auf eine erschöpfende Archivrecherche."
     required_fix: "Unsicherheitssprache beibehalten und Reopen-Triggers für neue Primärquellen setzen."
 verdict:
-  status: "passed_with_notes"
+  status: "self_review_only"
   reason: "Das Assessment ist akzeptabel, wenn es die Unterscheidung zwischen institutioneller Unterstützung, persönlicher Kausalität und Nachkriegsrehabilitation bewahrt."

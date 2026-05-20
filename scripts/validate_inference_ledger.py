@@ -202,8 +202,8 @@ def validate_case(case_dir: pathlib.Path, schema: dict) -> list[str]:
             )
             if has_nonempty_evidence_refs and evidence_ids is None:
                 errors.append(
-                    f"inference '{inf_id}' step '{step_id}' cites premise_evidence_refs "
-                    f"but evidence-pack.yml is absent."
+                    f"inference-ledger.yml inference '{inf_id}' step '{step_id}': "
+                    f"premise_evidence_refs require evidence-pack.yml (missing evidence-pack.yml)."
                 )
             elif isinstance(evidence_refs, list) and evidence_ids is not None:
                 for ref in evidence_refs:

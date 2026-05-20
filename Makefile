@@ -15,6 +15,7 @@ validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_no_fixture_language.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_mechanical_migration_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_claims.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_absence_language_scope.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_sources.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_verification_gate.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_weight_audit.py cases
@@ -28,13 +29,16 @@ validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_verdict_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_overclosure.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_evidence_pack.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_evidence_source_alignment.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_case_references.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_source_cluster_robustness.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_lifecycle.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_redteam_independence.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_forbidden_language.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_status_prose_consistency.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_answer_receipt.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_answer_receipt_claims_consistency.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_verification_language_consistency.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_refusal_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_aggregation_discipline.py cases
 

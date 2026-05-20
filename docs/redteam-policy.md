@@ -39,6 +39,20 @@ A red-team review asks:
 
 A `blocked` red-team verdict means `assessment.status` cannot be `final`. This is enforced by the validation scripts.
 
+## Reviewer independence
+
+Self-review is allowed as an intermediate control step, but it cannot produce an independent pass verdict.
+
+`passed` and `passed_with_notes` require independent review.
+
+When reviewer independence is not established, use `self_review_only` or `pending_independent_review`.
+
+## Finding resolution discipline
+
+High-severity findings block pass-style verdicts until they are explicitly resolved.
+
+A high finding is only considered resolved when its status is `resolved` and `resolution_refs` point to concrete remediation artifacts.
+
 ## What red-team is not
 
 Red-team review is not:
