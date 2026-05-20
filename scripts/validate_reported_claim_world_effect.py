@@ -111,6 +111,33 @@ def normalize_source_refs(refs: Any) -> Set[str]:
     return {src for src in refs if isinstance(src, str) and src}
 
 
+def get_sources_by_id(sources_doc: Dict[str, Any]) -> Set[str]:
+    sources_list = sources_doc.get("sources", [])
+    if not isinstance(sources_list, list):
+        return set()
+    ids: Set[str] = set()
+    for src in sources_list:
+        if not isinstance(src, dict):
+            continue
+        source_id = src.get("source_id")
+        if isinstance(source_id, str) and source_id:
+            ids.add(source_id)
+            continue
+        alt_id = src.get("id")
+        if isinstance(alt_id, str) and alt_id:
+            ids.add(alt_id)
+    return ids
+
+
+def evidence_origin_sources(evidence: Dict[str, Any]) -> Set[str]:
+    origins: Set[str] = set()
+    singular = evidence.get("source_ref")
+    if isinstance(singular, str) and singular:
+        origins.add(singular)
+    origins.update(normalize_source_refs(evidence.get("source_refs")))
+    return origins
+
+
 def is_reported_claim(claims_by_id: Dict[str, Dict[str, Any]], claim_id: str) -> bool:
     claim = claims_by_id.get(claim_id, {})
     return (
@@ -187,25 +214,44 @@ def provenance_matches_premises(
     return isinstance(premise_claim_refs, list) and marker in premise_claim_refs
 
 
-def get_major_effect_support_issue(obj: Dict[str, Any]) -> Optional[str]:
+def get_major_effect_support_issue(
+    obj: Dict[str, Any],
+    known_source_ids: Set[str],
+    derived_origin_sources: Set[str],
+) -> Optional[str]:
     allowed_effect = obj.get("allowed_effect", "")
     independent_support = obj.get("independent_support_source_refs", [])
     if allowed_effect != "major_with_independent_support":
         return "allowed_effect must be 'major_with_independent_support'"
     if not (isinstance(independent_support, list) and bool(independent_support)):
         return "independent_support_source_refs must be a non-empty list"
+    independent_set = normalize_source_refs(independent_support)
+    missing_source_ids = sorted(independent_set.difference(known_source_ids))
+    if missing_source_ids:
+        return (
+            "independent_support_source_refs contains source id(s) missing in sources.yml: "
+            + ", ".join(missing_source_ids)
+        )
     origin_sources = obj.get("origin_source_refs")
     if origin_sources is not None and not isinstance(origin_sources, list):
         return "origin_source_refs must be a list when provided"
+
     if isinstance(origin_sources, list):
-        independent_set = normalize_source_refs(independent_support)
-        origin_set = normalize_source_refs(origin_sources)
-        overlap = sorted(independent_set.intersection(origin_set))
-        if overlap:
-            return (
-                "independent_support_source_refs overlaps with origin_source_refs: "
-                + ", ".join(overlap)
-            )
+        effective_origin_sources = normalize_source_refs(origin_sources)
+        overlap_label = "origin_source_refs"
+    else:
+        effective_origin_sources = derived_origin_sources
+        overlap_label = "evidence-derived origin sources"
+
+    if not effective_origin_sources:
+        return "Cannot verify independence: origin sources are unknown."
+
+    overlap = sorted(independent_set.intersection(effective_origin_sources))
+    if overlap:
+        return (
+            f"independent_support_source_refs overlaps with {overlap_label}: "
+            + ", ".join(overlap)
+        )
     return None
 
 
@@ -215,6 +261,8 @@ def has_inference_provenance(
     token: ProvenanceToken,
     relation_type: str,
     strength: float,
+    known_source_ids: Set[str],
+    derived_origin_sources: Set[str],
     failure_reasons: Optional[List[str]] = None,
 ) -> bool:
     inferences = inference_ledger.get("inferences", [])
@@ -235,7 +283,11 @@ def has_inference_provenance(
             and "reported_to_world" in top_checks
         ):
             major_support_issue = (
-                get_major_effect_support_issue(inference) if major_relation else None
+                get_major_effect_support_issue(
+                    inference, known_source_ids, derived_origin_sources
+                )
+                if major_relation
+                else None
             )
             if major_support_issue is None:
                 return True
@@ -258,7 +310,11 @@ def has_inference_provenance(
                 and "reported_to_world" in step_checks
             ):
                 major_support_issue = (
-                    get_major_effect_support_issue(step) if major_relation else None
+                    get_major_effect_support_issue(
+                        step, known_source_ids, derived_origin_sources
+                    )
+                    if major_relation
+                    else None
                 )
                 if major_support_issue is not None:
                     if failure_reasons is not None:
@@ -277,6 +333,8 @@ def has_argument_provenance(
     token: ProvenanceToken,
     relation_type: str,
     strength: float,
+    known_source_ids: Set[str],
+    derived_origin_sources: Set[str],
     failure_reasons: Optional[List[str]] = None,
 ) -> bool:
     arguments = argument_provenance.get("arguments", [])
@@ -299,7 +357,9 @@ def has_argument_provenance(
             continue
 
         if major_relation:
-            major_support_issue = get_major_effect_support_issue(arg)
+            major_support_issue = get_major_effect_support_issue(
+                arg, known_source_ids, derived_origin_sources
+            )
             if major_support_issue is not None:
                 if failure_reasons is not None:
                     failure_reasons.append(
@@ -310,7 +370,9 @@ def has_argument_provenance(
 
         allowed_effect = arg.get("allowed_effect", "")
         if allowed_effect == "major_with_independent_support":
-            major_support_issue = get_major_effect_support_issue(arg)
+            major_support_issue = get_major_effect_support_issue(
+                arg, known_source_ids, derived_origin_sources
+            )
             if major_support_issue is not None:
                 if failure_reasons is not None:
                     failure_reasons.append(
@@ -364,6 +426,9 @@ def validate_case(case_dir: Path) -> List[str]:
     argument_provenance, err = load_yaml_file(case_dir / "argument-provenance.yml")
     if err:
         return [err]
+    sources, err = load_yaml_file(case_dir / "sources.yml")
+    if err:
+        return [err]
 
     claims_by_id: Dict[str, Dict[str, Any]] = {}
     claims_list = claims.get("claims", [])
@@ -382,6 +447,7 @@ def validate_case(case_dir: Path) -> List[str]:
                 evidence_id = evidence.get("evidence_id")
                 if isinstance(evidence_id, str) and evidence_id:
                     evidence_by_id[evidence_id] = evidence
+    known_source_ids = get_sources_by_id(sources)
 
     relations_file = case_dir / "evidence-relations.yml"
     relations_list = relations.get("relations", [])
@@ -404,6 +470,7 @@ def validate_case(case_dir: Path) -> List[str]:
         evidence_ids = get_evidence_refs(relation)
         report_derived_ids: List[str] = []
         tokens: List[ProvenanceToken] = []
+        report_derived_origin_sources: Set[str] = set()
         for evidence_id in evidence_ids:
             evidence = evidence_by_id.get(evidence_id)
             if not evidence:
@@ -412,6 +479,7 @@ def validate_case(case_dir: Path) -> List[str]:
             if evidence_tokens:
                 report_derived_ids.append(evidence_id)
                 tokens.extend(evidence_tokens)
+                report_derived_origin_sources.update(evidence_origin_sources(evidence))
 
         if not report_derived_ids:
             continue
@@ -446,6 +514,8 @@ def validate_case(case_dir: Path) -> List[str]:
                 token,
                 str(relation_type),
                 strength_value,
+                known_source_ids,
+                report_derived_origin_sources,
                 token_failures,
             ) or has_argument_provenance(
                 argument_provenance,
@@ -453,6 +523,8 @@ def validate_case(case_dir: Path) -> List[str]:
                 token,
                 str(relation_type),
                 strength_value,
+                known_source_ids,
+                report_derived_origin_sources,
                 token_failures,
             )
             if has_valid:

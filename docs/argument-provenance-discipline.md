@@ -47,6 +47,8 @@ Strength threshold: ≥ 0.6
 
 Major-effect threshold: ≥ 0.75 for all strong-effect relation types listed above. At or above that threshold, `reported_to_world` alone is not enough in either `inference-ledger.yml` or `argument-provenance.yml`: the matching entry must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`.
 
+For `major_with_independent_support`, each `independent_support_source_refs` id must exist in `sources.yml`. Independence must be verifiable against known origin sources: either explicit `origin_source_refs` in the provenance object, or origin sources derived from the referenced report-derived evidence (`source_ref` / `source_refs`). If origin sources are unknown, major-effect independent support is invalid.
+
 Then one of the following must exist:
 
 ### Option 1: Inference Ledger Entry

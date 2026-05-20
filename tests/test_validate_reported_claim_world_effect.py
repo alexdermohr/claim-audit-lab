@@ -7,10 +7,10 @@ from pathlib import Path
 
 import pytest
 import yaml
-import validate_reported_claim_world_effect as vrwe
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import validate_reported_claim_world_effect as vrwe
 
 @pytest.fixture
 def case_dir(tmp_path):
@@ -332,7 +332,11 @@ class TestReportedClaimWorldEffect:
             {"claim_id": "c001", "statement": "Controlled demolition", "claim_kind": "causal_claim"},
             {"claim_id": "c002", "statement": "NIST reported fire collapse", "claim_kind": "reported_claim"},
         ]})
-        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s_independent"},
+        ]})
         write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
             {"relation_id": "r_major_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.8}
         ]})
@@ -371,7 +375,11 @@ class TestReportedClaimWorldEffect:
             {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
         ]})
         write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
-            {"evidence_id": "e001", "claim_refs": ["c002"]}
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s_independent"},
         ]})
         write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
             {"relation_id": "r_weakens_major_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.8}
@@ -401,6 +409,11 @@ class TestReportedClaimWorldEffect:
         ]})
         write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
             {"relation_id": "r_overlap_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_indirectly", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+            {"source_id": "s003"},
         ]})
         write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
             {
@@ -509,7 +522,11 @@ class TestReportedClaimWorldEffect:
             {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
         ]})
         write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
-            {"evidence_id": "e001", "claim_refs": ["c002"]}
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s_independent"},
         ]})
         write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
             {"relation_id": "r_inf_major_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "alternative_explanation", "strength": 0.8}
@@ -762,6 +779,9 @@ class TestReportedClaimWorldEffect:
         write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
             {"relation_id": "r_bad_origin_type", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_indirectly", "strength": 0.8}
         ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s_independent"},
+        ]})
         write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
             {
                 "argument_id": "arg_bad_origin_type",
@@ -777,3 +797,160 @@ class TestReportedClaimWorldEffect:
         assert exit_code == 1
         assert "r_bad_origin_type" in output
         assert "origin_source_refs must be a list when provided" in output
+
+    def test_major_relation_independent_support_missing_source_id_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_missing_source", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_missing_source",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001"],
+                "independent_support_source_refs": ["s_missing"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_missing_source" in output
+        assert "s_missing" in output
+        assert "missing in sources.yml" in output
+
+    def test_major_relation_known_sources_and_non_overlapping_origin_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_known_sources_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_directly", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_known_sources_ok",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001"],
+                "independent_support_source_refs": ["s002"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_major_relation_without_origin_uses_evidence_sources_for_overlap_fail(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_derived_overlap_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_derived_overlap_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "independent_support_source_refs": ["s001"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_derived_overlap_fail" in output
+        assert "evidence-derived origin sources" in output
+
+    def test_major_relation_without_origin_with_distinct_evidence_sources_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_derived_non_overlap_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "contradicts_indirectly", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_derived_non_overlap_ok",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "independent_support_source_refs": ["s002"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_major_relation_without_origin_and_without_evidence_sources_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s002"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_origin_unknown_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_indirectly", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_origin_unknown_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "independent_support_source_refs": ["s002"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_origin_unknown_fail" in output
+        assert "Cannot verify independence: origin sources are unknown." in output
