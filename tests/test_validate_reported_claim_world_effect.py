@@ -181,6 +181,7 @@ class TestReportedClaimWorldEffect:
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "r001" in output
+        assert "alternative_explanation" in output
 
     def test_nested_inference_steps_with_singular_forbidden_upgrade_passes(self, tmp_path):
         case_dir = tmp_path / "test_case"
