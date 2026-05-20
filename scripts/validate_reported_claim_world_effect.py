@@ -60,12 +60,11 @@ MAJOR_EFFECT_THRESHOLD = 0.75
 DIRECT_REPORTED_EVIDENCE_MARKER = "_direct_reported_evidence_marker"
 
 
-# (marker, evidence_id_for_direct_marker)
-ProvenanceToken = Tuple[str, Optional[str]]
+ProvenanceToken = Tuple[str, Optional[str]]  # (marker, direct_evidence_id_or_none)
 
 
 def load_yaml_file(path: Path) -> Tuple[Dict[str, Any], Optional[str]]:
-    """Load YAML and return (content, error_message)."""
+    """Load YAML and return (content, error_message) instead of raising parse exceptions."""
     if not path.exists():
         return {}, None
     try:
@@ -213,9 +212,7 @@ def has_inference_provenance(
             provenance_matches_premises(top_claim_premises, top_evidence_premises, token)
             and "reported_to_world" in top_checks
         ):
-            if major_relation and not has_required_major_effect_support(inference):
-                pass
-            else:
+            if not major_relation or has_required_major_effect_support(inference):
                 return True
 
         steps = inference.get("inference_steps", [])
