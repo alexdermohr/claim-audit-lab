@@ -195,6 +195,8 @@ def get_major_effect_support_issue(obj: Dict[str, Any]) -> Optional[str]:
     if not (isinstance(independent_support, list) and bool(independent_support)):
         return "independent_support_source_refs must be a non-empty list"
     origin_sources = obj.get("origin_source_refs")
+    if origin_sources is not None and not isinstance(origin_sources, list):
+        return "origin_source_refs must be a list when provided"
     if isinstance(origin_sources, list):
         independent_set = normalize_source_refs(independent_support)
         origin_set = normalize_source_refs(origin_sources)
@@ -333,7 +335,7 @@ def describe_token(token: ProvenanceToken) -> str:
 
 
 def deduplicate_preserving_order(items: List[str]) -> List[str]:
-    """Preserve first-seen order for stable, readable diagnostics."""
+    """Preserve first-seen order for stable, readable diagnostics (expects strings)."""
     return list(dict.fromkeys(items))
 
 
