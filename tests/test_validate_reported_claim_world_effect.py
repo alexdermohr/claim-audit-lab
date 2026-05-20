@@ -145,6 +145,25 @@ class TestReportedClaimWorldEffect:
         exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
+    def test_reported_claim_kind_target_not_treated_as_world_claim(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {
+                "claim_id": "c001",
+                "statement": "Target is still a source position",
+                "claim_type": "causal_claim",
+                "claim_kind": "reported_claim",
+            },
+            {"claim_id": "c002", "statement": "Other reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [{"evidence_id": "e001", "claim_refs": ["c002"]}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_reported_target", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.9}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
     def test_empty_cases_passes(self, tmp_path):
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
@@ -321,6 +340,82 @@ class TestReportedClaimWorldEffect:
         ]})
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 0, output
+
+    def test_weakens_major_relation_with_only_reported_to_world_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_weakens_major_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "inference-ledger.yml", {"inferences": [
+            {"claim_ref": "c001", "premise_claim_refs": ["c002"], "forbidden_upgrades_checked": ["reported_to_world"]}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_weakens_major_fail" in output
+        assert "major_with_independent_support" in output
+
+    def test_weakens_major_relation_with_independent_support_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_weakens_major_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_weakens_major",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "independent_support_source_refs": ["s_independent"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_major_relation_independent_support_overlaps_origin_sources_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_overlap_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_indirectly", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_overlap",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001", "s002"],
+                "independent_support_source_refs": ["s002", "s003"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_overlap_fail" in output
+        assert "overlaps with origin_source_refs" in output
 
     def test_malformed_evidence_relations_yaml_fails(self, tmp_path):
         case_dir = tmp_path / "test_case"

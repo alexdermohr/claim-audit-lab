@@ -45,7 +45,7 @@ Relation types:
 
 Strength threshold: ≥ 0.6
 
-Major-effect threshold: ≥ 0.75 for `alternative_explanation`, `method_challenge`, `supports`, `supports_directly`, `contradicts`, and `contradicts_directly`. At or above that threshold, `reported_to_world` alone is not enough in either `inference-ledger.yml` or `argument-provenance.yml`: the matching entry must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`.
+Major-effect threshold: ≥ 0.75 for all strong-effect relation types listed above. At or above that threshold, `reported_to_world` alone is not enough in either `inference-ledger.yml` or `argument-provenance.yml`: the matching entry must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`.
 
 Then one of the following must exist:
 

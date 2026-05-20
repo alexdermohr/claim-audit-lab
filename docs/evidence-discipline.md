@@ -48,7 +48,7 @@ Justification must appear in:
 1. `inference-ledger.yml` with `forbidden_upgrades_checked: [reported_to_world]`, **or**
 2. `argument-provenance.yml` entry with `reported_to_world` and an `allowed_effect` compatible with the relation strength.
 
-For major-effect relations (`alternative_explanation`, `method_challenge`, `supports`, `supports_directly`, `contradicts`, `contradicts_directly`) at strength ≥ 0.75, both `inference-ledger.yml` and `argument-provenance.yml` must use `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`. A bare `reported_to_world` acknowledgement does not justify high-strength world effects.
+For major-effect relations (all strong-effect relation types at strength ≥ 0.75), whichever artifact is used (`inference-ledger.yml` or `argument-provenance.yml`) must declare `allowed_effect: major_with_independent_support` and provide non-empty `independent_support_source_refs`. A bare `reported_to_world` acknowledgement does not justify high-strength world effects.
 
 For direct `source_report`/`reported_claim` evidence entries that do not point to a reported claim id via `claim_refs`, provenance must reference the specific evidence id through `premise_evidence_refs`.
 

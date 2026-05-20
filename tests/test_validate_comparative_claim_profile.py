@@ -302,3 +302,51 @@ class TestComparativeClaimProfile:
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "c_rather_than" in output
+
+    def test_comparative_claim_without_regex_language_and_without_requirement_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_comp_plain_fail",
+                "statement": "Mechanism comparison",
+                "claim_kind": "comparative_claim",
+                "requires": [],
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "c_comp_plain_fail" in output
+        assert "comparative_probability" in output
+
+    def test_comparative_claim_without_regex_language_with_requirement_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_comp_plain_req_ok",
+                "statement": "Mechanism comparison",
+                "claim_kind": "comparative_claim",
+                "requires": ["comparative_probability"],
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_comparative_claim_without_regex_language_with_burden_profile_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_comp_plain_burden_ok",
+                "statement": "Mechanism comparison",
+                "claim_kind": "comparative_claim",
+                "burden_profile": "comparative",
+                "requires": [],
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output

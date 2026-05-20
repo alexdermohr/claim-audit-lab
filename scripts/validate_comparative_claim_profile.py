@@ -99,9 +99,6 @@ def validate_case(case_dir: Path) -> List[str]:
                 for item in (requires if isinstance(requires, list) else [])
             )
         )
-        if not has_comparative:
-            continue
-
         claim_kind = claim.get("claim_kind", "")
         burden_profile = claim.get("burden_profile", "")
         is_comparative_kind = claim_kind == "comparative_claim"
@@ -110,6 +107,18 @@ def validate_case(case_dir: Path) -> List[str]:
             isinstance(requires, list) and "comparative_probability" in requires
         )
 
+        if is_comparative_kind and not is_comparative_burden and not has_comp_requirement:
+            errors.append(
+                f"{claims_file} claim_id={claim_id}: "
+                f"claim_kind='comparative_claim' but 'comparative_probability' is not "
+                f"declared in 'requires' and burden_profile is not 'comparative'. "
+                f"Add 'comparative_probability' to requires, or set burden_profile='comparative'."
+            )
+            continue
+
+        if not has_comparative:
+            continue
+
         if not (is_comparative_kind or is_comparative_burden):
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "
@@ -117,13 +126,6 @@ def validate_case(case_dir: Path) -> List[str]:
                 f"but claim_kind={claim_kind!r} is not 'comparative_claim' "
                 f"and burden_profile={burden_profile!r} is not 'comparative'. "
                 f"Expected: claim_kind='comparative_claim' or burden_profile='comparative'."
-            )
-        elif is_comparative_kind and not is_comparative_burden and not has_comp_requirement:
-            errors.append(
-                f"{claims_file} claim_id={claim_id}: "
-                f"claim_kind='comparative_claim' but 'comparative_probability' is not "
-                f"declared in 'requires' and burden_profile is not 'comparative'. "
-                f"Add 'comparative_probability' to requires, or set burden_profile='comparative'."
             )
 
     return errors

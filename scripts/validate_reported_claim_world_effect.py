@@ -47,12 +47,7 @@ STRONG_EFFECT_RELATIONS = {
 }
 
 MAJOR_EFFECT_RELATIONS = {
-    "alternative_explanation",
-    "contradicts",
-    "contradicts_directly",
-    "method_challenge",
-    "supports",
-    "supports_directly",
+    *STRONG_EFFECT_RELATIONS,
 }
 
 STRENGTH_THRESHOLD = 0.6
@@ -117,6 +112,11 @@ def is_reported_claim(claims_by_id: Dict[str, Dict[str, Any]], claim_id: str) ->
 
 def is_world_claim(claims_by_id: Dict[str, Dict[str, Any]], claim_id: str) -> bool:
     claim = claims_by_id.get(claim_id, {})
+    if (
+        claim.get("claim_kind") == "reported_claim"
+        or claim.get("burden_profile") == "source_report"
+    ):
+        return False
     return (
         claim.get("claim_type") in WORLD_CLAIM_TYPES
         or claim.get("claim_kind") in WORLD_CLAIM_TYPES
@@ -178,14 +178,26 @@ def provenance_matches_premises(
     return isinstance(premise_claim_refs, list) and marker in premise_claim_refs
 
 
-def has_required_major_effect_support(obj: Dict[str, Any]) -> bool:
+def get_major_effect_support_issue(obj: Dict[str, Any]) -> Optional[str]:
     allowed_effect = obj.get("allowed_effect", "")
     independent_support = obj.get("independent_support_source_refs", [])
-    has_independent_support = isinstance(independent_support, list) and bool(independent_support)
-    return (
-        allowed_effect == "major_with_independent_support"
-        and has_independent_support
-    )
+    if allowed_effect != "major_with_independent_support":
+        return "allowed_effect must be 'major_with_independent_support'"
+    if not (isinstance(independent_support, list) and bool(independent_support)):
+        return "independent_support_source_refs must be a non-empty list"
+    origin_sources = obj.get("origin_source_refs")
+    if isinstance(origin_sources, list):
+        independent_set = {
+            src for src in independent_support if isinstance(src, str) and src
+        }
+        origin_set = {src for src in origin_sources if isinstance(src, str) and src}
+        overlap = sorted(independent_set.intersection(origin_set))
+        if overlap:
+            return (
+                "independent_support_source_refs overlaps with origin_source_refs: "
+                + ", ".join(overlap)
+            )
+    return None
 
 
 def has_inference_provenance(
@@ -194,6 +206,7 @@ def has_inference_provenance(
     token: ProvenanceToken,
     relation_type: str,
     strength: float,
+    failure_reasons: Optional[List[str]] = None,
 ) -> bool:
     inferences = inference_ledger.get("inferences", [])
     if not isinstance(inferences, list):
@@ -212,8 +225,15 @@ def has_inference_provenance(
             provenance_matches_premises(top_claim_premises, top_evidence_premises, token)
             and "reported_to_world" in top_checks
         ):
-            if not major_relation or has_required_major_effect_support(inference):
+            major_support_issue = (
+                get_major_effect_support_issue(inference) if major_relation else None
+            )
+            if major_support_issue is None:
                 return True
+            if failure_reasons is not None:
+                failure_reasons.append(
+                    f"inference-ledger top-level: {major_support_issue}"
+                )
 
         steps = inference.get("inference_steps", [])
         if not isinstance(steps, list):
@@ -228,7 +248,14 @@ def has_inference_provenance(
                 provenance_matches_premises(step_claim_premises, step_evidence_premises, token)
                 and "reported_to_world" in step_checks
             ):
-                if major_relation and not has_required_major_effect_support(step):
+                major_support_issue = (
+                    get_major_effect_support_issue(step) if major_relation else None
+                )
+                if major_support_issue is not None:
+                    if failure_reasons is not None:
+                        failure_reasons.append(
+                            f"inference-ledger inference_step: {major_support_issue}"
+                        )
                     continue
                 return True
 
@@ -241,6 +268,7 @@ def has_argument_provenance(
     token: ProvenanceToken,
     relation_type: str,
     strength: float,
+    failure_reasons: Optional[List[str]] = None,
 ) -> bool:
     arguments = argument_provenance.get("arguments", [])
     if not isinstance(arguments, list):
@@ -262,19 +290,39 @@ def has_argument_provenance(
             continue
 
         if major_relation:
-            if not has_required_major_effect_support(arg):
+            major_support_issue = get_major_effect_support_issue(arg)
+            if major_support_issue is not None:
+                if failure_reasons is not None:
+                    failure_reasons.append(
+                        f"argument-provenance: {major_support_issue}"
+                    )
                 continue
             return True
 
         allowed_effect = arg.get("allowed_effect", "")
         if allowed_effect == "major_with_independent_support":
-            if not has_required_major_effect_support(arg):
+            major_support_issue = get_major_effect_support_issue(arg)
+            if major_support_issue is not None:
+                if failure_reasons is not None:
+                    failure_reasons.append(
+                        f"argument-provenance: {major_support_issue}"
+                    )
                 continue
             return True
         if allowed_effect in {"non_decisive", "uncertainty_only"}:
             return True
 
     return False
+
+
+def describe_token(token: ProvenanceToken) -> str:
+    marker, direct_evidence_id = token
+    if marker == DIRECT_REPORTED_EVIDENCE_MARKER:
+        return (
+            f"direct source_report evidence id '{direct_evidence_id}' "
+            f"(requires premise_evidence_refs match)"
+        )
+    return f"reported claim marker '{marker}' (requires premise_claim_refs match)"
 
 
 def discover_case_dirs(root: Path) -> List[Path]:
@@ -374,33 +422,58 @@ def validate_case(case_dir: Path) -> List[str]:
                 seen_tokens.add(token)
                 unique_tokens.append(token)
 
-        all_markers_valid = all(
-            has_inference_provenance(
+        missing_tokens: List[str] = []
+        marker_issues: List[str] = []
+        for token in unique_tokens:
+            token_failures: List[str] = []
+            has_valid = has_inference_provenance(
                 inference_ledger,
                 claim_ref,
                 token,
                 str(relation_type),
                 strength_value,
-            )
-            or has_argument_provenance(
+                token_failures,
+            ) or has_argument_provenance(
                 argument_provenance,
                 claim_ref,
                 token,
                 str(relation_type),
                 strength_value,
+                token_failures,
             )
-            for token in unique_tokens
-        )
+            if has_valid:
+                continue
+            token_desc = describe_token(token)
+            missing_tokens.append(token_desc)
+            if token_failures:
+                deduped_failures = list(dict.fromkeys(token_failures))
+                marker_issues.append(f"{token_desc}: {'; '.join(deduped_failures)}")
 
-        if all_markers_valid:
+        if not missing_tokens:
             continue
 
         evidence_str = ", ".join(report_derived_ids)
+        missing_tokens_str = "; ".join(missing_tokens)
+        expected_fix = (
+            "Provide matching premise_claim_refs or premise_evidence_refs with "
+            "reported_to_world in inference-ledger.yml or argument-provenance.yml."
+        )
+        if is_major_relation(str(relation_type), strength_value):
+            expected_fix += (
+                " For major effects (strength >= 0.75), whichever artifact is used must also set "
+                "allowed_effect='major_with_independent_support' and include non-empty "
+                "independent_support_source_refs."
+            )
+        detail_suffix = (
+            f" Detailed issues: {' | '.join(marker_issues)}."
+            if marker_issues
+            else ""
+        )
         errors.append(
-            f"{relations_file} relation_id={relation_id}: report-derived evidence ({evidence_str}) "
-            f"is used as {relation_type} strength={strength_value} against world claim {claim_ref} "
-            f"without sufficient inference-ledger.yml or argument-provenance.yml support for "
-            f"reported_to_world handling and allowed_effect compatibility."
+            f"{relations_file} relation_id={relation_id} claim_ref={claim_ref}: "
+            f"report-derived evidence ({evidence_str}) uses relation_type={relation_type} "
+            f"strength={strength_value} without valid provenance for marker(s): "
+            f"{missing_tokens_str}. {expected_fix}{detail_suffix}"
         )
 
     return errors
