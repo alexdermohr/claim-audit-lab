@@ -502,8 +502,8 @@ class TestReportedClaimWorldEffect:
             {
                 "claim_ref": "c001",
                 "inference_steps": [
-                    {"step_id": "s1", "premise_claim_refs": ["c002"], "forbidden_upgrade_checked": ["reported_to_world"]},
-                    {"step_id": "s2", "premise_claim_refs": ["c003"], "forbidden_upgrade_checked": ["reported_to_world"]},
+                    {"step_id": "s1", "premise_claim_refs": ["c002"], "forbidden_upgrades_checked": ["reported_to_world"]},
+                    {"step_id": "s2", "premise_claim_refs": ["c003"], "forbidden_upgrades_checked": ["reported_to_world"]},
                 ],
             }
         ]})
@@ -614,3 +614,27 @@ class TestReportedClaimWorldEffect:
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert "r_suppression" in output
+
+
+    @pytest.mark.parametrize("claim_kind,relation_id", [
+        ("capability_claim", "r_capability"),
+        ("forecast_claim", "r_forecast"),
+        ("value_claim", "r_value"),
+        ("absence_claim", "r_absence"),
+    ])
+    def test_additional_world_claim_types_are_checked(self, tmp_path, claim_kind, relation_id):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": claim_kind},
+            {"claim_id": "c002", "statement": "Reported", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": relation_id, "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.7}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert relation_id in output

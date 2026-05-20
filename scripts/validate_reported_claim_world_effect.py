@@ -360,6 +360,8 @@ def validate_case(case_dir: Path) -> List[str]:
         if strength_error:
             errors.append(strength_error)
             continue
+        # Strength parsing happens only after relation/target/report-derived relevance checks.
+        # Keep this guard so invalid/missing strengths fail relevant strong-effect relations only.
         if strength_value is None or strength_value < STRENGTH_THRESHOLD:
             continue
 
