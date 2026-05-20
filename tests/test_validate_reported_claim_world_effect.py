@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+import validate_reported_claim_world_effect as vrwe
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -732,3 +733,18 @@ class TestReportedClaimWorldEffect:
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 1
         assert relation_id in output
+
+    def test_normalize_source_refs_filters_invalid_values(self):
+        refs = ["s001", "", None, 42, "s002"]
+        assert vrwe.normalize_source_refs(refs) == {"s001", "s002"}
+        assert vrwe.normalize_source_refs("s001") == set()
+
+    def test_describe_token_formats_reported_claim_and_direct_evidence(self):
+        assert "reported claim marker 'c123'" in vrwe.describe_token(("c123", None))
+        direct = vrwe.describe_token((vrwe.DIRECT_REPORTED_EVIDENCE_MARKER, "e001"))
+        assert "direct source_report evidence id 'e001'" in direct
+
+    def test_deduplicate_preserving_order_keeps_first_occurrence_order(self):
+        items = ["a", "b", "a", "c", "b", "d"]
+        assert vrwe.deduplicate_preserving_order(items) == ["a", "b", "c", "d"]
+        assert vrwe.deduplicate_preserving_order([]) == []
