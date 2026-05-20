@@ -150,6 +150,19 @@ def test_claim_without_absence_language_ignored(tmp_path):
     assert result == 0, "Expected pass: no absence language in statement"
 
 
+def test_not_found_error_label_does_not_trigger_absence(tmp_path):
+    """'Not Found' as an error label in a non-absence context must not trigger the validator."""
+    claim = _minimal_claim(
+        claim_id="c001",
+        statement="The source title contains 'Not Found' as an HTTP error label.",
+        status="weak",
+    )
+    claims_yaml = _dump_claims(claim)
+    _write_case(tmp_path, claims_yaml)
+    result = validate_absence_language_scope.main(str(tmp_path / "cases"))
+    assert result == 0, "Expected pass: 'Not Found' bare string no longer triggers absence check"
+
+
 def test_error_message_includes_claim_id_and_field(tmp_path):
     """Error messages must include the claim ID and violated field."""
     from io import StringIO

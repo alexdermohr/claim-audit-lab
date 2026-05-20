@@ -5,7 +5,6 @@ with bounded scope, forbidden-upgrade declaration, and closure caps."""
 from __future__ import annotations
 
 import pathlib
-import re
 import sys
 
 import yaml
@@ -22,10 +21,11 @@ ABSENCE_TRIGGERS = [
     # English
     "no evidence",
     "no proof",
-    "not found",
     "not documented",
     "absence of evidence",
     "no indication",
+    "no matching evidence found",
+    "evidence not found",
 ]
 
 STRONG_STATUSES = {"established", "strongly_supported"}
@@ -45,9 +45,13 @@ CASE_MARKERS = (
 )
 
 
-def _has_trigger(text: str) -> bool:
+def _has_trigger(text: str) -> str | None:
+    """Return the first matched absence trigger phrase, or None."""
     lower = text.lower()
-    return any(t in lower for t in ABSENCE_TRIGGERS)
+    for t in ABSENCE_TRIGGERS:
+        if t in lower:
+            return t
+    return None
 
 
 def _has_exhaustivity_marker(scope: str) -> bool:
@@ -100,11 +104,7 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
 
         # Determine if absence language is present
         trigger_text = f"{statement} {notes}"
-        trigger_found = None
-        for t in ABSENCE_TRIGGERS:
-            if t in trigger_text.lower():
-                trigger_found = t
-                break
+        trigger_found = _has_trigger(trigger_text)
 
         if trigger_found is None:
             continue

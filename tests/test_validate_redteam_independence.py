@@ -146,7 +146,30 @@ def test_non_independent_reviewer_cannot_self_declare_independent(tmp_path):
     assert result == 1, "Expected failure: non-independent reviewer cannot self-declare independent"
 
 
+def test_pass_verdict_without_reviewer_independence_block_fails(tmp_path):
+    """reviewer='lab-maintainer' + no reviewer_independence block + verdict='passed' must fail."""
+    data = _base_redteam(
+        reviewer="lab-maintainer",
+        verdict={"status": "passed"},
+    )
+    _write_case(tmp_path, data, case_id="case-missing-independence-block")
+    result = validate_redteam_independence.main(str(tmp_path / "cases"))
+    assert result == 1, "Expected failure: pass verdict without reviewer_independence block"
+
+
 # ---------- Pass tests ----------
+
+
+def test_external_reviewer_with_explicit_independent_status_passes(tmp_path):
+    """reviewer='external-reviewer' + reviewer_independence.status='independent' + passed → pass."""
+    data = _base_redteam(
+        reviewer="external-reviewer",
+        reviewer_independence={"status": "independent"},
+        verdict={"status": "passed"},
+    )
+    _write_case(tmp_path, data, case_id="case-external-independent")
+    result = validate_redteam_independence.main(str(tmp_path / "cases"))
+    assert result == 0, "Expected pass: explicit independent block with non-bot reviewer name"
 
 
 def test_non_independent_reviewer_with_self_review_only_passes(tmp_path):

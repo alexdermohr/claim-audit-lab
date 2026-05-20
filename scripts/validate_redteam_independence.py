@@ -107,13 +107,13 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
     # --- Rule 1 & 2: Reviewer Independence ---
     if isinstance(reviewer_independence, dict):
         indep_status = reviewer_independence.get("status", "unknown")
-        if indep_status in ("self_review", "unknown"):
+        if indep_status != "independent":
             if verdict_status in PASS_STATUSES:
                 errors.append(
                     f"FAIL {rt_file}: verdict.status: "
                     f"reviewer_independence.status is '{indep_status}' but "
                     f"verdict.status is '{verdict_status}'. "
-                    f"Self-review or unknown reviewer cannot produce a pass verdict. "
+                    f"Only reviewer_independence.status: independent may produce a pass verdict. "
                     f"Use self_review_only or pending_independent_review instead."
                 )
         if reviewer_looks_non_independent and indep_status == "independent":
@@ -127,9 +127,10 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
                     f"Set reviewer_independence.status: self_review and use self_review_only or blocked."
                 )
     else:
-        # Fallback heuristic on reviewer string
-        if reviewer_looks_non_independent:
-            if verdict_status in PASS_STATUSES:
+        # reviewer_independence block is absent.
+        # Any pass-style verdict requires an explicit independent block.
+        if verdict_status in PASS_STATUSES:
+            if reviewer_looks_non_independent:
                 errors.append(
                     f"FAIL {rt_file}: verdict.status: "
                     f"reviewer '{reviewer_str or '<empty>'}' matches non-independent reviewer pattern "
@@ -137,6 +138,14 @@ def validate_case(case_dir: pathlib.Path) -> list[str]:
                     f"Add reviewer_independence.status: self_review and change "
                     f"verdict.status to self_review_only (if no high findings) "
                     f"or blocked (if high findings present)."
+                )
+            else:
+                errors.append(
+                    f"FAIL {rt_file}: verdict.status: "
+                    f"pass-style verdict '{verdict_status}' requires an explicit "
+                    f"reviewer_independence block with status: independent. "
+                    f"reviewer_independence is absent for reviewer '{reviewer_str or '<empty>'}'. "
+                    f"Add reviewer_independence: {{status: independent}} if the reviewer is truly external."
                 )
 
     # --- Rule 3: High Finding Gate ---

@@ -36,15 +36,16 @@ POSITIVE_VERIFICATION_PATTERNS = [
     "validierte quellen",
 ]
 
-# Negation / discipline patterns that neutralise a positive match.
-# If a line contains a positive pattern AND a negation pattern, it is allowed.
+# Negation / discipline phrases that are masked out before checking for positive patterns.
+# A phrase is masked from its containing sentence unit before the positive-pattern scan runs.
+# Note: bare 'unverified' is intentionally absent — it is too short to safely neutralise
+# a positive pattern in the same sentence (e.g. "Verified sources (unverified).").
 NEGATION_PATTERNS = [
     "nicht extern verifiziert",
     "nicht verifiziert",
     "not externally verified",
     "not verified",
     "not independently verified",
-    "unverified",
     "als unverified markiert",
     "background-knowledge-only",
     "no external verification",
@@ -97,14 +98,22 @@ def _iter_units(text: str) -> list[str]:
 
 
 def _has_positive_pattern(text: str) -> str | None:
-    """Return the first matched positive verification pattern, or None."""
+    """Return the first matched positive verification pattern, or None.
+
+    Each sentence unit is processed independently.  Negation phrases are
+    masked out of the unit text before the positive-pattern scan runs, so
+    a sentence like "Not externally verified, but verified sources show ..."
+    will still flag the residual "verified sources" after the negation phrase
+    has been removed.
+    """
     for unit in _iter_units(text):
         lower = unit.lower()
+        # Mask negation phrases from this unit before checking positive patterns.
+        neutralized = lower
+        for neg in NEGATION_PATTERNS:
+            neutralized = neutralized.replace(neg, "")
         for pat in POSITIVE_VERIFICATION_PATTERNS:
-            if pat in lower:
-                # Negation only neutralises within the same sentence/line unit.
-                if any(neg in lower for neg in NEGATION_PATTERNS):
-                    continue
+            if pat in neutralized:
                 return pat
     return None
 
