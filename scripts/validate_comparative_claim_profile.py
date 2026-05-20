@@ -26,6 +26,7 @@ except ImportError:
 
 
 COMPARATIVE_PATTERNS = [
+    # Explicit probabilistic comparison: P(expr) > P(expr) or P(expr) < P(expr).
     r"\bp\s*\([^)]*\)\s*[<>]\s*p\s*\([^)]*\)",
     r"\bwahrscheinlicher\s+als\b",
     r"\bhöher\s+als\b",

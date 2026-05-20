@@ -160,7 +160,7 @@ class TestComparativeClaimProfile:
         exit_code, _ = run_validator(tmp_path)
         assert exit_code == 0
 
-    def test_comparative_language_case_insensitive(self, tmp_path):
+    def test_rather_than_case_insensitive_fails(self, tmp_path):
         case_dir = tmp_path / "test_case"
         case_dir.mkdir()
         claims_data = {

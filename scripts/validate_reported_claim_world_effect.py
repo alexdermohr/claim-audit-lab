@@ -143,7 +143,12 @@ def reported_claim_markers(
         markers.append(DIRECT_REPORTED_EVIDENCE)
 
     seen: Set[str] = set()
-    return [marker for marker in markers if not (marker in seen or seen.add(marker))]
+    deduped: List[str] = []
+    for marker in markers:
+        if marker not in seen:
+            seen.add(marker)
+            deduped.append(marker)
+    return deduped
 
 
 def provenance_matches_premises(
