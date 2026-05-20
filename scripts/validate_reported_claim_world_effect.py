@@ -301,7 +301,6 @@ def validate_case(case_dir: Path) -> List[str]:
         if strength_error:
             errors.append(strength_error)
             continue
-        assert strength_value is not None
 
         if strength_value < STRENGTH_THRESHOLD:
             continue

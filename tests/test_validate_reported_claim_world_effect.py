@@ -51,7 +51,6 @@ class TestReportedClaimWorldEffect:
         assert exit_code == 1
         assert "r001" in output
         assert "alternative_explanation" in output
-        assert "alternative_explanation" in output
 
     def test_reported_claim_as_safe_relation_passes(self, tmp_path):
         case_dir = tmp_path / "test_case"
