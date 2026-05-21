@@ -3,7 +3,8 @@
 Validate that comparative probability claims are correctly typed.
 
 Comparative claims (P(A) > P(B), "more likely than", etc.) must be typed
-as `claim_kind: comparative_claim` or `burden_profile: comparative` and must
+as `claim_type: comparative_claim`, `claim_kind: comparative_claim`, or
+`burden_profile: comparative` and must
 declare `comparative_probability` in their requirements (unless burden_profile
 is already set to `comparative`, which serves as the declaration).
 

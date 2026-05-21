@@ -49,6 +49,8 @@ Major-effect threshold: ≥ 0.75 for all strong-effect relation types listed abo
 
 For `major_with_independent_support`, each `independent_support_source_refs` id must exist in `sources.yml`. Independence must be verifiable against known origin sources: either explicit `origin_source_refs` in the provenance object, or origin sources derived from the referenced report-derived evidence (`source_ref` / `source_refs`). If origin sources are unknown, major-effect independent support is invalid.
 
+When `origin_source_refs` is explicitly provided, each id must resolve in `sources.yml`. Explicit origin refs may add context, but must not omit evidence-derived origin sources.
+
 Then one of the following must exist:
 
 ### Option 1: Inference Ledger Entry

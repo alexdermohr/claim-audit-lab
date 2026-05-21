@@ -243,7 +243,20 @@ def get_major_effect_support_issue(
         return "origin_source_refs must contain only non-empty strings"
 
     if isinstance(origin_sources, list):
-        effective_origin_sources = normalize_source_refs(origin_sources)
+        explicit_origin_set = set(origin_sources)
+        missing_origin_ids = sorted(explicit_origin_set.difference(known_source_ids))
+        if missing_origin_ids:
+            return (
+                "origin_source_refs contains source id(s) missing in sources.yml: "
+                + ", ".join(missing_origin_ids)
+            )
+        if derived_origin_sources and not derived_origin_sources.issubset(explicit_origin_set):
+            omitted = sorted(derived_origin_sources.difference(explicit_origin_set))
+            return (
+                "origin_source_refs omits evidence-derived origin source(s): "
+                + ", ".join(omitted)
+            )
+        effective_origin_sources = explicit_origin_set
         overlap_label = "origin_source_refs"
     else:
         effective_origin_sources = derived_origin_sources

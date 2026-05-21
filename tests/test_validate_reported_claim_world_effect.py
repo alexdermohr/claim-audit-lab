@@ -1045,3 +1045,164 @@ class TestReportedClaimWorldEffect:
         assert "r_bad_origin_str_fail" in output
         assert "non-empty strings" in output
 
+    def test_major_relation_origin_source_refs_omits_evidence_derived_origin_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s_fake"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_origin_omits_derived_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_origin_omits_derived_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s_fake"],
+                "independent_support_source_refs": ["s001"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_origin_omits_derived_fail" in output
+        assert "omits evidence-derived origin source(s)" in output
+
+    def test_major_relation_origin_source_refs_missing_source_id_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_origin_missing_source_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_origin_missing_source_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s_missing"],
+                "independent_support_source_refs": ["s002"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_origin_missing_source_fail" in output
+        assert "origin_source_refs contains source id(s) missing in sources.yml" in output
+
+    def test_major_relation_origin_source_refs_matching_evidence_origin_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_origin_match_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_origin_match_ok",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001"],
+                "independent_support_source_refs": ["s002"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_major_relation_origin_source_refs_superset_of_evidence_origin_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+            {"source_id": "s_extra"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_origin_superset_ok", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_origin_superset_ok",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001", "s_extra"],
+                "independent_support_source_refs": ["s002"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_major_relation_independent_support_nested_entry_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [
+            {"source_id": "s001"},
+            {"source_id": "s002"},
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_nested_support_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_nested_support_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001"],
+                "independent_support_source_refs": [["s002"]],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_nested_support_fail" in output
+        assert "independent_support_source_refs must contain only non-empty strings" in output

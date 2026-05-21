@@ -52,6 +52,8 @@ For major-effect relations (all strong-effect relation types at strength ≥ 0.7
 
 Each `independent_support_source_refs` id must resolve to a declared source in `sources.yml`. Independence is only valid when those support sources do not overlap with known origin sources (`origin_source_refs` when declared, otherwise origins derived from the relevant evidence `source_ref` / `source_refs`). If origin sources cannot be determined, the major-effect independent-support condition is not satisfied.
 
+When `origin_source_refs` is explicitly declared, each id must resolve in `sources.yml`. Explicit origins may add source context but must not omit origins derived from the relevant evidence.
+
 For direct `source_report`/`reported_claim` evidence entries that do not point to a reported claim id via `claim_refs`, provenance must reference the specific evidence id through `premise_evidence_refs`.
 
 See `docs/argument-provenance-discipline.md` for details and examples.
