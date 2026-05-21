@@ -954,3 +954,94 @@ class TestReportedClaimWorldEffect:
         assert exit_code == 1
         assert "r_origin_unknown_fail" in output
         assert "Cannot verify independence: origin sources are unknown." in output
+
+    def test_major_relation_independent_support_empty_string_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [{"source_id": "s001"}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_empty_str_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_empty_str_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001"],
+                "independent_support_source_refs": [""],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_empty_str_fail" in output
+        assert "non-empty strings" in output
+
+    def test_major_relation_independent_support_null_entry_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [{"source_id": "s001"}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_null_entry_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "weakens", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_null_entry_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": ["s001"],
+                "independent_support_source_refs": [None],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_null_entry_fail" in output
+        assert "non-empty strings" in output
+
+    def test_major_relation_origin_source_refs_empty_string_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [{"source_id": "s002"}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r_bad_origin_str_fail", "claim_ref": "c001", "evidence_refs": ["e001"], "relation_type": "supports_indirectly", "strength": 0.8}
+        ]})
+        write_yml_file(case_dir, "argument-provenance.yml", {"arguments": [
+            {
+                "argument_id": "arg_bad_origin_str_fail",
+                "target_claim_ref": "c001",
+                "premise_claim_refs": ["c002"],
+                "forbidden_upgrades_checked": ["reported_to_world"],
+                "allowed_effect": "major_with_independent_support",
+                "origin_source_refs": [""],
+                "independent_support_source_refs": ["s002"],
+            }
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "r_bad_origin_str_fail" in output
+        assert "non-empty strings" in output
+

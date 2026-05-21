@@ -225,7 +225,9 @@ def get_major_effect_support_issue(
         return "allowed_effect must be 'major_with_independent_support'"
     if not (isinstance(independent_support, list) and bool(independent_support)):
         return "independent_support_source_refs must be a non-empty list"
-    independent_set = normalize_source_refs(independent_support)
+    if any(not isinstance(src, str) or not src for src in independent_support):
+        return "independent_support_source_refs must contain only non-empty strings"
+    independent_set = set(s for s in independent_support if isinstance(s, str) and s)
     missing_source_ids = sorted(independent_set.difference(known_source_ids))
     if missing_source_ids:
         return (
@@ -235,6 +237,10 @@ def get_major_effect_support_issue(
     origin_sources = obj.get("origin_source_refs")
     if origin_sources is not None and not isinstance(origin_sources, list):
         return "origin_source_refs must be a list when provided"
+    if isinstance(origin_sources, list) and any(
+        not isinstance(src, str) or not src for src in origin_sources
+    ):
+        return "origin_source_refs must contain only non-empty strings"
 
     if isinstance(origin_sources, list):
         effective_origin_sources = normalize_source_refs(origin_sources)

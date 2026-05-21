@@ -350,3 +350,69 @@ class TestComparativeClaimProfile:
         write_claims_yml(case_dir, claims_data)
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 0, output
+
+    def test_claim_type_comparative_claim_with_requires_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_type_req_ok",
+                "statement": "The mechanism is better",
+                "claim_type": "comparative_claim",
+                "claim_kind": "causal_claim",
+                "requires": ["comparative_probability"],
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_claim_type_comparative_claim_without_requires_and_no_burden_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_type_no_req_fail",
+                "statement": "The mechanism is better",
+                "claim_type": "comparative_claim",
+                "claim_kind": "causal_claim",
+                "requires": [],
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1
+        assert "c_type_no_req_fail" in output
+        assert "comparative_probability" in output
+
+    def test_claim_type_comparative_claim_with_burden_profile_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_type_burden_ok",
+                "statement": "The mechanism is better",
+                "claim_type": "comparative_claim",
+                "claim_kind": "causal_claim",
+                "burden_profile": "comparative",
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_claim_type_comparative_claim_with_regex_language_and_requires_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_type_lang_req_ok",
+                "statement": "P(A) > P(B)",
+                "claim_type": "comparative_claim",
+                "claim_kind": "causal_claim",
+                "requires": ["comparative_probability"],
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output

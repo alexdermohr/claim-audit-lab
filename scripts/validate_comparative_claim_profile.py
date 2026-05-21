@@ -99,8 +99,10 @@ def validate_case(case_dir: Path) -> List[str]:
                 for item in (requires if isinstance(requires, list) else [])
             )
         )
+        claim_type = claim.get("claim_type", "")
         claim_kind = claim.get("claim_kind", "")
         burden_profile = claim.get("burden_profile", "")
+        is_comparative_type = claim_type == "comparative_claim"
         is_comparative_kind = claim_kind == "comparative_claim"
         is_comparative_burden = burden_profile == "comparative"
         has_comp_requirement = (
@@ -109,10 +111,10 @@ def validate_case(case_dir: Path) -> List[str]:
 
         # Consistency gate for explicit comparative typing, independent of
         # comparative-language regex detection.
-        if is_comparative_kind and not is_comparative_burden and not has_comp_requirement:
+        if (is_comparative_type or is_comparative_kind) and not is_comparative_burden and not has_comp_requirement:
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "
-                f"claim_kind='comparative_claim' but 'comparative_probability' is not "
+                f"claim_type/claim_kind='comparative_claim' but 'comparative_probability' is not "
                 f"declared in 'requires' and burden_profile is not 'comparative'. "
                 f"Add 'comparative_probability' to requires, or set burden_profile='comparative'."
             )
@@ -123,13 +125,13 @@ def validate_case(case_dir: Path) -> List[str]:
 
         # Language-detection gate: comparative wording must be represented in
         # typing/burden metadata.
-        if not (is_comparative_kind or is_comparative_burden):
+        if not (is_comparative_type or is_comparative_kind or is_comparative_burden):
             errors.append(
                 f"{claims_file} claim_id={claim_id}: "
                 f"comparative-language detected in statement/notes/requires "
-                f"but claim_kind={claim_kind!r} is not 'comparative_claim' "
+                f"but claim_type={claim_type!r} and claim_kind={claim_kind!r} are not 'comparative_claim' "
                 f"and burden_profile={burden_profile!r} is not 'comparative'. "
-                f"Expected: claim_kind='comparative_claim' or burden_profile='comparative'."
+                f"Expected: claim_type='comparative_claim', claim_kind='comparative_claim', or burden_profile='comparative'."
             )
 
     return errors
