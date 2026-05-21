@@ -227,7 +227,7 @@ def get_major_effect_support_issue(
         return "independent_support_source_refs must be a non-empty list"
     if any(not isinstance(src, str) or not src for src in independent_support):
         return "independent_support_source_refs must contain only non-empty strings"
-    independent_set = set(s for s in independent_support if isinstance(s, str) and s)
+    independent_set = set(independent_support)
     missing_source_ids = sorted(independent_set.difference(known_source_ids))
     if missing_source_ids:
         return (
