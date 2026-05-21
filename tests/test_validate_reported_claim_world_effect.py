@@ -1206,3 +1206,97 @@ class TestReportedClaimWorldEffect:
         assert exit_code == 1
         assert "r_nested_support_fail" in output
         assert "independent_support_source_refs must contain only non-empty strings" in output
+
+
+class TestSafeRelationsGate:
+    """Tests for SAFE_RELATIONS pass-through and unknown-relation-type gate."""
+
+    def _base_case(self, case_dir: Path, relation_type: str):
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"], "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "sources.yml", {"sources": [{"source_id": "s001"}]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"],
+             "relation_type": relation_type, "strength": 0.8}
+        ]})
+
+    def test_safe_relation_reports_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        self._base_case(case_dir, "reports")
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_safe_relation_contextualizes_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        self._base_case(case_dir, "contextualizes")
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_safe_relation_source_position_passes(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        self._base_case(case_dir, "source_position")
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_unknown_relation_proves_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        self._base_case(case_dir, "proves")
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1, output
+        assert "r001" in output
+        assert "unknown" in output.lower()
+        assert "proves" in output
+
+    def test_unknown_relation_establishes_fails(self, tmp_path):
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        self._base_case(case_dir, "establishes")
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1, output
+        assert "r001" in output
+        assert "unknown" in output.lower()
+        assert "establishes" in output
+
+    def test_unknown_relation_non_world_claim_passes(self, tmp_path):
+        """Unknown relation type does not trigger if target is not a world claim."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "Meta claim", "claim_kind": "meta_claim"},
+            {"claim_id": "c002", "statement": "Reported claim", "claim_kind": "reported_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "claim_refs": ["c002"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"],
+             "relation_type": "proves", "strength": 0.8}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_unknown_relation_no_report_derived_evidence_passes(self, tmp_path):
+        """Unknown relation type does not trigger if no report-derived evidence."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        write_yml_file(case_dir, "claims.yml", {"claims": [
+            {"claim_id": "c001", "statement": "World claim", "claim_kind": "causal_claim"},
+        ]})
+        write_yml_file(case_dir, "evidence-pack.yml", {"evidence": [
+            {"evidence_id": "e001", "source_refs": ["s001"]}
+        ]})
+        write_yml_file(case_dir, "evidence-relations.yml", {"relations": [
+            {"relation_id": "r001", "claim_ref": "c001", "evidence_refs": ["e001"],
+             "relation_type": "proves", "strength": 0.8}
+        ]})
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output

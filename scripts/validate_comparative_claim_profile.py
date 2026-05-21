@@ -40,7 +40,9 @@ COMPARATIVE_PATTERNS = [
     r"\binstead\s+of\b",
     r"\brather\s+than\b",
     r"\bstatt\s+durch\b",
-    r"\bgegenüber\b",
+    # "gegenüber" alone is too broad (e.g. "kritisch gegenüber der Quelle").
+    # Only detect it when paired with explicitly comparative probability wording.
+    r"\bwahrscheinlicher\s+gegenüber\b",
     r"\bcompared\s+to\b",
 ]
 

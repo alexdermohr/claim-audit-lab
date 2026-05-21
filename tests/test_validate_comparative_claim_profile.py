@@ -416,3 +416,65 @@ class TestComparativeClaimProfile:
         write_claims_yml(case_dir, claims_data)
         exit_code, output = run_validator(tmp_path)
         assert exit_code == 0, output
+
+    def test_gegenueber_neutral_does_not_trigger(self, tmp_path):
+        """'neutral gegenüber X' should not trigger comparative-language detection."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_neutral_gegenueber",
+                "statement": "Die Untersuchung bleibt neutral gegenüber X.",
+                "claim_type": "causal_claim",
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_gegenueber_source_critique_does_not_trigger(self, tmp_path):
+        """'kritisch gegenüber der Quelle' should not trigger comparative-language detection."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_kritisch_gegenueber",
+                "statement": "Der Bericht ist kritisch gegenüber der Quelle.",
+                "claim_type": "causal_claim",
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 0, output
+
+    def test_wahrscheinlicher_als_still_triggers(self, tmp_path):
+        """wahrscheinlicher als must still trigger comparative detection."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_wahr_als_fail",
+                "statement": "Feuer ist wahrscheinlicher als Absprache.",
+                "claim_type": "causal_claim",
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1, output
+        assert "c_wahr_als_fail" in output
+
+    def test_more_likely_than_still_triggers(self, tmp_path):
+        """'more likely than' must still trigger comparative detection."""
+        case_dir = tmp_path / "test_case"
+        case_dir.mkdir()
+        claims_data = {
+            "claims": [{
+                "claim_id": "c_more_likely_fail",
+                "statement": "Fire is more likely than controlled demolition.",
+                "claim_type": "causal_claim",
+            }]
+        }
+        write_claims_yml(case_dir, claims_data)
+        exit_code, output = run_validator(tmp_path)
+        assert exit_code == 1, output
+        assert "c_more_likely_fail" in output

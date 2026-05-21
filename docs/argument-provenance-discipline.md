@@ -118,6 +118,39 @@ The validator supports both `evidence_ref` (singular string) and `evidence_refs`
 
 Evidence is detected as report-derived when either its `claim_refs` list contains a `reported_claim` id, or the evidence entry itself is marked with `burden_profile: source_report` / `claim_kind: reported_claim`. For direct source-report evidence without a reported claim ref, provenance must reference the specific evidence id via `premise_evidence_refs`.
 
+## Unknown Relation Types
+
+If report-derived evidence is used against a world claim with a relation type that is neither a safe relation nor a registered strong-effect relation, the validator will fail with an error.
+
+The full lists are:
+
+**Safe relations** (no provenance needed):
+- `reports`, `contextualizes`, `source_position`
+
+**Registered strong-effect relations** (require provenance):
+- `alternative_explanation`, `weakens`, `contradicts`, `contradicts_directly`, `contradicts_indirectly`, `supports`, `supports_directly`, `supports_indirectly`, `method_challenge`
+
+Any other relation type (e.g. `proves`, `establishes`, `decisively_refutes`) used with report-derived evidence targeting a world claim is flagged as unknown and must be registered in one of the two sets before use.
+
+## Relation-Level Origin Independence
+
+When a single relation uses multiple report-derived evidence items (e.g. `e001` and `e002`), origin-source independence for major-effect provenance is evaluated at **relation level**: the union of all origin sources for all report-derived evidence in the relation is used when checking independence. Each provenance entry must declare `independent_support_source_refs` that do not overlap with this combined origin set.
+
+This means: if `e001` originates from `s001` and `e002` from `s002`, then provenance must show independence from both `s001` and `s002`, not just the origin of one marker. This is a deliberate conservative choice. Marker-local independence assessment is reserved for a future validator revision.
+
+## Limitation: Independence as Source-ID Non-Overlap
+
+The current validator asserts **source-id non-overlap** as its definition of independence:
+
+- `independent_support_source_refs` must not share any id with the derived or declared origin sources.
+
+This is a necessary but not sufficient condition for true independence. The validator does **not** assess:
+- Methodological independence (different analysis methods)
+- Institutional independence (different affiliated organizations)
+- Source-cluster independence (different information lineages)
+
+Cluster-level independence assessment is reserved for a future source-cluster validator. When authoring provenance entries, document methodological independence in the `notes` field even if the validator cannot enforce it.
+
 ## Rationale
 
 1. **Transparency**: The agent or author explicitly acknowledges that a reported claim is being used as a world argument, not merely as a source position.

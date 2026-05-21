@@ -34,6 +34,12 @@ WORLD_CLAIM_TYPES = {
     "absence_claim",
 }
 
+SAFE_RELATIONS = {
+    "reports",
+    "contextualizes",
+    "source_position",
+}
+
 STRONG_EFFECT_RELATIONS = {
     "alternative_explanation",
     "weakens",
@@ -481,7 +487,7 @@ def validate_case(case_dir: Path) -> List[str]:
         claim_ref = relation.get("claim_ref", "")
         relation_type = relation.get("relation_type", "")
 
-        if relation_type not in STRONG_EFFECT_RELATIONS:
+        if relation_type in SAFE_RELATIONS:
             continue
         if not isinstance(claim_ref, str) or not is_world_claim(claims_by_id, claim_ref):
             continue
@@ -501,6 +507,17 @@ def validate_case(case_dir: Path) -> List[str]:
                 report_derived_origin_sources.update(evidence_origin_sources(evidence))
 
         if not report_derived_ids:
+            continue
+
+        if relation_type not in STRONG_EFFECT_RELATIONS:
+            evidence_str = ", ".join(report_derived_ids)
+            errors.append(
+                f"{relations_file} relation_id={relation_id} claim_ref={claim_ref}: "
+                f"report-derived evidence ({evidence_str}) uses unknown "
+                f"relation_type={relation_type!r} against a world claim. "
+                f"Use a safe relation type (reports, contextualizes, source_position) or "
+                f"register it as a strong-effect relation type with provenance."
+            )
             continue
 
         strength_value, strength_error = parse_strength(
