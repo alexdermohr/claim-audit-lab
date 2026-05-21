@@ -426,6 +426,7 @@ class TestComparativeClaimProfile:
                 "claim_id": "c_neutral_gegenueber",
                 "statement": "Die Untersuchung bleibt neutral gegenüber X.",
                 "claim_type": "causal_claim",
+                "claim_kind": "causal_claim",
             }]
         }
         write_claims_yml(case_dir, claims_data)
@@ -441,6 +442,7 @@ class TestComparativeClaimProfile:
                 "claim_id": "c_kritisch_gegenueber",
                 "statement": "Der Bericht ist kritisch gegenüber der Quelle.",
                 "claim_type": "causal_claim",
+                "claim_kind": "causal_claim",
             }]
         }
         write_claims_yml(case_dir, claims_data)
@@ -456,6 +458,7 @@ class TestComparativeClaimProfile:
                 "claim_id": "c_wahr_als_fail",
                 "statement": "Feuer ist wahrscheinlicher als Absprache.",
                 "claim_type": "causal_claim",
+                "claim_kind": "causal_claim",
             }]
         }
         write_claims_yml(case_dir, claims_data)
@@ -472,6 +475,7 @@ class TestComparativeClaimProfile:
                 "claim_id": "c_more_likely_fail",
                 "statement": "Fire is more likely than controlled demolition.",
                 "claim_type": "causal_claim",
+                "claim_kind": "causal_claim",
             }]
         }
         write_claims_yml(case_dir, claims_data)
