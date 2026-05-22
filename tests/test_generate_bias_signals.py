@@ -299,6 +299,46 @@ class TestReportedClaimWorldPressure:
         assert "reported_claim_world_pressure" not in types_of(signals)
 
 
+class TestCounterhypothesisUnderSteelman:
+    def test_strong_claim_with_counter_and_weak_steelman_fires(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_type="causal_claim", status="established",
+                  counterclaims=["might be coincidence"])
+        ]})
+        write(case / "assessment.md", "c001 is the cause.")  # no steelman block
+        signals = gbs.generate_for_case(case)
+        sig = [s for s in signals if s["signal_type"] == "counterhypothesis_understeelman"]
+        assert sig and sig[0]["affected_claims"] == ["c001"]
+
+    def test_signal_is_claim_local_not_case_global(self, tmp_path):
+        # c001 carries a counterhypothesis; c002 (also strong) does not. The signal
+        # must attach to c001 only and must not piggyback onto c002.
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_type="causal_claim", status="established",
+                  counterclaims=["alternative cause"]),
+            claim("c002", claim_type="motive_claim", status="established"),
+        ]})
+        write(case / "assessment.md", "Both claims hold.")
+        signals = gbs.generate_for_case(case)
+        affected = {
+            tuple(s["affected_claims"])
+            for s in signals if s["signal_type"] == "counterhypothesis_understeelman"
+        }
+        assert ("c001",) in affected
+        assert ("c002",) not in affected
+
+    def test_strong_claim_without_any_counter_does_not_fire(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_type="causal_claim", status="established")
+        ]})
+        write(case / "assessment.md", "c001 is the cause.")
+        signals = gbs.generate_for_case(case)
+        assert "counterhypothesis_understeelman" not in types_of(signals)
+
+
 import json
 import pathlib
 from jsonschema_compat import jsonschema as _jsonschema

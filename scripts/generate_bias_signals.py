@@ -37,16 +37,21 @@ WEAK_STATUSES = {"weak", "speculative", "unresolved", "no_verdict_possible"}
 STRONG_STATUSES = {"strongly_supported", "established"}
 COUNTER_REQUIRING_TYPES = {"causal_claim", "motive_claim"}
 
+# Strong-effect relation types, kept in sync with STRONG_EFFECT_RELATIONS in
+# validate_reported_claim_world_effect.py. The bare forms "supports",
+# "contradicts", and "contradicts_indirectly" are legacy aliases not present in
+# evidence-relation.v1.schema.json's enum; they are recognised here so a relation
+# cannot dodge the gate by relabelling to a non-canonical type.
 DIRECTIONAL_RELATION_TYPES = {
-    "supports",
+    "supports",  # legacy alias (not in schema enum)
     "supports_directly",
     "supports_indirectly",
     "weakens",
     "undercuts",
-    "contradicts",
+    "contradicts",  # legacy alias (not in schema enum)
     "contradicts_directly",
     "contradicts_conditionally",
-    "contradicts_indirectly",
+    "contradicts_indirectly",  # legacy alias (not in schema enum)
     "alternative_explanation",
     "method_challenge",
 }
@@ -435,9 +440,11 @@ def detect_reported_claim_world_pressure(ctx: CaseContext) -> list[dict]:
                 if rtype not in DIRECTIONAL_RELATION_TYPES:
                     continue
                 ev_refs = _get_evidence_refs_from_relation(relation)
+                triggering_ev_refs: list[str] = []
                 involved_reported: set[str] = set()
                 for ev_ref in ev_refs:
                     if ev_ref in reported_evidence:
+                        triggering_ev_refs.append(ev_ref)
                         involved_reported.update(reported_evidence[ev_ref])
                 if not involved_reported:
                     continue
@@ -446,7 +453,7 @@ def detect_reported_claim_world_pressure(ctx: CaseContext) -> list[dict]:
                     continue
                 relation_id = relation.get("relation_id", "?")
                 observation = (
-                    f"evidence {' '.join(sorted(ev_refs))} derived from reported_claim(s) "
+                    f"evidence {sorted(triggering_ev_refs)} derived from reported_claim(s) "
                     f"{sorted(involved_reported)} is used via '{rtype}' relation "
                     f"({relation_id}) toward claim {target_claim} while "
                     f"argument-provenance.yml is missing; the inference path is undeclared."
@@ -543,22 +550,8 @@ def detect_redteam_pending_with_final_language(ctx: CaseContext) -> list[dict]:
 
 
 def detect_counterhypothesis_understeelman(ctx: CaseContext) -> list[dict]:
-    strong_claims = [
-        c.get("claim_id")
-        for c in ctx.claims
-        if c.get("status") in STRONG_STATUSES
-        and c.get("claim_type") in COUNTER_REQUIRING_TYPES
-        and isinstance(c.get("claim_id"), str)
-    ]
-    if not strong_claims:
-        return []
-    has_counter = (
-        any((c.get("counterclaims") or []) for c in ctx.claims)
-        or "```steelman" in ctx.assessment_text
-        or ctx.has_hypotheses
-    )
-    if not has_counter:
-        return []
+    # Case-global prose quality of the steelman (assessment.md is not structured
+    # per-claim, so these prose checks are evaluated once and reused per claim).
     steelman_present = "```steelman" in ctx.assessment_text
     what_would_change = any(
         re.search(p, ctx.assessment_text, flags=re.IGNORECASE) for p in WHAT_WOULD_CHANGE_PATTERNS
@@ -579,20 +572,37 @@ def detect_counterhypothesis_understeelman(ctx: CaseContext) -> list[dict]:
         else "steelman quality below 0.3" if low_quality
         else "no 'what would change the verdict' statement"
     )
-    observation = (
-        f"strong causal/motive claim(s) {sorted(strong_claims)} carry a counterhypothesis "
-        f"but the steelman is under-developed ({reason})."
-    )
-    return [
-        _build(
-            ctx,
-            signal_type="counterhypothesis_understeelman",
-            severity=0.70,
-            affected_claims=sorted(strong_claims),
-            detected_from=["assessment.md"],
-            observation=observation,
+
+    signals: list[dict] = []
+    for claim in ctx.claims:
+        claim_id = claim.get("claim_id")
+        if not isinstance(claim_id, str):
+            continue
+        if claim.get("status") not in STRONG_STATUSES:
+            continue
+        if claim.get("claim_type") not in COUNTER_REQUIRING_TYPES:
+            continue
+        # Claim-local: only fire if THIS claim actually carries a counterhypothesis.
+        # A bare steelman block elsewhere is not attributable to this claim, so the
+        # claim's own counterclaims (or a case-level hypotheses ledger) are required.
+        has_counter = bool(claim.get("counterclaims") or []) or ctx.has_hypotheses
+        if not has_counter:
+            continue
+        observation = (
+            f"strong causal/motive claim {claim_id} carries a counterhypothesis "
+            f"but the steelman is under-developed ({reason})."
         )
-    ]
+        signals.append(
+            _build(
+                ctx,
+                signal_type="counterhypothesis_understeelman",
+                severity=0.70,
+                affected_claims=[claim_id],
+                detected_from=[f"claims.yml#{claim_id}", "assessment.md"],
+                observation=observation,
+            )
+        )
+    return signals
 
 
 DETECTORS = (

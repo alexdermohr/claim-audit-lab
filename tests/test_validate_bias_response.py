@@ -147,6 +147,49 @@ class TestFinalMode:
         })
         assert errors_of(case) == []
 
+    def test_final_mitigated_with_escaping_ref_fails(self, tmp_path):
+        case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
+        (tmp_path / "cases" / "outside.yml").write_text("x: 1", encoding="utf-8")
+        write(case / "bias-response.yml", {
+            "schema_version": "1.0",
+            "case_ref": "cases/severe",
+            "responses": [{
+                "signal_ref": signal_id,
+                "response_status": "mitigated",
+                "rationale": "cites a sibling file outside the case",
+                "mitigation_refs": ["../outside.yml"],
+            }],
+        })
+        assert errors_of(case)
+
+    def test_final_mitigated_with_absolute_ref_fails(self, tmp_path):
+        case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
+        write(case / "bias-response.yml", {
+            "schema_version": "1.0",
+            "case_ref": "cases/severe",
+            "responses": [{
+                "signal_ref": signal_id,
+                "response_status": "mitigated",
+                "rationale": "cites an absolute system path",
+                "mitigation_refs": ["/etc/hosts"],
+            }],
+        })
+        assert errors_of(case)
+
+    def test_final_mitigated_with_anchor_ref_passes(self, tmp_path):
+        case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
+        write(case / "bias-response.yml", {
+            "schema_version": "1.0",
+            "case_ref": "cases/severe",
+            "responses": [{
+                "signal_ref": signal_id,
+                "response_status": "mitigated",
+                "rationale": "anchored ref to an existing in-case artifact",
+                "mitigation_refs": ["claims.yml#c001"],
+            }],
+        })
+        assert errors_of(case) == []
+
     def test_final_mitigated_with_nonexistent_ref_fails(self, tmp_path):
         case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
         write(case / "bias-response.yml", {
