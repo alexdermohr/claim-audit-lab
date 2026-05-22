@@ -338,6 +338,36 @@ class TestCounterhypothesisUnderSteelman:
         signals = gbs.generate_for_case(case)
         assert "counterhypothesis_understeelman" not in types_of(signals)
 
+    def test_unrelated_hypothesis_does_not_trigger(self, tmp_path):
+        # hypotheses.yml exists but carries no reference to c001 → no signal.
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_type="causal_claim", status="established"),
+        ]})
+        write(case / "hypotheses.yml", {"hypotheses": [{
+            "hypothesis_id": "h001",
+            "description": "An alternative explanation unrelated to any claim.",
+        }]})
+        write(case / "assessment.md", "c001 is the cause.")
+        signals = gbs.generate_for_case(case)
+        assert "counterhypothesis_understeelman" not in types_of(signals)
+
+    def test_linked_hypothesis_triggers(self, tmp_path):
+        # hypotheses.yml references c001 via claim_refs → signal fires.
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_type="causal_claim", status="established"),
+        ]})
+        write(case / "hypotheses.yml", {"hypotheses": [{
+            "hypothesis_id": "h001",
+            "description": "Alternative causation for c001.",
+            "claim_refs": ["c001"],
+        }]})
+        write(case / "assessment.md", "c001 is the cause.")  # no steelman block
+        signals = gbs.generate_for_case(case)
+        sig = [s for s in signals if s["signal_type"] == "counterhypothesis_understeelman"]
+        assert sig and sig[0]["affected_claims"] == ["c001"]
+
 
 import json
 import pathlib

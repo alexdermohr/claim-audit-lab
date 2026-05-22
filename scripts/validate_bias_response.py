@@ -59,13 +59,15 @@ def _lifecycle_status(case_dir: pathlib.Path) -> str:
 
 
 def _ref_exists(case_dir: pathlib.Path, ref: str) -> bool:
-    """A response ref points at an existing artifact inside the case directory.
+    """A response ref points at an existing file inside the case directory.
 
-    An optional #anchor is ignored. Refs that escape the case directory (via ``..``
-    or absolute paths) are rejected: the gate must not accept foreign files as proof.
+    An optional #anchor is ignored. Absolute paths, ``..`` escapes, empty refs,
+    and directory refs (e.g. ``"."`` or ``"./"``) are all rejected.
     """
     target = ref.split("#", 1)[0].strip()
     if not target:
+        return False
+    if pathlib.Path(target).is_absolute():
         return False
     base = case_dir.resolve()
     resolved = (case_dir / target).resolve()
@@ -73,7 +75,7 @@ def _ref_exists(case_dir: pathlib.Path, ref: str) -> bool:
         resolved.relative_to(base)
     except ValueError:
         return False
-    return resolved.exists()
+    return resolved.exists() and resolved.is_file()
 
 
 class CaseResult:
