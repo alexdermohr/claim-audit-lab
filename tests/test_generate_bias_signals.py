@@ -105,6 +105,38 @@ class TestRelationThresholdProximity:
         signals = gbs.generate_for_case(case)
         assert "relation_threshold_proximity" not in types_of(signals)
 
+    def test_strength_near_gate_with_supports_fires(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [claim("c001")]})
+        write(case / "evidence-relations.yml", {
+            "relations": [{
+                "relation_id": "r001",
+                "evidence_ref": "e001",
+                "claim_ref": "c001",
+                "relation_type": "supports",
+                "strength": 0.76,
+                "explanation": "near the 0.75 gate via supports",
+            }]
+        })
+        signals = gbs.generate_for_case(case)
+        assert "relation_threshold_proximity" in types_of(signals)
+
+    def test_strength_near_gate_with_contradicts_fires(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [claim("c001")]})
+        write(case / "evidence-relations.yml", {
+            "relations": [{
+                "relation_id": "r001",
+                "evidence_ref": "e001",
+                "claim_ref": "c001",
+                "relation_type": "contradicts",
+                "strength": 0.76,
+                "explanation": "near the 0.75 gate via contradicts",
+            }]
+        })
+        signals = gbs.generate_for_case(case)
+        assert "relation_threshold_proximity" in types_of(signals)
+
 
 class TestComparativeClaimUnderframed:
     def test_comparative_without_null_hypothesis_fires(self, tmp_path):
@@ -121,6 +153,15 @@ class TestComparativeClaimUnderframed:
             claim("c001", claim_kind="comparative_claim",
                   requires=["base rate", "explicit alternative"],
                   notes="evaluated against the null hypothesis")
+        ]})
+        signals = gbs.generate_for_case(case)
+        assert "comparative_claim_underframed" not in types_of(signals)
+
+    def test_comparative_with_snake_case_base_rate_does_not_fire(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_kind="comparative_claim",
+                  requires=["comparative_base_rate"])
         ]})
         signals = gbs.generate_for_case(case)
         assert "comparative_claim_underframed" not in types_of(signals)
@@ -210,6 +251,58 @@ class TestReportedClaimWorldPressure:
         sig = next(s for s in signals if s["signal_type"] == "reported_claim_world_pressure")
         assert "c001" in sig["affected_claims"] and "c002" in sig["affected_claims"]
 
+    def test_evidence_pack_path_fires_when_directional_relation(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_kind="reported_claim", statement="Outlet X reported Y."),
+            claim("c002", claim_type="causal_claim", status="weak"),
+        ]})
+        write(case / "evidence-pack.yml", {"evidence": [{
+            "evidence_id": "e001",
+            "claim_refs": ["c001"],
+        }]})
+        write(case / "evidence-relations.yml", {"relations": [{
+            "relation_id": "r001",
+            "evidence_ref": "e001",
+            "claim_ref": "c002",
+            "relation_type": "supports_directly",
+            "strength": 0.70,
+            "explanation": "reported evidence used to support world claim",
+        }]})
+        # no argument-provenance.yml -> inference path undeclared
+        signals = gbs.generate_for_case(case)
+        assert "reported_claim_world_pressure" in types_of(signals)
+        sig = next(s for s in signals if s["signal_type"] == "reported_claim_world_pressure")
+        assert "c001" in sig["affected_claims"]
+        assert "c002" in sig["affected_claims"]
+
+    def test_evidence_pack_safe_relation_does_not_fire(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_kind="reported_claim", statement="Outlet X reported Y."),
+            claim("c002", claim_type="causal_claim", status="weak"),
+        ]})
+        write(case / "evidence-pack.yml", {"evidence": [{
+            "evidence_id": "e001",
+            "claim_refs": ["c001"],
+        }]})
+        write(case / "evidence-relations.yml", {"relations": [{
+            "relation_id": "r001",
+            "evidence_ref": "e001",
+            "claim_ref": "c002",
+            "relation_type": "reports",  # safe relation: contextualizes/reports
+            "strength": 0.70,
+            "explanation": "only contextualizes, no strong world effect",
+        }]})
+        # no argument-provenance.yml, but safe relation type -> no severe signal
+        signals = gbs.generate_for_case(case)
+        assert "reported_claim_world_pressure" not in types_of(signals)
+
+
+import json
+import pathlib
+from jsonschema_compat import jsonschema as _jsonschema
+
 
 class TestDeterminismAndDocument:
     def test_signal_ids_are_stable(self, tmp_path):
@@ -249,3 +342,16 @@ class TestDeterminismAndDocument:
         write(case / "assessment.md", "This clearly proves c001.")
         rc = gbs.main([str(tmp_path / "cases"), "--check"])
         assert rc == 0
+
+    def test_build_document_is_schema_valid(self, tmp_path):
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [claim("c001", status="weak")]})
+        write(case / "assessment.md", "This clearly proves c001.")
+        signals = gbs.generate_for_case(case)
+        doc = gbs.build_document(gbs.relative_case_ref(case), signals)
+        schema_path = pathlib.Path(gbs.__file__).parent.parent / "schemas" / "bias-signals.v1.schema.json"
+        with open(schema_path, encoding="utf-8") as f:
+            schema = json.load(f)
+        validator = _jsonschema.Draft7Validator(schema, format_checker=_jsonschema.FormatChecker())
+        errors = list(validator.iter_errors(doc))
+        assert errors == []

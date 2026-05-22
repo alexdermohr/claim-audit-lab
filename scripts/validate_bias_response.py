@@ -166,6 +166,16 @@ def validate_case(case_dir: pathlib.Path, response_schema: dict) -> CaseResult:
             result.errors.extend(f"{RESPONSE_FILENAME}: {e}" for e in errs)
             return result
 
+        # case_ref must match the case directory this file lives in.
+        expected_ref = gbs.relative_case_ref(case_dir)
+        doc_ref = response_doc.get("case_ref", "")
+        if doc_ref != expected_ref:
+            result.errors.append(
+                f"bias-response.yml case_ref '{doc_ref}' does not match "
+                f"expected '{expected_ref}' for this case directory."
+            )
+            return result
+
     responses = []
     if isinstance(response_doc, dict):
         responses = [r for r in response_doc.get("responses", []) if isinstance(r, dict)]

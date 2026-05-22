@@ -176,6 +176,21 @@ class TestFinalMode:
         errs = errors_of(case)
         assert any("not generated" in e for e in errs)
 
+    def test_wrong_case_ref_fails(self, tmp_path):
+        case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
+        write(case / "bias-response.yml", {
+            "schema_version": "1.0",
+            "case_ref": "cases/wrong/path",
+            "responses": [{
+                "signal_ref": signal_id,
+                "response_status": "mitigated",
+                "rationale": "fixed the language",
+                "mitigation_refs": ["assessment.md"],
+            }],
+        })
+        errs = errors_of(case)
+        assert any("case_ref" in e for e in errs)
+
     def test_severe_signal_accepted_with_constraint_fails(self, tmp_path):
         case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
         write(case / "bias-response.yml", {

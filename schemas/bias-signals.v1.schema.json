@@ -59,7 +59,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "pattern": "^c[0-9]{3,}$"
+              "minLength": 1
             }
           },
           "detected_from": {

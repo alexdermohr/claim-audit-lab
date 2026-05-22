@@ -26,29 +26,35 @@ from typing import Any
 import yaml
 
 from case_compat import find_cases_root
+from jsonschema_compat import jsonschema
 
 GENERATED_BY = "scripts/generate_bias_signals.py"
 GENERATED_SUBDIR = "_generated"
 GENERATED_FILENAME = "bias-signals.yml"
+SIGNALS_SCHEMA_PATH = pathlib.Path(__file__).parent.parent / "schemas" / "bias-signals.v1.schema.json"
 
 WEAK_STATUSES = {"weak", "speculative", "unresolved", "no_verdict_possible"}
 STRONG_STATUSES = {"strongly_supported", "established"}
 COUNTER_REQUIRING_TYPES = {"causal_claim", "motive_claim"}
 
 DIRECTIONAL_RELATION_TYPES = {
+    "supports",
     "supports_directly",
     "supports_indirectly",
     "weakens",
     "undercuts",
+    "contradicts",
     "contradicts_directly",
     "contradicts_conditionally",
+    "contradicts_indirectly",
     "alternative_explanation",
+    "method_challenge",
 }
 THRESHOLD_GATES = (0.60, 0.75)
 THRESHOLD_WINDOW = 0.03
 
 PENDING_REDTEAM_VERDICTS = {"pending", "pending_independent_review"}
-FINAL_LANGUAGE_TOKENS = {"final", "assessed", "final_under_uncertainty"}
+FINAL_LANGUAGE_TOKENS = {"assessed", "final_under_uncertainty"}
 
 # Finalizing prose: stronger than any below-established verdict warrants.
 FINALIZING_PATTERNS = (
@@ -70,18 +76,23 @@ FINALIZING_PATTERNS = (
 # Framing tokens that a comparative claim must declare to be adequately framed.
 COMPARATIVE_FRAMING_TOKENS = (
     "base rate",
+    "base_rate",
     "baseline",
     "basisrate",
     "null hypothesis",
+    "null_hypothesis",
     "nullhypothese",
     "alternative",
     "alternativen",
     "comparison base",
+    "comparison_base",
+    "comparative_base_rate",
     "vergleichsbasis",
     "reference class",
     "referenzklasse",
     "prior",
     "decision rule",
+    "decision_rule",
     "decision logic",
     "entscheidungslogik",
     "evaluation standard",
@@ -136,6 +147,8 @@ class CaseContext:
         self.assessment_text = _read_text(case_dir / "assessment.md")
         self.has_argument_provenance = (case_dir / "argument-provenance.yml").exists()
         self.has_hypotheses = (case_dir / "hypotheses.yml").exists()
+        evidence_pack_doc = _load_yaml(case_dir / "evidence-pack.yml")
+        self.evidence_pack = _as_list(evidence_pack_doc, "evidence")
 
 
 def _as_list(doc: Any, key: str) -> list[dict]:
@@ -169,6 +182,34 @@ def _eligible_lines(text: str) -> list[str]:
             continue
         lines.append(raw)
     return lines
+
+
+def _get_evidence_refs_from_relation(relation: dict) -> list[str]:
+    """Collect all evidence refs from a relation (singular and plural fields)."""
+    refs: list[str] = []
+    singular = relation.get("evidence_ref")
+    if isinstance(singular, str) and singular:
+        refs.append(singular)
+    plural = relation.get("evidence_refs") or []
+    if isinstance(plural, list):
+        refs.extend(r for r in plural if isinstance(r, str) and r)
+    return list(dict.fromkeys(refs))
+
+
+def _load_signals_schema() -> dict | None:
+    try:
+        with open(SIGNALS_SCHEMA_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def _schema_errors_for_document(document: dict, schema: dict) -> list[str]:
+    validator = jsonschema.Draft7Validator(schema, format_checker=jsonschema.FormatChecker())
+    return [
+        f"Schema error at {list(e.absolute_path)}: {e.message}"
+        for e in sorted(validator.iter_errors(document), key=lambda e: list(e.absolute_path))
+    ]
 
 
 def _assessment_status_token(text: str) -> str:
@@ -336,15 +377,21 @@ def detect_source_weight_asymmetry(ctx: CaseContext) -> list[dict]:
 
 def detect_reported_claim_world_pressure(ctx: CaseContext) -> list[dict]:
     signals: list[dict] = []
+
+    # Build a set of reported_claim / source_report claim IDs.
+    reported_claim_ids: set[str] = set()
     for claim in ctx.claims:
-        claim_id = claim.get("claim_id")
-        if not isinstance(claim_id, str):
-            continue
-        is_reported = (
+        cid = claim.get("claim_id")
+        if isinstance(cid, str) and (
             claim.get("claim_kind") == "reported_claim"
             or claim.get("burden_profile") == "source_report"
-        )
-        if not is_reported:
+        ):
+            reported_claim_ids.add(cid)
+
+    # Path A: world_claim_refs or assessment mention on the claim itself.
+    for claim in ctx.claims:
+        claim_id = claim.get("claim_id")
+        if not isinstance(claim_id, str) or claim_id not in reported_claim_ids:
             continue
         world_refs = [r for r in (claim.get("world_claim_refs") or []) if isinstance(r, str)]
         mentioned = bool(ctx.assessment_text) and claim_id in ctx.assessment_text
@@ -366,6 +413,58 @@ def detect_reported_claim_world_pressure(ctx: CaseContext) -> list[dict]:
                 observation=observation,
             )
         )
+
+    # Path B: evidence-pack items derived from reported claims used via directional relations.
+    if not ctx.has_argument_provenance and reported_claim_ids and ctx.evidence_pack:
+        # Map evidence_id → list of reported claim IDs it is derived from.
+        reported_evidence: dict[str, list[str]] = {}
+        for evidence in ctx.evidence_pack:
+            eid = evidence.get("evidence_id")
+            if not isinstance(eid, str):
+                continue
+            linked = [
+                ref for ref in (evidence.get("claim_refs") or [])
+                if isinstance(ref, str) and ref in reported_claim_ids
+            ]
+            if linked:
+                reported_evidence[eid] = linked
+
+        if reported_evidence:
+            for relation in ctx.relations:
+                rtype = relation.get("relation_type", "")
+                if rtype not in DIRECTIONAL_RELATION_TYPES:
+                    continue
+                ev_refs = _get_evidence_refs_from_relation(relation)
+                involved_reported: set[str] = set()
+                for ev_ref in ev_refs:
+                    if ev_ref in reported_evidence:
+                        involved_reported.update(reported_evidence[ev_ref])
+                if not involved_reported:
+                    continue
+                target_claim = relation.get("claim_ref")
+                if not isinstance(target_claim, str) or not target_claim:
+                    continue
+                relation_id = relation.get("relation_id", "?")
+                observation = (
+                    f"evidence {' '.join(sorted(ev_refs))} derived from reported_claim(s) "
+                    f"{sorted(involved_reported)} is used via '{rtype}' relation "
+                    f"({relation_id}) toward claim {target_claim} while "
+                    f"argument-provenance.yml is missing; the inference path is undeclared."
+                )
+                signals.append(
+                    _build(
+                        ctx,
+                        signal_type="reported_claim_world_pressure",
+                        severity=0.78,
+                        affected_claims=sorted(involved_reported | {target_claim}),
+                        detected_from=[
+                            f"evidence-relations.yml#{relation_id}",
+                            "argument-provenance.yml(missing)",
+                        ],
+                        observation=observation,
+                    )
+                )
+
     return signals
 
 
@@ -591,11 +690,20 @@ def main(argv: list[str]) -> int:
         print(f"No case directories found under {root}")
         return 0
 
+    signals_schema = _load_signals_schema()
+
     json_payload: list[dict] = []
     drift = 0
     for case_dir in case_dirs:
         signals = generate_for_case(case_dir)
         document = build_document(relative_case_ref(case_dir), signals)
+
+        if signals_schema:
+            schema_errs = _schema_errors_for_document(document, signals_schema)
+            if schema_errs:
+                for err in schema_errs:
+                    print(f"SCHEMA ERROR {case_dir}: {err}", file=sys.stderr)
+                return 1
 
         if args.check:
             committed = _generated_path(case_dir)
