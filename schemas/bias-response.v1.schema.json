@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://claim-audit-lab/schemas/bias-response.v1.schema.json",
+  "title": "Bias Response v1",
+  "description": "Manual responses to machine-derived bias signals. acknowledged/noted/seen/handled are intentionally not permitted.",
+  "type": "object",
+  "required": ["schema_version", "case_ref", "responses"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "case_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "responses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["signal_ref", "response_status", "rationale"],
+        "additionalProperties": false,
+        "properties": {
+          "signal_ref": {
+            "type": "string",
+            "pattern": "^bs_[0-9a-f]{12}$"
+          },
+          "response_status": {
+            "type": "string",
+            "enum": [
+              "mitigated",
+              "accepted_with_constraint",
+              "false_positive",
+              "escalated_to_redteam"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mitigation_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "residual_risk": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          },
+          "constraint_statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "redteam_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

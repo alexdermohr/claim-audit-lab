@@ -43,6 +43,8 @@ validate:
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_verification_language_consistency.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_refusal_discipline.py cases
 	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_aggregation_discipline.py cases
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/generate_bias_signals.py cases --check
+	$(PYTHONPATH_ENV) $(PYTHON) scripts/validate_bias_response.py cases
 
 test:
 	$(PYTHONPATH_ENV) $(PYTHON) -m pytest tests
