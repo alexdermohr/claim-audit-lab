@@ -95,6 +95,13 @@ The generator starts with a small set of hard signal types.
 | `redteam_pending_with_final_language` | 0.85 | red-team verdict is `pending` while lifecycle/assessment language is finalizing |
 | `counterhypothesis_understeelman` | 0.70 | a strong causal/motive claim has a counterhypothesis but the steelman is absent, very low, or lacks "what would change the verdict" |
 
+**`counterhypothesis_understeelman` — claim locality rule:** a counterhypothesis
+is present when the claim carries `counterclaims`, *or* when an entry in
+`hypotheses.yml` explicitly references the claim via `claim_ref`, `claim_refs`,
+`target_claim_ref`, `target_claim_refs`, or `affected_claims`. A bare
+`hypotheses.yml` with no claim references does not trigger the signal for any
+claim — presence of the file alone is not evidence of a per-claim counter.
+
 Asymmetry alone is not bias. The rule is **asymmetry + missing justification =
 signal**, never **asymmetry = bias**.
 

@@ -345,7 +345,7 @@ class TestCounterhypothesisUnderSteelman:
             claim("c001", claim_type="causal_claim", status="established"),
         ]})
         write(case / "hypotheses.yml", {"hypotheses": [{
-            "hypothesis_id": "h001",
+            "id": "h001",
             "description": "An alternative explanation unrelated to any claim.",
         }]})
         write(case / "assessment.md", "c001 is the cause.")
@@ -359,7 +359,7 @@ class TestCounterhypothesisUnderSteelman:
             claim("c001", claim_type="causal_claim", status="established"),
         ]})
         write(case / "hypotheses.yml", {"hypotheses": [{
-            "hypothesis_id": "h001",
+            "id": "h001",
             "description": "Alternative causation for c001.",
             "claim_refs": ["c001"],
         }]})
@@ -375,7 +375,7 @@ class TestCounterhypothesisUnderSteelman:
             claim("c001", claim_type="causal_claim", status="established"),
         ]})
         write(case / "hypotheses.yml", {"hypotheses": [{
-            "hypothesis_id": "h001",
+            "id": "h001",
             "description": "Alternative causation for c001.",
             "claim_ref": "c001",  # singular string, not list
         }]})

@@ -29,6 +29,19 @@ hypotheses:
     supporting_evidence: []
     weaknesses: []
 
+# To trigger the counterhypothesis_understeelman bias signal, a hypothesis must
+# explicitly reference the affected claim(s) via claim_ref / claim_refs /
+# target_claim_ref / target_claim_refs / affected_claims.
+# A bare hypotheses.yml without claim references does not activate the signal.
+  - id: "h_example_linked"
+    label: "alternative_causal_explanation"
+    description: "Placeholder: an alternative explanation directly competing with c001."
+    status: "speculative"
+    supporting_evidence: []
+    weaknesses: []
+    claim_refs:
+      - "c001"
+
 steelmans:
   - hypothesis_id: "h3"
     strongest_version: ""
