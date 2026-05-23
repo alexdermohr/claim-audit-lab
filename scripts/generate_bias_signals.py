@@ -550,15 +550,23 @@ def detect_redteam_pending_with_final_language(ctx: CaseContext) -> list[dict]:
     ]
 
 
+def _refs_from_field(value: object) -> list[str]:
+    """Safely extract string refs from a field that may be a string, list, or invalid."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        return [v for v in value if isinstance(v, str)]
+    return []
+
+
 def _hypothesis_refs_claim(hyp: dict, claim_id: str) -> bool:
     """True if a hypothesis explicitly references claim_id in any standard ref field."""
     for key in ("claim_ref", "target_claim_ref"):
         if hyp.get(key) == claim_id:
             return True
     for key in ("claim_refs", "target_claim_refs", "affected_claims"):
-        for ref in (hyp.get(key) or []):
-            if ref == claim_id:
-                return True
+        if claim_id in _refs_from_field(hyp.get(key)):
+            return True
     return False
 
 

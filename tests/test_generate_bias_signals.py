@@ -368,6 +368,22 @@ class TestCounterhypothesisUnderSteelman:
         sig = [s for s in signals if s["signal_type"] == "counterhypothesis_understeelman"]
         assert sig and sig[0]["affected_claims"] == ["c001"]
 
+    def test_linked_hypothesis_string_claim_ref_triggers(self, tmp_path):
+        # Defensive: claim_ref as a string (not list) still works.
+        case = make_case(tmp_path)
+        write(case / "claims.yml", {"claims": [
+            claim("c001", claim_type="causal_claim", status="established"),
+        ]})
+        write(case / "hypotheses.yml", {"hypotheses": [{
+            "hypothesis_id": "h001",
+            "description": "Alternative causation for c001.",
+            "claim_ref": "c001",  # singular string, not list
+        }]})
+        write(case / "assessment.md", "c001 is the cause.")  # no steelman block
+        signals = gbs.generate_for_case(case)
+        sig = [s for s in signals if s["signal_type"] == "counterhypothesis_understeelman"]
+        assert sig and sig[0]["affected_claims"] == ["c001"]
+
 
 import json
 import pathlib
