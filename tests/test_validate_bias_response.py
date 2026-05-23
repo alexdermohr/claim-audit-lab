@@ -190,6 +190,20 @@ class TestFinalMode:
         })
         assert errors_of(case) == []
 
+    def test_final_mitigated_with_dir_ref_fails(self, tmp_path):
+        case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
+        write(case / "bias-response.yml", {
+            "schema_version": "1.0",
+            "case_ref": "cases/severe",
+            "responses": [{
+                "signal_ref": signal_id,
+                "response_status": "mitigated",
+                "rationale": "references the case directory itself",
+                "mitigation_refs": ["."],
+            }],
+        })
+        assert errors_of(case)
+
     def test_final_mitigated_with_nonexistent_ref_fails(self, tmp_path):
         case, signal_id = severe_case(tmp_path, "final_under_uncertainty")
         write(case / "bias-response.yml", {

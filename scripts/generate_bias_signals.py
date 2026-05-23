@@ -151,7 +151,8 @@ class CaseContext:
         self.lifecycle = _load_yaml(case_dir / "lifecycle.yml")
         self.assessment_text = _read_text(case_dir / "assessment.md")
         self.has_argument_provenance = (case_dir / "argument-provenance.yml").exists()
-        self.has_hypotheses = (case_dir / "hypotheses.yml").exists()
+        hypotheses_doc = _load_yaml(case_dir / "hypotheses.yml")
+        self.hypotheses = _as_list(hypotheses_doc, "hypotheses")
         evidence_pack_doc = _load_yaml(case_dir / "evidence-pack.yml")
         self.evidence_pack = _as_list(evidence_pack_doc, "evidence")
 
@@ -549,6 +550,26 @@ def detect_redteam_pending_with_final_language(ctx: CaseContext) -> list[dict]:
     ]
 
 
+def _refs_from_field(value: object) -> list[str]:
+    """Safely extract string refs from a field that may be a string, list, or invalid."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        return [v for v in value if isinstance(v, str)]
+    return []
+
+
+def _hypothesis_refs_claim(hyp: dict, claim_id: str) -> bool:
+    """True if a hypothesis explicitly references claim_id in any standard ref field."""
+    for key in ("claim_ref", "target_claim_ref"):
+        if hyp.get(key) == claim_id:
+            return True
+    for key in ("claim_refs", "target_claim_refs", "affected_claims"):
+        if claim_id in _refs_from_field(hyp.get(key)):
+            return True
+    return False
+
+
 def detect_counterhypothesis_understeelman(ctx: CaseContext) -> list[dict]:
     # Case-global prose quality of the steelman (assessment.md is not structured
     # per-claim, so these prose checks are evaluated once and reused per claim).
@@ -583,9 +604,12 @@ def detect_counterhypothesis_understeelman(ctx: CaseContext) -> list[dict]:
         if claim.get("claim_type") not in COUNTER_REQUIRING_TYPES:
             continue
         # Claim-local: only fire if THIS claim actually carries a counterhypothesis.
-        # A bare steelman block elsewhere is not attributable to this claim, so the
-        # claim's own counterclaims (or a case-level hypotheses ledger) are required.
-        has_counter = bool(claim.get("counterclaims") or []) or ctx.has_hypotheses
+        # A bare hypotheses.yml is not enough — the hypothesis must explicitly reference
+        # this claim via claim_ref / claim_refs / target_claim_ref / target_claim_refs /
+        # affected_claims. claim.counterclaims is always a valid local trigger.
+        has_counter = bool(claim.get("counterclaims") or []) or any(
+            _hypothesis_refs_claim(h, claim_id) for h in ctx.hypotheses
+        )
         if not has_counter:
             continue
         observation = (
