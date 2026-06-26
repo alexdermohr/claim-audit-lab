@@ -1,0 +1,73 @@
+schema_version: "1.0"
+evidence:
+  - evidence_id: "e001"
+    source_ref: "s001"
+    claim_refs: ["c001", "c002", "c003", "c005"]
+    type: "document_excerpt"
+    summary: "NIST NCSTAR 1A beschreibt Brände über annähernd sieben Stunden und eine thermisch initiierte interne Progressionskette."
+    verbatim_or_ref: "NIST NCSTAR 1A, Executive Summary and probable collapse sequence."
+    locator: "PDF pages 36, 62-63, 88-95 in the web-rendered report"
+    accessed_at: "2026-06-26"
+    supports: ["c003", "c005"]
+    contradicts: ["c002"]
+    notes: "Direkte Berichtsevidenz; sie dokumentiert zugleich den NIST-Quelleninhalt und positive mechanische Stützung, ist aber keine unabhängige Replikation."
+
+  - evidence_id: "e002"
+    source_ref: "s002"
+    claim_refs: ["c001", "c002", "c003", "c005"]
+    type: "official_statement"
+    summary: "Die NIST-FAQ nennt Brände auf mindestens zehn Etagen, unkontrollierte Brände auf mehreren unteren Etagen und einen Ausfall der Wasserversorgung."
+    verbatim_or_ref: "NIST WTC 7 Investigation FAQ, sections on fires and collapse initiation."
+    locator: "FAQ paragraphs describing floors 7-9 and 11-13 and failed water supply"
+    accessed_at: "2026-06-26"
+    supports: ["c003", "c005"]
+    contradicts: ["c002"]
+    notes: "Die FAQ gehört zum selben NIST-Cluster wie s001 und zählt nicht als unabhängige Bestätigung."
+
+  - evidence_id: "e003"
+    source_ref: "s001"
+    claim_refs: ["c001", "c003", "c005", "c006"]
+    type: "model_output"
+    summary: "NIST zerlegt die sichtbare Abwärtsbewegung in drei Phasen und berichtet für eine Teilphase von rund 2,25 Sekunden eine Beschleunigung in Höhe der Erdbeschleunigung."
+    verbatim_or_ref: "NIST NCSTAR 1A, analysis of descent time."
+    locator: "PDF pages 85-86"
+    accessed_at: "2026-06-26"
+    supports: ["c003"]
+    contradicts: []
+    notes: "Die Freifallphase ist eine relevante Beobachtung. Im aktuellen Pack ist sie nicht als eindeutiger Identifikator eines einzelnen Mechanismus belegt."
+
+  - evidence_id: "e004"
+    source_ref: "s001"
+    claim_refs: ["c001", "c003", "c006"]
+    type: "model_output"
+    summary: "NIST prüfte ein explosives Alternativszenario und erwartete dabei starke akustische und sichtbare Begleiterscheinungen, die im ausgewerteten Material nicht gefunden wurden."
+    verbatim_or_ref: "NIST NCSTAR 1A, hypothetical blast scenarios and observations."
+    locator: "PDF pages 67-69, 90 and 95"
+    accessed_at: "2026-06-26"
+    supports: ["c003"]
+    contradicts: []
+    notes: "Dies schwächt bestimmte explosive Szenarien, schließt aber nicht jeden denkbaren absichtlichen Mechanismus direkt aus."
+
+  - evidence_id: "e005"
+    source_ref: "s004"
+    claim_refs: ["c001", "c004", "c005", "c006"]
+    type: "official_statement"
+    summary: "Die UAF-Projektseite gibt als Hauptschlussfolgerung an, dass Feuer den Einsturz nicht verursachte; als zweite Schlussfolgerung nennt sie ein nahezu gleichzeitiges Versagen aller Stützen."
+    verbatim_or_ref: "UAF Institute of Northern Engineering project conclusions."
+    locator: "Project page, Principal Conclusions"
+    accessed_at: "2026-06-26"
+    supports: ["c004"]
+    contradicts: []
+    notes: "Direkte Positionsdarstellung des UAF-Clusters; für Weltclaims ist eine getrennte Evidenzrelation erforderlich."
+
+  - evidence_id: "e006"
+    source_ref: "s004"
+    claim_refs: ["c001", "c004", "c006"]
+    type: "official_statement"
+    summary: "Die UAF-Projektseite dokumentiert Projektzeitraum, Team, Finanzierung und die Bereitstellung umfangreicher Modelldaten."
+    verbatim_or_ref: "UAF project metadata and data-download section."
+    locator: "Project page, overview, funding and data sections"
+    accessed_at: "2026-06-26"
+    supports: ["c004"]
+    contradicts: []
+    notes: "Offene Modelldaten erhöhen die Reproduzierbarkeit; projektbezogene Finanzierung und Clusterbindung bleiben als Gewichtungsrisiko sichtbar."
