@@ -1,0 +1,70 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-demolition-vs-fire-plausibility"
+inferences:
+  - inference_id: "inf001"
+    claim_ref: "c001"
+    triggered_by: "comparative_claim"
+    inference_steps:
+      - step_id: "step001"
+        premise_evidence_refs: ["e001", "e002"]
+        operation: "scope_limit"
+        produces: "Der Vergleich darf nicht gegen die Prämisse eines kurzen und nur lokalen Brandes geführt werden, weil diese Prämisse mit dem dokumentierten Brandverlauf unvereinbar ist."
+        uncertainty_effect: "lowers"
+        forbidden_upgrade_checked: ["source_prestige_to_truth"]
+      - step_id: "step002"
+        premise_claim_refs: ["c005", "c006"]
+        operation: "comparison"
+        produces: "Im aktuellen Pack besitzt das Brandmodell eine stärkere positive Ereigniskette, während der Sprengungsclaim an der fallbezogenen Brücke offen bleibt."
+        uncertainty_effect: "localizes"
+        forbidden_upgrade_checked: ["rival_weakness_to_own_proof", "suspicion_to_proof", "source_prestige_to_truth"]
+      - step_id: "step003"
+        premise_evidence_refs: ["e003", "e005"]
+        operation: "uncertainty_preservation"
+        produces: "Freifallphase und UAF-Gegenmodell verhindern starke Closure zugunsten des Brandmodells, tragen aber den relativen Vorrang der Sprengung nicht allein."
+        uncertainty_effect: "preserves"
+        forbidden_upgrade_checked: ["correlation_to_causation", "rival_weakness_to_own_proof"]
+
+  - inference_id: "inf002"
+    claim_ref: "c002"
+    triggered_by: "strong_negative_verdict"
+    inference_steps:
+      - step_id: "step004"
+        premise_evidence_refs: ["e001", "e002"]
+        operation: "contradiction"
+        produces: "Mehrstündige Brände auf mehreren Etagen schließen die gekoppelte Beschreibung als kurz und nur lokal direkt aus."
+        uncertainty_effect: "lowers"
+        forbidden_upgrade_checked: ["source_prestige_to_truth"]
+
+  - inference_id: "inf003"
+    claim_ref: "c005"
+    triggered_by: "causal_chain"
+    inference_steps:
+      - step_id: "step005"
+        premise_evidence_refs: ["e001", "e002"]
+        operation: "corroboration"
+        produces: "Branddauer, Mehrgeschossverteilung und eine konkrete thermisch-strukturelle Sequenz bilden positive Stützung für einen brandinduzierten progressiven Einsturz."
+        uncertainty_effect: "lowers"
+        forbidden_upgrade_checked: ["source_prestige_to_truth"]
+      - step_id: "step006"
+        premise_evidence_refs: ["e003", "e005"]
+        operation: "uncertainty_preservation"
+        produces: "Der Beobachtungsfit der Freifallphase und das UAF-Gegenmodell lassen die genaue Initial- und Progressionssequenz materiell offen."
+        uncertainty_effect: "preserves"
+        forbidden_upgrade_checked: ["absence_of_evidence_to_falsehood"]
+
+  - inference_id: "inf004"
+    claim_ref: "c006"
+    triggered_by: "causal_chain"
+    inference_steps:
+      - step_id: "step007"
+        premise_evidence_refs: ["e003", "e005"]
+        operation: "scope_limit"
+        produces: "Die beobachtete Freifallphase und das UAF-Gegenmodell stützen höchstens mechanische Kompatibilität, nicht die tatsächliche Anwendung einer kontrollierten Sprengung."
+        uncertainty_effect: "localizes"
+        forbidden_upgrade_checked: ["correlation_to_causation", "suspicion_to_proof"]
+      - step_id: "step008"
+        premise_evidence_refs: ["e004", "e006"]
+        operation: "uncertainty_preservation"
+        produces: "Fehlende fallbezogene Brückenevidenz und Clusterabhängigkeit halten den Ereignisclaim auf spekulativ, ohne ihn direkt zu falsifizieren."
+        uncertainty_effect: "preserves"
+        forbidden_upgrade_checked: ["absence_of_evidence_to_falsehood", "source_prestige_to_truth"]
