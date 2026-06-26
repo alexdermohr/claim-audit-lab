@@ -85,8 +85,9 @@ Der Audit ordnet daher nicht nach dem eindrucksvollsten Einzelmerkmal, sondern n
 
 ## Epistemische Leeren
 
+- **nt001:** Eine vollständig unabhängige Blind-Reproduktion der konkurrierenden Strukturmodelle mit gemeinsamem Inputset fehlt, nötig für starke comparative Closure von c001.
+- **nt002:** Eine unabhängige Reproduktion plus fallbezogene Brücke vom modellierten raschen Tragwirkungsverlust zum historischen Ereignis fehlt, nötig für eine Aufwertung von c006.
 - Direkte fallbezogene operative oder forensische Evidenz fehlt, nötig für eine Aufwertung von c006.
-- Eine vollständig unabhängige Reproduktion der konkurrierenden Strukturmodelle mit gemeinsamem Inputset fehlt, nötig für starke comparative Closure von c001.
 - Eine unabhängige technische Red-Team-Prüfung dieser Case fehlt, nötig für einen Lifecycle-Status jenseits `draft`.
 
 ## Risiko- und Nutzenabschätzung
