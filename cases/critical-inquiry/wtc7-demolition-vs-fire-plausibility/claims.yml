@@ -9,47 +9,24 @@ claims:
     status: "weak"
     evidence_refs: ["e001", "e002", "e003", "e004", "e005", "e006"]
     source_refs: ["s001", "s002", "s003", "s004"]
-    requires:
-      - "comparative_probability"
-      - "positive mechanische Stützung beider Hypothesen"
-      - "diskriminierender Beobachtungsabgleich"
-      - "fallbezogene Brückenevidenz"
+    requires: ["comparative_probability", "positive mechanische Stützung beider Hypothesen", "diskriminierender Beobachtungsabgleich", "fallbezogene Brückenevidenz"]
     required_chain:
-      - id: "fire_mechanism"
-        requirement: "Das Brandmodell muss mechanisch tragfähig und mit dem Gebäude vereinbar sein."
-        status: "partially_satisfied"
-      - id: "demolition_mechanism"
-        requirement: "Das Sprengungsmodell muss die beobachtete Versagenssequenz erklären."
-        status: "contested"
-      - id: "observational_discrimination"
-        requirement: "Beobachtungen müssen zwischen den Modellen unterscheiden."
-        status: "contested"
-      - id: "event_bridge"
-        requirement: "Die tatsächliche Anwendung einer kontrollierten Sprengung muss fallbezogen gestützt sein."
-        status: "missing"
-      - id: "comparative_bridge"
-        requirement: "Die positive Evidenz für Sprengung muss stärker sein als die positive Evidenz für Brandkollaps."
-        status: "missing"
+      - {id: "fire_mechanism", requirement: "Das Brandmodell muss mechanisch tragfähig und mit dem Gebäude vereinbar sein.", status: "partially_satisfied"}
+      - {id: "demolition_mechanism", requirement: "Das Sprengungsmodell muss die beobachtete Versagenssequenz erklären.", status: "contested"}
+      - {id: "observational_discrimination", requirement: "Beobachtungen müssen zwischen den Modellen unterscheiden.", status: "contested"}
+      - {id: "event_bridge", requirement: "Die tatsächliche Anwendung einer kontrollierten Sprengung muss fallbezogen gestützt sein.", status: "missing"}
+      - {id: "comparative_bridge", requirement: "Die positive Evidenz für Sprengung muss stärker sein als die positive Evidenz für Brandkollaps.", status: "missing"}
     counterclaims:
       - "Ein lang andauernder unkontrollierter Mehrgeschossbrand löste interne progressive Schäden aus."
       - "Die exakte NIST-Sequenz kann unvollständig sein, ohne dass daraus eine kontrollierte Sprengung folgt."
       - "Die öffentlich verfügbaren Daten erlauben keinen robusten Mechanismenvergleich."
-    forbidden_upgrades:
-      - "source_prestige_to_truth"
-      - "suspicion_to_proof"
-      - "absence_of_evidence_to_falsehood"
-      - "correlation_to_causation"
+    forbidden_upgrades: ["source_prestige_to_truth", "suspicion_to_proof", "absence_of_evidence_to_falsehood", "correlation_to_causation"]
     uncertainty:
       score: 0.42
-      causes:
-        - "Die Modelle wurden nicht mit einem gemeinsamen vollständig reproduzierbaren Datensatz gegeneinander getestet."
-        - "Diskriminierende Beobachtungen und fallbezogene Brückenevidenz sind begrenzt."
-        - "Die zentralen Quellen gehören zwei interessensensitiven Clustern an."
+      causes: ["Die Modelle wurden nicht mit einem gemeinsamen vollständig reproduzierbaren Datensatz gegeneinander getestet.", "Diskriminierende Beobachtungen und fallbezogene Brückenevidenz sind begrenzt.", "Die zentralen Quellen gehören zwei interessensensitiven Clustern an."]
     interpolation:
       score: 0.25
-      assumptions:
-        - "Die geprüften Berichte bilden die stärksten Versionen der Modelle hinreichend ab."
-        - "Plausibilität wird anhand positiver Mechanik, Beobachtungsfit und Brückenevidenz geordnet."
+      assumptions: ["Die geprüften Berichte bilden die stärksten Versionen der Modelle hinreichend ab.", "Plausibilität wird anhand positiver Mechanik, Beobachtungsfit und Brückenevidenz geordnet."]
     notes: "Weak betrifft den relativen Vorrang der Sprengungshypothese; dies ist kein negatives Wahrheitszertifikat über jeden denkbaren Mechanismus."
 
   - schema_version: "1.0"
@@ -61,19 +38,15 @@ claims:
     evidence_refs: ["e001", "e002"]
     source_refs: ["s001", "s002"]
     requires: ["Branddauer", "räumliche Brandverteilung"]
-    counterclaims:
-      - "Die Brände dauerten annähernd sieben Stunden und betrafen mehrere Etagen."
+    counterclaims: ["Die Brände dauerten annähernd sieben Stunden und betrafen mehrere Etagen."]
     forbidden_upgrades: ["source_prestige_to_truth"]
     direct_incompatibility_basis: "e001 und e002 dokumentieren annähernd sieben Stunden sowie Brände auf mehreren Etagen; das ist unvereinbar mit der gekoppelten Charakterisierung als kurz und nur lokal."
     uncertainty:
       score: 0.12
-      causes:
-        - "Der Ausdruck lokal ist unscharf; bewertet wird seine gewöhnliche Bedeutung als einzelner begrenzter Brandbereich."
+      causes: ["Der Ausdruck lokal ist unscharf; bewertet wird seine gewöhnliche Bedeutung als einzelner begrenzter Brandbereich."]
     interpolation:
       score: 0.08
-      assumptions:
-        - "Kurz bezeichnet eine deutlich kürzere Dauer als mehrere Stunden."
-        - "Nur lokal bezeichnet keinen Mehrgeschossbrand."
+      assumptions: ["Kurz bezeichnet eine deutlich kürzere Dauer als mehrere Stunden.", "Nur lokal bezeichnet keinen Mehrgeschossbrand."]
     notes: "Contradicted gilt für die gekoppelte Prämisse kurz und nur lokal."
 
   - schema_version: "1.0"
@@ -83,17 +56,13 @@ claims:
     burden_profile: "source_report"
     statement: "NIST berichtet, dass lang andauernde unkontrollierte Brände einen progressiven Einsturz von WTC 7 auslösten."
     status: "established"
-    evidence_refs: ["e001", "e002", "e003", "e004"]
+    evidence_refs: ["e008", "e009"]
     source_refs: ["s001", "s002"]
     requires: ["direkt geprüfte NIST-Dokumente"]
     counterclaims: []
     forbidden_upgrades: ["source_prestige_to_truth"]
-    uncertainty:
-      score: 0.05
-      causes: ["Das Verdict schließt nur den Quelleninhalt, nicht die Wahrheit des Weltclaims."]
-    interpolation:
-      score: 0.03
-      assumptions: ["Die geprüften Dokumente sind authentische NIST-Veröffentlichungen."]
+    uncertainty: {score: 0.05, causes: ["Das Verdict schließt nur den Quelleninhalt, nicht die Wahrheit des Weltclaims."]}
+    interpolation: {score: 0.03, assumptions: ["Die geprüften Dokumente sind authentische NIST-Veröffentlichungen."]}
     notes: "Reported claim; kein Upgrade zum Weltclaim."
 
   - schema_version: "1.0"
@@ -103,17 +72,13 @@ claims:
     burden_profile: "source_report"
     statement: "Der UAF-Abschlussbericht berichtet, dass Feuer den Einsturz nicht verursachte und ein nahezu gleichzeitiges Versagen aller Stützen erforderlich war."
     status: "established"
-    evidence_refs: ["e005", "e006"]
+    evidence_refs: ["e007", "e010"]
     source_refs: ["s003", "s004"]
     requires: ["direkt geprüfter UAF-Bericht und Projektseite"]
     counterclaims: []
     forbidden_upgrades: ["source_prestige_to_truth"]
-    uncertainty:
-      score: 0.06
-      causes: ["Das Verdict schließt nur den Quelleninhalt, nicht die Wahrheit des Weltclaims."]
-    interpolation:
-      score: 0.04
-      assumptions: ["Der heruntergeladene Bericht entspricht der auf der UAF-Seite referenzierten Endfassung."]
+    uncertainty: {score: 0.06, causes: ["Das Verdict schließt nur den Quelleninhalt, nicht die Wahrheit des Weltclaims."]}
+    interpolation: {score: 0.04, assumptions: ["Der heruntergeladene Bericht entspricht der auf der UAF-Seite referenzierten Endfassung."]}
     notes: "Reported claim; kein Upgrade zum Weltclaim."
 
   - schema_version: "1.0"
@@ -127,30 +92,14 @@ claims:
     source_refs: ["s001", "s002", "s003"]
     requires: ["Brandexposition", "thermischer Initialschaden", "interne Progression", "Beobachtungsabgleich"]
     required_chain:
-      - id: "fire_exposure"
-        requirement: "Lang andauernde unkontrollierte Brände wirkten auf tragende Bauteile ein."
-        status: "satisfied"
-      - id: "thermal_initiation"
-        requirement: "Thermische Einwirkung initiierte ein lokales Versagen."
-        status: "partially_satisfied"
-      - id: "internal_progression"
-        requirement: "Das lokale Versagen breitete sich intern progressiv aus."
-        status: "contested"
-      - id: "facade_descent"
-        requirement: "Der interne Schaden erklärt die spätere Fassadenbewegung einschließlich einer Freifallphase."
-        status: "partially_satisfied"
-    counterclaims:
-      - "Das UAF-Modell findet keine brandinduzierte Sequenz, die den beobachteten globalen Einsturz erzeugt."
-      - "Die NIST-Initialsequenz hängt von Modellannahmen ab, die nicht vollständig unabhängig reproduziert wurden."
+      - {id: "fire_exposure", requirement: "Lang andauernde unkontrollierte Brände wirkten auf tragende Bauteile ein.", status: "satisfied"}
+      - {id: "thermal_initiation", requirement: "Thermische Einwirkung initiierte ein lokales Versagen.", status: "partially_satisfied"}
+      - {id: "internal_progression", requirement: "Das lokale Versagen breitete sich intern progressiv aus.", status: "contested"}
+      - {id: "facade_descent", requirement: "Der interne Schaden erklärt die spätere Fassadenbewegung einschließlich einer Freifallphase.", status: "partially_satisfied"}
+    counterclaims: ["Das UAF-Modell findet keine brandinduzierte Sequenz, die den beobachteten globalen Einsturz erzeugt.", "Die NIST-Initialsequenz hängt von Modellannahmen ab, die nicht vollständig unabhängig reproduziert wurden."]
     forbidden_upgrades: ["source_prestige_to_truth", "absence_of_evidence_to_falsehood"]
-    uncertainty:
-      score: 0.38
-      causes:
-        - "Die Branddauer ist gut dokumentiert; die genaue Initial- und Progressionssequenz bleibt modellabhängig."
-        - "Eine unabhängige Reproduktion mit identischen Inputs fehlt im aktuellen Pack."
-    interpolation:
-      score: 0.22
-      assumptions: ["Die NIST-Modellierung erfasst die wesentlichen thermischen und strukturellen Randbedingungen hinreichend."]
+    uncertainty: {score: 0.38, causes: ["Die Branddauer ist gut dokumentiert; die genaue Initial- und Progressionssequenz bleibt modellabhängig.", "Eine unabhängige Reproduktion mit identischen Inputs fehlt im aktuellen Pack."]}
+    interpolation: {score: 0.22, assumptions: ["Die NIST-Modellierung erfasst die wesentlichen thermischen und strukturellen Randbedingungen hinreichend."]}
     notes: "Plausible: positive Mechanik und Beobachtungsfit sind vorhanden, zentrale Modellfragen bleiben offen."
 
   - schema_version: "1.0"
@@ -164,30 +113,12 @@ claims:
     source_refs: ["s001", "s003", "s004"]
     requires: ["mechanische Ereigniskette", "fallbezogene operative Evidenz", "forensische Signaturen", "Beobachtungsabgleich"]
     required_chain:
-      - id: "mechanism"
-        requirement: "Ein konkreter Sprengungsmechanismus erklärt die erforderliche Versagenssequenz."
-        status: "contested"
-      - id: "event_application"
-        requirement: "Die tatsächliche Anwendung im Gebäude ist fallbezogen gestützt."
-        status: "missing"
-      - id: "forensic_bridge"
-        requirement: "Forensische Signaturen stützen den behaupteten Mechanismus."
-        status: "missing"
-      - id: "collapse_fit"
-        requirement: "Das Modell erklärt die Sequenz besser als konkurrierende Mechanismen."
-        status: "contested"
-    counterclaims:
-      - "Die äußere Bewegung folgte auf interne progressive Schäden und erfordert keine Sprengung."
-      - "Ein abstrakt möglicher Mechanismus ist ohne fallbezogene Brücke kein Ereignisnachweis."
+      - {id: "mechanism", requirement: "Ein konkreter Sprengungsmechanismus erklärt die erforderliche Versagenssequenz.", status: "contested"}
+      - {id: "event_application", requirement: "Die tatsächliche Anwendung im Gebäude ist fallbezogen gestützt.", status: "missing"}
+      - {id: "forensic_bridge", requirement: "Forensische Signaturen stützen den behaupteten Mechanismus.", status: "missing"}
+      - {id: "collapse_fit", requirement: "Das Modell erklärt die Sequenz besser als konkurrierende Mechanismen.", status: "contested"}
+    counterclaims: ["Die äußere Bewegung folgte auf interne progressive Schäden und erfordert keine Sprengung.", "Ein abstrakt möglicher Mechanismus ist ohne fallbezogene Brücke kein Ereignisnachweis."]
     forbidden_upgrades: ["suspicion_to_proof", "absence_of_evidence_to_falsehood", "correlation_to_causation"]
-    uncertainty:
-      score: 0.61
-      causes:
-        - "Direkte operative und forensische Brückenevidenz fehlt im auditierten Quellenpaket."
-        - "Die Bewegungsmerkmale sind nicht als eindeutig sprengungsspezifisch belegt."
-    interpolation:
-      score: 0.28
-      assumptions:
-        - "Nahezu gleichzeitiges Stützenversagen könnte grundsätzlich absichtlich erzeugt werden."
-        - "Der UAF-Befund wird als Modelldefeater, nicht als Ereignisnachweis behandelt."
+    uncertainty: {score: 0.61, causes: ["Direkte operative und forensische Brückenevidenz fehlt im auditierten Quellenpaket.", "Die Bewegungsmerkmale sind nicht als eindeutig sprengungsspezifisch belegt."]}
+    interpolation: {score: 0.28, assumptions: ["Nahezu gleichzeitiges Stützenversagen könnte grundsätzlich absichtlich erzeugt werden.", "Der UAF-Befund wird als Modelldefeater, nicht als Ereignisnachweis behandelt."]}
     notes: "Speculative bezeichnet die ereignisspezifische Behauptung, nicht die allgemeine technische Möglichkeit kontrollierter Sprengungen."
