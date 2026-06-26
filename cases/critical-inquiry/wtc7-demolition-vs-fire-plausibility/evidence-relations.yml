@@ -1,0 +1,144 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-demolition-vs-fire-plausibility"
+relations:
+  - relation_id: "r001"
+    evidence_ref: "e001"
+    claim_ref: "c002"
+    relation_type: "contradicts_directly"
+    strength: 0.92
+    explanation: "Eine annähernd siebenstündige Branddauer ist direkt unvereinbar mit der gekoppelten Charakterisierung der Brandexposition als kurz."
+    incompatible_proposition: "Die Brandexposition dauerte nur kurz."
+
+  - relation_id: "r002"
+    evidence_ref: "e002"
+    claim_ref: "c002"
+    relation_type: "contradicts_directly"
+    strength: 0.88
+    explanation: "Dokumentierte Brände auf mehreren Etagen sind direkt unvereinbar mit der gekoppelten Charakterisierung als auf nur einen lokalen Bereich beschränkt."
+    incompatible_proposition: "Die maßgebliche Brandexposition war auf einen einzigen lokalen Bereich beschränkt."
+
+  - relation_id: "r003"
+    evidence_ref: "e001"
+    claim_ref: "c003"
+    relation_type: "reports"
+    strength: 0.94
+    explanation: "Der Abschlussbericht dokumentiert ausdrücklich die NIST-Position zu Brandursache und progressiver Einsturzsequenz."
+
+  - relation_id: "r004"
+    evidence_ref: "e002"
+    claim_ref: "c003"
+    relation_type: "reports"
+    strength: 0.91
+    explanation: "Die FAQ dokumentiert die NIST-Position zu Brandverteilung, Wasserausfall und Einsturzmechanismus."
+
+  - relation_id: "r005"
+    evidence_ref: "e003"
+    claim_ref: "c003"
+    relation_type: "reports"
+    strength: 0.89
+    explanation: "Der Bericht dokumentiert die NIST-Auswertung der sichtbaren Abwärtsbewegung und der Freifallphase."
+
+  - relation_id: "r006"
+    evidence_ref: "e004"
+    claim_ref: "c003"
+    relation_type: "reports"
+    strength: 0.87
+    explanation: "Der Bericht dokumentiert die NIST-Prüfung eines explosiven Alternativszenarios."
+
+  - relation_id: "r007"
+    evidence_ref: "e005"
+    claim_ref: "c004"
+    relation_type: "reports"
+    strength: 0.93
+    explanation: "Die UAF-Projektseite dokumentiert ausdrücklich die beiden veröffentlichten Hauptschlussfolgerungen."
+
+  - relation_id: "r008"
+    evidence_ref: "e006"
+    claim_ref: "c004"
+    relation_type: "reports"
+    strength: 0.86
+    explanation: "Die Projektseite dokumentiert Metadaten, Finanzierung und Datenbereitstellung des UAF-Projekts."
+
+  - relation_id: "r009"
+    evidence_ref: "e001"
+    claim_ref: "c005"
+    relation_type: "supports_directly"
+    strength: 0.69
+    explanation: "Der Bericht liefert eine positive thermisch-strukturelle Mechanismuskette für einen brandinduzierten progressiven Einsturz."
+
+  - relation_id: "r010"
+    evidence_ref: "e002"
+    claim_ref: "c005"
+    relation_type: "supports_indirectly"
+    strength: 0.67
+    explanation: "Branddauer, Mehrgeschossverteilung und fehlende Löschwasserversorgung stützen zentrale Prämissen des Brandmodells."
+
+  - relation_id: "r011"
+    evidence_ref: "e003"
+    claim_ref: "c005"
+    relation_type: "contextualizes"
+    strength: 0.52
+    explanation: "Die gemessene Freifallphase begrenzt den erforderlichen Beobachtungsfit, identifiziert den Brandmechanismus aber nicht allein."
+
+  - relation_id: "r012"
+    evidence_ref: "e005"
+    claim_ref: "c005"
+    relation_type: "method_challenge"
+    strength: 0.68
+    explanation: "Das UAF-Modell bestreitet, dass die untersuchten Brandszenarien den globalen Einsturz erzeugen; dies ist ein materieller Defeater gegen starke Closure."
+
+  - relation_id: "r013"
+    evidence_ref: "e005"
+    claim_ref: "c006"
+    relation_type: "supports_indirectly"
+    strength: 0.44
+    explanation: "Die UAF-Schlussfolgerung schwächt das Brandmodell und beschreibt eine für absichtliches Versagen kompatible Anfangsbedingung, liefert aber keine fallbezogene Ereignisbrücke."
+
+  - relation_id: "r014"
+    evidence_ref: "e003"
+    claim_ref: "c006"
+    relation_type: "contextualizes"
+    strength: 0.51
+    explanation: "Die Freifallphase ist mit raschem Verlust von Tragwirkung vereinbar, aber im aktuellen Pack nicht eindeutig sprengungsspezifisch."
+
+  - relation_id: "r015"
+    evidence_ref: "e004"
+    claim_ref: "c006"
+    relation_type: "weakens"
+    strength: 0.66
+    explanation: "Die NIST-Analyse berichtet fehlende erwartete Begleitmerkmale für das untersuchte explosive Szenario; sie schließt nicht jede Variante direkt aus."
+
+  - relation_id: "r016"
+    evidence_ref: "e006"
+    claim_ref: "c006"
+    relation_type: "source_interest_warning"
+    strength: 0.55
+    explanation: "Die dokumentierte Projektfinanzierung und Clusterbindung begrenzen die Unabhängigkeitswertung, ohne die technische Arbeit automatisch zu entwerten."
+
+  - relation_id: "r017"
+    evidence_ref: "e001"
+    claim_ref: "c001"
+    relation_type: "alternative_explanation"
+    strength: 0.69
+    explanation: "Das NIST-Modell liefert positive mechanische Stützung für den Rivalen des Vergleichsclaims."
+
+  - relation_id: "r018"
+    evidence_ref: "e005"
+    claim_ref: "c001"
+    relation_type: "supports_indirectly"
+    strength: 0.44
+    explanation: "Die UAF-Position liefert einen ernsthaften Defeater gegen das Brandmodell, aber keine ausreichende positive Brücke zur tatsächlichen Sprengung."
+
+  - relation_id: "r019"
+    evidence_ref: "e004"
+    claim_ref: "c001"
+    relation_type: "weakens"
+    strength: 0.66
+    explanation: "Die im NIST-Bericht behandelten fehlenden Begleitmerkmale senken die comparative Stützung bestimmter Sprengungsszenarien."
+
+  - relation_id: "r020"
+    evidence_ref: "e003"
+    claim_ref: "c001"
+    relation_type: "contextualizes"
+    strength: 0.51
+    explanation: "Die Freifallphase ist eine gemeinsame Prüfbedingung beider Modelle und darf nicht ohne Bridge-Evidenz exklusiv einer Seite zugerechnet werden."
