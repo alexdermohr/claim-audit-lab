@@ -1,0 +1,38 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-demolition-vs-fire-plausibility"
+audited_at: "2026-06-26"
+auditor: "ChatGPT research runtime"
+records:
+  - source_ref: "s001"
+    questions:
+      - "Wie nah ist der Bericht an Untersuchungsdaten und Modellierung?"
+      - "Welche Modellinputs und Sensitivitäten sind unabhängig reproduzierbar?"
+      - "Wie stark ist die Abhängigkeit vom offiziellen Untersuchungscluster?"
+    evidence_refs: ["e001", "e003", "e004"]
+    disputed: true
+    notes: "Hohe Primärnähe und Methodentiefe stehen begrenzter Clusterunabhängigkeit und unvollständiger externer Reproduktion gegenüber. Der Bericht wird nach Systemtiefe, nicht nach Behördenstatus gewichtet."
+
+  - source_ref: "s002"
+    questions:
+      - "Ist die FAQ eine eigenständige Untersuchung oder eine Zusammenfassung des NIST-Berichts?"
+      - "Welche Beobachtungsdaten werden unmittelbar benannt?"
+    evidence_refs: ["e002"]
+    disputed: false
+    notes: "Die FAQ ist nützlich für Brandverteilung und Quellenposition, aber keine unabhängige Bestätigung des NIST-Modells."
+
+  - source_ref: "s003"
+    questions:
+      - "Wie transparent sind Modellannahmen und bereitgestellte Daten?"
+      - "Wurde die Endfassung vollständig direkt ausgelesen?"
+      - "Welche unabhängigen Replikationen liegen vor?"
+    evidence_refs: ["e005"]
+    disputed: true
+    notes: "Hohe methodische Relevanz und angebotene Modelldaten; die lokale Volltextauswertung blieb wegen eines Connector-Abbruchs unvollständig. Kernaussagen wurden über s004 gegengeprüft."
+
+  - source_ref: "s004"
+    questions:
+      - "Welche Projektmetadaten und Schlussfolgerungen sind direkt dokumentiert?"
+      - "Wie beeinflussen Finanzierung und Clusterbindung die Unabhängigkeitsbewertung?"
+    evidence_refs: ["e005", "e006"]
+    disputed: true
+    notes: "Die Projektseite ist primär für Metadaten und die UAF-Position. Finanzierung und Clusterbindung erhöhen das Interessenrisiko, ersetzen aber keine Prüfung der Methode."
