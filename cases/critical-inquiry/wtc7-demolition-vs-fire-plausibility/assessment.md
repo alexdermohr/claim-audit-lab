@@ -92,7 +92,7 @@ Der Audit ordnet daher nicht nach dem eindrucksvollsten Einzelmerkmal, sondern n
 
 ## Risiko- und Nutzenabschätzung
 
-**Nutzen der Einstufung:** Sie korrigiert die direkt ausgeschlossene Strohmann-Prämisse „kurz und lokal“, ohne offene Modellfragen zu verdecken. Sie trennt mechanische Möglichkeit, Ereignisbrücke und Akteurszuschreibung.
+**Nutzen der Einstufung:** Sie korrigiert die direkt ausgeschlossene Strohmann-Prämisse „kurz und lokal“, ohne offene Modellfragen zu verdecken. Die direkte Exklusion von c002 trennt mechanische Möglichkeit, Ereignisbrücke und Akteurszuschreibung voneinander.
 
 **Risiko der Einstufung:** Die bessere positive Kette des Brandmodells könnte als Bestätigung jedes NIST-Details missverstanden werden. Die direkte Exklusion von c002 darf umgekehrt nicht so gelesen werden, als falsifiziere die fehlende Ereignisbrücke jede Sprengungsvariante. Beides wäre eine Überdehnung des Verdicts.
 
