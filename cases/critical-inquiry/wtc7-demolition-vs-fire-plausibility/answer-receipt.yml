@@ -1,1 +1,50 @@
 schema_version: "1.0"
+question: "eine kontrollierte sprengung des wtc 7 ist plausibler als dessen einsturz nach kurzem, lokalen brand."
+task_classification: "case_building"
+answer_summary: "Der Vergleichsclaim c001 ist weak. Die Brandprämisse 'kurz und nur lokal' ist mit der dokumentierten Dauer und Verteilung direkt unvereinbar. Kein Wahrheitszertifikat."
+verdicts_used:
+  - claim_id: "c001"
+    statement: "Comparative mechanism claim"
+    status: "weak"
+    uncertainty_score: 0.42
+    burden_layers_addressed: ["physical_mechanism", "structural_effect", "observational_fit", "operational_placement", "comparative_probability"]
+counterhypotheses_considered:
+  - statement: "A long-duration multi-floor fire caused progressive internal damage before visible facade descent."
+    steelman_quality: 0.86
+  - statement: "The exact official initiation sequence is incomplete, while a broader early support loss fits the motion better."
+    steelman_quality: 0.78
+forbidden_upgrades_check:
+  upgrades_considered: ["correlation_to_causation", "source_prestige_to_truth", "suspicion_to_proof", "absence_of_evidence_to_falsehood", "reported_to_world"]
+  upgrades_blocked: ["correlation_to_causation", "source_prestige_to_truth", "suspicion_to_proof", "absence_of_evidence_to_falsehood", "reported_to_world"]
+banned_phrases_self_scan:
+  scanned: true
+  hits: []
+source_cluster_audit:
+  clusters_identified:
+    - cluster_id: "nist"
+      members: ["s001", "s002"]
+      alignment_basis: "Shared institution and model lineage."
+    - cluster_id: "uaf"
+      members: ["s003", "s004"]
+      alignment_basis: "Shared project and model lineage."
+  independence_verified: false
+  fragility_score: 0.74
+refusal_check:
+  refused: false
+  balanced_framing_present: false
+external_research:
+  tools_used: ["web.run", "PDF inspection", "Grabowski retrieval"]
+  sources_consulted:
+    - citation: "NIST NCSTAR 1A"
+      source_type: "government_report"
+    - citation: "NIST WTC 7 FAQ"
+      source_type: "official_body"
+    - citation: "UAF WTC 7 project page"
+      source_type: "primary_document"
+  background_knowledge_only: false
+oracle_disclaimer_present: true
+final_uncertainty_statement: "Independent common-input model replication and complete UAF detail extraction are missing. Dies ist kein Wahrheitszertifikat."
+what_would_change_assessment: "Independent reproducible model comparison with discriminating predictions or new direct event evidence could change c001."
+case_ref: "cases/critical-inquiry/wtc7-demolition-vs-fire-plausibility"
+review_date: "2026-06-26"
+notes: "Draft case; independent red-team pending."
