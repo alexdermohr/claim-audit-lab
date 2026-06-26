@@ -5,15 +5,13 @@
 **Status:** draft  
 **Date:** 2026-06-26
 
-> Eine kontrollierte Sprengung des WTC 7 ist plausibler als dessen Einsturz nach kurzem, lokalen Brand.
+## These — c001
 
-## These
+c001 erhält seine stärkste Stützung aus der sichtbaren Abwärtsbewegung, der gemessenen Freifallphase und dem UAF-Gegenmodell. Für c001 sind diese Befunde materielle Defeater gegen starke Sicherheit hinsichtlich der exakten NIST-Sequenz, aber noch keine hinreichende positive Ereignisbrücke.
 
-Die stärkste Gegenposition zum Brandmodell verweist auf die sichtbare Abwärtsbewegung, die gemessene Freifallphase und das UAF-Gegenmodell. Diese Befunde sind materielle Defeater gegen starke Sicherheit hinsichtlich der exakten NIST-Sequenz.
+## Antithese — direkte Exklusion c002
 
-## Antithese — direkte Exklusionsbasis c002
-
-c002 ist `contradicted`: e001 und e002 dokumentieren eine mehrstündige Branddauer sowie Brände auf mehreren Etagen. Damit ist die gekoppelte Prämisse „kurz und nur lokal“ direkt ausgeschlossen. Zugleich besitzt das Brandmodell eine positive thermisch-strukturelle Ereigniskette vom Brand über interne Progression bis zur sichtbaren Fassadenbewegung.
+c002 ist `contradicted`: e001 und e002 dokumentieren eine mehrstündige Branddauer sowie Brände auf mehreren Etagen und schließen damit die gekoppelte Prämisse „kurz und nur lokal“ direkt aus. Die direkte Exklusionsbasis betrifft sowohl die Dauer als auch die räumliche Verteilung der Brandexposition. c005 besitzt dagegen eine positive thermisch-strukturelle Ereigniskette vom Brand über interne Progression bis zur sichtbaren Fassadenbewegung.
 
 ## Synthese
 
@@ -47,9 +45,7 @@ Der NIST-Cluster trägt institutionelle Verantwortung für die offizielle Unters
 
 ## Risiko- und Nutzenabschätzung — direkte Exklusion c002
 
-**Nutzen:** Die Bewertung entfernt die durch e001 und e002 direkt ausgeschlossene Kurz-und-lokal-Prämisse, ohne offene Modellfragen zu glätten. Sie trennt mechanische Möglichkeit, Ereignisbrücke und Akteurszuschreibung.
-
-**Risiko:** Die stärkere positive Kette des Brandmodells könnte als Bestätigung jedes NIST-Details missverstanden werden. Umgekehrt falsifiziert die fehlende Ereignisbrücke nicht jede denkbare alternative Variante. Beides wäre eine Überdehnung.
+**Nutzen:** Die direkte Exklusion entfernt die durch e001 und e002 ausgeschlossene Kurz-und-lokal-Prämisse, ohne offene Modellfragen zu glätten. **Risiko:** c005 könnte als Bestätigung jedes NIST-Details missverstanden werden; c006 darf zugleich nicht allein wegen der fehlenden Ereignisbrücke als direkt falsifiziert behandelt werden.
 
 ## Verdict — direkte Exklusionsbasis c002
 
