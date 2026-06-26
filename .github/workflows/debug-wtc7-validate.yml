@@ -3,6 +3,8 @@ name: Debug WTC7 Validate
 on:
   push:
     branches: ["feat/wtc7-audit-v2"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   validate-tail:
