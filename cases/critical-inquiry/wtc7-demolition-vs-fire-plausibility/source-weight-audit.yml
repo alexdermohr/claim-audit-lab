@@ -25,7 +25,7 @@ records:
       - "Wie transparent sind Modellannahmen und bereitgestellte Daten?"
       - "Wurde die Endfassung vollständig direkt ausgelesen?"
       - "Welche unabhängigen Replikationen liegen vor?"
-    evidence_refs: ["e005"]
+    evidence_refs: ["e007"]
     disputed: true
     notes: "Hohe methodische Relevanz und angebotene Modelldaten; die lokale Volltextauswertung blieb wegen eines Connector-Abbruchs unvollständig. Kernaussagen wurden über s004 gegengeprüft."
 
