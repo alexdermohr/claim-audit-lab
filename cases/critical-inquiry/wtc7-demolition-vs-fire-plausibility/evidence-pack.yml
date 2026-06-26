@@ -71,3 +71,15 @@ evidence:
     supports: ["c004"]
     contradicts: []
     notes: "Offene Modelldaten erhöhen die Reproduzierbarkeit; projektbezogene Finanzierung und Clusterbindung bleiben als Gewichtungsrisiko sichtbar."
+
+  - evidence_id: "e007"
+    source_ref: "s003"
+    claim_refs: ["c004"]
+    type: "document_excerpt"
+    summary: "Die direkt heruntergeladene UAF-Endfassung ist der Abschlussbericht des Projekts; ihre publizierten Kernaussagen stimmen mit der UAF-Projektseite überein."
+    verbatim_or_ref: "UAF final report, title and conclusion cross-check against the project page."
+    locator: "Downloaded final-report PDF, March 2020"
+    accessed_at: "2026-06-26"
+    supports: ["c004"]
+    contradicts: []
+    notes: "Partielle Verifikation: Datei und Berichtszusammenhang geprüft; vollständige lokale Textextraktion blieb nach Connector-Timeout offen."
