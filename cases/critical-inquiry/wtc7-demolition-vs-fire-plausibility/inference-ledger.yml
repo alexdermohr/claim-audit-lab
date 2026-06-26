@@ -6,65 +6,38 @@ inferences:
     triggered_by: "comparative_claim"
     inference_steps:
       - step_id: "step001"
-        premise_evidence_refs: ["e001", "e002"]
-        operation: "scope_limit"
-        produces: "Der Vergleich muss den dokumentierten Mehrstunden- und Mehrgeschossbrand verwenden."
-        uncertainty_effect: "lowers"
-        forbidden_upgrade_checked: ["source_prestige_to_truth", "reported_to_world"]
-      - step_id: "step002"
         premise_claim_refs: ["c005", "c006"]
         operation: "comparison"
-        produces: "c005 besitzt die stärkere positive Ereigniskette; c006 bleibt an der Ereignisbrücke offen."
+        produces: "c005 has the stronger positive event chain; c006 retains an open event bridge."
         uncertainty_effect: "localizes"
         forbidden_upgrade_checked: ["rival_weakness_to_own_proof", "suspicion_to_proof", "source_prestige_to_truth"]
-      - step_id: "step003"
-        premise_evidence_refs: ["e003", "e004", "e005"]
-        operation: "uncertainty_preservation"
-        produces: "Bewegungsdaten und Gegenmodell verhindern starke Closure, ohne c001 positiv zu schließen."
-        uncertainty_effect: "preserves"
-        forbidden_upgrade_checked: ["correlation_to_causation", "rival_weakness_to_own_proof", "reported_to_world"]
-
   - inference_id: "inf002"
     claim_ref: "c002"
     triggered_by: "strong_negative_verdict"
     inference_steps:
-      - step_id: "step004"
+      - step_id: "step002"
         premise_evidence_refs: ["e001", "e002"]
         operation: "contradiction"
-        produces: "Mehrstündige Brände auf mehreren Etagen schließen die gekoppelte Kurz-und-lokal-Prämisse direkt aus."
+        produces: "Multi-hour fires on several floors directly exclude the combined short-and-local premise."
         uncertainty_effect: "lowers"
-        forbidden_upgrade_checked: ["source_prestige_to_truth", "reported_to_world"]
-
+        forbidden_upgrade_checked: ["source_prestige_to_truth"]
   - inference_id: "inf003"
     claim_ref: "c005"
     triggered_by: "causal_chain"
     inference_steps:
-      - step_id: "step005"
-        premise_evidence_refs: ["e001", "e002"]
-        operation: "corroboration"
-        produces: "Brandverlauf und beschriebene Strukturkette stützen c005 positiv."
-        uncertainty_effect: "lowers"
-        forbidden_upgrade_checked: ["source_prestige_to_truth", "reported_to_world"]
-      - step_id: "step006"
-        premise_evidence_refs: ["e003", "e005"]
+      - step_id: "step003"
+        premise_evidence_refs: ["e001", "e002", "e005"]
         operation: "uncertainty_preservation"
-        produces: "Bewegungsfit und Gegenmodell halten die genaue Sequenz offen."
+        produces: "The documented fire path provides positive support while the countermodel keeps the exact sequence open."
         uncertainty_effect: "preserves"
-        forbidden_upgrade_checked: ["absence_of_evidence_to_falsehood", "reported_to_world"]
-
+        forbidden_upgrade_checked: ["source_prestige_to_truth", "absence_of_evidence_to_falsehood"]
   - inference_id: "inf004"
     claim_ref: "c006"
     triggered_by: "causal_chain"
     inference_steps:
-      - step_id: "step007"
-        premise_evidence_refs: ["e003", "e005"]
+      - step_id: "step004"
+        premise_evidence_refs: ["e003", "e004", "e005"]
         operation: "scope_limit"
-        produces: "Die Befunde stützen mögliche Kompatibilität, nicht die tatsächliche Anwendung."
+        produces: "The evidence supports compatibility questions but not event-specific closure."
         uncertainty_effect: "localizes"
         forbidden_upgrade_checked: ["correlation_to_causation", "suspicion_to_proof"]
-      - step_id: "step008"
-        premise_evidence_refs: ["e004", "e006"]
-        operation: "uncertainty_preservation"
-        produces: "Die fehlende Ereignisbrücke und Clusterabhängigkeit erhalten den spekulativen Status."
-        uncertainty_effect: "preserves"
-        forbidden_upgrade_checked: ["absence_of_evidence_to_falsehood", "source_prestige_to_truth", "reported_to_world"]
