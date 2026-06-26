@@ -1,0 +1,60 @@
+schema_version: "1.0"
+case_ref: "cases/critical-inquiry/wtc7-demolition-vs-fire-plausibility"
+investigations:
+  - investigation_id: "inv001"
+    source_cluster_refs: ["s001", "s002"]
+    lead_institution: "National Institute of Standards and Technology"
+    report_role: "primary_investigation"
+    politically_sensitive: true
+    financially_sensitive: true
+    institutional_interest_risk: 0.55
+    hypothesis_space_declared:
+      - "Long-duration uncontrolled fires initiated a progressive structural collapse."
+      - "An intentional rapid-support-loss alternative was examined through expected observable effects."
+    hypothesis_space_gaps:
+      - "No independent common-input replication of the full structural model is present in this case."
+      - "The exact initiation and progression sequence remains disputed by the UAF countermodel."
+    non_tested_material_paths:
+      - path_id: "nt001"
+        expected_test: "Independent blind reproduction of the competing models with a shared input set and preregistered discriminating predictions."
+        justification_present: "no"
+        justification_quality: 0.0
+        materiality: 0.90
+        notes: "The missing common-input test limits comparative closure; it is not evidence of misconduct by itself."
+    adversarial_review:
+      present: "partial"
+      notes: "Public technical criticism and a later UAF countermodel exist, but this case does not establish a shared-data independent replication within the original investigation."
+    integrity_verdict: "methodologically_strong_but_incompletely_adversarial"
+    downstream_constraints:
+      - "Do not convert official status into truth."
+      - "Do not close c001 strongly while the common-input replication gap remains open."
+      - "Treat the NIST sequence as positive model evidence, not an oracle."
+
+  - investigation_id: "inv002"
+    source_cluster_refs: ["s003", "s004"]
+    lead_institution: "University of Alaska Fairbanks, Institute of Northern Engineering"
+    report_role: "academic_study"
+    politically_sensitive: true
+    financially_sensitive: true
+    institutional_interest_risk: 0.72
+    hypothesis_space_declared:
+      - "Fire-induced local failures were tested as explanations of global collapse."
+      - "Near-simultaneous loss of column support was tested as a condition for the observed global motion."
+    hypothesis_space_gaps:
+      - "The model condition is not itself an event-specific account of how the support loss was produced."
+      - "Direct operational or forensic bridge evidence is outside the positive chain documented in this case."
+    non_tested_material_paths:
+      - path_id: "nt002"
+        expected_test: "Independent reproduction and an event-specific bridge from the modeled support-loss condition to the historical event."
+        justification_present: "partial"
+        justification_quality: 0.35
+        materiality: 0.92
+        notes: "Open model data aid reproduction, but the event bridge remains separate from model compatibility."
+    adversarial_review:
+      present: "partial"
+      notes: "The study directly challenges the official model and publishes model data, but independent replication and a full second-pass report extraction remain open in this case."
+    integrity_verdict: "methodologically_strong_but_interest_sensitive"
+    downstream_constraints:
+      - "Do not convert failure of a rival model into proof of c006."
+      - "Do not treat project funding as a substitute for technical evaluation."
+      - "Keep c006 below strong closure without event-specific bridge evidence."
