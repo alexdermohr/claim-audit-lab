@@ -96,7 +96,7 @@ Der Audit ordnet daher nicht nach dem eindrucksvollsten Einzelmerkmal, sondern n
 
 **Risiko der Einstufung:** Die bessere positive Kette des Brandmodells könnte als Bestätigung jedes NIST-Details missverstanden werden. Umgekehrt könnte fehlende Ereignisbrücke als direkte Falsifikation jeder Sprengungsvariante gelesen werden. Beides wäre eine Überdehnung des Verdicts.
 
-## Verdict
+## Verdict — direkte Exklusionsbasis für c002
 
 - **c001 — weak:** Die kontrollierte Sprengung besitzt im aktuellen Pack nicht die stärkere positive Ereigniskette.
 - **c002 — contradicted, direkte Exklusion:** Mehrstündige Brände auf mehreren Etagen schließen „kurz und nur lokal“ direkt aus.
