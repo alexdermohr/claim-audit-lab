@@ -25,7 +25,7 @@ c001 ist `weak`: Im aktuellen Evidenzpaket ist die alternative absichtliche Eins
 
 Die Wahl „exakte NIST-Sequenz oder absichtliche Ursache“ ist zu eng. Ein dritter Pfad bleibt offen: ein brandinduzierter progressiver Einsturz mit einer Detailsequenz, die vom konkreten NIST-Modell abweicht. Diese Möglichkeit senkt die Sicherheit, erzeugt aber keine positive Ereignisbrücke für c006.
 
-## Belegt / plausibel / spekulativ
+## Quelleninhalt / plausibel / spekulativ
 
 - c003 ist `established`: Die geprüften NIST-Quellen berichten den Brand-Progressionspfad. Dies ist ein Quelleninhaltsclaim, kein Weltclaim-Zertifikat.
 - c004 ist `established`: Die geprüften UAF-Quellen berichten Feuer-Ausschluss und nahezu gleichzeitiges Stützenversagen. Dies ist ebenfalls ein Quelleninhaltsclaim.
@@ -50,7 +50,7 @@ Der NIST-Cluster trägt institutionelle Verantwortung für die offizielle Unters
 ## Verdict — direkte Exklusionsbasis c002
 
 - **c001 — weak:** keine stärkere positive Ereigniskette für die alternative absichtliche Ursache.
-- **c002 — contradicted:** Mehrstunden- und Mehrgeschossbrand schließen „kurz und nur lokal“ direkt aus.
+- **c002 — contradicted, direkte Exklusion:** Mehrstunden- und Mehrgeschossbrand widersprechen „kurz und nur lokal“ unmittelbar.
 - **c003 — established:** NIST-Quelleninhaltsclaim.
 - **c004 — established:** UAF-Quelleninhaltsclaim.
 - **c005 — plausible:** positiver Brand- und Mechanismuspfad bei offenen Modellfragen.
