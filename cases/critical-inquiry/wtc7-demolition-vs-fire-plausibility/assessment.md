@@ -13,9 +13,9 @@
 
 Die stärkste Fassung zugunsten einer kontrollierten Sprengung verweist auf die weitgehend gleichmäßige sichtbare Abwärtsbewegung, eine gemessene Freifallphase und das UAF-Gegenmodell. Dieses Modell bestreitet einen brandinduzierten globalen Einsturz und verlangt für die beobachtete Bewegung ein nahezu gleichzeitiges Versagen aller Stützen. Damit liegt ein materieller Defeater gegen starke Closure des NIST-Modells vor.
 
-## Antithese
+## Antithese — direkte Inkompatibilität
 
-Die Formulierung „kurzer, lokaler Brand“ beschreibt den dokumentierten Rivalen nicht angemessen. c002 ist `contradicted`: e001 und e002 dokumentieren annähernd sieben Stunden sowie Brände auf mehreren Etagen. Diese Befunde sind direkt unvereinbar mit der gekoppelten Prämisse, die maßgebliche Brandexposition sei kurz und nur lokal gewesen.
+Die Formulierung „kurzer, lokaler Brand“ beschreibt den dokumentierten Rivalen nicht angemessen; die direkte Inkompatibilität betrifft Dauer und räumliche Verteilung. c002 ist `contradicted`: e001 und e002 dokumentieren annähernd sieben Stunden sowie Brände auf mehreren Etagen, was die gekoppelte Kurz-und-lokal-Prämisse direkt ausschließt. Diese Befunde bilden die direkte Exklusionsbasis und schließen die Behauptung aus, die maßgebliche Brandexposition sei zugleich kurz und nur lokal gewesen.
 
 NIST liefert außerdem eine positive thermisch-strukturelle Ereigniskette: lang andauernde unkontrollierte Brände, lokaler Initialschaden, interne Progression und spätere sichtbare Fassadenbewegung. Die Freifallphase wird dabei nicht bestritten, sondern als Teil einer mehrphasigen Bewegung nach vorausgehendem internem Tragwirkungsverlust behandelt.
 
@@ -37,7 +37,7 @@ Die binäre Wahl „NIST-Sequenz oder kontrollierte Sprengung“ ist zu eng. Ein
 
 ### Belegt als Quelleninhalt
 
-- c003 ist als `reported_claim` **etabliert**: NIST berichtet einen brandinduzierten progressiven Einsturz und dokumentiert seine Auswertung der Bewegungsphasen sowie eines explosiven Alternativszenarios.
+- c003 ist als `reported_claim` **etabliert**: NIST berichtet einen brandinduzierten progressiven Einsturz und dokumentiert seine Auswertung der Bewegungsphasen sowie eines alternativen raschen Tragwirkungsverlusts.
 - c004 ist als `reported_claim` **etabliert**: Die UAF-Projektseite berichtet, Feuer habe den Einsturz nicht verursacht und nahezu gleichzeitiges Stützenversagen sei erforderlich.
 
 Diese beiden Verdicts schließen nur, was die Quellen sagen. Sie sind keine Weltclaim-Zertifikate.
@@ -92,20 +92,18 @@ Der Audit ordnet daher nicht nach dem eindrucksvollsten Einzelmerkmal, sondern n
 
 ## Risiko- und Nutzenabschätzung
 
-**Nutzen der Einstufung:** Sie korrigiert die Strohmann-Prämisse „kurz und lokal“, ohne offene Modellfragen zu verdecken. Sie trennt mechanische Möglichkeit, Ereignisbrücke und Akteurszuschreibung.
+**Nutzen der Einstufung:** Sie korrigiert die direkt ausgeschlossene Strohmann-Prämisse „kurz und lokal“, ohne offene Modellfragen zu verdecken. Sie trennt mechanische Möglichkeit, Ereignisbrücke und Akteurszuschreibung.
 
 **Risiko der Einstufung:** Die bessere positive Kette des Brandmodells könnte als Bestätigung jedes NIST-Details missverstanden werden. Umgekehrt könnte fehlende Ereignisbrücke als direkte Falsifikation jeder Sprengungsvariante gelesen werden. Beides wäre eine Überdehnung des Verdicts.
 
 ## Verdict
 
-| Claim | Status | Kurzbegründung |
-|---|---|---|
-| c001 | weak | Die kontrollierte Sprengung besitzt im aktuellen Pack nicht die stärkere positive Ereigniskette. |
-| c002 | contradicted | Mehrstündige Brände auf mehreren Etagen sind direkt unvereinbar mit „kurz und nur lokal“. |
-| c003 | established | NIST berichtet den Brand-Progressionspfad; Quelleninhaltsclaim. |
-| c004 | established | UAF berichtet Feuer-Ausschluss und nahezu gleichzeitiges Stützenversagen; Quelleninhaltsclaim. |
-| c005 | plausible | Positive Brand-, Mechanismus- und Beobachtungsevidenz bei offenen Modellfragen. |
-| c006 | speculative | Mechanische Möglichkeit ohne ausreichende fallbezogene Ereignisbrücke. |
+- **c001 — weak:** Die kontrollierte Sprengung besitzt im aktuellen Pack nicht die stärkere positive Ereigniskette.
+- **c002 — contradicted, direkte Exklusion:** Mehrstündige Brände auf mehreren Etagen schließen „kurz und nur lokal“ direkt aus.
+- **c003 — established:** NIST berichtet den Brand-Progressionspfad; Quelleninhaltsclaim.
+- **c004 — established:** UAF berichtet Feuer-Ausschluss und nahezu gleichzeitiges Stützenversagen; Quelleninhaltsclaim.
+- **c005 — plausible:** Positive Brand-, Mechanismus- und Beobachtungsevidenz bei offenen Modellfragen.
+- **c006 — speculative:** Mechanische Möglichkeit ohne ausreichende fallbezogene Ereignisbrücke.
 
 ## Unsicherheit und Interpolation
 
