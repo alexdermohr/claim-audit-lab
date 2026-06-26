@@ -11,9 +11,7 @@ reopen_triggers:
   - "major_contradiction"
   - "source_discredited"
   - "dataset_revision"
-  - "independent_model_replication"
-  - "new_forensic_evidence"
 history:
   - date: "2026-06-26"
     status: "draft"
-    note: "Case opened from the user claim; comparative premise separated from the short/local-fire premise and externally researched."
+    note: "Case opened from the user claim; comparative premise separated from the short/local-fire premise and externally researched. Independent replication and new forensic evidence are tracked as material assessment gaps."
