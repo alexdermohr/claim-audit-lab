@@ -1,0 +1,100 @@
+schema_version: "1.0"
+sources:
+  - schema_version: "1.0"
+    source_id: "s001"
+    label: "NIST NCSTAR 1A — Final Report on the Collapse of World Trade Center Building 7"
+    url_or_ref: "https://doi.org/10.6028/NIST.NCSTAR.1A"
+    source_type: "government_report"
+    publication_date: "2008-11-20"
+    author_or_org: "National Institute of Standards and Technology"
+    accessed_at: "2026-06-26"
+    source_weight:
+      primary_proximity: 0.88
+      method_transparency: 0.86
+      reproducibility: 0.55
+      source_cluster_independence: 0.35
+      institutional_interest_risk: 0.55
+      adversarial_relevance: 0.90
+      historical_track_record: 0.75
+      update_latency_risk: 0.05
+    source_verification:
+      status: "verified"
+      method: "web PDF retrieval and page-level text inspection"
+      verified_at: "2026-06-26"
+      verifier: "ChatGPT research runtime"
+      notes: "Branddauer, Mechanismuskette, Freifallintervall und Alternativanalyse wurden direkt im Bericht geprüft."
+    notes: "Primärer Abschlussbericht des offiziellen Untersuchungsclusters; hohe Systemtiefe, aber keine clusterunabhängige Replikation."
+
+  - schema_version: "1.0"
+    source_id: "s002"
+    label: "NIST — WTC 7 Investigation FAQs"
+    url_or_ref: "https://www.nist.gov/world-trade-center-investigation/study-faqs/wtc-7-investigation"
+    source_type: "official_body"
+    publication_date: "2022-04-05"
+    author_or_org: "National Institute of Standards and Technology"
+    accessed_at: "2026-06-26"
+    source_weight:
+      primary_proximity: 0.72
+      method_transparency: 0.65
+      reproducibility: 0.45
+      source_cluster_independence: 0.25
+      institutional_interest_risk: 0.55
+      adversarial_relevance: 0.82
+      historical_track_record: 0.72
+      update_latency_risk: 0.08
+    source_verification:
+      status: "verified"
+      method: "direct webpage inspection"
+      verified_at: "2026-06-26"
+      verifier: "ChatGPT research runtime"
+      notes: "Aussagen zu Brandverteilung, Wasserausfall, Einsturzzeit und Alternativhypothesen wurden direkt geprüft."
+    notes: "Erklärende Darstellung desselben NIST-Clusters; nicht als unabhängige Bestätigung gezählt."
+
+  - schema_version: "1.0"
+    source_id: "s003"
+    label: "A Structural Reevaluation of the Collapse of World Trade Center 7 — Final Report"
+    url_or_ref: "UAF final report, March 2020, linked from the Institute of Northern Engineering project page"
+    source_type: "primary_document"
+    publication_date: "2020-03-01"
+    author_or_org: "J. Leroy Hulsey, Feng Xiao, Zhili Quan — University of Alaska Fairbanks"
+    accessed_at: "2026-06-26"
+    source_weight:
+      primary_proximity: 0.70
+      method_transparency: 0.80
+      reproducibility: 0.72
+      source_cluster_independence: 0.45
+      institutional_interest_risk: 0.72
+      adversarial_relevance: 0.90
+      historical_track_record: 0.45
+      update_latency_risk: 0.05
+    source_verification:
+      status: "partially_verified"
+      method: "direct PDF download and project-page cross-check"
+      verified_at: "2026-06-26"
+      verifier: "ChatGPT and Grabowski runtime"
+      notes: "Die Endfassung wurde direkt heruntergeladen; die vollständige lokale Textextraktion endete durch einen Connector-Timeout. Kernaussagen wurden über die UAF-Projektseite gegengeprüft."
+    notes: "Technischer Gegenbericht mit offen angebotenem Modelldatensatz; die projektbezogene Finanzierung begründet ein sichtbares Cluster- und Interessenrisiko, aber keine automatische Abwertung."
+
+  - schema_version: "1.0"
+    source_id: "s004"
+    label: "UAF Institute of Northern Engineering — WTC 7 Project Page"
+    url_or_ref: "https://ine.uaf.edu/wtc7"
+    source_type: "primary_document"
+    author_or_org: "University of Alaska Fairbanks, Institute of Northern Engineering"
+    accessed_at: "2026-06-26"
+    source_weight:
+      primary_proximity: 0.62
+      method_transparency: 0.58
+      reproducibility: 0.62
+      source_cluster_independence: 0.35
+      institutional_interest_risk: 0.72
+      adversarial_relevance: 0.78
+      historical_track_record: 0.45
+      update_latency_risk: 0.08
+    source_verification:
+      status: "verified"
+      method: "direct webpage inspection"
+      verified_at: "2026-06-26"
+      verifier: "ChatGPT research runtime"
+      notes: "Projektzeitraum, Autoren, Finanzierung, Datenbereitstellung und veröffentlichte Schlussfolgerungen wurden direkt geprüft."
+    notes: "Projektmetadaten und Positionsdarstellung desselben UAF-Clusters; nicht als unabhängige Replikation gezählt."
