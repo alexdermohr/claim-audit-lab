@@ -18,6 +18,11 @@ investigations:
         justification_present: "unknown"
         justification_quality: 0.0
         materiality: 0.0
+        affected_claims: ["c001"]
+        residual_path_closure:
+          status: "unknown"
+          rationale: "Explain whether this residual path has been closed before any negative world-claim closure."
+          evidence_refs: []
         notes: "Non-test limits closure; it is not evidence of cover-up by itself."
     adversarial_review:
       present: "unknown"

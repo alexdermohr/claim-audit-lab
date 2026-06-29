@@ -26,6 +26,8 @@ Investigation integrity documents:
 - institutional interest risk;
 - declared and missing hypothesis space;
 - material paths not tested and why;
+- which claim(s) each non-tested material path affects, using `affected_claims` when the path is claim-specific;
+- whether a residual path has been closed before negative closure, using `residual_path_closure.status: closed` with a non-empty rationale and at least one evidence reference;
 - adversarial review;
 - downstream constraints on claim closure.
 
@@ -35,4 +37,5 @@ Investigation integrity documents:
 - Advocacy source ≠ automatically false.
 - High method depth can coexist with high institutional interest risk.
 - A non-tested material path limits closure unless a rationale explains why it is immaterial.
+- An unresolved high-materiality non-tested path blocks `contradicted` closure for affected world-causal claims until `residual_path_closure.status` is `closed` with a non-empty rationale and at least one evidence reference.
 - Strong alternative mechanisms do not logically eliminate every supplemental causal pathway.
