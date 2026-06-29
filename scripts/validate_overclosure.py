@@ -470,12 +470,7 @@ def validate_residual_path_closure(case_dir: pathlib.Path, claim_by_id: dict[str
             for path in investigation.get("non_tested_material_paths") or []:
                 if not isinstance(path, dict):
                     continue
-                materiality = path.get("materiality")
-                quality = path.get("justification_quality", 1)
-                low_quality = isinstance(quality, (int, float)) and quality < 0.7
-                unresolved = path.get("justification_present") in {"partial", "no", "unknown"} or low_quality
-                if not (isinstance(materiality, (int, float)) and materiality >= HIGH_MATERIALITY_THRESHOLD and unresolved):
-                    continue
+
                 affected_claims = path_affected_claims(path)
                 for claim_ref in affected_claims:
                     if claim_ref not in claim_by_id:
@@ -487,6 +482,13 @@ def validate_residual_path_closure(case_dir: pathlib.Path, claim_by_id: dict[str
                         errors.append(
                             f"non-tested path '{path.get('path_id', '?')}' residual_path_closure references unknown evidence_ref '{evidence_ref}'."
                         )
+
+                materiality = path.get("materiality")
+                quality = path.get("justification_quality", 1)
+                low_quality = isinstance(quality, (int, float)) and quality < 0.7
+                unresolved = path.get("justification_present") in {"partial", "no", "unknown"} or low_quality
+                if not (isinstance(materiality, (int, float)) and materiality >= HIGH_MATERIALITY_THRESHOLD and unresolved):
+                    continue
                 if residual_path_is_closed(path):
                     continue
                 candidate_claims = {
