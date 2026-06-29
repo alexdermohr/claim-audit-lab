@@ -395,6 +395,37 @@ def claim_overlaps_investigation(claim: dict, investigation: dict, evidence_by_i
     return False
 
 
+def residual_path_is_closed(path: dict) -> bool:
+    closure = path.get("residual_path_closure")
+    if not isinstance(closure, dict) or closure.get("status") != "closed":
+        return False
+    rationale = closure.get("rationale")
+    evidence_refs = closure.get("evidence_refs")
+    return (
+        isinstance(rationale, str)
+        and bool(rationale.strip())
+        and isinstance(evidence_refs, list)
+        and any(isinstance(ref, str) and ref.strip() for ref in evidence_refs)
+    )
+
+
+def path_affected_claims(path: dict) -> list[str]:
+    affected_claims = path.get("affected_claims")
+    if not isinstance(affected_claims, list):
+        return []
+    return [claim_ref for claim_ref in affected_claims if isinstance(claim_ref, str)]
+
+
+def residual_path_evidence_refs(path: dict) -> list[str]:
+    closure = path.get("residual_path_closure")
+    if not isinstance(closure, dict):
+        return []
+    evidence_refs = closure.get("evidence_refs")
+    if not isinstance(evidence_refs, list):
+        return []
+    return [evidence_ref for evidence_ref in evidence_refs if isinstance(evidence_ref, str)]
+
+
 def validate_residual_path_closure(case_dir: pathlib.Path, claim_by_id: dict[str, dict]) -> list[str]:
     errors: list[str] = []
     evidence_data, load_errors = load_optional_object(case_dir / "evidence-pack.yml", "evidence-pack.yml")
@@ -439,20 +470,41 @@ def validate_residual_path_closure(case_dir: pathlib.Path, claim_by_id: dict[str
             for path in investigation.get("non_tested_material_paths") or []:
                 if not isinstance(path, dict):
                     continue
+
+                affected_claims = path_affected_claims(path)
+                for claim_ref in affected_claims:
+                    if claim_ref not in claim_by_id:
+                        errors.append(
+                            f"non-tested path '{path.get('path_id', '?')}' references unknown affected_claim '{claim_ref}'."
+                        )
+                for evidence_ref in residual_path_evidence_refs(path):
+                    if evidence_ref not in evidence_by_id:
+                        errors.append(
+                            f"non-tested path '{path.get('path_id', '?')}' residual_path_closure references unknown evidence_ref '{evidence_ref}'."
+                        )
+
                 materiality = path.get("materiality")
                 quality = path.get("justification_quality", 1)
                 low_quality = isinstance(quality, (int, float)) and quality < 0.7
                 unresolved = path.get("justification_present") in {"partial", "no", "unknown"} or low_quality
                 if not (isinstance(materiality, (int, float)) and materiality >= HIGH_MATERIALITY_THRESHOLD and unresolved):
                     continue
-                # TODO: add affected_claims/residual_path_closure to non_tested_material_paths.
-                # Until then, only block contradicted claims that overlap the investigation source cluster
-                # through claim.source_refs or evidence.source_ref; unrelated causal claims in the same case are not blocked.
-                for claim_ref, claim in contradicted_claims.items():
-                    if not claim_overlaps_investigation(claim, investigation, evidence_by_id):
-                        continue
+                if residual_path_is_closed(path):
+                    continue
+                candidate_claims = {
+                    claim_ref: contradicted_claims[claim_ref]
+                    for claim_ref in affected_claims
+                    if claim_ref in contradicted_claims
+                }
+                if not affected_claims:
+                    candidate_claims = {
+                        claim_ref: claim
+                        for claim_ref, claim in contradicted_claims.items()
+                        if claim_overlaps_investigation(claim, investigation, evidence_by_id)
+                    }
+                for claim_ref in candidate_claims:
                     errors.append(
-                        f"claim '{claim_ref}' is contradicted while overlapping high-materiality non-tested path '{path.get('path_id', '?')}' remains unresolved/partial; residual-path-closure is required before negative closure (schema field pending; non-tested paths do not yet declare affected_claims)."
+                        f"claim '{claim_ref}' is contradicted while high-materiality non-tested path '{path.get('path_id', '?')}' remains unresolved/partial for that claim; set residual_path_closure.status='closed' before negative closure."
                     )
     return errors
 

@@ -309,3 +309,13 @@ def test_investigation_id_list_fails_without_traceback(tmp_path):
 
     assert any("investigation-integrity.yml investigations[0].investigation_id must be a string" in e for e in errors), errors
     assert not any("Traceback" in e for e in errors)
+
+
+def test_investigation_integrity_template_validates_against_schema():
+    template_path = pathlib.Path(__file__).parent.parent / "cases" / "_template" / "investigation-integrity.yml"
+    with open(template_path, encoding="utf-8") as f:
+        template = yaml.safe_load(f)
+
+    errors = validate_investigation_integrity.schema_errors(template, load_schema())
+
+    assert errors == []

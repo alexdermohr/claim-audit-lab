@@ -66,6 +66,511 @@ def test_invalid_contradicted_with_unresolved_high_materiality_anomaly_fails():
     assert any("residual-path-closure" in error for error in errors), errors
 
 
+def test_non_tested_path_uses_affected_claims_to_target_negative_closure(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [
+            {
+                "schema_version": "1.0",
+                "claim_id": "c001",
+                "claim_type": "causal_claim",
+                "claim_kind": "causal_claim",
+                "statement": "Affected causal claim.",
+                "status": "contradicted",
+                "source_refs": ["s001"],
+                "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+                "uncertainty": {"score": 0.2, "causes": []},
+                "interpolation": {"score": 0.1, "assumptions": []},
+            },
+            {
+                "schema_version": "1.0",
+                "claim_id": "c002",
+                "claim_type": "causal_claim",
+                "claim_kind": "causal_claim",
+                "statement": "Unaffected causal claim.",
+                "status": "contradicted",
+                "source_refs": ["s001"],
+                "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+                "uncertainty": {"score": 0.2, "causes": []},
+                "interpolation": {"score": 0.1, "assumptions": []},
+            },
+        ],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001"],
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("claim 'c001'" in error and "nt001" in error for error in errors), errors
+    assert not any("claim 'c002'" in error and "nt001" in error for error in errors), errors
+
+
+def test_non_tested_path_closed_residual_path_allows_negative_closure(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001"],
+                "residual_path_closure": {
+                    "status": "closed",
+                    "rationale": "Direct temporal exclusion closes this path.",
+                    "evidence_refs": ["e001"],
+                },
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    (tmp_path / "evidence-pack.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "evidence": [{"evidence_id": "e001", "source_ref": "s001", "claim_refs": ["c001"]}],
+    }), encoding="utf-8")
+
+    assert validate_overclosure.validate_case(tmp_path) == []
+
+
+def test_non_tested_path_unknown_affected_claim_fails(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001-typo"],
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("unknown affected_claim 'c001-typo'" in error for error in errors), errors
+
+
+def test_non_tested_path_closed_unknown_affected_claim_still_fails(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "evidence-pack.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "evidence": [{"evidence_id": "e001", "source_ref": "s001", "claim_refs": ["c001"]}],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001-typo"],
+                "residual_path_closure": {
+                    "status": "closed",
+                    "rationale": "Direct temporal exclusion closes this path.",
+                    "evidence_refs": ["e001"],
+                },
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("unknown affected_claim 'c001-typo'" in error for error in errors), errors
+
+
+def test_closed_residual_path_unknown_evidence_ref_fails(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "evidence-pack.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "evidence": [{"evidence_id": "e001", "source_ref": "s001", "claim_refs": ["c001"]}],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001"],
+                "residual_path_closure": {
+                    "status": "closed",
+                    "rationale": "Direct temporal exclusion closes this path.",
+                    "evidence_refs": ["e999"],
+                },
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("unknown evidence_ref 'e999'" in error for error in errors), errors
+
+
+def test_non_tested_path_closed_without_evidence_refs_still_blocks(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001"],
+                "residual_path_closure": {"status": "closed", "rationale": "Direct temporal exclusion closes this path."},
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("claim 'c001'" in error and "nt001" in error for error in errors), errors
+
+
+def test_non_tested_path_closed_without_rationale_still_blocks(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001"],
+                "residual_path_closure": {"status": "closed", "rationale": " ", "evidence_refs": ["e001"]},
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("claim 'c001'" in error and "nt001" in error for error in errors), errors
+
+
+def test_non_tested_path_open_residual_path_blocks_negative_closure(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt001",
+                "expected_test": "Test affected path.",
+                "justification_present": "partial",
+                "justification_quality": 0.4,
+                "materiality": 0.8,
+                "affected_claims": ["c001"],
+                "residual_path_closure": {"status": "open", "rationale": "Still unclosed.", "evidence_refs": ["e001"]},
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("claim 'c001'" in error and "nt001" in error for error in errors), errors
+
+
+def test_non_tested_path_low_materiality_still_validates_references(tmp_path):
+    import yaml
+
+    (tmp_path / "claims.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "claims": [{
+            "schema_version": "1.0",
+            "claim_id": "c001",
+            "claim_type": "causal_claim",
+            "claim_kind": "causal_claim",
+            "statement": "Affected causal claim.",
+            "status": "contradicted",
+            "source_refs": ["s001"],
+            "direct_incompatibility_basis": "Temporal exclusion rules out the required link.",
+            "uncertainty": {"score": 0.2, "causes": []},
+            "interpolation": {"score": 0.1, "assumptions": []},
+        }],
+    }), encoding="utf-8")
+    (tmp_path / "evidence-pack.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "evidence": [{"evidence_id": "e001", "source_ref": "s001", "claim_refs": ["c001"]}],
+    }), encoding="utf-8")
+    (tmp_path / "investigation-integrity.yml").write_text(yaml.safe_dump({
+        "schema_version": "1.0",
+        "case_ref": "cases/test",
+        "investigations": [{
+            "investigation_id": "inv001",
+            "source_cluster_refs": ["s001"],
+            "lead_institution": "Test institution",
+            "report_role": "primary_investigation",
+            "politically_sensitive": False,
+            "financially_sensitive": False,
+            "institutional_interest_risk": 0.0,
+            "hypothesis_space_declared": ["main"],
+            "hypothesis_space_gaps": ["gap"],
+            "non_tested_material_paths": [{
+                "path_id": "nt-low",
+                "expected_test": "Low-materiality path still needs valid references.",
+                "justification_present": "yes",
+                "justification_quality": 1.0,
+                "materiality": 0.1,
+                "affected_claims": ["c999"],
+                "residual_path_closure": {
+                    "status": "open",
+                    "rationale": "Reference-integrity check only.",
+                    "evidence_refs": ["e999"],
+                },
+            }],
+            "adversarial_review": {"present": "unknown", "notes": "Unknown."},
+            "integrity_verdict": "insufficient_information",
+            "downstream_constraints": ["No overclosure."],
+        }],
+    }), encoding="utf-8")
+
+    errors = validate_overclosure.validate_case(tmp_path)
+
+    assert any("unknown affected_claim 'c999'" in error for error in errors), errors
+    assert any("unknown evidence_ref 'e999'" in error for error in errors), errors
+    assert not any("claim 'c001'" in error and "nt-low" in error for error in errors), errors
+
+
 def test_valid_causal_temporal_exclusion_contradiction_passes():
     assert fixture_errors("valid", "causal_temporal_exclusion_contradiction") == []
 
